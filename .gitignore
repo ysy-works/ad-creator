@@ -12,6 +12,7 @@ secrets/
 # Project data and generated reports
 data/
 report/
+docs/
 
 # Python
 __pycache__/
