@@ -1,11 +1,15 @@
-from fastapi import APIRouter, UploadFile, File, Form
-from fastapi.responses import StreamingResponse
-from PIL import Image, ImageOps
+import base64
 import io
 
-from app.model.model import generate_ad_image
+from fastapi import APIRouter, UploadFile, File, Form
+from fastapi.responses import JSONResponse
+from PIL import Image
+from pydantic import BaseModel
+
+from app.model.model import generate_ad_image, TextLayerItem
 
 router = APIRouter()
+
 
 def resize_to_instagram(image: Image.Image) -> Image.Image:
     """
@@ -14,7 +18,6 @@ def resize_to_instagram(image: Image.Image) -> Image.Image:
     """
     target_size = (1080, 1080)
 
-    # 이미지를 정사각형으로 크롭 (중앙 기준)
     width, height = image.size
     min_side = min(width, height)
     left = (width - min_side) // 2
@@ -23,11 +26,25 @@ def resize_to_instagram(image: Image.Image) -> Image.Image:
     bottom = top + min_side
     image = image.crop((left, top, right, bottom))
 
-    # 1080x1080으로 리사이즈
     image = image.resize(target_size, Image.LANCZOS)
     return image
 
-@router.post("/generate")
+
+def image_to_base64(image: Image.Image) -> str:
+    buffer = io.BytesIO()
+    image.save(buffer, format="PNG")
+    encoded = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    return f"data:image/png;base64,{encoded}"
+
+
+class GenerateResponse(BaseModel):
+    image_layer: str
+    text_layers: list[TextLayerItem]
+    canvas_width: int = 1080
+    canvas_height: int = 1080
+
+
+@router.post("/generate", response_model=GenerateResponse)
 async def generate(
     product_image: UploadFile = File(...),
     prompt: str = Form(...)
@@ -36,15 +53,15 @@ async def generate(
     image_data = await product_image.read()
     pil_image = Image.open(io.BytesIO(image_data)).convert("RGB")
 
-    # 모델 호출 (model.py의 빈 공간)
-    result_image = generate_ad_image(pil_image, prompt)
+    # 모델 호출 (model.py) - 이제 이미지 + 텍스트 레이어를 함께 반환
+    result = generate_ad_image(pil_image, prompt)
 
-    # 인스타그램 피드 비율로 변환
-    result_image = resize_to_instagram(result_image)
+    # 인스타그램 피드 비율로 변환 (텍스트가 없는 순수 이미지 레이어에만 적용)
+    result_image = resize_to_instagram(result.image)
 
-    # 결과 PIL Image → 바이트로 변환해서 반환
-    output = io.BytesIO()
-    result_image.save(output, format="PNG")
-    output.seek(0)
-
-    return StreamingResponse(output, media_type="image/png")
+    return JSONResponse(content={
+        "image_layer": image_to_base64(result_image),
+        "text_layers": [layer.model_dump() for layer in result.text_layers],
+        "canvas_width": 1080,
+        "canvas_height": 1080,
+    })
