@@ -88,14 +88,22 @@ function App() {
   };
 
   return (
-    <div style={{ padding: "24px", fontFamily: "sans-serif", maxWidth: "900px", margin: "0 auto" }}>
+    <div
+      style={{
+        padding: "32px 48px",
+        fontFamily: "sans-serif",
+        maxWidth: "1400px",
+        margin: "0 auto",
+        textAlign: "center",
+      }}
+    >
       <h2>카페 음료 사진 보정 생성기 (프로토타입)</h2>
       <p style={{ color: "#666" }}>
         사진을 올리고, 원하는 분위기와 구도를 골라주세요. 별도 프롬프트 입력은 필요 없습니다.
       </p>
 
       {/* 1. 사진 업로드 */}
-      <div style={{ marginBottom: "24px" }}>
+      <div style={{ marginBottom: "32px" }}>
         <h3>1. 사진 업로드</h3>
         <input type="file" accept="image/jpeg,image/png" onChange={handleFileChange} />
         {productPreviewUrl && (
@@ -110,14 +118,21 @@ function App() {
       </div>
 
       {/* 2. 레퍼런스 갤러리 */}
-      <div style={{ marginBottom: "24px" }}>
+      <div style={{ marginBottom: "32px" }}>
         <h3>2. 분위기 · 구도 선택</h3>
         {Object.keys(groupedByMood).length === 0 && <p>레퍼런스를 불러오는 중...</p>}
 
         {Object.entries(groupedByMood).map(([moodId, group]) => (
-          <div key={moodId} style={{ marginBottom: "20px" }}>
-            <h4 style={{ marginBottom: "8px" }}>{group.mood_label}</h4>
-            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+          <div key={moodId} style={{ marginBottom: "36px" }}>
+            <h4 style={{ marginBottom: "16px", fontSize: "18px" }}>{group.mood_label}</h4>
+            <div
+              style={{
+                display: "flex",
+                gap: "20px",
+                flexWrap: "wrap",
+                justifyContent: "center",
+              }}
+            >
               {group.items.map((ref) => (
                 <div
                   key={ref.id}
@@ -128,17 +143,21 @@ function App() {
                       selectedReferenceId === ref.id
                         ? "3px solid #4a90e2"
                         : "1px solid #ddd",
-                    borderRadius: "8px",
-                    padding: "4px",
-                    width: "140px",
+                    borderRadius: "10px",
+                    padding: "6px",
+                    width: "220px",
+                    boxShadow:
+                      selectedReferenceId === ref.id
+                        ? "0 2px 8px rgba(74,144,226,0.35)"
+                        : "none",
                   }}
                 >
                   <img
                     src={ref.thumbnail_url}
                     alt={ref.composition_label}
-                    style={{ width: "100%", height: "120px", objectFit: "cover", borderRadius: "6px" }}
+                    style={{ width: "100%", height: "220px", objectFit: "cover", borderRadius: "8px" }}
                   />
-                  <div style={{ fontSize: "12px", textAlign: "center", marginTop: "4px" }}>
+                  <div style={{ fontSize: "14px", textAlign: "center", marginTop: "8px" }}>
                     {ref.composition_label}
                   </div>
                 </div>
@@ -149,7 +168,11 @@ function App() {
       </div>
 
       {/* 3. 생성 버튼 */}
-      <button onClick={handleGenerate} disabled={loading} style={{ padding: "10px 20px" }}>
+      <button
+        onClick={handleGenerate}
+        disabled={loading}
+        style={{ padding: "12px 32px", fontSize: "16px" }}
+      >
         {loading ? "생성 중..." : "이미지 생성"}
       </button>
 
@@ -157,12 +180,12 @@ function App() {
 
       {/* 4. 결과 */}
       {resultImage && (
-        <div style={{ marginTop: "24px" }}>
+        <div style={{ marginTop: "32px" }}>
           <h3>결과</h3>
           <img
             src={resultImage}
             alt="생성 결과"
-            style={{ maxWidth: "400px", borderRadius: "8px", border: "1px solid #ddd" }}
+            style={{ maxWidth: "480px", borderRadius: "8px", border: "1px solid #ddd" }}
           />
           <div style={{ marginTop: "12px" }}>
             <button onClick={handleDownload}>다운로드</button>
