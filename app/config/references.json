@@ -5,7 +5,7 @@
     "mood_label": "따뜻한 카페 감성",
     "composition_id": "top_view",
     "composition_label": "위에서 내려다본 구도",
-    "thumbnail_url": "https://picsum.photos/seed/warmcafe1/300/300"
+    "thumbnail_url": "https://picsum.photos/seed/warm_cafe-top_view/300/300"
   },
   {
     "id": "warm_cafe__side_view",
@@ -13,7 +13,7 @@
     "mood_label": "따뜻한 카페 감성",
     "composition_id": "side_view",
     "composition_label": "옆에서 바라본 구도",
-    "thumbnail_url": "https://picsum.photos/seed/warmcafe2/300/300"
+    "thumbnail_url": "https://picsum.photos/seed/warm_cafe-side_view/300/300"
   },
   {
     "id": "warm_cafe__hand_holding",
@@ -21,7 +21,7 @@
     "mood_label": "따뜻한 카페 감성",
     "composition_id": "hand_holding",
     "composition_label": "손으로 들고 있는 구도",
-    "thumbnail_url": "https://picsum.photos/seed/warmcafe3/300/300"
+    "thumbnail_url": "https://picsum.photos/seed/warm_cafe-hand_holding/300/300"
   },
   {
     "id": "modern_minimal__top_view",
@@ -29,7 +29,7 @@
     "mood_label": "모던 미니멀",
     "composition_id": "top_view",
     "composition_label": "위에서 내려다본 구도",
-    "thumbnail_url": "https://picsum.photos/seed/modern1/300/300"
+    "thumbnail_url": "https://picsum.photos/seed/modern_minimal-top_view/300/300"
   },
   {
     "id": "modern_minimal__side_view",
@@ -37,7 +37,7 @@
     "mood_label": "모던 미니멀",
     "composition_id": "side_view",
     "composition_label": "옆에서 바라본 구도",
-    "thumbnail_url": "https://picsum.photos/seed/modern2/300/300"
+    "thumbnail_url": "https://picsum.photos/seed/modern_minimal-side_view/300/300"
   },
   {
     "id": "modern_minimal__hand_holding",
@@ -45,7 +45,7 @@
     "mood_label": "모던 미니멀",
     "composition_id": "hand_holding",
     "composition_label": "손으로 들고 있는 구도",
-    "thumbnail_url": "https://picsum.photos/seed/modern3/300/300"
+    "thumbnail_url": "https://picsum.photos/seed/modern_minimal-hand_holding/300/300"
   },
   {
     "id": "vintage_film__top_view",
@@ -53,6 +53,190 @@
     "mood_label": "빈티지 필름룩",
     "composition_id": "top_view",
     "composition_label": "위에서 내려다본 구도",
-    "thumbnail_url": "https://picsum.photos/seed/vintage1/300/300"
+    "thumbnail_url": "https://picsum.photos/seed/vintage_film-top_view/300/300"
+  },
+  {
+    "id": "vintage_film__side_view",
+    "mood_id": "vintage_film",
+    "mood_label": "빈티지 필름룩",
+    "composition_id": "side_view",
+    "composition_label": "옆에서 바라본 구도",
+    "thumbnail_url": "https://picsum.photos/seed/vintage_film-side_view/300/300"
+  },
+  {
+    "id": "vintage_film__hand_holding",
+    "mood_id": "vintage_film",
+    "mood_label": "빈티지 필름룩",
+    "composition_id": "hand_holding",
+    "composition_label": "손으로 들고 있는 구도",
+    "thumbnail_url": "https://picsum.photos/seed/vintage_film-hand_holding/300/300"
+  },
+  {
+    "id": "dark_moody__top_view",
+    "mood_id": "dark_moody",
+    "mood_label": "다크 무드",
+    "composition_id": "top_view",
+    "composition_label": "위에서 내려다본 구도",
+    "thumbnail_url": "https://picsum.photos/seed/dark_moody-top_view/300/300"
+  },
+  {
+    "id": "dark_moody__side_view",
+    "mood_id": "dark_moody",
+    "mood_label": "다크 무드",
+    "composition_id": "side_view",
+    "composition_label": "옆에서 바라본 구도",
+    "thumbnail_url": "https://picsum.photos/seed/dark_moody-side_view/300/300"
+  },
+  {
+    "id": "dark_moody__hand_holding",
+    "mood_id": "dark_moody",
+    "mood_label": "다크 무드",
+    "composition_id": "hand_holding",
+    "composition_label": "손으로 들고 있는 구도",
+    "thumbnail_url": "https://picsum.photos/seed/dark_moody-hand_holding/300/300"
+  },
+  {
+    "id": "pastel_soft__top_view",
+    "mood_id": "pastel_soft",
+    "mood_label": "파스텔 소프트",
+    "composition_id": "top_view",
+    "composition_label": "위에서 내려다본 구도",
+    "thumbnail_url": "https://picsum.photos/seed/pastel_soft-top_view/300/300"
+  },
+  {
+    "id": "pastel_soft__side_view",
+    "mood_id": "pastel_soft",
+    "mood_label": "파스텔 소프트",
+    "composition_id": "side_view",
+    "composition_label": "옆에서 바라본 구도",
+    "thumbnail_url": "https://picsum.photos/seed/pastel_soft-side_view/300/300"
+  },
+  {
+    "id": "pastel_soft__hand_holding",
+    "mood_id": "pastel_soft",
+    "mood_label": "파스텔 소프트",
+    "composition_id": "hand_holding",
+    "composition_label": "손으로 들고 있는 구도",
+    "thumbnail_url": "https://picsum.photos/seed/pastel_soft-hand_holding/300/300"
+  },
+  {
+    "id": "natural_light__top_view",
+    "mood_id": "natural_light",
+    "mood_label": "내추럴 라이트",
+    "composition_id": "top_view",
+    "composition_label": "위에서 내려다본 구도",
+    "thumbnail_url": "https://picsum.photos/seed/natural_light-top_view/300/300"
+  },
+  {
+    "id": "natural_light__side_view",
+    "mood_id": "natural_light",
+    "mood_label": "내추럴 라이트",
+    "composition_id": "side_view",
+    "composition_label": "옆에서 바라본 구도",
+    "thumbnail_url": "https://picsum.photos/seed/natural_light-side_view/300/300"
+  },
+  {
+    "id": "natural_light__hand_holding",
+    "mood_id": "natural_light",
+    "mood_label": "내추럴 라이트",
+    "composition_id": "hand_holding",
+    "composition_label": "손으로 들고 있는 구도",
+    "thumbnail_url": "https://picsum.photos/seed/natural_light-hand_holding/300/300"
+  },
+  {
+    "id": "industrial__top_view",
+    "mood_id": "industrial",
+    "mood_label": "인더스트리얼",
+    "composition_id": "top_view",
+    "composition_label": "위에서 내려다본 구도",
+    "thumbnail_url": "https://picsum.photos/seed/industrial-top_view/300/300"
+  },
+  {
+    "id": "industrial__side_view",
+    "mood_id": "industrial",
+    "mood_label": "인더스트리얼",
+    "composition_id": "side_view",
+    "composition_label": "옆에서 바라본 구도",
+    "thumbnail_url": "https://picsum.photos/seed/industrial-side_view/300/300"
+  },
+  {
+    "id": "industrial__hand_holding",
+    "mood_id": "industrial",
+    "mood_label": "인더스트리얼",
+    "composition_id": "hand_holding",
+    "composition_label": "손으로 들고 있는 구도",
+    "thumbnail_url": "https://picsum.photos/seed/industrial-hand_holding/300/300"
+  },
+  {
+    "id": "bright_clean__top_view",
+    "mood_id": "bright_clean",
+    "mood_label": "브라이트 클린",
+    "composition_id": "top_view",
+    "composition_label": "위에서 내려다본 구도",
+    "thumbnail_url": "https://picsum.photos/seed/bright_clean-top_view/300/300"
+  },
+  {
+    "id": "bright_clean__side_view",
+    "mood_id": "bright_clean",
+    "mood_label": "브라이트 클린",
+    "composition_id": "side_view",
+    "composition_label": "옆에서 바라본 구도",
+    "thumbnail_url": "https://picsum.photos/seed/bright_clean-side_view/300/300"
+  },
+  {
+    "id": "bright_clean__hand_holding",
+    "mood_id": "bright_clean",
+    "mood_label": "브라이트 클린",
+    "composition_id": "hand_holding",
+    "composition_label": "손으로 들고 있는 구도",
+    "thumbnail_url": "https://picsum.photos/seed/bright_clean-hand_holding/300/300"
+  },
+  {
+    "id": "botanical_green__top_view",
+    "mood_id": "botanical_green",
+    "mood_label": "보태니컬 그린",
+    "composition_id": "top_view",
+    "composition_label": "위에서 내려다본 구도",
+    "thumbnail_url": "https://picsum.photos/seed/botanical_green-top_view/300/300"
+  },
+  {
+    "id": "botanical_green__side_view",
+    "mood_id": "botanical_green",
+    "mood_label": "보태니컬 그린",
+    "composition_id": "side_view",
+    "composition_label": "옆에서 바라본 구도",
+    "thumbnail_url": "https://picsum.photos/seed/botanical_green-side_view/300/300"
+  },
+  {
+    "id": "botanical_green__hand_holding",
+    "mood_id": "botanical_green",
+    "mood_label": "보태니컬 그린",
+    "composition_id": "hand_holding",
+    "composition_label": "손으로 들고 있는 구도",
+    "thumbnail_url": "https://picsum.photos/seed/botanical_green-hand_holding/300/300"
+  },
+  {
+    "id": "monochrome__top_view",
+    "mood_id": "monochrome",
+    "mood_label": "모노크롬",
+    "composition_id": "top_view",
+    "composition_label": "위에서 내려다본 구도",
+    "thumbnail_url": "https://picsum.photos/seed/monochrome-top_view/300/300"
+  },
+  {
+    "id": "monochrome__side_view",
+    "mood_id": "monochrome",
+    "mood_label": "모노크롬",
+    "composition_id": "side_view",
+    "composition_label": "옆에서 바라본 구도",
+    "thumbnail_url": "https://picsum.photos/seed/monochrome-side_view/300/300"
+  },
+  {
+    "id": "monochrome__hand_holding",
+    "mood_id": "monochrome",
+    "mood_label": "모노크롬",
+    "composition_id": "hand_holding",
+    "composition_label": "손으로 들고 있는 구도",
+    "thumbnail_url": "https://picsum.photos/seed/monochrome-hand_holding/300/300"
   }
 ]
