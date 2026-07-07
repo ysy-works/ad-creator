@@ -5,7 +5,7 @@
     "mood_label": "뉴트럴 화이트",
     "composition_id": "close_up",
     "composition_label": "클로즈업",
-    "thumbnail_url": "https://picsum.photos/seed/neutral_white-close_up/300/300"
+    "thumbnail_url": "/references/neutral_white__close_up.png"
   },
   {
     "id": "neutral_white__medium_shot",
@@ -13,7 +13,7 @@
     "mood_label": "뉴트럴 화이트",
     "composition_id": "medium_shot",
     "composition_label": "미디움샷",
-    "thumbnail_url": "https://picsum.photos/seed/neutral_white-medium_shot/300/300"
+    "thumbnail_url": "/references/neutral_white__medium_shot.png"
   },
   {
     "id": "neutral_white__aerial_shot",
@@ -21,7 +21,7 @@
     "mood_label": "뉴트럴 화이트",
     "composition_id": "aerial_shot",
     "composition_label": "항공샷",
-    "thumbnail_url": "https://picsum.photos/seed/neutral_white-aerial_shot/300/300"
+    "thumbnail_url": "/references/neutral_white__aerial_shot.png"
   },
   {
     "id": "neutral_white__hand_holding",
@@ -29,7 +29,7 @@
     "mood_label": "뉴트럴 화이트",
     "composition_id": "hand_holding",
     "composition_label": "손에 들고 있는 샷",
-    "thumbnail_url": "https://picsum.photos/seed/neutral_white-hand_holding/300/300"
+    "thumbnail_url": "/references/neutral_white__hand_holding.png"
   },
   {
     "id": "wood__close_up",
@@ -37,7 +37,7 @@
     "mood_label": "우드",
     "composition_id": "close_up",
     "composition_label": "클로즈업",
-    "thumbnail_url": "https://picsum.photos/seed/wood-close_up/300/300"
+    "thumbnail_url": "/references/wood__close_up.png"
   },
   {
     "id": "wood__medium_shot",
@@ -45,7 +45,7 @@
     "mood_label": "우드",
     "composition_id": "medium_shot",
     "composition_label": "미디움샷",
-    "thumbnail_url": "https://picsum.photos/seed/wood-medium_shot/300/300"
+    "thumbnail_url": "/references/wood__medium_shot.png"
   },
   {
     "id": "wood__aerial_shot",
@@ -53,7 +53,7 @@
     "mood_label": "우드",
     "composition_id": "aerial_shot",
     "composition_label": "항공샷",
-    "thumbnail_url": "https://picsum.photos/seed/wood-aerial_shot/300/300"
+    "thumbnail_url": "/references/wood__aerial_shot.png"
   },
   {
     "id": "wood__hand_holding",
@@ -61,7 +61,7 @@
     "mood_label": "우드",
     "composition_id": "hand_holding",
     "composition_label": "손에 들고 있는 샷",
-    "thumbnail_url": "https://picsum.photos/seed/wood-hand_holding/300/300"
+    "thumbnail_url": "/references/wood__hand_holding.png"
   },
   {
     "id": "vivid__close_up",
@@ -69,7 +69,7 @@
     "mood_label": "Vivid",
     "composition_id": "close_up",
     "composition_label": "클로즈업",
-    "thumbnail_url": "https://picsum.photos/seed/vivid-close_up/300/300"
+    "thumbnail_url": "/references/vivid__close_up.png"
   },
   {
     "id": "vivid__medium_shot",
@@ -77,7 +77,7 @@
     "mood_label": "Vivid",
     "composition_id": "medium_shot",
     "composition_label": "미디움샷",
-    "thumbnail_url": "https://picsum.photos/seed/vivid-medium_shot/300/300"
+    "thumbnail_url": "/references/vivid__medium_shot.png"
   },
   {
     "id": "vivid__aerial_shot",
@@ -85,7 +85,7 @@
     "mood_label": "Vivid",
     "composition_id": "aerial_shot",
     "composition_label": "항공샷",
-    "thumbnail_url": "https://picsum.photos/seed/vivid-aerial_shot/300/300"
+    "thumbnail_url": "/references/vivid__aerial_shot.png"
   },
   {
     "id": "vivid__hand_holding",
@@ -93,6 +93,6 @@
     "mood_label": "Vivid",
     "composition_id": "hand_holding",
     "composition_label": "손에 들고 있는 샷",
-    "thumbnail_url": "https://picsum.photos/seed/vivid-hand_holding/300/300"
+    "thumbnail_url": "/references/vivid__hand_holding.png"
   }
 ]
