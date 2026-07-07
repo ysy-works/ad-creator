@@ -44,13 +44,16 @@ function App() {
     return acc;
   }, {});
 
+  // 현재 선택된 레퍼런스 객체 (업로드 단계에서 안내 문구에 사용)
+  const selectedReference = references.find((r) => r.id === selectedReferenceId);
+
   const handleGenerate = async () => {
-    if (!productFile) {
-      setError("사진을 업로드해주세요.");
+    if (!selectedReferenceId) {
+      setError("레퍼런스를 먼저 선택해주세요.");
       return;
     }
-    if (!selectedReferenceId) {
-      setError("레퍼런스를 선택해주세요.");
+    if (!productFile) {
+      setError("사진을 업로드해주세요.");
       return;
     }
     setError("");
@@ -99,27 +102,12 @@ function App() {
     >
       <h2>카페 음료 사진 보정 생성기 (프로토타입)</h2>
       <p style={{ color: "#666" }}>
-        사진을 올리고, 원하는 분위기와 구도를 골라주세요. 별도 프롬프트 입력은 필요 없습니다.
+        원하는 분위기와 구도를 먼저 고르고, 그 구도에 맞게 사진을 찍어 올려주세요. 별도 프롬프트 입력은 필요 없습니다.
       </p>
 
-      {/* 1. 사진 업로드 */}
+      {/* 1. 레퍼런스 갤러리 */}
       <div style={{ marginBottom: "32px" }}>
-        <h3>1. 사진 업로드</h3>
-        <input type="file" accept="image/jpeg,image/png" onChange={handleFileChange} />
-        {productPreviewUrl && (
-          <div style={{ marginTop: "12px" }}>
-            <img
-              src={productPreviewUrl}
-              alt="업로드한 사진 미리보기"
-              style={{ maxWidth: "240px", borderRadius: "8px", border: "1px solid #ddd" }}
-            />
-          </div>
-        )}
-      </div>
-
-      {/* 2. 레퍼런스 갤러리 */}
-      <div style={{ marginBottom: "32px" }}>
-        <h3>2. 분위기 · 구도 선택</h3>
+        <h3>1. 분위기 · 구도 선택</h3>
         {Object.keys(groupedByMood).length === 0 && <p>레퍼런스를 불러오는 중...</p>}
 
         {Object.entries(groupedByMood).map(([moodId, group]) => (
@@ -165,6 +153,34 @@ function App() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* 2. 사진 업로드 */}
+      <div style={{ marginBottom: "32px" }}>
+        <h3>2. 사진 업로드</h3>
+        {selectedReference ? (
+          <p style={{ color: "#4a90e2" }}>
+            선택한 구도: <strong>{selectedReference.mood_label} · {selectedReference.composition_label}</strong>
+            {" "}— 이 구도에 맞게 촬영한 사진을 올려주세요.
+          </p>
+        ) : (
+          <p style={{ color: "#999" }}>레퍼런스를 먼저 선택해주세요.</p>
+        )}
+        <input
+          type="file"
+          accept="image/jpeg,image/png"
+          onChange={handleFileChange}
+          disabled={!selectedReferenceId}
+        />
+        {productPreviewUrl && (
+          <div style={{ marginTop: "12px" }}>
+            <img
+              src={productPreviewUrl}
+              alt="업로드한 사진 미리보기"
+              style={{ maxWidth: "240px", borderRadius: "8px", border: "1px solid #ddd" }}
+            />
+          </div>
+        )}
       </div>
 
       {/* 3. 생성 버튼 */}
