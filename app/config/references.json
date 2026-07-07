@@ -16,12 +16,12 @@
     "thumbnail_url": "https://picsum.photos/seed/neutral_white-medium_shot/300/300"
   },
   {
-    "id": "neutral_white__full_shot",
+    "id": "neutral_white__aerial_shot",
     "mood_id": "neutral_white",
     "mood_label": "뉴트럴 화이트",
-    "composition_id": "full_shot",
-    "composition_label": "풀샷",
-    "thumbnail_url": "https://picsum.photos/seed/neutral_white-full_shot/300/300"
+    "composition_id": "aerial_shot",
+    "composition_label": "항공샷",
+    "thumbnail_url": "https://picsum.photos/seed/neutral_white-aerial_shot/300/300"
   },
   {
     "id": "neutral_white__hand_holding",
@@ -48,12 +48,12 @@
     "thumbnail_url": "https://picsum.photos/seed/wood-medium_shot/300/300"
   },
   {
-    "id": "wood__full_shot",
+    "id": "wood__aerial_shot",
     "mood_id": "wood",
     "mood_label": "우드",
-    "composition_id": "full_shot",
-    "composition_label": "풀샷",
-    "thumbnail_url": "https://picsum.photos/seed/wood-full_shot/300/300"
+    "composition_id": "aerial_shot",
+    "composition_label": "항공샷",
+    "thumbnail_url": "https://picsum.photos/seed/wood-aerial_shot/300/300"
   },
   {
     "id": "wood__hand_holding",
@@ -80,12 +80,12 @@
     "thumbnail_url": "https://picsum.photos/seed/vivid-medium_shot/300/300"
   },
   {
-    "id": "vivid__full_shot",
+    "id": "vivid__aerial_shot",
     "mood_id": "vivid",
     "mood_label": "Vivid",
-    "composition_id": "full_shot",
-    "composition_label": "풀샷",
-    "thumbnail_url": "https://picsum.photos/seed/vivid-full_shot/300/300"
+    "composition_id": "aerial_shot",
+    "composition_label": "항공샷",
+    "thumbnail_url": "https://picsum.photos/seed/vivid-aerial_shot/300/300"
   },
   {
     "id": "vivid__hand_holding",
