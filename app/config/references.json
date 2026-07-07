@@ -28,7 +28,7 @@
     "mood_id": "neutral_white",
     "mood_label": "뉴트럴 화이트",
     "composition_id": "hand_holding",
-    "composition_label": "손으로 든 것",
+    "composition_label": "손에 들고 있는 샷",
     "thumbnail_url": "https://picsum.photos/seed/neutral_white-hand_holding/300/300"
   },
   {
@@ -60,7 +60,7 @@
     "mood_id": "wood",
     "mood_label": "우드",
     "composition_id": "hand_holding",
-    "composition_label": "손으로 든 것",
+    "composition_label": "손에 들고 있는 샷",
     "thumbnail_url": "https://picsum.photos/seed/wood-hand_holding/300/300"
   },
   {
@@ -92,7 +92,7 @@
     "mood_id": "vivid",
     "mood_label": "Vivid",
     "composition_id": "hand_holding",
-    "composition_label": "손으로 든 것",
+    "composition_label": "손에 들고 있는 샷",
     "thumbnail_url": "https://picsum.photos/seed/vivid-hand_holding/300/300"
   }
 ]
