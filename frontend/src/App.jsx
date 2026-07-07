@@ -127,16 +127,14 @@ function App() {
                   onClick={() => setSelectedReferenceId(ref.id)}
                   style={{
                     cursor: "pointer",
-                    border:
-                      selectedReferenceId === ref.id
-                        ? "3px solid #4a90e2"
-                        : "1px solid #ddd",
+                    boxSizing: "border-box",
+                    border: "1px solid #ddd",
                     borderRadius: "10px",
                     padding: "6px",
                     width: "220px",
                     boxShadow:
                       selectedReferenceId === ref.id
-                        ? "0 2px 8px rgba(74,144,226,0.35)"
+                        ? "0 0 0 3px #4a90e2, 0 2px 8px rgba(74,144,226,0.35)"
                         : "none",
                   }}
                 >
