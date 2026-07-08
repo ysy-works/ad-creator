@@ -181,6 +181,19 @@ function App() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap');
 
+        html, body {
+          margin: 0;
+          padding: 0;
+          width: 100%;
+        }
+        #root {
+          width: 100%;
+        }
+
+        *, *::before, *::after {
+          box-sizing: border-box;
+        }
+
         .cafe-app {
           --bg: #EFE8DA;
           --surface: #FFFDF9;
@@ -190,6 +203,7 @@ function App() {
           --accent-2: #5C6B4C;
           --line: #DDD2BE;
 
+          width: 100%;
           background: var(--bg);
           color: var(--ink);
           font-family: 'Pretendard', -apple-system, sans-serif;
