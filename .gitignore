@@ -1,42 +1,7 @@
-# Environment variables and secrets
-.env
-.env.*
-!.env.example
-ssh-key/
-secrets/
-*.pem
-*.key
-*.p12
-*.pfx
-
-# Project data and generated reports
-data/
-report/
-docs/
-
-# Python
 __pycache__/
-*.py[cod]
+*.pyc
+outputs/
+*.jpg
+*.jpeg
+*.png
 .venv/
-venv/
-.ipynb_checkpoints/
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.coverage
-htmlcov/
-
-# Node.js
-node_modules/
-dist/
-build/
-.next/
-
-# Logs
-*.log
-
-# IDE and OS files
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
