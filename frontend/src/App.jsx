@@ -262,7 +262,7 @@ function App() {
 
         .mood-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
           gap: clamp(12px, 2.5vw, 20px);
         }
 
@@ -426,7 +426,7 @@ function App() {
         .download-btn:hover { background: var(--accent); color: #fff; }
 
         @media (max-width: 480px) {
-          .mood-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+          .mood-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
         }
       `}</style>
 
