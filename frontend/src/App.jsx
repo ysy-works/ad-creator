@@ -182,6 +182,7 @@ function App() {
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap');
 
         html, body {
+          display: block;
           margin: 0;
           padding: 0;
           width: 100%;
