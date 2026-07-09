@@ -475,7 +475,7 @@ function App() {
 
         .result-section {
           margin-top: 48px;
-          max-width: 340px;
+          max-width: min(460px, 100%);
           margin-left: auto;
           margin-right: auto;
         }
