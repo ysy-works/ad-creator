@@ -667,7 +667,8 @@ function App() {
             {/* 문구 품질을 위한 최소 정보 (둘 다 선택 입력) - 이미지 확인 후 입력 */}
             {!captionReady && (
               <div className="upload-panel qa-panel">
-                <p className="upload-hint">문구를 만들기 전에, 비워두셔도 되는 정보예요.</p>
+                <h3 className="section-title" style={{ marginTop: "28px" }}>문구에 담을 정보 (선택)</h3>
+                <p className="upload-hint">비워두셔도 괜찮아요. 채워주시면 문구가 더 정확해져요.</p>
 
                 <div className="qa-field">
                   <label className="qa-field__label">메뉴명</label>
