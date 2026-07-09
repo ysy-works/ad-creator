@@ -23,7 +23,21 @@ import { useState, useEffect } from "react";
 // PC(localhost)에서 접속하든 휴대폰(같은 Wi-Fi의 IP)에서 접속하든
 // 지금 브라우저 주소창의 호스트를 그대로 따라가서 API를 호출한다.
 // -> IP가 바뀌어도(카페 Wi-Fi 등) 코드 수정 없이 그대로 동작함.
-const API_BASE = `http://${window.location.hostname}:8000`;
+// 배포된 백엔드 주소 (Render). Vercel 등 실제 배포 환경에서는 기본으로 이걸 씀.
+const RENDER_BACKEND = "https://ad-creator-backend-latest.onrender.com";
+
+// 지금 접속한 주소가 localhost거나, 같은 Wi-Fi 안의 사설망 IP(192.168.x.x, 10.x.x.x)면
+// "로컬에서 개발 중"이라고 판단해서 로컬 백엔드(8000번 포트)를 우선 사용한다.
+// -> 평소 개발할 때는 Render의 콜드스타트(약 1분)를 기다릴 필요 없이 바로 로컬로 붙는다.
+const isLocalDev =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1" ||
+  /^192\.168\.\d{1,3}\.\d{1,3}$/.test(window.location.hostname) ||
+  /^10\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(window.location.hostname);
+
+const API_BASE = isLocalDev
+  ? `http://${window.location.hostname}:8000`
+  : RENDER_BACKEND;
 
 const seededLikeCount = (id) => {
   let hash = 0;
