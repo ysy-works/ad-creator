@@ -95,6 +95,9 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [resultImage, setResultImage] = useState(null);
+  const [caption, setCaption] = useState(null);
+  const [hashtags, setHashtags] = useState([]);
+  const [copied, setCopied] = useState(false);
 
   // 페이지 로드 시 레퍼런스 목록 불러오기
   useEffect(() => {
@@ -144,6 +147,9 @@ function App() {
     setError("");
     setLoading(true);
     setResultImage(null);
+    setCaption(null);
+    setHashtags([]);
+    setCopied(false);
 
     try {
       const formData = new FormData();
@@ -161,10 +167,28 @@ function App() {
 
       const data = await response.json();
       setResultImage(data.result_image);
+      setCaption(data.caption || null);
+      setHashtags(data.hashtags || []);
+      // 캡션 생성만 실패한 경우(이미지는 정상) -> 이미지는 보여주되 안내 문구만 표시
+      if (data.caption_error) {
+        setError("이미지는 생성됐지만, 캡션 생성에 실패했습니다.");
+      }
     } catch (err) {
       setError(err.message || "오류가 발생했습니다.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  // 캡션 + 해시태그를 클립보드에 복사 (바로 붙여넣기용)
+  const handleCopyCaption = async () => {
+    const text = [caption, hashtags.join(" ")].filter(Boolean).join("\n\n");
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      setError("복사에 실패했습니다. 직접 선택해서 복사해주세요.");
     }
   };
 
@@ -425,6 +449,46 @@ function App() {
         }
         .download-btn:hover { background: var(--accent); color: #fff; }
 
+        .caption-box {
+          margin-top: 20px;
+          text-align: left;
+          background: var(--surface);
+          border: 1px solid var(--line);
+          border-radius: 12px;
+          padding: 16px 18px;
+        }
+        .caption-box__label {
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.06em;
+          color: var(--accent-2);
+          margin-bottom: 8px;
+        }
+        .caption-box__text {
+          font-size: 14px;
+          line-height: 1.6;
+          color: var(--ink);
+          margin: 0 0 10px;
+          white-space: pre-wrap;
+        }
+        .caption-box__hashtags {
+          font-size: 13px;
+          color: var(--accent);
+          margin: 0 0 14px;
+          line-height: 1.6;
+        }
+        .copy-btn {
+          padding: 8px 18px;
+          font-size: 12.5px;
+          font-weight: 600;
+          color: var(--ink);
+          background: var(--bg);
+          border: 1px solid var(--line);
+          border-radius: 999px;
+          cursor: pointer;
+        }
+        .copy-btn:hover { background: var(--line); }
+
         @media (max-width: 480px) {
           .mood-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
         }
@@ -504,7 +568,21 @@ function App() {
             <PostFrame brand="moodcut" caption="방금 생성된 결과예요" likeCount={null}>
               <img src={resultImage} alt="생성 결과" />
             </PostFrame>
-            <button className="download-btn" onClick={handleDownload}>다운로드</button>
+            <button className="download-btn" onClick={handleDownload}>이미지 다운로드</button>
+
+            {/* 캡션/해시태그는 이미지와 별개의 텍스트로 제공 (이미지에 합성되지 않음) */}
+            {caption && (
+              <div className="caption-box">
+                <div className="caption-box__label">바로 올릴 캡션</div>
+                <p className="caption-box__text">{caption}</p>
+                {hashtags.length > 0 && (
+                  <p className="caption-box__hashtags">{hashtags.join(" ")}</p>
+                )}
+                <button className="copy-btn" onClick={handleCopyCaption}>
+                  {copied ? "복사됨!" : "텍스트 복사"}
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
