@@ -593,7 +593,7 @@ function App() {
         <span className="cafe-app__eyebrow">COFFEE MOOD LAB</span>
         <h2 className="cafe-app__title">카페 음료 사진 보정 생성기</h2>
         <p className="cafe-app__subtitle">
-          사진을 올리면 어울리는 스타일로 보정하고, 바로 올릴 문구까지 만들어드려요.
+          사진을 올리면 어울리는 스타일로 보정하고, 바로 올릴 문구까지 만들어드립니다.
         </p>
 
         {/* 1. 레퍼런스 갤러리 */}
@@ -648,57 +648,14 @@ function App() {
           )}
         </div>
 
-        {/* 3. 문구 품질을 위한 최소 정보 (둘 다 선택 입력) */}
-        <h3 className="section-title" style={{ marginTop: "8px" }}>3. 문구에 담을 정보 (선택)</h3>
-        <div className="upload-panel">
-          <p className="upload-hint">비워두셔도 괜찮아요. 채워주시면 문구가 더 정확해져요.</p>
-
-          <div className="qa-field">
-            <label className="qa-field__label">메뉴명</label>
-            <input
-              type="text"
-              className="qa-field__input"
-              placeholder="예: 아이스 아메리카노"
-              value={menuName}
-              onChange={(e) => setMenuName(e.target.value)}
-            />
-          </div>
-
-          <div className="qa-field">
-            <label className="qa-field__label">게시 목적</label>
-            <div className="qa-options">
-              {PURPOSE_OPTIONS.map((option) => (
-                <button
-                  key={option}
-                  type="button"
-                  className={`qa-chip${purpose === option ? " is-selected" : ""}`}
-                  onClick={() => setPurpose(purpose === option ? "" : option)}
-                >
-                  {option}
-                </button>
-              ))}
-            </div>
-            {purpose === "기타" && (
-              <input
-                type="text"
-                className="qa-field__input"
-                style={{ marginTop: "8px" }}
-                placeholder="게시 목적을 직접 입력해주세요"
-                value={purposeOther}
-                onChange={(e) => setPurposeOther(e.target.value)}
-              />
-            )}
-          </div>
-        </div>
-
-        {/* 4. 생성 버튼 */}
+        {/* 3. 생성 버튼 (업로드 직후 바로 생성) */}
         <button className="generate-btn" onClick={handleGenerate} disabled={loading}>
           {loading ? "생성 중..." : "이미지 생성"}
         </button>
 
         {error && <p className="error-text">{error}</p>}
 
-        {/* 5. 결과 (다운로드는 프레임 제외, 순수 이미지만) */}
+        {/* 4. 결과 (다운로드는 프레임 제외, 순수 이미지만) */}
         {resultImage && (
           <div className="result-section">
             <h3 className="section-title">결과</h3>
@@ -706,6 +663,50 @@ function App() {
               <img src={resultImage} alt="생성 결과" />
             </PostFrame>
             <button className="download-btn" onClick={handleDownload}>이미지 다운로드</button>
+
+            {/* 문구 품질을 위한 최소 정보 (둘 다 선택 입력) - 이미지 확인 후 입력 */}
+            {!captionReady && (
+              <div className="upload-panel qa-panel">
+                <p className="upload-hint">문구를 만들기 전에, 비워두셔도 되는 정보예요.</p>
+
+                <div className="qa-field">
+                  <label className="qa-field__label">메뉴명</label>
+                  <input
+                    type="text"
+                    className="qa-field__input"
+                    placeholder="예: 아이스 아메리카노"
+                    value={menuName}
+                    onChange={(e) => setMenuName(e.target.value)}
+                  />
+                </div>
+
+                <div className="qa-field">
+                  <label className="qa-field__label">게시 목적</label>
+                  <div className="qa-options">
+                    {PURPOSE_OPTIONS.map((option) => (
+                      <button
+                        key={option}
+                        type="button"
+                        className={`qa-chip${purpose === option ? " is-selected" : ""}`}
+                        onClick={() => setPurpose(purpose === option ? "" : option)}
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                  {purpose === "기타" && (
+                    <input
+                      type="text"
+                      className="qa-field__input"
+                      style={{ marginTop: "8px" }}
+                      placeholder="게시 목적을 직접 입력해주세요"
+                      value={purposeOther}
+                      onChange={(e) => setPurposeOther(e.target.value)}
+                    />
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* 캡션/해시태그/스토리 문구는 이미지와 별개의 텍스트로, 버튼을 눌러야 생성됨 */}
             {!captionReady && (
