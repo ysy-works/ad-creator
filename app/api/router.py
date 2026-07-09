@@ -2,9 +2,11 @@ import base64
 import io
 import json
 from pathlib import Path
+from typing import Optional
 
 from fastapi import APIRouter, UploadFile, File, Form
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 from PIL import Image
 
 from app.model.model import generate_styled_image
@@ -46,6 +48,11 @@ def _load_references():
         return json.load(f)
 
 
+def _find_reference(reference_id: str):
+    references = _load_references()
+    return next((r for r in references if r["id"] == reference_id), None)
+
+
 @router.get("/references")
 async def get_references():
     """
@@ -63,45 +70,55 @@ async def generate(
 ):
     """
     사용자가 올린 사진 + 고른 레퍼런스(reference_id)를 기반으로
-    같은 분위기/구도의 이미지를 생성하고, 그 결과 이미지를 바로 이어서
-    캡션·해시태그 생성에도 사용한다.
+    같은 분위기/구도의 이미지를 생성해서 반환.
 
-    -> "결과 이미지를 실제로 보고 캡션을 쓴다"는 원칙을 지키기 위해,
-       이미지 생성 직후 같은 요청 안에서 캡션까지 만들어 한 번에 응답한다.
-       (나중에 진짜 모델이 붙어도 이 순서는 그대로 유지하면 됨:
-        모델 결과물 → 그 결과물을 그대로 캡션 생성기에 전달)
+    캡션 생성은 여기서 하지 않는다 (사용자가 이미지 결과를 먼저 확인한 뒤,
+    별도 버튼을 눌러야 /caption이 호출되는 2단계 구조).
     """
-    references = _load_references()
-    reference = next((r for r in references if r["id"] == reference_id), None)
+    reference = _find_reference(reference_id)
     if reference is None:
         return JSONResponse(status_code=400, content={"error": "존재하지 않는 reference_id입니다."})
 
     image_data = await product_image.read()
     pil_image = Image.open(io.BytesIO(image_data)).convert("RGB")
 
-    # 1) 이미지 생성 (지금은 더미: 업로드 이미지를 그대로 반환.
-    #    모델팀 연동 후에도 이 함수의 반환값이 "최종 결과 이미지"라는 계약은 동일)
     result_image = generate_styled_image(pil_image, reference)
     result_image = resize_to_instagram(result_image)
-    result_base64 = image_to_base64(result_image)
-
-    # 2) 캡션/해시태그 생성 — 방금 만든 결과 이미지를 그대로 보고 작성
-    caption_package = {"caption": None, "hashtags": []}
-    caption_error = None
-    try:
-        caption_package = generate_caption_package(
-            result_image_base64=result_base64,
-            mood_label=reference["mood_label"],
-            composition_label=reference["composition_label"],
-        )
-    except Exception as e:
-        # 캡션 생성이 실패해도 이미지 생성 자체는 이미 성공했으니
-        # 전체 요청을 실패시키지 않고, 이미지는 정상 반환 + 에러 사유만 같이 알려준다.
-        caption_error = str(e)
 
     return JSONResponse(content={
-        "result_image": result_base64,
-        "caption": caption_package.get("caption"),
-        "hashtags": caption_package.get("hashtags", []),
-        "caption_error": caption_error,
+        "result_image": image_to_base64(result_image),
     })
+
+
+class CaptionRequest(BaseModel):
+    reference_id: str
+    result_image_base64: str
+    menu_name: Optional[str] = None
+    purpose: Optional[str] = None
+
+
+@router.post("/caption")
+async def caption(payload: CaptionRequest):
+    """
+    이미 생성된 결과 이미지(result_image_base64)를 보고
+    캡션 + 해시태그 + 스토리 문구를 생성.
+
+    /generate와 분리된 이유: 사용자가 이미지 결과부터 먼저 확인하고,
+    "캡션·해시태그 만들기" 버튼을 눌렀을 때만 (선택적으로) 호출되는 구조이기 때문.
+    """
+    reference = _find_reference(payload.reference_id)
+    if reference is None:
+        return JSONResponse(status_code=400, content={"error": "존재하지 않는 reference_id입니다."})
+
+    try:
+        result = generate_caption_package(
+            result_image_base64=payload.result_image_base64,
+            mood_label=reference["mood_label"],
+            composition_label=reference["composition_label"],
+            menu_name=payload.menu_name,
+            purpose=payload.purpose,
+        )
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": f"캡션 생성 실패: {e}"})
+
+    return JSONResponse(content=result)
