@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 /*
   디자인 토큰 (무드컷 · 카페 무드보드 소셜카드 컨셉)
@@ -20,7 +20,21 @@ import { useState, useEffect } from "react";
     좋아요 수는 레퍼런스 id 기반으로 결정적으로 생성(매번 안 바뀜).
 */
 
-// PC(localhost)에서 접속하든 휴대폰(같은 Wi-Fi의 IP)에서 접속하든
+// 카드 캡션에 쓸 감성적인 한 줄 문구. composition_id 기준으로 매핑.
+// (references.json의 composition_label 자체는 안 건드림 — 업로드 안내 등
+//  다른 곳에서는 여전히 원래 라벨을 씀. 이건 카드에서 "촬영기법 용어처럼
+//  보인다"는 피드백을 반영해, 카드에서만 보여줄 감성적 문구를 따로 둔 것.)
+const COMPOSITION_MOOD_CAPTIONS = {
+  product_large: "가까이서 담은 진한 한 잔",
+  product_center: "테이블 위, 자연스러운 순간",
+  aerial_shot: "위에서 내려다본 오늘의 한 컷",
+  handheld_lifestyle: "손끝에 걸린 편안한 하루",
+};
+
+const getCardCaption = (ref) =>
+  COMPOSITION_MOOD_CAPTIONS[ref.composition_id] || ref.composition_label;
+
+
 // 지금 브라우저 주소창의 호스트를 그대로 따라가서 API를 호출한다.
 // -> IP가 바뀌어도(카페 Wi-Fi 등) 코드 수정 없이 그대로 동작함.
 // 배포된 백엔드 주소 (Render). Vercel 등 실제 배포 환경에서는 기본으로 이걸 씀.
@@ -101,6 +115,7 @@ function PostFrame({ children, brand = "moodcut", caption, likeCount, selected, 
 
 function App() {
   const [productFile, setProductFile] = useState(null);
+  const fileInputRef = useRef(null);
   const [productPreviewUrl, setProductPreviewUrl] = useState(null);
 
   const [references, setReferences] = useState([]); // GET /references 결과 (그루핑 전 원본)
@@ -124,9 +139,14 @@ function App() {
 
   const PURPOSE_OPTIONS = ["일상 홍보", "신메뉴 소개", "오늘의 추천", "세일·이벤트", "기타"];
 
-  // 페이지 로드 시 레퍼런스 목록 불러오기
+  // 페이지 로드 시 레퍼런스 목록 불러오기.
+  // -> 예전엔 백엔드(Render)의 GET /references를 호출했는데, 이 데이터는
+  //    고정된 정적 정보(무드/구도 목록)라 굳이 매번 Render를 거칠 필요가 없다.
+  //    프론트(Cloudflare)에 같이 배포되는 정적 파일(/references.json)을
+  //    직접 읽도록 바꿔서, Render가 잠들어 있어도 갤러리는 항상 즉시 뜬다.
+  //    (실제 이미지 생성/캡션 생성은 여전히 Render를 거침 — 여기만 예외)
   useEffect(() => {
-    fetch(`${API_BASE}/references`)
+    fetch("/references.json")
       .then((res) => res.json())
       .then((data) => setReferences(data))
       .catch(() => setError("레퍼런스 목록을 불러오지 못했습니다."));
@@ -315,12 +335,14 @@ function App() {
           font-size: clamp(24px, 4vw, 36px);
           text-align: center;
           margin: 6px 0 8px;
+          color: var(--ink);
         }
 
         .cafe-app__subtitle {
           text-align: center;
           color: var(--ink-soft);
           font-size: clamp(13px, 2.4vw, 15px);
+          font-weight: 500;
           max-width: 560px;
           margin: 0 auto 40px;
           line-height: 1.6;
@@ -332,6 +354,7 @@ function App() {
           font-weight: 600;
           text-align: center;
           margin-bottom: 20px;
+          color: var(--ink);
         }
 
         .mood-block { margin-bottom: 44px; }
@@ -426,6 +449,7 @@ function App() {
           padding: 2px 10px 12px;
           font-size: 12px;
           color: var(--ink-soft);
+          text-align: left;
         }
         .post-frame__caption strong {
           color: var(--ink);
@@ -439,18 +463,49 @@ function App() {
         }
         .upload-hint {
           font-size: 14px;
+          font-weight: 500;
           margin-bottom: 14px;
           color: var(--ink-soft);
         }
-        .upload-hint.is-active { color: var(--accent-2); font-weight: 600; }
+        .upload-hint.is-active { color: var(--accent-2); font-weight: 900; }
 
         .file-input-wrap {
-          display: inline-flex;
+          display: flex;
+          flex-direction: column;
           align-items: center;
-          gap: 10px;
+          gap: 8px;
         }
-        .file-input-wrap input[type="file"] {
-          font-size: 13px;
+        .file-input-hidden {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+        }
+        .file-input-btn {
+          padding: 9px 22px;
+          font-size: 13.5px;
+          font-weight: 600;
+          color: var(--accent);
+          background: var(--surface);
+          border: 1.5px solid var(--accent);
+          border-radius: 999px;
+          cursor: pointer;
+          transition: background 0.15s ease, color 0.15s ease;
+        }
+        .file-input-btn:hover:not(:disabled) {
+          background: var(--accent);
+          color: #fff;
+        }
+        .file-input-btn:disabled {
+          opacity: 0.5;
+          cursor: default;
+          border-color: var(--line);
+          color: var(--ink-soft);
+        }
+        .file-input-name {
+          font-size: 12.5px;
           color: var(--ink-soft);
         }
 
@@ -524,6 +579,7 @@ function App() {
         }
         .caption-box__text {
           font-size: 14px;
+          font-weight: 500;
           line-height: 1.6;
           color: var(--ink);
           margin: 0 0 10px;
@@ -624,7 +680,7 @@ function App() {
                 <PostFrame
                   key={ref.id}
                   brand="moodcut"
-                  caption={ref.composition_label}
+                  caption={getCardCaption(ref)}
                   likeCount={seededLikeCount(ref.id)}
                   selected={selectedReferenceId === ref.id}
                   onClick={() => setSelectedReferenceId(ref.id)}
@@ -649,11 +705,24 @@ function App() {
           )}
           <div className="file-input-wrap">
             <input
+              ref={fileInputRef}
               type="file"
               accept="image/jpeg,image/png"
               onChange={handleFileChange}
               disabled={!selectedReferenceId}
+              className="file-input-hidden"
             />
+            <button
+              type="button"
+              className="file-input-btn"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={!selectedReferenceId}
+            >
+              사진 선택
+            </button>
+            <span className="file-input-name">
+              {productFile ? productFile.name : "선택된 파일 없음"}
+            </span>
           </div>
           {productPreviewUrl && (
             <div className="preview-thumb">
@@ -672,7 +741,7 @@ function App() {
         {/* 4. 결과 (다운로드는 프레임 제외, 순수 이미지만) */}
         {resultImage && (
           <div className="result-section">
-            <h3 className="section-title">결과</h3>
+            <h3 className="section-title">무드컷 완성</h3>
             <PostFrame brand="moodcut" likeCount={null}>
               <img src={resultImage} alt="생성 결과" />
             </PostFrame>
