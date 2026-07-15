@@ -25,6 +25,7 @@ venv/
 .ruff_cache/
 .coverage
 htmlcov/
+ad-creator-venv/
 
 # Node.js
 node_modules/
@@ -40,3 +41,7 @@ build/
 .idea/
 .DS_Store
 Thumbs.db
+
+# API
+GCP-key/
+API 키.txt

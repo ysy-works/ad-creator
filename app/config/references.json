@@ -5,7 +5,7 @@
     "mood_label": "뉴트럴 화이트",
     "composition_id": "product_large",
     "composition_label": "클로즈업",
-    "thumbnail_url": "/references/natural_white__product_large.png"
+    "thumbnail_url": "/references/natural_white__product_large.webp"
   },
   {
     "id": "natural_white__product_center",
@@ -13,7 +13,7 @@
     "mood_label": "뉴트럴 화이트",
     "composition_id": "product_center",
     "composition_label": "미디움샷",
-    "thumbnail_url": "/references/natural_white__product_center.png"
+    "thumbnail_url": "/references/natural_white__product_center.webp"
   },
   {
     "id": "natural_white__aerial_shot",
@@ -21,7 +21,7 @@
     "mood_label": "뉴트럴 화이트",
     "composition_id": "aerial_shot",
     "composition_label": "항공샷",
-    "thumbnail_url": "/references/natural_white__aerial_shot.png"
+    "thumbnail_url": "/references/natural_white__aerial_shot.webp"
   },
   {
     "id": "natural_white__handheld_lifestyle",
@@ -29,7 +29,7 @@
     "mood_label": "뉴트럴 화이트",
     "composition_id": "handheld_lifestyle",
     "composition_label": "손에 들고 있는 샷",
-    "thumbnail_url": "/references/natural_white__handheld_lifestyle.png"
+    "thumbnail_url": "/references/natural_white__handheld_lifestyle.webp"
   },
   {
     "id": "wood__product_large",
@@ -37,7 +37,7 @@
     "mood_label": "우드",
     "composition_id": "product_large",
     "composition_label": "클로즈업",
-    "thumbnail_url": "/references/wood__product_large.png"
+    "thumbnail_url": "/references/wood__product_large.webp"
   },
   {
     "id": "wood__product_center",
@@ -45,7 +45,7 @@
     "mood_label": "우드",
     "composition_id": "product_center",
     "composition_label": "미디움샷",
-    "thumbnail_url": "/references/wood__product_center.png"
+    "thumbnail_url": "/references/wood__product_center.webp"
   },
   {
     "id": "wood__aerial_shot",
@@ -53,7 +53,7 @@
     "mood_label": "우드",
     "composition_id": "aerial_shot",
     "composition_label": "항공샷",
-    "thumbnail_url": "/references/wood__aerial_shot.png"
+    "thumbnail_url": "/references/wood__aerial_shot.webp"
   },
   {
     "id": "wood__handheld_lifestyle",
@@ -61,7 +61,7 @@
     "mood_label": "우드",
     "composition_id": "handheld_lifestyle",
     "composition_label": "손에 들고 있는 샷",
-    "thumbnail_url": "/references/wood__handheld_lifestyle.png"
+    "thumbnail_url": "/references/wood__handheld_lifestyle.webp"
   },
   {
     "id": "vivid__product_large",
@@ -69,7 +69,7 @@
     "mood_label": "Vivid",
     "composition_id": "product_large",
     "composition_label": "클로즈업",
-    "thumbnail_url": "/references/vivid__product_large.png"
+    "thumbnail_url": "/references/vivid__product_large.webp"
   },
   {
     "id": "vivid__product_center",
@@ -77,7 +77,7 @@
     "mood_label": "Vivid",
     "composition_id": "product_center",
     "composition_label": "미디움샷",
-    "thumbnail_url": "/references/vivid__product_center.png"
+    "thumbnail_url": "/references/vivid__product_center.webp"
   },
   {
     "id": "vivid__aerial_shot",
@@ -85,7 +85,7 @@
     "mood_label": "Vivid",
     "composition_id": "aerial_shot",
     "composition_label": "항공샷",
-    "thumbnail_url": "/references/vivid__aerial_shot.png"
+    "thumbnail_url": "/references/vivid__aerial_shot.webp"
   },
   {
     "id": "vivid__handheld_lifestyle",
@@ -93,6 +93,6 @@
     "mood_label": "Vivid",
     "composition_id": "handheld_lifestyle",
     "composition_label": "손에 들고 있는 샷",
-    "thumbnail_url": "/references/vivid__handheld_lifestyle.png"
+    "thumbnail_url": "/references/vivid__handheld_lifestyle.webp"
   }
 ]
