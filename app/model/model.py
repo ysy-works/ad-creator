@@ -46,7 +46,7 @@ def generate_styled_image(product_image: Image.Image, reference: dict) -> Image.
         f"{MODEL_API_URL}/generate",
         files=files,
         data=data,
-        timeout=300,
+        timeout=420,
     )
     response.raise_for_status()
     result = response.json()
