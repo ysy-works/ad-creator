@@ -23,7 +23,7 @@ COMPOSITION_MAP = {
 
 def generate_styled_image(product_image: Image.Image, reference: dict) -> Image.Image:
     """
-    기현님(모델팀) GCP 서버(Flux)에 이미지를 보내서 스타일이 입혀진 결과를 받아온다.
+    기현님 GCP 서버(Flux)에 이미지를 보내서 스타일이 입혀진 결과를 받아온다.
     1) POST /generate 로 이미지+스타일 정보 전송 -> image_url 받음
     2) 그 image_url을 GET으로 다시 요청해서 실제 이미지 바이트를 받음
     """
@@ -46,7 +46,7 @@ def generate_styled_image(product_image: Image.Image, reference: dict) -> Image.
         f"{MODEL_API_URL}/generate",
         files=files,
         data=data,
-        timeout=180,
+        timeout=300,
     )
     response.raise_for_status()
     result = response.json()
