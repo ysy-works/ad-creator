@@ -1,0 +1,749 @@
+{
+  "white": {
+    "aerial": {
+      "background_style": "white",
+      "composition": "aerial",
+      "reference_count": 4,
+      "mood_name": "Minimal Cozy",
+      "common_elements": [
+        "white or very neutral background",
+        "aerial overhead camera angle",
+        "soft natural or diffused lighting",
+        "minimal props or simple accompanying items",
+        "neutral to warm tones in beverage and props",
+        "shallow depth of field or gentle background softness",
+        "clear focus on the beverage as the subject",
+        "negative space around the product emphasizing simplicity"
+      ],
+      "discard_as_one_off": [
+        "textured fabric background like crumpled sheets",
+        "presence of book with visible text",
+        "specific branded packaging or labels",
+        "colored or patterned dishware with strong graphics"
+      ],
+      "one_sentence_direction": "Create a clean, soft, and minimal overhead flat-lay mood with neutral white backgrounds and gentle natural light highlighting the beverage as the clear subject.",
+      "camera": {
+        "angle": "directly above, overhead aerial view",
+        "framing": "product centered or slightly off-center, taking moderate space but with ample surrounding negative space",
+        "lens_feel": "standard focal length with minimal distortion",
+        "depth_of_field": "shallow to moderate with softly blurred backgrounds"
+      },
+      "lighting": {
+        "quality": "soft and diffused",
+        "direction": "natural light from side or top, diffused to avoid harsh shadows",
+        "contrast": "low to medium contrast",
+        "shadow": "soft shadows gently around or behind the product",
+        "highlight": "natural highlights showing texture and freshness without glare"
+      },
+      "background": {
+        "surface": "matte white or neutral smooth surfaces like table or fabric",
+        "environment": "minimalist, clean and indoor",
+        "props": "few simple props like plain cups, plates, or neutral objects with minimal texture",
+        "negative_space": "generous negative space to emphasize minimalism and focus"
+      },
+      "color_grade": {
+        "palette": [
+          "white",
+          "soft beige",
+          "light brown",
+          "muted warm gray"
+        ],
+        "temperature": "neutral to slightly warm",
+        "saturation": "low to medium saturation",
+        "contrast": "medium contrast"
+      },
+      "instagram_style_prompt": "overhead flat-lay of beverage on white matte surface, soft diffused natural light, minimal props, neutral palette, gentle shadows, clean and modern minimalist aesthetic emphasizing product clarity and simplicity",
+      "composition_force_prompt": "aerial overhead view with generous negative white space and minimal soft shadows",
+      "avoid": [
+        "busy backgrounds and cluttered props",
+        "strong directional or harsh lighting",
+        "colorful or patterned surfaces and dishware",
+        "close-up macro shots or angled perspective instead of overhead",
+        "sharp shadows or high contrast that distracts from product"
+      ]
+    },
+    "handheld": {
+      "background_style": "white",
+      "composition": "handheld",
+      "reference_count": 4,
+      "mood_name": "Minimal Cozy",
+      "common_elements": [
+        "hand holding the beverage cup close to the camera",
+        "simple, mostly white or pale neutral backgrounds",
+        "plastic or transparent cups",
+        "milk based iced coffee or tea drinks with visible ice",
+        "natural, soft lighting without harsh shadows",
+        "minimal props or none besides a straw",
+        "shallow depth of field with background gently blurred",
+        "the beverage is the clear focal point positioned near center"
+      ],
+      "discard_as_one_off": [
+        "visible outdoor street backgrounds",
+        "text-heavy or decorative labels on cups",
+        "multiple cups held at once",
+        "large, distracting props or busy surfaces"
+      ],
+      "one_sentence_direction": "Capture a soft, intimate handheld moment of a chilled milk beverage against a clean, minimal white background with gentle natural light emphasizing texture and layers.",
+      "camera": {
+        "angle": "eye-level or slightly above handheld perspective",
+        "framing": "close-up framing with the cup filling 40-60% of vertical frame, centered",
+        "lens_feel": "normal to short telephoto for natural proportions",
+        "depth_of_field": "shallow focus with softly blurred background"
+      },
+      "lighting": {
+        "quality": "soft, diffused natural light",
+        "direction": "side or slight front to side lighting",
+        "contrast": "low to medium contrast",
+        "shadow": "soft shadows primarily below or behind the cup",
+        "highlight": "gentle highlights on the liquid surface and plastic cup"
+      },
+      "background": {
+        "surface": "smooth or plain matte surface or no visible surface",
+        "environment": "minimal indoor setting with plain white or neutral walls",
+        "props": "minimal to no additional props, occasionally simple straws",
+        "negative_space": "ample negative space around the subject for clean minimalism"
+      },
+      "color_grade": {
+        "palette": [
+          "soft beige",
+          "creamy white",
+          "light brown",
+          "muted black"
+        ],
+        "temperature": "neutral to slightly warm",
+        "saturation": "medium",
+        "contrast": "medium"
+      },
+      "instagram_style_prompt": "Handheld close-up of a transparent plastic cup with iced milk beverage against a smooth white background, soft diffused natural light from the side, shallow depth of field and minimalistic clean composition",
+      "composition_force_prompt": "Emphasize the handheld natural grip with the beverage cup centered and filling the frame against a clean white minimal background",
+      "avoid": [
+        "harsh shadows or direct sunlight",
+        "busy or cluttered backgrounds",
+        "distant or wide shots that minimize the drink",
+        "complex props or multiple objects competing for attention"
+      ]
+    },
+    "medium": {
+      "background_style": "white",
+      "composition": "medium",
+      "reference_count": 4,
+      "mood_name": "Minimalist Calm",
+      "common_elements": [
+        "soft, natural lighting with gentle shadows",
+        "white or very light, clean backgrounds and surfaces",
+        "medium distance framing with the beverage as a clear focal point",
+        "simple, low-density props arranged loosely or not at all",
+        "neutral and muted pastel color palette featuring beige, cream, soft browns",
+        "shallow to moderate depth of field with slight background blur",
+        "props like simple plates, minimal utensils, or small baked goods",
+        "light contrast with soft, non-harsh highlights"
+      ],
+      "discard_as_one_off": [
+        "bright red straws",
+        "heavy texture or patterned backgrounds",
+        "excessive props or cluttered table scenes",
+        "dark or intense shadowing",
+        "strong direct sunlight creating harsh contrasts"
+      ],
+      "one_sentence_direction": "Create serene and minimalist beverage photos with clean white backgrounds, soft natural lighting, and minimal simple props emphasizing calm and clarity.",
+      "camera": {
+        "angle": "eye-level or slightly above eye-level",
+        "framing": "medium shot framing with beverage centered or slightly off-center, occupying about one third to half of frame height",
+        "lens_feel": "natural lens with mild compression, neither too wide nor telephoto",
+        "depth_of_field": "shallow to moderate with beverage sharply in focus and softly blurred background"
+      },
+      "lighting": {
+        "quality": "soft and diffused, natural light",
+        "direction": "mostly side or top-side lighting that gently sculpts the beverage",
+        "contrast": "low to medium contrast creating smooth tonal transitions",
+        "shadow": "soft shadows that subtly anchor the product",
+        "highlight": "gentle highlights on glass or surface without glare"
+      },
+      "background": {
+        "surface": "matte or satin white table or counter surfaces, some smooth concrete or light stone",
+        "environment": "minimalist indoor settings with predominantly white walls",
+        "props": "low quantity, simple props like plain plates, minimal cutlery, small baked goods or napkins",
+        "negative_space": "ample negative space to maintain airy, uncluttered feel"
+      },
+      "color_grade": {
+        "palette": [
+          "white",
+          "beige",
+          "soft brown",
+          "muted cream"
+        ],
+        "temperature": "neutral to slightly warm",
+        "saturation": "low to medium saturation",
+        "contrast": "medium contrast emphasizing natural tones"
+      },
+      "instagram_style_prompt": "soft natural lighting with white minimalist backgrounds, medium framing focusing on beverage, low density simple props like plain ceramics or small baked goods, muted neutral color tones, gentle shadows and highlights, shallow depth of field for subtle background blur",
+      "composition_force_prompt": "medium close-up with centered or slightly off-center beverage on clean white background, minimal decorative elements, emphasizing serene simplicity and calm",
+      "avoid": [
+        "overly busy or cluttered scenes",
+        "harsh direct light or heavy shadows",
+        "strong colors or artificial saturated tones",
+        "excessive props breaking minimalist aesthetic"
+      ]
+    },
+    "closeup": {
+      "background_style": "white",
+      "composition": "closeup",
+      "reference_count": 4,
+      "mood_name": "Bright Minimalist",
+      "common_elements": [
+        "bright, mostly white or light neutral backgrounds",
+        "closeup framing with beverage centered",
+        "soft natural or diffused light with gentle shadows",
+        "simple, minimal props or no props to avoid clutter",
+        "clean surfaces such as white tables or light stone",
+        "well-defined but soft shadows primarily cast to one side",
+        "glassware showcasing beverage contents clearly",
+        "neutral and natural color palette with occasional accent colors",
+        "shallow depth of field focusing sharply on product with smooth background blur"
+      ],
+      "discard_as_one_off": [
+        "specific garnishes like rosemary sprigs",
+        "wooden spoons or very specific small props",
+        "complex patterned backgrounds or busy decor",
+        "harsh direct sunlight creating high contrast shadows"
+      ],
+      "one_sentence_direction": "Create a bright, clean, and minimal drink photo emphasizing clarity and a natural light mood with soft shadows on a white or neutral surface.",
+      "camera": {
+        "angle": "eye-level or slightly angled from above",
+        "framing": "beverage centered, filling roughly half to two-thirds of frame",
+        "lens_feel": "standard to short telephoto for natural perspective with slight compression",
+        "depth_of_field": "shallow focus on the beverage with smooth creamy background blur"
+      },
+      "lighting": {
+        "quality": "soft and diffused natural light",
+        "direction": "light mainly coming from one side, usually side or diagonal",
+        "contrast": "medium-low contrast to maintain soft, inviting mood",
+        "shadow": "soft-edged shadows falling gently alongside or behind the product",
+        "highlight": "gentle reflections to enhance glass and liquid texture without glare"
+      },
+      "background": {
+        "surface": "smooth white or very light, minimally textured tables or counters",
+        "environment": "minimalist setting with no visual clutter or distractions",
+        "props": "minimal or no props; if used, natural materials and very simple shapes",
+        "negative_space": "generous negative space around the beverage to emphasize simplicity"
+      },
+      "color_grade": {
+        "palette": [
+          "white",
+          "soft beige",
+          "transparent glass tones",
+          "natural accent colors (green, red, brown)"
+        ],
+        "temperature": "neutral to slightly warm",
+        "saturation": "medium saturation to preserve natural beverage colors",
+        "contrast": "medium-low contrast for an airy, clean look"
+      },
+      "instagram_style_prompt": "Bright minimalist drink photo with soft natural side lighting, white background and surface, shallow depth of field focusing on beverage, minimal natural props, gentle shadows and neutral to slightly warm color palette emphasizing clarity and inviting freshness.",
+      "composition_force_prompt": "Closeup centered composition on glass beverage filling frame with soft shadows on a clean white surface and ample negative space emphasizing simplicity and freshness.",
+      "avoid": [
+        "busy or colored backgrounds",
+        "harsh, direct midday sun creating hard shadows",
+        "cluttered or dense props",
+        "overly dark or moody lighting",
+        "wide shots losing product focus"
+      ]
+    }
+  },
+  "vivid": {
+    "aerial": {
+      "background_style": "vivid",
+      "composition": "aerial",
+      "reference_count": 4,
+      "mood_name": "Casual Daylight",
+      "common_elements": [
+        "top-down aerial camera angle",
+        "vivid, saturated color backgrounds",
+        "use of everyday surfaces like tables or car consoles",
+        "strong, directional natural light with defined shadows",
+        "shadows cast to the side or diagonally",
+        "ice cubes visible in drinks for texture and light reflection",
+        "medium density of props clustered around the main subject",
+        "common props include newspapers, books, sunglasses, food items",
+        "contrast of light and shadow to create depth",
+        "focus sharp on beverage with clear background details visible",
+        "background colors include black, red, white, and neutral surfaces",
+        "atmosphere suggests a casual, daytime lifestyle setting"
+      ],
+      "discard_as_one_off": [
+        "exact text on papers or menus",
+        "specific brand or product details",
+        "precise positioning or shape of ice cubes",
+        "exact placement and shape of shadows in each image",
+        "unique or very specific props like hats or car controls"
+      ],
+      "one_sentence_direction": "A vibrant, top-down view with strong natural light casting clear shadows on vivid surfaces and casual props clustered around the beverage.",
+      "camera": {
+        "angle": "aerial top-down shot at roughly 90 degrees",
+        "framing": "close crop centering the beverage as primary with surrounding props visible and filling space",
+        "lens_feel": "standard lens with minimal compression to preserve natural proportions",
+        "depth_of_field": "deep focus keeping beverage and nearby props sharp and clear"
+      },
+      "lighting": {
+        "quality": "hard/direct natural sunlight",
+        "direction": "light comes from one strong side casting clear shadows",
+        "contrast": "high contrast between light and shadow areas",
+        "shadow": "hard-edged shadows placed diagonally or to side",
+        "highlight": "specular highlights on ice and liquid surfaces"
+      },
+      "background": {
+        "surface": "solid, everyday surfaces like marble, painted tables, or car consoles",
+        "environment": "casual indoor or outdoor daytime settings",
+        "props": "moderate density, casual lifestyle items such as newspapers, books, sunglasses, and small food",
+        "negative_space": "balanced with moderate clutter around the drink to frame it without overcrowding"
+      },
+      "color_grade": {
+        "palette": [
+          "deep green",
+          "black",
+          "cream/off-white",
+          "red"
+        ],
+        "temperature": "neutral to warm",
+        "saturation": "high",
+        "contrast": "high"
+      },
+      "instagram_style_prompt": "aerial top-down shot with vivid color backgrounds, crisp direct sunlight casting hard shadows, casual everyday props clustered moderately around the drink, strong natural highlights on ice cubes, deep focus with balanced composition on lively solid surfaces",
+      "composition_force_prompt": "strict aerial flat lay emphasizing vivid, high contrast colors and dynamic shadows surrounding the centered beverage",
+      "avoid": [
+        "soft or diffused lighting",
+        "side or front camera angles",
+        "empty or minimalistic backgrounds",
+        "low contrast or muted color grading",
+        "isolated product with no lifestyle or casual props"
+      ]
+    },
+    "handheld": {
+      "background_style": "vivid",
+      "composition": "handheld",
+      "reference_count": 4,
+      "mood_name": "Cozy Natural Contrast",
+      "common_elements": [
+        "handheld beverage or food item as primary subject",
+        "vivid, deep color backgrounds with natural textures (wood, leather, painted surfaces)",
+        "soft to medium natural light with distinct directional shadows",
+        "rich shadow contrast with balanced highlights",
+        "moderate prop density with minimal but contextual items (utensils, sunglasses, chairs)",
+        "warm and earthy color palette with pops of strong tones (green, blue, brown)",
+        "shallow depth of field focusing on the subject with gently blurred background",
+        "composition highlights human interaction with the product"
+      ],
+      "discard_as_one_off": [
+        "multiple cups held together",
+        "specific brand or text on cups",
+        "extreme close-up on pastry details"
+      ],
+      "one_sentence_direction": "Capture a cozy, natural handheld moment with vivid textured backgrounds and warm directional light emphasizing product intimacy.",
+      "camera": {
+        "angle": "mostly from slightly above or eye level, handheld viewpoint",
+        "framing": "medium close-up framing product centrally or slightly off-center with visible hands",
+        "lens_feel": "natural focal length with slight compression for intimacy",
+        "depth_of_field": "shallow to moderate, keeping subject sharp and gently blurring background"
+      },
+      "lighting": {
+        "quality": "soft to medium, natural and directional",
+        "direction": "light commonly from side or slightly angled front to create contrast",
+        "contrast": "medium to strong contrast with defined shadows",
+        "shadow": "soft-edged to moderate shadows enhancing depth, often cast on background or surface",
+        "highlight": "subtle reflections on cup surfaces without overpowering glare"
+      },
+      "background": {
+        "surface": "natural wooden, leather, or painted matte textures",
+        "environment": "cozy cafe or casual outdoor urban seating",
+        "props": "few minimal props like utensils or small personal items",
+        "negative_space": "balanced, not too busy, allowing the product to stand out with visible background texture"
+      },
+      "color_grade": {
+        "palette": [
+          "warm brown",
+          "forest green",
+          "deep blue",
+          "cream white"
+        ],
+        "temperature": "warm",
+        "saturation": "medium to high",
+        "contrast": "medium to high"
+      },
+      "instagram_style_prompt": "handheld cozy beverage moment with vivid textured backgrounds, warm natural directional lighting, shallow depth of field, minimal props, and balanced shadow contrast to emphasize casual intimacy",
+      "composition_force_prompt": "dynamic handheld framing featuring visible interaction with the product against rich natural textures and vivid color backgrounds",
+      "avoid": [
+        "static flat lay shots",
+        "studio artificial lighting look",
+        "overly crowded backgrounds",
+        "hard harsh shadows without gradation",
+        "excessive props cluttering the scene"
+      ]
+    },
+    "medium": {
+      "background_style": "vivid",
+      "composition": "medium",
+      "reference_count": 4,
+      "mood_name": "Contemporary Cafe Vibe",
+      "common_elements": [
+        "top-down or slightly angled overhead view",
+        "solid color metal or matte tables (green or blue tones)",
+        "soft natural or diffused lighting with visible shadows",
+        "minimal and neat prop styling with small food items or utensils",
+        "neutral or muted background surfaces with some texture (concrete, wood, fabric)",
+        "medium saturation color palette with emphasis on greens, blues, and natural earthy tones",
+        "visible shadows cast from furniture or ambient elements",
+        "single product item typically centered or slightly off-center on table"
+      ],
+      "discard_as_one_off": [
+        "designer or branded handbags",
+        "specific food types like croissants or scones",
+        "harsh direct sunlight causing strong light flares",
+        "complex or busy background elements",
+        "multiple people/shoes or feet in frame"
+      ],
+      "one_sentence_direction": "A clean, modern cafe atmosphere captured in soft natural light emphasizing textured surfaces and neat minimal props on solid color tables.",
+      "camera": {
+        "angle": "overhead to slightly angled top-down",
+        "framing": "medium framing with product as main focus centered or slightly offset",
+        "lens_feel": "natural, moderate focal length avoiding wide-angle distortion",
+        "depth_of_field": "shallow-to-moderate focus with blurred background but sharp product details"
+      },
+      "lighting": {
+        "quality": "soft natural or diffused",
+        "direction": "top or side light casting natural shadows",
+        "contrast": "medium contrast balancing highlights and shadows",
+        "shadow": "soft to medium shadows shaped by furniture or natural light",
+        "highlight": "subtle reflections without glare, gentle specular highlights"
+      },
+      "background": {
+        "surface": "solid color metal or matte tables, mostly green or blue",
+        "environment": "modern cafe interiors or outdoor patio with minimal background complexity",
+        "props": "few small, neutral-colored items like plates, cutlery, or food pieces",
+        "negative_space": "balanced negative space around product creating clean, uncluttered look"
+      },
+      "color_grade": {
+        "palette": [
+          "olive green",
+          "navy blue",
+          "warm beige",
+          "muted gray"
+        ],
+        "temperature": "neutral to slightly warm",
+        "saturation": "medium",
+        "contrast": "medium"
+      },
+      "instagram_style_prompt": "a stylish beverage product photo with a contemporary cafe vibe, featuring medium top-down composition on solid matte green or blue tables, diffused natural lighting with soft shadows, minimal clean props like small plates and cutlery, neutral textured backgrounds with balanced negative space and a medium depth of field focusing on the product",
+      "composition_force_prompt": "medium overhead framing on a vivid solid-color metal cafe table with balanced minimal props and natural soft side lighting",
+      "avoid": [
+        "busyness or clutter in background",
+        "direct harsh sun glare",
+        "props that dominate or distract from the product",
+        "low lighting or overly dim scenes",
+        "wide-angle lens distortion"
+      ]
+    },
+    "closeup": {
+      "background_style": "vivid",
+      "composition": "closeup",
+      "reference_count": 4,
+      "mood_name": "Natural Vivid Cool",
+      "common_elements": [
+        "close-up framing focusing on one or two beverages",
+        "clear plastic cups with visible liquids and ice",
+        "black straws used in drinks",
+        "vivid and colorful backgrounds or surfaces enhancing the green/tan colors",
+        "soft to medium natural lighting with visible reflections",
+        "some form of label or text on the cup",
+        "shadows present but soft to moderate",
+        "products centered or slightly off-center in the frame"
+      ],
+      "discard_as_one_off": [
+        "specific brand labels and text",
+        "exact surface textures like orange bench or white table",
+        "individual drink color variations such as strong layered milk/green gradient"
+      ],
+      "one_sentence_direction": "Capture beverage products with bright vivid backdrops and soft natural light in a close-up style highlighting texture and color contrast.",
+      "camera": {
+        "angle": "eye-level or slightly above looking down",
+        "framing": "cocktails or drinks fill most of the frame, focused tightly",
+        "lens_feel": "moderate compression with a hint of macro detail",
+        "depth_of_field": "shallow DOF with background softly blurred to isolate product"
+      },
+      "lighting": {
+        "quality": "soft to medium natural/diffused light",
+        "direction": "side or top-side lighting creating gentle highlights",
+        "contrast": "medium contrast enhancing textures",
+        "shadow": "soft shadows cast to one side, diffused edges",
+        "highlight": "natural reflective highlights on liquid surface and cup"
+      },
+      "background": {
+        "surface": "simple solid color or vibrant textured backgrounds, mostly matte",
+        "environment": "casual and minimal indoor settings or benches",
+        "props": "minimal to no props, focus on drink and label",
+        "negative_space": "moderate negative space balanced with product size"
+      },
+      "color_grade": {
+        "palette": [
+          "forest green",
+          "cream white",
+          "light gray",
+          "warm brown"
+        ],
+        "temperature": "neutral to slightly warm",
+        "saturation": "medium",
+        "contrast": "medium to high"
+      },
+      "instagram_style_prompt": "close-up soft natural lighting on vibrant background, clear plastic cup with visible iced liquid and black straw, shallow focus with gentle shadows and bright rich colors, minimal props, drink centered",
+      "composition_force_prompt": "tight framing on iced beverage with visible texture and reflections, natural light emphasizing vivid but soft color contrast",
+      "avoid": [
+        "harsh lighting or heavy shadows obscuring product detail",
+        "busy or cluttered backgrounds that distract from drink",
+        "overly staged props that reduce focus on product",
+        "wide shots that make the drink appear distant or small"
+      ]
+    }
+  },
+  "wood": {
+    "aerial": {
+      "background_style": "wood",
+      "composition": "aerial",
+      "reference_count": 4,
+      "mood_name": "Warm Cozy Rustic",
+      "common_elements": [
+        "wooden surfaces with visible grain",
+        "aerial top-down camera angle",
+        "beverage cup centered or slightly off-center",
+        "soft natural lighting with warm tones",
+        "use of minimal props related to beverages like napkins, forks, or small treats",
+        "medium to shallow depth of field highlighting the beverage",
+        "neutral and warm color palette with browns, creams, and muted tones",
+        "calm and inviting atmosphere with moderate shadow play"
+      ],
+      "discard_as_one_off": [
+        "specific newspaper or printed text as main prop",
+        "glasses/spectacles",
+        "very dark or harsh concrete floors"
+      ],
+      "one_sentence_direction": "Capture a warm, cozy top-down view on wooden surfaces bathed in soft natural light highlighting the beverage as the clear focal point.",
+      "camera": {
+        "angle": "directly aerial top-down",
+        "framing": "medium framing with the beverage occupying central or slightly off-center position with space for small props",
+        "lens_feel": "natural lens with minimal compression, a casual but polished feel",
+        "depth_of_field": "moderate to shallow, focusing crisp on beverage with mild background blur"
+      },
+      "lighting": {
+        "quality": "soft and diffused natural light",
+        "direction": "mostly from side or near top, creating gentle shadows",
+        "contrast": "medium contrast enhancing textures",
+        "shadow": "soft shadows that add depth without overpowering",
+        "highlight": "subtle highlights on liquid surfaces and wood grain"
+      },
+      "background": {
+        "surface": "wooden table with visible texture and warm tones",
+        "environment": "cozy cafe or homely setting implied by shadows and props",
+        "props": "minimal, practical props like napkins, forks, small pastries, or magazine/newspaper pieces in muted colors",
+        "negative_space": "balanced, moderate negative space around the beverage to maintain focus"
+      },
+      "color_grade": {
+        "palette": [
+          "warm brown",
+          "cream",
+          "soft gray",
+          "muted white"
+        ],
+        "temperature": "warm",
+        "saturation": "medium",
+        "contrast": "medium"
+      },
+      "instagram_style_prompt": "aerial shot of beverage on warm textured wooden table, soft diffused natural light from the side, minimal cozy props like napkin or pastry, moderate depth of field focusing on cup, warm color tone with subtle shadows and highlights",
+      "composition_force_prompt": "distinct aerial top-down view emphasizing the wooden surface texture and cozy minimal props framing the beverage",
+      "avoid": [
+        "harsh artificial lighting",
+        "overly cluttered backgrounds",
+        "strongly saturated or cool color grading",
+        "portrait or angled side views instead of aerial"
+      ]
+    },
+    "handheld": {
+      "background_style": "wood",
+      "composition": "handheld",
+      "reference_count": 4,
+      "mood_name": "Cozy Café Vibe",
+      "common_elements": [
+        "wooden surfaces or furniture",
+        "beverage held in hand",
+        "soft natural lighting",
+        "casual clothing textures like denim and knitwear",
+        "warm, muted color tones",
+        "shallow depth of field focusing on the beverage",
+        "visible parts of seated human subject"
+      ],
+      "discard_as_one_off": [
+        "specific latte art designs",
+        "presence of multiple drinks or table setups",
+        "high-contrast shadows",
+        "outdoor elements like stone pathway"
+      ],
+      "one_sentence_direction": "Create a warm, inviting atmosphere capturing a casual, intimate moment with a drink held comfortably over a wood surface with soft natural lighting.",
+      "camera": {
+        "angle": "top-down or slightly angled from above",
+        "framing": "medium close-up with the beverage prominently in center or upper center, hand and lap partially visible",
+        "lens_feel": "natural wide-angle lens with minimal distortion",
+        "depth_of_field": "shallow with smooth bokeh, keeping the beverage sharply in focus"
+      },
+      "lighting": {
+        "quality": "soft and diffused",
+        "direction": "ambient light from side or window",
+        "contrast": "medium-low",
+        "shadow": "soft, minimal shadows near subject edges",
+        "highlight": "gentle highlights on beverage surface and rims"
+      },
+      "background": {
+        "surface": "natural wood tables or benches with visible grain",
+        "environment": "casual café or relaxed indoor setting",
+        "props": "minimal and natural, like accessories or glasses but not cluttered",
+        "negative_space": "balanced with modest empty areas to keep focus on beverage"
+      },
+      "color_grade": {
+        "palette": [
+          "warm beige",
+          "soft brown",
+          "muted blue",
+          "cream"
+        ],
+        "temperature": "warm",
+        "saturation": "medium",
+        "contrast": "medium"
+      },
+      "instagram_style_prompt": "handheld beverage photo with soft natural lighting, warm wooden backgrounds, shallow depth of field, casual clothing textures visible, cozy and intimate café atmosphere",
+      "composition_force_prompt": "emphasize handheld top-down framing with warm wood surfaces and gentle ambient light to create a personal, cozy café moment",
+      "avoid": [
+        "direct harsh lighting",
+        "busy or cluttered backgrounds",
+        "cold or overly bright color tones",
+        "distanced or flat frontal shots"
+      ]
+    },
+    "medium": {
+      "background_style": "wood",
+      "composition": "medium",
+      "reference_count": 4,
+      "mood_name": "Subtle Wood Elegance",
+      "common_elements": [
+        "wood surfaces as the primary table or bench material",
+        "natural and muted background elements",
+        "soft natural lighting with some shadows",
+        "medium framing capturing product and some surroundings",
+        "simple low to medium density props around the beverages",
+        "neutral to warm color palette",
+        "shadows present but soft and not overpowering",
+        "some props or background visual interest but not cluttered"
+      ],
+      "discard_as_one_off": [
+        "bright purple beverage color",
+        "strong green plant elements close to the product",
+        "very bright or direct harsh lighting"
+      ],
+      "one_sentence_direction": "Capture beverage products with medium close framing on warm wooden surfaces accented by soft natural light and subtle, natural props for an understated elegant mood.",
+      "camera": {
+        "angle": "eye-level or slightly above eye-level",
+        "framing": "medium framing showing the product and a bit of surrounding wood surface and props",
+        "lens_feel": "normal to slight telephoto with moderate compression",
+        "depth_of_field": "moderate to shallow depth of field with softly blurred backgrounds"
+      },
+      "lighting": {
+        "quality": "soft, natural, and diffused light",
+        "direction": "usually side or top side lighting",
+        "contrast": "medium contrast with soft transitions",
+        "shadow": "soft shadows with gentle falloff, shadows appear mostly on surface and behind product",
+        "highlight": "gentle highlights that emphasize texture without glare"
+      },
+      "background": {
+        "surface": "wood table or bench with visible grain and warm tone",
+        "environment": "minimalist cafe or indoor setting with neutral walls or windows in background",
+        "props": "simple additional props like trays, napkins, or plates; low to medium density",
+        "negative_space": "balanced with moderate negative space to keep focus on product but provide context"
+      },
+      "color_grade": {
+        "palette": [
+          "warm brown",
+          "white/off-white",
+          "neutral beige",
+          "muted green or gray"
+        ],
+        "temperature": "warm to neutral",
+        "saturation": "medium",
+        "contrast": "medium"
+      },
+      "instagram_style_prompt": "soft natural light casting gentle shadows on warm wooden surfaces, medium shot with slightly blurred neutral backgrounds, balanced simple props that accentuate but don't overwhelm, warm neutral tones with moderate saturation for a cozy elegant cafe vibe",
+      "composition_force_prompt": "medium framing focused on the beverage product set against textured warm wood with minimalistic but purposeful props for a serene natural cafe atmosphere",
+      "avoid": [
+        "harsh or direct flash lighting",
+        "overly busy or cluttered backgrounds",
+        "neon or overly saturated unnatural colors",
+        "props overpowering the beverage"
+      ]
+    },
+    "closeup": {
+      "background_style": "wood",
+      "composition": "closeup",
+      "reference_count": 4,
+      "mood_name": "Warm Minimalist Café",
+      "common_elements": [
+        "wooden table surface",
+        "closeup framing with beverage front and center",
+        "natural soft lighting with warm tones",
+        "neutral, cozy color palette dominated by browns and creams",
+        "simple, minimal props such as small plates, spoons, or subtle garnishes",
+        "shallow depth of field with soft background blur",
+        "pleasant shadowing under and around the product for depth",
+        "organic, casual styling with a cozy café atmosphere"
+      ],
+      "discard_as_one_off": [
+        "crackers attached to foam top",
+        "branded cup text and logos",
+        "white tabletop or non-wooden surfaces",
+        "strong direct sunlight or harsh shadows"
+      ],
+      "one_sentence_direction": "Photograph beverages prominently on warm wooden surfaces with soft, natural lighting and a minimal cozy café vibe emphasizing close, intimate framing.",
+      "camera": {
+        "angle": "slightly above eye-level or straight-on closeup",
+        "framing": "drink occupies the central foreground with a tight crop focusing on the product",
+        "lens_feel": "standard to short telephoto providing a slightly compressed but natural look",
+        "depth_of_field": "shallow to moderate blur softly separating background while keeping main drink sharply focused"
+      },
+      "lighting": {
+        "quality": "soft and diffused natural light",
+        "direction": "light commonly comes from one side or slight front-side, creating mild shadows",
+        "contrast": "medium contrast balancing detail and warmth",
+        "shadow": "gentle soft shadows supporting depth without harsh edges",
+        "highlight": "subtle glossy reflections on drink surface and occasional soft foam highlights"
+      },
+      "background": {
+        "surface": "warm, natural-finish wooden table",
+        "environment": "minimalist café or home setting with neutral tones",
+        "props": "few minimal props like understated plates or utensils, low density",
+        "negative_space": "ample negative space to keep focus on drink, not crowded or busy"
+      },
+      "color_grade": {
+        "palette": [
+          "warm brown",
+          "cream",
+          "neutral beige",
+          "soft white"
+        ],
+        "temperature": "warm",
+        "saturation": "medium",
+        "contrast": "medium"
+      },
+      "instagram_style_prompt": "Closeup of a beverage on warm wooden table, soft natural side light, shallow depth of field, warm cozy minimalist café vibe, subtle shadows and warm tones, clean composition with minimal elegant props, focus on drink detail and texture",
+      "composition_force_prompt": "Close, intimate framing emphasizing the beverage as the clear focal point against a warm wooden surface",
+      "avoid": [
+        "harsh direct lighting",
+        "busy backgrounds",
+        "cluttered props",
+        "non-wood surfaces",
+        "overly cool or desaturated color grading"
+      ]
+    }
+  }
+}

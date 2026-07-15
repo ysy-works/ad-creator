@@ -1,0 +1,43 @@
+# Python cache
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local env / secrets
+.env
+.venv/
+venv/
+
+# Runtime inputs / outputs
+input/*
+output/*
+benchmark/inputs/*
+benchmark/outputs/*
+benchmark/*.csv
+
+# Generated / uploaded images
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.gif
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Large local model/cache artifacts
+models/
+checkpoints/
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+
+# Logs
+*.log

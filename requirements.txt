@@ -1,0 +1,31 @@
+# FLUX.1 Kontext dev 음료 사진 변환 — 의존성
+# diffusers는 Kontext 지원을 위해 최신(git) 권장
+
+--extra-index-url https://download.pytorch.org/whl/cu124
+torch>=2.4
+torchvision
+
+# diffusers 최신 (Kontext). 안정 릴리스가 지원하면 핀 가능
+git+https://github.com/huggingface/diffusers.git
+
+transformers>=4.44
+accelerate>=0.33
+safetensors
+sentencepiece
+protobuf
+
+# NF4 양자화
+bitsandbytes>=0.43
+
+# 선택: 레거시 preserve_mode와 색상 평가 지표용 배경 제거
+rembg>=2.0.50
+onnxruntime
+
+# 이미지 처리
+Pillow>=10.0
+numpy
+
+# 선택: FastAPI 엔드포인트 예시용
+fastapi
+uvicorn
+python-multipart
