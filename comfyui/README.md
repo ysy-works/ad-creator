@@ -9,14 +9,15 @@
 ```text
 Frontend
   -> Backend (workflow_id 전달, 기본값: model-c-v1)
-    -> ComfyUI /prompt
+    -> HTTPS Generation Gateway (Bearer 인증)
+      -> ComfyUI /upload/image + /prompt
       -> workflow registry
         -> model-c-v1 custom node
           -> HTTP POST: 기존 model-c /generate
             -> GCP의 FLUX.1 Kontext NF4 파이프라인
           <- 결과 이미지
       -> ComfyUI SaveImage
-    <- prompt_id / 결과
+    <- generation_id / 상태 / 결과
 ```
 
 ComfyUI와 `model-c`는 **별도 프로세스·별도 Python 환경**으로 실행합니다. 두 프로젝트가 모두 최상위 패키지명 `app`을 사용하고 GPU 라이브러리 버전도 다를 수 있어, 같은 프로세스에서 직접 import하지 않습니다.
@@ -130,6 +131,87 @@ queued = submit_prompt(
 ```
 
 API 실행 전 입력 이미지는 ComfyUI `/upload/image`에 업로드합니다. 반환된 파일명을 워크플로의 `source_image`로 전달한 뒤 `/prompt`에 제출합니다.
+
+## Generation Gateway
+
+Render 백엔드는 ComfyUI의 8188 포트를 직접 호출하지 않습니다. GCP에서 함께 실행되는 Gateway만 HTTPS로 호출합니다.
+
+```text
+POST /v1/generations
+GET  /v1/generations/{generation_id}
+GET  /v1/generations/{generation_id}/result
+GET  /health
+```
+
+모든 `/v1/*` 요청에는 다음 헤더가 필요합니다.
+
+```http
+Authorization: Bearer ${COMFYUI_GATEWAY_API_KEY}
+```
+
+생성 요청은 `multipart/form-data`입니다.
+
+```text
+image              JPEG | PNG | WebP, 최대 20 MiB
+workflow_id        기본 model-c-v1
+composition        closeup | medium | aerial | handheld
+background_style   vivid | wood | white
+strength           low | medium | high
+seed               선택 정수
+```
+
+Gateway는 업로드 후 즉시 `202 Accepted`와 서명된 `generation_id`를 반환합니다. 백엔드는 상태 URL을 폴링하고 `succeeded`가 되면 결과 URL을 내려받습니다.
+
+```json
+{
+  "generation_id": "signed-job-token",
+  "workflow_id": "model-c-v1",
+  "status": "queued",
+  "status_url": "/v1/generations/signed-job-token",
+  "result_url": "/v1/generations/signed-job-token/result"
+}
+```
+
+상태값은 `queued`, `running`, `succeeded`, `failed`, `not_found` 중 하나입니다. 별도 Generation DB를 두지 않고 ComfyUI의 `/history/{prompt_id}`와 `/queue`를 사용합니다. `generation_id` 안의 prompt/workflow/output 정보는 HMAC으로 서명되어 위변조를 거부합니다.
+
+Gateway 실행 환경 변수:
+
+```env
+COMFYUI_BASE_URL=http://127.0.0.1:8188
+AD_CREATOR_MODEL_C_URL=http://127.0.0.1:8001
+AD_CREATOR_GATEWAY_API_KEY=32자-이상의-랜덤-비밀키
+```
+
+Gateway는 다음처럼 로컬에서 실행합니다.
+
+```bash
+uvicorn comfyui.gateway.app:app --host 127.0.0.1 --port 8002 --workers 1
+```
+
+## GCP 배포 구조
+
+```text
+Internet :443
+  -> Caddy (자동 HTTPS)
+    -> Gateway 127.0.0.1:8002
+      -> ComfyUI 127.0.0.1:8188 (CPU 전용)
+        -> model-c 127.0.0.1:8001 (기존 GPU 서비스)
+```
+
+```text
+/opt/ad-creator/                 comfyui 브랜치 체크아웃
+/opt/comfyui/ComfyUI/           공식 ComfyUI v0.28.0
+/opt/venv/comfyui/              독립 CPU Python 환경
+/etc/ad-creator/comfyui.env     내부 모델 주소
+/etc/ad-creator/gateway.env     Gateway 주소와 비밀키
+```
+
+- `model-c` 코드, 가상환경, 실행 사용자와 포트는 변경하지 않습니다.
+- ComfyUI와 Gateway는 `spai0813` 사용자로 별도 systemd 서비스에서 실행합니다.
+- ComfyUI 8188과 Gateway 8002는 loopback에만 바인딩합니다.
+- 외부에는 Caddy의 80/443만 허용합니다.
+- `input/ad_creator`는 1일, `output/ad_creator`는 7일 기준으로 systemd-tmpfiles가 정리합니다.
+- 서비스 템플릿과 환경변수 예시는 `comfyui/deploy/`에 있습니다.
 
 ## 검증
 

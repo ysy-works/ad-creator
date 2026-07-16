@@ -1,0 +1,21 @@
+[Unit]
+Description=Ad Creator authenticated generation gateway
+After=network-online.target ad-creator-comfyui.service
+Wants=network-online.target
+Requires=ad-creator-comfyui.service
+
+[Service]
+Type=simple
+User=spai0813
+Group=spai0813
+WorkingDirectory=/opt/ad-creator
+EnvironmentFile=/etc/ad-creator/gateway.env
+ExecStart=/opt/venv/comfyui/bin/uvicorn comfyui.gateway.app:app --host 127.0.0.1 --port 8002 --workers 1 --proxy-headers --forwarded-allow-ips 127.0.0.1
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
