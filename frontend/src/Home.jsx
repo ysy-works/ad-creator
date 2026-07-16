@@ -390,7 +390,7 @@ function Home({ onStart, lang = "ko", setLang }) {
           .home-hero p { font-size: 15px; }
           .home-hero-cta { flex-direction: column; gap: 12px; }
           .home-btn-large { width: 100%; max-width: 280px; }
-          .home-stat-row { flex-direction: column; gap: 24px; margin-top: 24px; }
+          .home-stat-row { flex-direction: column; gap: 24px; margin-top: 100px; }
           .home-footer-inner { flex-direction: column; gap: 8px; text-align: center; }
         }
       `}</style>
