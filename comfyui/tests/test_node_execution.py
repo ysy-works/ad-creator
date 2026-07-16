@@ -61,6 +61,7 @@ class NodeExecutionTest(unittest.TestCase):
 
         metadata = json.loads(metadata_json)
         self.assertEqual(tuple(image.shape), (1, 10, 12, 3))
+        self.assertTrue(torch.allclose(image[0, 0, 0], torch.tensor([245, 240, 230]) / 255))
         self.assertEqual(metadata["seed"], 42)
         self.assertNotIn("output_path", metadata)
         self.assertEqual(metadata["output_storage"], "comfyui_save_image")
