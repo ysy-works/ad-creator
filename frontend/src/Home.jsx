@@ -243,7 +243,7 @@ function Home({ onStart, lang = "ko", setLang }) {
           --bg: #EFE8DA;
           --surface: #FFFDF9;
           --ink: #2B2420;
-          --ink-soft: #6B6058;
+          --ink-soft: #554A40;
           --accent: #8A6E4B;
           --accent-2: #5C6B4C;
           --line: #DDD2BE;
@@ -290,7 +290,7 @@ function Home({ onStart, lang = "ko", setLang }) {
         .home-eyebrow { font-size: 13px; letter-spacing: 3px; color: var(--accent-2); font-weight: 700; margin-bottom: 22px; }
         .home-hero h1 { font-family: 'Fraunces', serif; font-weight: 600; font-size: clamp(38px, 5.4vw, 58px); line-height: 1.3; margin-bottom: 26px; color: var(--ink); }
         .home-hero h1 span { color: var(--accent); }
-        .home-hero p { font-size: 17px; color: var(--ink-soft); max-width: 480px; margin: 0 auto 40px; line-height: 1.7; }
+        .home-hero p { font-size: 18px; color: var(--ink-soft); max-width: 480px; margin: 0 auto 40px; line-height: 1.7; }
         .home-hero-cta { display: flex; gap: 16px; align-items: center; justify-content: center; margin-bottom: 56px; }
         .home-btn-large { padding: 15px 30px; font-size: 16px; width: 210px; text-align: center; white-space: nowrap; box-sizing: border-box; }
         .home-btn-secondary {
@@ -298,7 +298,7 @@ function Home({ onStart, lang = "ko", setLang }) {
           padding: 15px 30px; border-radius: 999px; font-size: 16px; font-weight: 700;
         }
         .home-btn-secondary:hover { background: rgba(43,36,32,0.06); }
-        .home-stat-row { display: flex; gap: 40px; justify-content: center; font-size: 14px; color: var(--ink-soft); }
+        .home-stat-row { display: flex; gap: 40px; justify-content: center; font-size: 15px; color: var(--ink-soft); }
         .home-stat-row b { color: var(--ink); font-family: 'Fraunces', serif; font-size: 20px; display: block; margin-bottom: 2px; }
 
         .home-float-card {
@@ -315,7 +315,7 @@ function Home({ onStart, lang = "ko", setLang }) {
         .fc-actions { display: flex; align-items: center; gap: 12px; padding: 11px 13px 4px; color: var(--ink); }
         .fc-actions svg { width: 18px; height: 18px; }
         .fc-actions svg:last-child { margin-left: auto; }
-        .home-float-card .fc-cap { padding: 6px 13px 13px; font-size: 13.5px; color: var(--ink-soft); line-height: 1.45; }
+        .home-float-card .fc-cap { padding: 6px 13px 13px; font-size: 14.5px; color: var(--ink-soft); line-height: 1.45; }
         .home-float-card .fc-cap b { color: var(--ink); font-weight: 700; }
         .fc1 { top: 9%; left: 9%; transform: rotate(-7deg); }
         .fc2 { top: 7%; right: 10%; transform: rotate(8deg); }
@@ -325,13 +325,13 @@ function Home({ onStart, lang = "ko", setLang }) {
         .home-section-head { text-align: center; max-width: 560px; margin: 0 auto 56px; }
         .home-kicker { font-size: 13px; letter-spacing: 2.5px; color: var(--accent-2); font-weight: 700; margin-bottom: 14px; }
         .home-section-head h2 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 34px; line-height: 1.4; margin-bottom: 16px; color: var(--ink); }
-        .home-section-head p { font-size: 15px; color: var(--ink-soft); line-height: 1.7; }
+        .home-section-head p { font-size: 16px; color: var(--ink-soft); line-height: 1.7; }
 
         .home-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; max-width: 1180px; margin: 0 auto; }
         .home-step { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 30px 26px; display: flex; flex-direction: column; }
         .home-step-num { font-family: 'Fraunces', serif; font-size: 14px; color: var(--accent); margin-bottom: 16px; }
         .home-step h3 { font-size: 18px; margin-bottom: 8px; color: var(--ink); }
-        .home-step p { font-size: 14px; color: var(--ink-soft); line-height: 1.65; margin-bottom: 18px; }
+        .home-step p { font-size: 15px; color: var(--ink-soft); line-height: 1.65; margin-bottom: 18px; }
         .home-step-visual { height: 130px; border-radius: 10px; background: var(--ink); display: flex; align-items: center; justify-content: center; margin-top: auto; }
 
         .home-ba { background: var(--accent-2); color: var(--surface); }
@@ -366,7 +366,7 @@ function Home({ onStart, lang = "ko", setLang }) {
         .home-faq { max-width: 740px; margin: 0 auto; }
         .faq-item { border-bottom: 1px solid var(--line); padding: 6px 4px; }
         .faq-q { width: 100%; background: none; display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: 700; padding: 18px 0; color: var(--ink); text-align: left; }
-        .faq-a { font-size: 14px; color: var(--ink-soft); line-height: 1.7; padding-bottom: 18px; }
+        .faq-a { font-size: 15px; color: var(--ink-soft); line-height: 1.7; padding-bottom: 18px; }
         .faq-item.is-open .faq-chev { transform: rotate(180deg); }
         .faq-chev { transition: transform 0.2s; color: var(--accent-2); }
 
