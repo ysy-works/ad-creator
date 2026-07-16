@@ -92,13 +92,7 @@ AD_CREATOR_MODEL_C_TIMEOUT_SECONDS=420
 
 - 같은 VM이면 loopback 주소를 사용합니다.
 - 다른 VM/서비스이면 외부 공개 URL 대신 GCP 내부 IP 또는 인증된 내부 주소를 사용합니다.
-- 현재 model-c API에 별도 인증 계약이 없으므로 인터넷에 직접 공개하지 않습니다.
-
-기존 model-c 서비스 실행 예시:
-
-```bash
-uvicorn app.api:app --host 127.0.0.1 --port 8001
-```
+- 현재 model-c의 `0.0.0.0:8001` 바인딩과 기존 방화벽은 변경하지 않으며, ComfyUI는 같은 VM의 `127.0.0.1:8001`로만 호출합니다.
 
 ComfyUI는 재현 가능한 검증 기준으로 공식 `v0.28.0`을 고정합니다.
 
@@ -143,13 +137,19 @@ GET  /v1/generations/{generation_id}/result
 GET  /health
 ```
 
-모든 `/v1/*` 요청에는 다음 헤더가 필요합니다.
+모든 `/v1/*` 요청에는 다음 인증 헤더가 필요합니다.
 
 ```http
 Authorization: Bearer ${COMFYUI_GATEWAY_API_KEY}
 ```
 
-생성 요청은 `multipart/form-data`입니다.
+생성 `POST`에는 추가로 요청별 키가 필요합니다.
+
+```http
+Idempotency-Key: ${ONE_UUID_PER_USER_GENERATION_ACTION}
+```
+
+생성 요청은 `multipart/form-data`입니다. HTTP 라이브러리가 multipart boundary를 만들도록 두고 `Content-Type`을 직접 지정하지 않습니다. 같은 논리 요청을 재시도할 때는 동일한 idempotency key와 동일한 입력을 사용하고, 사용자가 명시적으로 재생성할 때만 새 키를 발급합니다.
 
 ```text
 image              JPEG | PNG | WebP, 최대 20 MiB
@@ -172,7 +172,12 @@ Gateway는 업로드 후 즉시 `202 Accepted`와 서명된 `generation_id`를 �
 }
 ```
 
-상태값은 `queued`, `running`, `succeeded`, `failed`, `not_found` 중 하나입니다. 별도 Generation DB를 두지 않고 ComfyUI의 `/history/{prompt_id}`와 `/queue`를 사용합니다. `generation_id` 안의 prompt/workflow/output 정보는 HMAC으로 서명되어 위변조를 거부합니다.
+상태값은 `queued`, `running`, `succeeded`, `failed`, `unknown`, `expired` 중 하나입니다. Gateway의 SQLite에는 ComfyUI prompt, workflow, 상태와 완료 이미지 위치를 저장하고 실제 이미지는 ComfyUI 출력 폴더에 둡니다. `generation_id`에는 불투명한 job ID만 포함하며 별도 HMAC 키로 서명해 위변조를 거부합니다.
+
+- Gateway만 재시작하면 SQLite와 ComfyUI 상태를 사용해 계속 조회합니다.
+- ComfyUI 또는 VM이 실행 중 작업 도중 재시작되면 해당 작업은 재개되지 않으며 `unknown`으로 남을 수 있습니다.
+- 완료 작업은 SQLite에 저장된 파일 위치로 다시 조회할 수 있지만 출력 파일은 7일 후 정리됩니다. 백엔드는 성공 직후 결과를 영구 저장소로 복사합니다.
+- `POST` 응답을 받지 못한 경우 같은 idempotency key와 동일한 입력으로 재시도합니다. 같은 키에 다른 입력을 보내면 `409`를 반환하며, `unknown` 작업은 자동 재실행하지 않습니다.
 
 Gateway 실행 환경 변수:
 
@@ -180,6 +185,9 @@ Gateway 실행 환경 변수:
 COMFYUI_BASE_URL=http://127.0.0.1:8188
 AD_CREATOR_MODEL_C_URL=http://127.0.0.1:8001
 AD_CREATOR_GATEWAY_API_KEY=32자-이상의-랜덤-비밀키
+AD_CREATOR_GENERATION_SIGNING_KEY=API-키와-다른-32자-이상의-비밀키
+AD_CREATOR_GATEWAY_DB=/var/lib/ad-creator-gateway/gateway.sqlite3
+AD_CREATOR_MAX_QUEUED=3
 ```
 
 Gateway는 다음처럼 로컬에서 실행합니다.
@@ -195,7 +203,7 @@ Internet :443
   -> Caddy (자동 HTTPS)
     -> Gateway 127.0.0.1:8002
       -> ComfyUI 127.0.0.1:8188 (CPU 전용)
-        -> model-c 127.0.0.1:8001 (기존 GPU 서비스)
+        -> model-c의 기존 0.0.0.0:8001 서비스에 loopback으로 호출
 ```
 
 ```text
@@ -204,12 +212,14 @@ Internet :443
 /opt/venv/comfyui/              독립 CPU Python 환경
 /etc/ad-creator/comfyui.env     내부 모델 주소
 /etc/ad-creator/gateway.env     Gateway 주소와 비밀키
+/var/lib/ad-creator-gateway/    작업 상태 SQLite
 ```
 
 - `model-c` 코드, 가상환경, 실행 사용자와 포트는 변경하지 않습니다.
 - ComfyUI와 Gateway는 `spai0813` 사용자로 별도 systemd 서비스에서 실행합니다.
 - ComfyUI 8188과 Gateway 8002는 loopback에만 바인딩합니다.
-- 외부에는 Caddy의 80/443만 허용합니다.
+- 신규 ComfyUI/Gateway는 Caddy의 80/443으로만 공개하고 8002/8188은 열지 않습니다. 기존 model-c 8001의 바인딩과 방화벽은 변경하지 않습니다.
+- Caddy는 요청 본문을 22 MB로 제한합니다.
 - `input/ad_creator`는 1일, `output/ad_creator`는 7일 기준으로 systemd-tmpfiles가 정리합니다.
 - 서비스 템플릿과 환경변수 예시는 `comfyui/deploy/`에 있습니다.
 

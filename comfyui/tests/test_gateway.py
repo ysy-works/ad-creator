@@ -1,10 +1,16 @@
 import io
 import os
+import sqlite3
 import sys
+import tempfile
+import time
 import unittest
+import uuid
+from contextlib import closing
 from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
+from fastapi import HTTPException
 from fastapi.testclient import TestClient
 from PIL import Image
 
@@ -13,9 +19,19 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT))
 
 from comfyui.gateway.app import (
+    Settings,
+    _PromptSubmissionUncertain,
+    _attach_prompt,
+    _delete_unsubmitted_generation,
     _failure_message,
+    _generation_record,
     _output_image,
     _queued_prompt_ids,
+    _recorded_image,
+    _request_hash,
+    _reserve_generation,
+    _submit_generation,
+    _update_generation_record,
     app,
     decode_generation_id,
     encode_generation_id,
@@ -23,29 +39,56 @@ from comfyui.gateway.app import (
 
 
 API_KEY = "test-key-" + "x" * 40
+SIGNING_KEY = "signing-key-" + "y" * 40
+AUTH_HEADERS = {"Authorization": f"Bearer {API_KEY}"}
 
 
-def _png() -> bytes:
+def _png(color: str = "white") -> bytes:
     stream = io.BytesIO()
-    Image.new("RGB", (16, 16), "white").save(stream, format="PNG")
+    Image.new("RGB", (16, 16), color).save(stream, format="PNG")
     return stream.getvalue()
+
+
+def _request_headers(idempotency_key: str = "request-key-0001") -> dict[str, str]:
+    return {**AUTH_HEADERS, "Idempotency-Key": idempotency_key}
+
+
+def _reserve_test_generation(settings: Settings) -> tuple[str, str]:
+    job_id = str(uuid.uuid4())
+    generation_id = encode_generation_id(job_id=job_id, secret=SIGNING_KEY)
+    _reserve_generation(
+        generation_id=generation_id,
+        job_id=job_id,
+        idempotency_key=f"test-{uuid.uuid4()}",
+        request_hash=uuid.uuid4().hex,
+        workflow_id="model-c-v1",
+        output_node_id="pending",
+        settings=settings,
+    )
+    return generation_id, job_id
 
 
 class GatewayHelpersTest(unittest.TestCase):
     def test_generation_id_round_trip_and_tamper_rejection(self):
-        token = encode_generation_id(
-            prompt_id="prompt-1", workflow_id="model-c-v1", output_node_id="3", secret=API_KEY
-        )
-        self.assertEqual(
-            decode_generation_id(token, secret=API_KEY),
-            {"p": "prompt-1", "w": "model-c-v1", "o": "3"},
-        )
-        with self.assertRaises(Exception):
-            decode_generation_id(token + "x", secret=API_KEY)
+        job_id = str(uuid.uuid4())
+        token = encode_generation_id(job_id=job_id, secret=SIGNING_KEY)
+        self.assertEqual(decode_generation_id(token, secret=SIGNING_KEY), {"j": job_id})
+        with self.assertRaises(HTTPException):
+            decode_generation_id(token + "x", secret=SIGNING_KEY)
 
     def test_extracts_output_and_failure(self):
         entry = {
-            "outputs": {"3": {"images": [{"filename": "result.png", "subfolder": "ad", "type": "output"}]}},
+            "outputs": {
+                "3": {
+                    "images": [
+                        {
+                            "filename": "result.png",
+                            "subfolder": "ad",
+                            "type": "output",
+                        }
+                    ]
+                }
+            },
             "status": {"status_str": "success"},
         }
         self.assertEqual(
@@ -55,7 +98,9 @@ class GatewayHelpersTest(unittest.TestCase):
         failed = {
             "status": {
                 "status_str": "error",
-                "messages": [["execution_error", {"exception_message": "model failed"}]],
+                "messages": [
+                    ["execution_error", {"exception_message": "model failed"}]
+                ],
             }
         }
         self.assertEqual(_failure_message(failed), "model failed")
@@ -63,43 +108,438 @@ class GatewayHelpersTest(unittest.TestCase):
     def test_extracts_queue_prompt_ids(self):
         self.assertEqual(_queued_prompt_ids([[1, "a"], [2, "b"]]), {"a", "b"})
 
+    def test_completed_result_metadata_survives_new_database_connection(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            with patch.dict(
+                os.environ,
+                {
+                    "AD_CREATOR_GATEWAY_API_KEY": API_KEY,
+                    "AD_CREATOR_GENERATION_SIGNING_KEY": SIGNING_KEY,
+                    "AD_CREATOR_GATEWAY_DB": str(
+                        Path(temp_dir) / "gateway.sqlite3"
+                    ),
+                },
+                clear=False,
+            ):
+                settings = Settings.from_env()
+                generation_id, _ = _reserve_test_generation(settings)
+                _attach_prompt(
+                    generation_id,
+                    prompt_id=str(uuid.uuid4()),
+                    workflow_id="model-c-v1",
+                    output_node_id="3",
+                    settings=settings,
+                )
+                expected = {
+                    "filename": "result.png",
+                    "subfolder": "ad_creator",
+                    "type": "output",
+                }
+                _update_generation_record(
+                    generation_id,
+                    state="succeeded",
+                    settings=settings,
+                    image=expected,
+                )
+
+                reloaded = _generation_record(generation_id, Settings.from_env())
+                self.assertIsNotNone(reloaded)
+                self.assertEqual(reloaded["state"], "succeeded")
+                self.assertEqual(_recorded_image(reloaded), expected)
+
+    def test_terminal_state_cannot_regress_or_lose_result_metadata(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            with patch.dict(
+                os.environ,
+                {
+                    "AD_CREATOR_GATEWAY_API_KEY": API_KEY,
+                    "AD_CREATOR_GENERATION_SIGNING_KEY": SIGNING_KEY,
+                    "AD_CREATOR_GATEWAY_DB": str(
+                        Path(temp_dir) / "gateway.sqlite3"
+                    ),
+                },
+                clear=False,
+            ):
+                settings = Settings.from_env()
+                generation_id, _ = _reserve_test_generation(settings)
+                expected = {
+                    "filename": "result.png",
+                    "subfolder": "ad_creator",
+                    "type": "output",
+                }
+                _update_generation_record(
+                    generation_id,
+                    state="succeeded",
+                    settings=settings,
+                    image=expected,
+                )
+                _update_generation_record(
+                    generation_id,
+                    state="running",
+                    settings=settings,
+                )
+                record = _generation_record(generation_id, settings)
+                self.assertEqual(record["state"], "succeeded")
+                self.assertEqual(_recorded_image(record), expected)
+
 
 class GatewayApiTest(unittest.TestCase):
     def setUp(self):
-        self.env = patch.dict(os.environ, {"AD_CREATOR_GATEWAY_API_KEY": API_KEY}, clear=False)
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.env = patch.dict(
+            os.environ,
+            {
+                "AD_CREATOR_GATEWAY_API_KEY": API_KEY,
+                "AD_CREATOR_GENERATION_SIGNING_KEY": SIGNING_KEY,
+                "AD_CREATOR_GATEWAY_DB": str(
+                    Path(self.temp_dir.name) / "gateway.sqlite3"
+                ),
+            },
+            clear=False,
+        )
         self.env.start()
         self.client = TestClient(app)
 
     def tearDown(self):
         self.client.close()
         self.env.stop()
+        self.temp_dir.cleanup()
 
     def test_requires_bearer_key(self):
         response = self.client.post(
-            "/v1/generations", files={"image": ("input.png", _png(), "image/png")}
+            "/v1/generations",
+            headers={"Idempotency-Key": "request-key-0001"},
+            files={"image": ("input.png", _png(), "image/png")},
         )
         self.assertEqual(response.status_code, 401)
 
+    def test_requires_idempotency_key(self):
+        response = self.client.post(
+            "/v1/generations",
+            headers=AUTH_HEADERS,
+            files={"image": ("input.png", _png(), "image/png")},
+        )
+        self.assertEqual(response.status_code, 400)
+
     def test_health_reports_misconfigured_gateway(self):
-        with patch.dict(os.environ, {"AD_CREATOR_GATEWAY_API_KEY": ""}, clear=False):
+        with patch.dict(
+            os.environ, {"AD_CREATOR_GATEWAY_API_KEY": ""}, clear=False
+        ):
             response = self.client.get("/health")
         self.assertEqual(response.status_code, 503)
-        self.assertEqual(response.json(), {"ok": False, "gateway": "misconfigured"})
+        self.assertEqual(
+            response.json(), {"ok": False, "gateway": "misconfigured"}
+        )
 
     @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
     def test_submits_generation_and_returns_signed_job(self, submit_generation):
-        submit_generation.return_value = ("prompt-123", "model-c-v1", "3")
+        prompt_id = str(uuid.uuid4())
+        submit_generation.return_value = (prompt_id, "model-c-v1", "3")
         response = self.client.post(
             "/v1/generations",
-            headers={"Authorization": f"Bearer {API_KEY}"},
+            headers=_request_headers(),
             files={"image": ("input.png", _png(), "image/png")},
-            data={"composition": "medium", "background_style": "white", "strength": "low"},
+            data={
+                "composition": "medium",
+                "background_style": "white",
+                "strength": "low",
+            },
         )
         self.assertEqual(response.status_code, 202)
         payload = response.json()
         self.assertEqual(payload["status"], "queued")
-        decoded = decode_generation_id(payload["generation_id"], secret=API_KEY)
-        self.assertEqual(decoded["p"], "prompt-123")
+        decoded = decode_generation_id(
+            payload["generation_id"], secret=SIGNING_KEY
+        )
+        record = _generation_record(
+            payload["generation_id"], Settings.from_env()
+        )
+        self.assertEqual(decoded["j"], record["job_id"])
+        self.assertEqual(record["prompt_id"], prompt_id)
+        self.assertEqual(record["output_node_id"], "3")
+
+    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    def test_same_idempotent_request_is_submitted_once(self, submit_generation):
+        submit_generation.return_value = (str(uuid.uuid4()), "model-c-v1", "3")
+        request = {
+            "headers": _request_headers("same-request-key"),
+            "files": {"image": ("input.png", _png(), "image/png")},
+            "data": {"background_style": "white"},
+        }
+        first = self.client.post("/v1/generations", **request)
+        second = self.client.post("/v1/generations", **request)
+        self.assertEqual(first.status_code, 202)
+        self.assertEqual(second.status_code, 202)
+        self.assertEqual(
+            first.json()["generation_id"], second.json()["generation_id"]
+        )
+        self.assertEqual(submit_generation.await_count, 1)
+
+    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    def test_in_flight_duplicate_cannot_invalidate_original_reservation(
+        self, submit_generation
+    ):
+        settings = Settings.from_env()
+        data = _png()
+        request_key = "in-flight-request-key"
+        job_id = str(uuid.uuid4())
+        generation_id = encode_generation_id(job_id=job_id, secret=SIGNING_KEY)
+        _reserve_generation(
+            generation_id=generation_id,
+            job_id=job_id,
+            idempotency_key=request_key,
+            request_hash=_request_hash(
+                data=data,
+                content_type="image/png",
+                workflow_id="model-c-v1",
+                composition="medium",
+                background_style="wood",
+                strength="medium",
+                seed=None,
+            ),
+            workflow_id="model-c-v1",
+            output_node_id="pending",
+            settings=settings,
+        )
+
+        duplicate = self.client.post(
+            "/v1/generations",
+            headers=_request_headers(request_key),
+            files={"image": ("input.png", data, "image/png")},
+        )
+        self.assertEqual(duplicate.status_code, 409)
+        self.assertEqual(duplicate.headers["Retry-After"], "2")
+        submit_generation.assert_not_awaited()
+
+        polled = self.client.get(
+            f"/v1/generations/{generation_id}", headers=AUTH_HEADERS
+        )
+        self.assertEqual(polled.status_code, 200)
+        self.assertEqual(polled.json()["status"], "unknown")
+        self.assertEqual(
+            _generation_record(generation_id, settings)["state"], "submitting"
+        )
+
+        _delete_unsubmitted_generation(generation_id, settings)
+        self.assertIsNone(_generation_record(generation_id, settings))
+
+    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    def test_stale_submission_becomes_unknown_without_resubmission(
+        self, submit_generation
+    ):
+        settings = Settings.from_env()
+        data = _png()
+        request_key = "stale-request-key"
+        job_id = str(uuid.uuid4())
+        generation_id = encode_generation_id(job_id=job_id, secret=SIGNING_KEY)
+        _reserve_generation(
+            generation_id=generation_id,
+            job_id=job_id,
+            idempotency_key=request_key,
+            request_hash=_request_hash(
+                data=data,
+                content_type="image/png",
+                workflow_id="model-c-v1",
+                composition="medium",
+                background_style="wood",
+                strength="medium",
+                seed=None,
+            ),
+            workflow_id="model-c-v1",
+            output_node_id="pending",
+            settings=settings,
+        )
+        with closing(sqlite3.connect(settings.database_path)) as connection:
+            with connection:
+                connection.execute(
+                    "UPDATE generations SET updated_at = ? WHERE generation_id = ?",
+                    (int(time.time()) - 301, generation_id),
+                )
+
+        response = self.client.post(
+            "/v1/generations",
+            headers=_request_headers(request_key),
+            files={"image": ("input.png", data, "image/png")},
+        )
+        self.assertEqual(response.status_code, 202)
+        self.assertEqual(response.json()["generation_id"], generation_id)
+        self.assertEqual(response.json()["status"], "unknown")
+        submit_generation.assert_not_awaited()
+
+    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    def test_reused_key_with_different_request_is_rejected(self, submit_generation):
+        submit_generation.return_value = (str(uuid.uuid4()), "model-c-v1", "3")
+        headers = _request_headers("conflicting-request-key")
+        first = self.client.post(
+            "/v1/generations",
+            headers=headers,
+            files={"image": ("input.png", _png("white"), "image/png")},
+        )
+        second = self.client.post(
+            "/v1/generations",
+            headers=headers,
+            files={"image": ("input.png", _png("black"), "image/png")},
+        )
+        self.assertEqual(first.status_code, 202)
+        self.assertEqual(second.status_code, 409)
+        self.assertEqual(submit_generation.await_count, 1)
+
+    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    def test_pre_submit_rejection_does_not_consume_idempotency_key(
+        self, submit_generation
+    ):
+        submit_generation.side_effect = [
+            HTTPException(
+                status_code=429,
+                detail="Generation queue is full.",
+                headers={"Retry-After": "10"},
+            ),
+            (str(uuid.uuid4()), "model-c-v1", "3"),
+        ]
+        request = {
+            "headers": _request_headers("retryable-request-key"),
+            "files": {"image": ("input.png", _png(), "image/png")},
+        }
+        first = self.client.post("/v1/generations", **request)
+        second = self.client.post("/v1/generations", **request)
+        self.assertEqual(first.status_code, 429)
+        self.assertEqual(second.status_code, 202)
+        self.assertEqual(submit_generation.await_count, 2)
+
+    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    def test_uncertain_prompt_submission_is_not_automatically_repeated(
+        self, submit_generation
+    ):
+        submit_generation.side_effect = _PromptSubmissionUncertain(
+            HTTPException(status_code=504, detail="Upstream timeout.")
+        )
+        request = {
+            "headers": _request_headers("uncertain-request-key"),
+            "files": {"image": ("input.png", _png(), "image/png")},
+        }
+        first = self.client.post("/v1/generations", **request)
+        self.assertEqual(first.status_code, 504)
+        generation_id = first.json()["detail"]["generation_id"]
+
+        retry = self.client.post("/v1/generations", **request)
+        self.assertEqual(retry.status_code, 202)
+        self.assertEqual(retry.json()["generation_id"], generation_id)
+        self.assertEqual(retry.json()["status"], "unknown")
+        self.assertEqual(submit_generation.await_count, 1)
+
+    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    def test_completed_status_is_loaded_from_sqlite_after_refresh(
+        self, submit_generation
+    ):
+        prompt_id = str(uuid.uuid4())
+        submit_generation.return_value = (prompt_id, "model-c-v1", "3")
+        created = self.client.post(
+            "/v1/generations",
+            headers=_request_headers("completed-request-key"),
+            files={"image": ("input.png", _png(), "image/png")},
+        )
+        generation_id = created.json()["generation_id"]
+        result_image = {
+            "filename": "result.png",
+            "subfolder": "ad_creator",
+            "type": "output",
+        }
+
+        with patch(
+            "comfyui.gateway.app._generation_state",
+            new=AsyncMock(return_value=("succeeded", result_image, None)),
+        ) as generation_state:
+            completed = self.client.get(
+                f"/v1/generations/{generation_id}", headers=AUTH_HEADERS
+            )
+            self.assertEqual(completed.status_code, 200)
+            self.assertEqual(completed.json()["status"], "succeeded")
+            generation_state.assert_awaited_once()
+
+        with patch(
+            "comfyui.gateway.app._generation_state", new=AsyncMock()
+        ) as generation_state:
+            persisted = self.client.get(
+                f"/v1/generations/{generation_id}", headers=AUTH_HEADERS
+            )
+            self.assertEqual(persisted.json()["status"], "succeeded")
+            generation_state.assert_not_awaited()
+
+    def test_generation_without_prompt_is_reported_unknown(self):
+        settings = Settings.from_env()
+        generation_id, _ = _reserve_test_generation(settings)
+        with patch(
+            "comfyui.gateway.app._generation_state", new=AsyncMock()
+        ) as generation_state:
+            response = self.client.get(
+                f"/v1/generations/{generation_id}", headers=AUTH_HEADERS
+            )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["status"], "unknown")
+        generation_state.assert_not_awaited()
+
+    def test_expired_result_always_returns_gone(self):
+        settings = Settings.from_env()
+        generation_id, _ = _reserve_test_generation(settings)
+        image = {
+            "filename": "expired.png",
+            "subfolder": "ad_creator",
+            "type": "output",
+        }
+        _update_generation_record(
+            generation_id,
+            state="succeeded",
+            settings=settings,
+            image=image,
+        )
+        _update_generation_record(
+            generation_id,
+            state="expired",
+            settings=settings,
+            error="Generated image has expired.",
+        )
+        for _ in range(2):
+            response = self.client.get(
+                f"/v1/generations/{generation_id}/result", headers=AUTH_HEADERS
+            )
+            self.assertEqual(response.status_code, 410)
+
+
+class GatewayQueueTest(unittest.IsolatedAsyncioTestCase):
+    async def test_rejects_submission_when_queue_is_full(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            with patch.dict(
+                os.environ,
+                {
+                    "AD_CREATOR_GATEWAY_API_KEY": API_KEY,
+                    "AD_CREATOR_GENERATION_SIGNING_KEY": SIGNING_KEY,
+                    "AD_CREATOR_GATEWAY_DB": str(
+                        Path(temp_dir) / "gateway.sqlite3"
+                    ),
+                    "AD_CREATOR_MAX_QUEUED": "1",
+                },
+                clear=False,
+            ):
+                with patch(
+                    "comfyui.gateway.app._json_request",
+                    new=AsyncMock(
+                        return_value={
+                            "queue_running": [[1, str(uuid.uuid4())]]
+                        }
+                    ),
+                ):
+                    with self.assertRaises(HTTPException) as caught:
+                        await _submit_generation(
+                            data=_png(),
+                            content_type="image/png",
+                            workflow_id="model-c-v1",
+                            composition="medium",
+                            background_style="white",
+                            strength="medium",
+                            seed=None,
+                            settings=Settings.from_env(),
+                        )
+                self.assertEqual(caught.exception.status_code, 429)
 
 
 if __name__ == "__main__":

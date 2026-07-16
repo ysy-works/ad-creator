@@ -1,12 +1,17 @@
 import base64
+import asyncio
 import hashlib
 import hmac
 import io
 import json
 import os
 import secrets
+import sqlite3
+import time
 import uuid
+from contextlib import contextmanager
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Annotated, Any, Literal
 
 import httpx
@@ -21,8 +26,10 @@ MAX_IMAGE_BYTES = 20 * 1024 * 1024
 MAX_RESULT_BYTES = 50 * 1024 * 1024
 MAX_IMAGE_PIXELS = 40_000_000
 ALLOWED_CONTENT_TYPES = {"image/jpeg", "image/png", "image/webp"}
+ALLOWED_RESULT_CONTENT_TYPES = {"image/jpeg", "image/png", "image/webp"}
 FORMAT_EXTENSIONS = {"JPEG": ".jpg", "PNG": ".png", "WEBP": ".webp"}
-JOB_TOKEN_VERSION = 1
+JOB_TOKEN_VERSION = 2
+SUBMISSION_STALE_SECONDS = 300
 
 
 @dataclass(frozen=True)
@@ -30,16 +37,35 @@ class Settings:
     comfyui_url: str
     model_c_url: str
     api_key: str
+    signing_key: str
+    database_path: Path
+    max_queued: int
 
     @classmethod
     def from_env(cls) -> "Settings":
         api_key = os.environ.get("AD_CREATOR_GATEWAY_API_KEY", "")
         if len(api_key) < 32:
             raise RuntimeError("AD_CREATOR_GATEWAY_API_KEY must contain at least 32 characters.")
+        signing_key = os.environ.get("AD_CREATOR_GENERATION_SIGNING_KEY", "")
+        if len(signing_key) < 32:
+            raise RuntimeError("AD_CREATOR_GENERATION_SIGNING_KEY must contain at least 32 characters.")
+        if secrets.compare_digest(api_key, signing_key):
+            raise RuntimeError("Gateway API and generation signing keys must be different.")
+        try:
+            max_queued = int(os.environ.get("AD_CREATOR_MAX_QUEUED", "3"))
+        except ValueError as exc:
+            raise RuntimeError("AD_CREATOR_MAX_QUEUED must be an integer.") from exc
+        if not 1 <= max_queued <= 100:
+            raise RuntimeError("AD_CREATOR_MAX_QUEUED must be between 1 and 100.")
         return cls(
             comfyui_url=os.environ.get("COMFYUI_BASE_URL", "http://127.0.0.1:8188").rstrip("/"),
             model_c_url=os.environ.get("AD_CREATOR_MODEL_C_URL", "http://127.0.0.1:8001").rstrip("/"),
             api_key=api_key,
+            signing_key=signing_key,
+            database_path=Path(
+                os.environ.get("AD_CREATOR_GATEWAY_DB", "data/gateway.sqlite3")
+            ).expanduser(),
+            max_queued=max_queued,
         )
 
 
@@ -50,6 +76,286 @@ app = FastAPI(
     redoc_url=None,
     openapi_url=None,
 )
+
+_SUBMISSION_LOCK = asyncio.Lock()
+_TERMINAL_STATES = {"succeeded", "failed", "expired"}
+_REQUIRED_GENERATION_COLUMNS = {
+    "generation_id",
+    "job_id",
+    "idempotency_key",
+    "request_hash",
+    "prompt_id",
+    "workflow_id",
+    "output_node_id",
+    "state",
+    "filename",
+    "subfolder",
+    "output_type",
+    "error",
+    "created_at",
+    "updated_at",
+}
+
+
+class _PromptSubmissionUncertain(Exception):
+    def __init__(self, error: HTTPException):
+        super().__init__(str(error.detail))
+        self.error = error
+
+
+@contextmanager
+def _database(settings: Settings):
+    settings.database_path.parent.mkdir(parents=True, exist_ok=True)
+    connection = sqlite3.connect(settings.database_path, timeout=5.0)
+    try:
+        connection.row_factory = sqlite3.Row
+        connection.execute("PRAGMA journal_mode=WAL")
+        connection.execute("PRAGMA busy_timeout=5000")
+        connection.execute(
+            """
+        CREATE TABLE IF NOT EXISTS generations (
+            generation_id TEXT PRIMARY KEY,
+            job_id TEXT NOT NULL UNIQUE,
+            idempotency_key TEXT NOT NULL UNIQUE,
+            request_hash TEXT NOT NULL,
+            prompt_id TEXT UNIQUE,
+            workflow_id TEXT NOT NULL,
+                output_node_id TEXT NOT NULL,
+                state TEXT NOT NULL,
+                filename TEXT,
+                subfolder TEXT,
+                output_type TEXT,
+                error TEXT,
+                created_at INTEGER NOT NULL,
+                updated_at INTEGER NOT NULL
+            )
+            """
+        )
+        columns = {
+            str(row[1]) for row in connection.execute("PRAGMA table_info(generations)").fetchall()
+        }
+        if not _REQUIRED_GENERATION_COLUMNS.issubset(columns):
+            raise sqlite3.DatabaseError(
+                "Unsupported gateway database schema; start with a fresh gateway database."
+            )
+        connection.commit()
+        yield connection
+        connection.commit()
+    finally:
+        connection.close()
+
+
+def _reserve_generation(
+    *,
+    generation_id: str,
+    job_id: str,
+    idempotency_key: str,
+    request_hash: str,
+    workflow_id: str,
+    output_node_id: str,
+    settings: Settings,
+) -> tuple[dict[str, Any], bool]:
+    now = int(time.time())
+    with _database(settings) as connection:
+        connection.execute("BEGIN IMMEDIATE")
+        existing = connection.execute(
+            "SELECT * FROM generations WHERE idempotency_key = ?", (idempotency_key,)
+        ).fetchone()
+        if existing is not None:
+            record = dict(existing)
+            if record["request_hash"] != request_hash:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="Idempotency-Key was already used for a different request.",
+                )
+            return record, False
+        connection.execute(
+            """
+            INSERT INTO generations (
+                generation_id, job_id, idempotency_key, request_hash,
+                workflow_id, output_node_id,
+                state, created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, 'submitting', ?, ?)
+            """,
+            (
+                generation_id,
+                job_id,
+                idempotency_key,
+                request_hash,
+                workflow_id,
+                output_node_id,
+                now,
+                now,
+            ),
+        )
+        record = connection.execute(
+            "SELECT * FROM generations WHERE generation_id = ?", (generation_id,)
+        ).fetchone()
+        if record is None:
+            raise sqlite3.DatabaseError("Generation reservation was not stored.")
+        return dict(record), True
+
+
+def _attach_prompt(
+    generation_id: str,
+    *,
+    prompt_id: str,
+    workflow_id: str,
+    output_node_id: str,
+    settings: Settings,
+) -> None:
+    with _database(settings) as connection:
+        cursor = connection.execute(
+            """
+            UPDATE generations
+            SET prompt_id = ?, workflow_id = ?, output_node_id = ?,
+                state = 'queued', error = NULL, updated_at = ?
+            WHERE generation_id = ? AND state NOT IN ('succeeded', 'failed', 'expired')
+            """,
+            (
+                prompt_id,
+                workflow_id,
+                output_node_id,
+                int(time.time()),
+                generation_id,
+            ),
+        )
+        if cursor.rowcount != 1:
+            raise sqlite3.DatabaseError("Generation prompt metadata was not stored.")
+
+
+def _delete_unsubmitted_generation(generation_id: str, settings: Settings) -> None:
+    with _database(settings) as connection:
+        connection.execute(
+            """
+            DELETE FROM generations
+            WHERE generation_id = ? AND prompt_id IS NULL AND state = 'submitting'
+            """,
+            (generation_id,),
+        )
+
+
+def _generation_record(generation_id: str, settings: Settings) -> dict[str, Any] | None:
+    with _database(settings) as connection:
+        row = connection.execute(
+            "SELECT * FROM generations WHERE generation_id = ?", (generation_id,)
+        ).fetchone()
+    return dict(row) if row is not None else None
+
+
+def _update_generation_record(
+    generation_id: str,
+    *,
+    state: str,
+    settings: Settings,
+    image: dict[str, str] | None = None,
+    error: str | None = None,
+) -> None:
+    with _database(settings) as connection:
+        now = int(time.time())
+        if state == "expired":
+            connection.execute(
+                """
+                UPDATE generations
+                SET state = 'expired', error = ?, updated_at = ?
+                WHERE generation_id = ? AND state = 'succeeded'
+                """,
+                (error, now, generation_id),
+            )
+        elif state == "succeeded" and image is not None:
+            connection.execute(
+                """
+                UPDATE generations
+                SET state = 'succeeded', filename = ?, subfolder = ?, output_type = ?,
+                    error = NULL, updated_at = ?
+                WHERE generation_id = ?
+                  AND state NOT IN ('succeeded', 'failed', 'expired')
+                """,
+                (
+                    image["filename"],
+                    image.get("subfolder", ""),
+                    image.get("type", "output"),
+                    now,
+                    generation_id,
+                ),
+            )
+        else:
+            connection.execute(
+                """
+                UPDATE generations
+                SET state = ?, error = ?, updated_at = ?
+                WHERE generation_id = ?
+                  AND state NOT IN ('succeeded', 'failed', 'expired')
+                """,
+                (state, error, now, generation_id),
+            )
+
+
+def _recorded_image(record: dict[str, Any]) -> dict[str, str] | None:
+    filename = record.get("filename")
+    if not isinstance(filename, str) or not filename:
+        return None
+    return {
+        "filename": filename,
+        "subfolder": str(record.get("subfolder") or ""),
+        "type": str(record.get("output_type") or "output"),
+    }
+
+
+def _request_hash(
+    *,
+    data: bytes,
+    content_type: str,
+    workflow_id: str,
+    composition: str,
+    background_style: str,
+    strength: str,
+    seed: int | None,
+) -> str:
+    canonical = json.dumps(
+        {
+            "background_style": background_style,
+            "composition": composition,
+            "content_type": content_type,
+            "image_sha256": hashlib.sha256(data).hexdigest(),
+            "seed": seed,
+            "strength": strength,
+            "workflow_id": workflow_id,
+        },
+        ensure_ascii=True,
+        separators=(",", ":"),
+        sort_keys=True,
+    ).encode("utf-8")
+    return hashlib.sha256(canonical).hexdigest()
+
+
+def _idempotency_key(value: str | None) -> str:
+    key = (value or "").strip()
+    if not 8 <= len(key) <= 128 or any(character.isspace() for character in key):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Idempotency-Key must contain 8 to 128 non-whitespace characters.",
+        )
+    return key
+
+
+def _public_status(record: dict[str, Any]) -> str:
+    state_value = str(record["state"])
+    return "unknown" if state_value == "submitting" else state_value
+
+
+def _generation_response(record: dict[str, Any]) -> dict[str, Any]:
+    generation_id = str(record["generation_id"])
+    result: dict[str, Any] = {
+        "generation_id": generation_id,
+        "workflow_id": str(record["workflow_id"]),
+        "status": _public_status(record),
+        "status_url": f"/v1/generations/{generation_id}",
+        "result_url": f"/v1/generations/{generation_id}/result",
+    }
+    if record.get("error"):
+        result["error"] = str(record["error"])
+    return result
 
 
 def _settings() -> Settings:
@@ -82,9 +388,9 @@ def _b64decode(value: str) -> bytes:
     return base64.urlsafe_b64decode(value + padding)
 
 
-def encode_generation_id(*, prompt_id: str, workflow_id: str, output_node_id: str, secret: str) -> str:
+def encode_generation_id(*, job_id: str, secret: str) -> str:
     payload = json.dumps(
-        {"v": JOB_TOKEN_VERSION, "p": prompt_id, "w": workflow_id, "o": output_node_id},
+        {"v": JOB_TOKEN_VERSION, "j": job_id},
         ensure_ascii=True,
         separators=(",", ":"),
         sort_keys=True,
@@ -96,6 +402,8 @@ def encode_generation_id(*, prompt_id: str, workflow_id: str, output_node_id: st
 
 def decode_generation_id(value: str, *, secret: str) -> dict[str, str]:
     try:
+        if len(value) > 2048:
+            raise ValueError("token too long")
         encoded, supplied_signature = value.split(".", 1)
         expected_signature = hmac.new(
             secret.encode("utf-8"), encoded.encode("ascii"), hashlib.sha256
@@ -103,13 +411,16 @@ def decode_generation_id(value: str, *, secret: str) -> dict[str, str]:
         if not hmac.compare_digest(_b64decode(supplied_signature), expected_signature):
             raise ValueError("signature mismatch")
         payload = json.loads(_b64decode(encoded).decode("utf-8"))
+        if not isinstance(payload, dict):
+            raise ValueError("invalid token payload")
         if payload.get("v") != JOB_TOKEN_VERSION:
             raise ValueError("unsupported token version")
-        result = {key: str(payload[key]) for key in ("p", "w", "o")}
+        result = {"j": str(payload["j"])}
         if not all(result.values()):
             raise ValueError("empty token value")
+        uuid.UUID(result["j"])
         return result
-    except (ValueError, KeyError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+    except (ValueError, KeyError, TypeError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Generation not found.") from exc
 
 
@@ -143,7 +454,7 @@ def _validate_image(data: bytes, content_type: str | None) -> str:
         raise HTTPException(status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, detail="Image exceeds 20 MiB.")
 
     try:
-        with Image.open(io.BytesIO(data)) as image:
+        with Image.open(io.BytesIO(data), formats=("JPEG", "PNG", "WEBP")) as image:
             image_format = image.format
             width, height = image.size
             if width * height > MAX_IMAGE_PIXELS:
@@ -173,43 +484,68 @@ async def _submit_generation(
     settings: Settings,
 ) -> tuple[str, str, str]:
     extension = _validate_image(data, content_type)
-    upload_name = f"{uuid.uuid4().hex}{extension}"
-    upload_payload = await _json_request(
-        "POST",
-        f"{settings.comfyui_url}/upload/image",
-        timeout=30.0,
-        files={"image": (upload_name, data, content_type)},
-        data={"type": "input", "subfolder": "ad_creator", "overwrite": "false"},
-    )
-    uploaded_name = upload_payload.get("name")
-    uploaded_subfolder = upload_payload.get("subfolder") or ""
-    if not isinstance(uploaded_name, str) or not uploaded_name:
-        raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail="ComfyUI upload failed.")
-    source_image = f"{uploaded_subfolder}/{uploaded_name}" if uploaded_subfolder else uploaded_name
+    async with _SUBMISSION_LOCK:
+        queue = await _json_request("GET", f"{settings.comfyui_url}/queue", timeout=15.0)
+        queued_count = len(_queued_prompt_ids(queue.get("queue_running"))) + len(
+            _queued_prompt_ids(queue.get("queue_pending"))
+        )
+        if queued_count >= settings.max_queued:
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail="Generation queue is full.",
+                headers={"Retry-After": "10"},
+            )
 
-    values: dict[str, Any] = {
-        "source_image": source_image,
-        "composition": composition,
-        "background_style": background_style,
-        "strength": strength,
-    }
-    if seed is not None:
-        values["seed"] = seed
-    try:
-        resolved = build_prompt(workflow_id=workflow_id, values=values)
-    except WorkflowRouterError as exc:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+        upload_name = f"{uuid.uuid4().hex}{extension}"
+        upload_payload = await _json_request(
+            "POST",
+            f"{settings.comfyui_url}/upload/image",
+            timeout=30.0,
+            files={"image": (upload_name, data, content_type)},
+            data={"type": "input", "subfolder": "ad_creator", "overwrite": "false"},
+        )
+        uploaded_name = upload_payload.get("name")
+        uploaded_subfolder = upload_payload.get("subfolder") or ""
+        if not isinstance(uploaded_name, str) or not uploaded_name:
+            raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail="ComfyUI upload failed.")
+        source_image = f"{uploaded_subfolder}/{uploaded_name}" if uploaded_subfolder else uploaded_name
 
-    queued = await _json_request(
-        "POST",
-        f"{settings.comfyui_url}/prompt",
-        timeout=30.0,
-        json={"prompt": resolved["prompt"], "client_id": f"gateway-{uuid.uuid4().hex}"},
-    )
-    prompt_id = queued.get("prompt_id")
-    if not isinstance(prompt_id, str) or not prompt_id:
-        raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail="ComfyUI did not return prompt_id.")
-    return prompt_id, str(resolved["workflow_id"]), str(resolved["output_node_id"])
+        values: dict[str, Any] = {
+            "source_image": source_image,
+            "composition": composition,
+            "background_style": background_style,
+            "strength": strength,
+        }
+        if seed is not None:
+            values["seed"] = seed
+        try:
+            resolved = build_prompt(workflow_id=workflow_id, values=values)
+        except WorkflowRouterError as exc:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+
+        try:
+            queued = await _json_request(
+                "POST",
+                f"{settings.comfyui_url}/prompt",
+                timeout=30.0,
+                json={
+                    "prompt": resolved["prompt"],
+                    "client_id": f"gateway-{uuid.uuid4().hex}",
+                },
+            )
+        except HTTPException as exc:
+            # A timeout or connection loss can happen after ComfyUI accepted the prompt.
+            # The caller must keep the reservation and must not submit it automatically again.
+            raise _PromptSubmissionUncertain(exc) from exc
+        prompt_id = queued.get("prompt_id")
+        if not isinstance(prompt_id, str) or not prompt_id:
+            raise _PromptSubmissionUncertain(
+                HTTPException(
+                    status_code=status.HTTP_502_BAD_GATEWAY,
+                    detail="ComfyUI did not return prompt_id.",
+                )
+            )
+        return prompt_id, str(resolved["workflow_id"]), str(resolved["output_node_id"])
 
 
 def _output_image(entry: dict[str, Any], output_node_id: str) -> dict[str, str] | None:
@@ -261,11 +597,16 @@ def _queued_prompt_ids(queue_entries: Any) -> set[str]:
 async def _generation_state(
     *, prompt_id: str, output_node_id: str, settings: Settings
 ) -> tuple[str, dict[str, str] | None, str | None]:
-    history = await _json_request(
-        "GET", f"{settings.comfyui_url}/history/{prompt_id}", timeout=15.0
-    )
-    entry = history.get(prompt_id)
-    if isinstance(entry, dict):
+    async def read_history() -> dict[str, Any] | None:
+        history = await _json_request(
+            "GET", f"{settings.comfyui_url}/history/{prompt_id}", timeout=15.0
+        )
+        value = history.get(prompt_id)
+        return value if isinstance(value, dict) else None
+
+    def completed_state(
+        entry: dict[str, Any],
+    ) -> tuple[str, dict[str, str] | None, str | None]:
         image = _output_image(entry, output_node_id)
         if image is not None:
             return "succeeded", image, None
@@ -274,12 +615,62 @@ async def _generation_state(
             return "failed", None, failure
         return "failed", None, "Generation completed without an output image."
 
+    entry = await read_history()
+    if isinstance(entry, dict):
+        return completed_state(entry)
+
     queue = await _json_request("GET", f"{settings.comfyui_url}/queue", timeout=15.0)
     if prompt_id in _queued_prompt_ids(queue.get("queue_running")):
         return "running", None, None
     if prompt_id in _queued_prompt_ids(queue.get("queue_pending")):
         return "queued", None, None
-    return "not_found", None, None
+
+    # A job can move from the queue to history between the two reads above.
+    entry = await read_history()
+    if isinstance(entry, dict):
+        return completed_state(entry)
+    return "unknown", None, None
+
+
+async def _refresh_generation(
+    generation_id: str,
+    *,
+    token: dict[str, str],
+    settings: Settings,
+) -> tuple[dict[str, Any], dict[str, str] | None]:
+    record = _generation_record(generation_id, settings)
+    if record is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Generation not found.")
+    if str(record["job_id"]) != token["j"]:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Generation not found.")
+
+    recorded_image = _recorded_image(record)
+    if record["state"] in _TERMINAL_STATES:
+        return record, recorded_image
+
+    prompt_id = record.get("prompt_id")
+    if not isinstance(prompt_id, str) or not prompt_id:
+        # A concurrent retry can observe this reservation while the original
+        # request is still uploading. A read must not change it, otherwise a
+        # definite pre-submit failure can no longer remove the reservation.
+        return record, _recorded_image(record)
+
+    current_status, image, error = await _generation_state(
+        prompt_id=prompt_id,
+        output_node_id=str(record["output_node_id"]),
+        settings=settings,
+    )
+    _update_generation_record(
+        generation_id,
+        state=current_status,
+        settings=settings,
+        image=image,
+        error=error,
+    )
+    record = _generation_record(generation_id, settings)
+    if record is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Generation not found.")
+    return record, _recorded_image(record)
 
 
 @app.get("/health")
@@ -293,6 +684,12 @@ async def health() -> JSONResponse:
         )
 
     checks: dict[str, bool] = {}
+    try:
+        with _database(settings) as connection:
+            connection.execute("SELECT 1").fetchone()
+        checks["storage"] = True
+    except (OSError, sqlite3.Error):
+        checks["storage"] = False
     for name, url in (
         ("comfyui", f"{settings.comfyui_url}/system_stats"),
         ("model_c", f"{settings.model_c_url}/health"),
@@ -317,32 +714,145 @@ async def create_generation(
     background_style: Annotated[Literal["vivid", "wood", "white"], Form()] = "wood",
     strength: Annotated[Literal["low", "medium", "high"], Form()] = "medium",
     seed: Annotated[int | None, Form(ge=-1, le=2147483647)] = None,
+    idempotency_key: Annotated[str | None, Header(alias="Idempotency-Key")] = None,
     settings: Settings = Depends(require_api_key),
 ) -> dict[str, Any]:
+    try:
+        with _database(settings) as connection:
+            connection.execute("SELECT 1").fetchone()
+    except (OSError, sqlite3.Error) as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Generation storage is unavailable.",
+        ) from exc
+
+    request_key = _idempotency_key(idempotency_key)
     data = await image.read(MAX_IMAGE_BYTES + 1)
-    prompt_id, selected_workflow_id, output_node_id = await _submit_generation(
+    content_type = image.content_type or "application/octet-stream"
+    _validate_image(data, content_type)
+    request_hash = _request_hash(
         data=data,
-        content_type=image.content_type or "application/octet-stream",
+        content_type=content_type,
         workflow_id=workflow_id,
         composition=composition,
         background_style=background_style,
         strength=strength,
         seed=seed,
-        settings=settings,
     )
-    generation_id = encode_generation_id(
-        prompt_id=prompt_id,
-        workflow_id=selected_workflow_id,
-        output_node_id=output_node_id,
-        secret=settings.api_key,
-    )
-    return {
-        "generation_id": generation_id,
-        "workflow_id": selected_workflow_id,
-        "status": "queued",
-        "status_url": f"/v1/generations/{generation_id}",
-        "result_url": f"/v1/generations/{generation_id}/result",
-    }
+    job_id = str(uuid.uuid4())
+    generation_id = encode_generation_id(job_id=job_id, secret=settings.signing_key)
+    try:
+        record, created = _reserve_generation(
+            generation_id=generation_id,
+            job_id=job_id,
+            idempotency_key=request_key,
+            request_hash=request_hash,
+            workflow_id=workflow_id,
+            output_node_id="pending",
+            settings=settings,
+        )
+    except HTTPException:
+        raise
+    except (OSError, sqlite3.Error) as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Generation storage is unavailable.",
+        ) from exc
+
+    if not created:
+        if record["state"] == "submitting":
+            age_seconds = int(time.time()) - int(record["updated_at"])
+            if age_seconds < SUBMISSION_STALE_SECONDS:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="The original request is still being submitted.",
+                    headers={"Retry-After": "2"},
+                )
+            _update_generation_record(
+                str(record["generation_id"]),
+                state="unknown",
+                settings=settings,
+                error="Prompt submission did not complete before the gateway restarted.",
+            )
+            refreshed = _generation_record(str(record["generation_id"]), settings)
+            if refreshed is None:
+                raise HTTPException(
+                    status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                    detail="Generation storage is unavailable.",
+                )
+            record = refreshed
+        return _generation_response(record)
+
+    try:
+        prompt_id, selected_workflow_id, output_node_id = await _submit_generation(
+            data=data,
+            content_type=content_type,
+            workflow_id=workflow_id,
+            composition=composition,
+            background_style=background_style,
+            strength=strength,
+            seed=seed,
+            settings=settings,
+        )
+    except _PromptSubmissionUncertain as exc:
+        message = str(exc.error.detail)
+        try:
+            _update_generation_record(
+                generation_id,
+                state="unknown",
+                settings=settings,
+                error=message,
+            )
+        except (OSError, sqlite3.Error):
+            pass
+        raise HTTPException(
+            status_code=exc.error.status_code,
+            headers=exc.error.headers,
+            detail={
+                "message": message,
+                "generation_id": generation_id,
+                "status": "unknown",
+                "status_url": f"/v1/generations/{generation_id}",
+            },
+        ) from exc
+    except HTTPException:
+        _delete_unsubmitted_generation(generation_id, settings)
+        raise
+
+    try:
+        _attach_prompt(
+            generation_id,
+            prompt_id=prompt_id,
+            workflow_id=selected_workflow_id,
+            output_node_id=output_node_id,
+            settings=settings,
+        )
+        record = _generation_record(generation_id, settings)
+    except (OSError, sqlite3.Error) as exc:
+        try:
+            _update_generation_record(
+                generation_id,
+                state="unknown",
+                settings=settings,
+                error="Prompt was accepted but its metadata could not be stored.",
+            )
+        except (OSError, sqlite3.Error):
+            pass
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail={
+                "message": "Prompt was accepted but generation storage is unavailable.",
+                "generation_id": generation_id,
+                "status": "unknown",
+                "status_url": f"/v1/generations/{generation_id}",
+            },
+        ) from exc
+    if record is None:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Generation storage is unavailable.",
+        )
+    return _generation_response(record)
 
 
 @app.get("/v1/generations/{generation_id}")
@@ -350,20 +860,9 @@ async def get_generation(
     generation_id: str,
     settings: Settings = Depends(require_api_key),
 ) -> dict[str, Any]:
-    token = decode_generation_id(generation_id, secret=settings.api_key)
-    current_status, image, error = await _generation_state(
-        prompt_id=token["p"], output_node_id=token["o"], settings=settings
-    )
-    result: dict[str, Any] = {
-        "generation_id": generation_id,
-        "workflow_id": token["w"],
-        "status": current_status,
-    }
-    if current_status == "succeeded":
-        result["result_url"] = f"/v1/generations/{generation_id}/result"
-    if error:
-        result["error"] = error
-    return result
+    token = decode_generation_id(generation_id, secret=settings.signing_key)
+    record, _ = await _refresh_generation(generation_id, token=token, settings=settings)
+    return _generation_response(record)
 
 
 @app.get("/v1/generations/{generation_id}/result")
@@ -371,12 +870,16 @@ async def get_generation_result(
     generation_id: str,
     settings: Settings = Depends(require_api_key),
 ) -> Response:
-    token = decode_generation_id(generation_id, secret=settings.api_key)
-    current_status, image, error = await _generation_state(
-        prompt_id=token["p"], output_node_id=token["o"], settings=settings
-    )
+    token = decode_generation_id(generation_id, secret=settings.signing_key)
+    record, image = await _refresh_generation(generation_id, token=token, settings=settings)
+    current_status = str(record["state"])
+    if current_status == "expired":
+        raise HTTPException(
+            status_code=status.HTTP_410_GONE,
+            detail="Generated image has expired.",
+        )
     if current_status != "succeeded" or image is None:
-        detail = error or f"Generation is {current_status}."
+        detail = str(record.get("error") or f"Generation is {current_status}.")
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=detail)
 
     try:
@@ -385,9 +888,30 @@ async def get_generation_result(
             response.raise_for_status()
     except httpx.TimeoutException as exc:
         raise HTTPException(status_code=status.HTTP_504_GATEWAY_TIMEOUT, detail="Result timeout.") from exc
+    except httpx.HTTPStatusError as exc:
+        if exc.response.status_code == status.HTTP_404_NOT_FOUND:
+            _update_generation_record(
+                generation_id,
+                state="expired",
+                settings=settings,
+                error="Generated image has expired.",
+            )
+            raise HTTPException(
+                status_code=status.HTTP_410_GONE,
+                detail="Generated image has expired.",
+            ) from exc
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="Result download failed.",
+        ) from exc
     except httpx.HTTPError as exc:
         raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail="Result download failed.") from exc
     if len(response.content) > MAX_RESULT_BYTES:
         raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail="Result exceeds 50 MiB.")
     media_type = response.headers.get("content-type", "image/png").split(";", 1)[0]
+    if media_type not in ALLOWED_RESULT_CONTENT_TYPES:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="Result has an unsupported content type.",
+        )
     return Response(content=response.content, media_type=media_type)
