@@ -158,7 +158,7 @@ sudo caddy validate --config /etc/caddy/Caddyfile
 sudo systemctl reload caddy
 ```
 
-신규 ComfyUI/Gateway용 방화벽 규칙에는 80/443만 허용하고 8002/8188은 외부에 공개하지 않습니다. 기존 model-c 8001의 바인딩·네트워크 태그·방화벽 규칙은 변경하지 않습니다. 공개 후 외부에서 `https://HOST/health`와 인증 실패 `401`을 확인합니다.
+신규 ComfyUI/Gateway용 방화벽 규칙에는 80/443만 허용하고 8002/8188은 외부에 공개하지 않습니다. 기존 model-c 8001의 바인딩·네트워크 태그·방화벽 규칙은 변경하지 않습니다. 공개 후 외부에서 `https://HOST/health`의 `200` 응답과 API 키가 없는 생성 요청의 인증 실패 `401`을 확인합니다.
 
 ## 백엔드 연동 원칙
 

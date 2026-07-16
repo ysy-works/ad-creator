@@ -27,8 +27,8 @@ HTTP 라이브러리가 `multipart/form-data`의 boundary를 만들도록 두고
 | --- | --- | --- |
 | `image` | 예 | JPEG, PNG, WebP / 최대 20 MiB, 4천만 픽셀 |
 | `workflow_id` | 아니요 | 기본 `model-c-v1` |
-| `composition` | 아니요 | `closeup`, `medium`, `aerial`, `handheld` |
-| `background_style` | 아니요 | `white`, `wood`, `vivid` |
+| `composition` | 아니요 | `closeup`, `medium`, `aerial`, `handheld` / 기본 `medium` |
+| `background_style` | 아니요 | `white`, `wood`, `vivid` / 기본 `wood` |
 | `strength` | 아니요 | `low`, `medium`, `high` / 기본 `medium` |
 | `seed` | 아니요 | `-1` 또는 0~2147483647. 생략하면 랜덤 |
 
