@@ -24,7 +24,13 @@ def resize_to_instagram(image: Image.Image) -> Image.Image:
     """
     target_size = (1080, 1080)
 
-    width, height = image.size bottom))
+    width, height = image.size
+    min_side = min(width, height)
+    left = (width - min_side) // 2
+    top = (height - min_side) // 2
+    right = left + min_side
+    bottom = top + min_side
+    image = image.crop((left, top, right, bottom))
 
     image = image.resize(target_size, Image.LANCZOS)
     return image
