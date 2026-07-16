@@ -54,17 +54,16 @@ const STR = {
     heroTitle1: "내가 찍은 사진으로",
     heroTitleSpan: "인스타 무드컷",
     heroTitle2: " 만들기",
-    heroSubtitle: "사진 한 장만 올리면 어울리는 분위기로 보정하고, 바로 올릴 캡션까지 만들어드려요.",
+    heroSubtitle: "사진 한 장만 올리면 보정 및 어울리는 캡션까지 만들어드립니다.",
     exploreStyles: "스타일 둘러보기",
     stat1Num: "12", stat1Label: "무드 × 구도 조합",
     stat2Num: "3", stat2Label: "단계로 끝",
     stat3Num: "1장", stat3Label: "만 있으면 시작",
     processKicker: "이용 방법",
-    processTitle1: "사진 올리고, 스타일 고르고,",
-    processTitle2: "기다리기만 하면 돼요",
+    processTitle: "사진 올리고, 스타일 고르고, 기다리면 끝",
     processSub: "어려운 편집 프로그램도, 촬영 장비도 필요 없어요.",
     step1Title: "사진 업로드",
-    step1Desc: "휴대폰으로 편하게 찍은 음료 사진이면 충분해요.",
+    step1Desc: "휴대폰으로 편하게 찍은 음료 사진 올리기",
     step2Title: "스타일 선택",
     step2Desc: "뉴트럴 화이트, 우드, Vivid 중 원하는 무드와 구도를 골라요.",
     step3Title: "결과 확인",
@@ -105,8 +104,7 @@ const STR = {
     stat2Num: "3", stat2Label: "steps, done",
     stat3Num: "1", stat3Label: "photo is all you need",
     processKicker: "How it works",
-    processTitle1: "Upload, pick a style,",
-    processTitle2: "and wait",
+    processTitle: "Upload, pick a style, and wait",
     processSub: "No editing skills or camera gear needed.",
     step1Title: "Upload a photo",
     step1Desc: "A casual phone shot of your drink is enough.",
@@ -248,7 +246,7 @@ function Home({ onStart, lang = "ko", setLang }) {
           --accent-2: #5C6B4C;
           --line: #DDD2BE;
         }
-        .home { font-family: 'Pretendard', system-ui, sans-serif; color: var(--ink); background: var(--bg); }
+        .home { font-family: 'Pretendard', system-ui, sans-serif; color: var(--ink); background: var(--bg); word-break: keep-all; overflow-wrap: break-word; }
         .home img { max-width: 100%; display: block; }
         .home button { font-family: inherit; cursor: pointer; border: none; }
         .home .wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
@@ -389,9 +387,10 @@ function Home({ onStart, lang = "ko", setLang }) {
         }
         @media (max-width: 560px) {
           .home-hero { padding: 110px 20px 70px; }
+          .home-hero p { font-size: 15px; }
           .home-hero-cta { flex-direction: column; gap: 12px; }
           .home-btn-large { width: 100%; max-width: 280px; }
-          .home-stat-row { gap: 24px; flex-wrap: wrap; }
+          .home-stat-row { flex-direction: column; gap: 14px; }
           .home-footer-inner { flex-direction: column; gap: 8px; text-align: center; }
         }
       `}</style>
@@ -451,7 +450,7 @@ function Home({ onStart, lang = "ko", setLang }) {
       <section className="home-section" id="process">
         <div className="home-section-head">
           <div className="home-kicker">{t.processKicker}</div>
-          <h2>{t.processTitle1}<br />{t.processTitle2}</h2>
+          <h2>{t.processTitle}</h2>
           <p>{t.processSub}</p>
         </div>
         <div className="home-steps">
