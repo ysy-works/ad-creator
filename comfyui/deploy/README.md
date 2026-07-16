@@ -29,7 +29,8 @@ ss -ltn | grep -E ':(8001|8002|8188|80|443)\b' || true
 2. 소스와 독립 가상환경
 
 ```bash
-sudo install -d -o spai0813 -g spai0813 /opt/ad-creator /opt/comfyui /opt/venv
+sudo install -d -o spai0813 -g spai0813 \
+  /opt/ad-creator /opt/comfyui /opt/venv/comfyui
 git clone --branch comfyui --single-branch https://github.com/ysy-works/ad-creator.git /opt/ad-creator
 git clone --branch v0.28.0 --depth 1 https://github.com/Comfy-Org/ComfyUI.git /opt/comfyui/ComfyUI
 python3 -m venv /opt/venv/comfyui
