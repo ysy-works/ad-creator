@@ -394,7 +394,7 @@ function App({ lang = "ko", setLang }) {
           --bg: #EFE8DA;
           --surface: #FFFDF9;
           --ink: #2B2420;
-          --ink-soft: #6B6058;
+          --ink-soft: #554A40;
           --accent: #8A6E4B;
           --accent-2: #5C6B4C;
           --line: #DDD2BE;
@@ -463,7 +463,7 @@ function App({ lang = "ko", setLang }) {
         .cafe-app__subtitle {
           text-align: center;
           color: var(--ink-soft);
-          font-size: clamp(13px, 2.4vw, 15px);
+          font-size: clamp(14px, 2.4vw, 16px);
           font-weight: 500;
           max-width: 560px;
           margin: 0 auto 40px;
@@ -569,7 +569,7 @@ function App({ lang = "ko", setLang }) {
 
         .post-frame__caption {
           padding: 2px 10px 12px;
-          font-size: 12px;
+          font-size: 13px;
           color: var(--ink-soft);
           text-align: left;
         }
@@ -584,7 +584,7 @@ function App({ lang = "ko", setLang }) {
           text-align: center;
         }
         .upload-hint {
-          font-size: 14px;
+          font-size: 15px;
           font-weight: 500;
           margin-bottom: 14px;
           color: var(--ink-soft);
@@ -627,7 +627,7 @@ function App({ lang = "ko", setLang }) {
           color: var(--ink-soft);
         }
         .file-input-name {
-          font-size: 12.5px;
+          font-size: 13.5px;
           color: var(--ink-soft);
         }
 
