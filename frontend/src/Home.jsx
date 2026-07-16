@@ -182,10 +182,9 @@ const MiniBookmarkIcon = () => (
   </svg>
 );
 
-function Home({ onStart }) {
+function Home({ onStart, lang = "ko", setLang }) {
   const [references, setReferences] = useState([]);
   const [activeCardId, setActiveCardId] = useState(null);
-  const [lang, setLang] = useState("ko");
   const t = STR[lang];
 
   useEffect(() => {
@@ -325,13 +324,13 @@ function Home({ onStart }) {
         .home-section { padding: 144px 32px; }
         .home-section-head { text-align: center; max-width: 560px; margin: 0 auto 56px; }
         .home-kicker { font-size: 13px; letter-spacing: 2.5px; color: var(--accent-2); font-weight: 700; margin-bottom: 14px; }
-        .home-section-head h2 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 34px; line-height: 1.4; margin-bottom: 16px; }
+        .home-section-head h2 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 34px; line-height: 1.4; margin-bottom: 16px; color: var(--ink); }
         .home-section-head p { font-size: 15px; color: var(--ink-soft); line-height: 1.7; }
 
         .home-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; max-width: 1180px; margin: 0 auto; }
         .home-step { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 30px 26px; display: flex; flex-direction: column; }
         .home-step-num { font-family: 'Fraunces', serif; font-size: 14px; color: var(--accent); margin-bottom: 16px; }
-        .home-step h3 { font-size: 18px; margin-bottom: 8px; }
+        .home-step h3 { font-size: 18px; margin-bottom: 8px; color: var(--ink); }
         .home-step p { font-size: 14px; color: var(--ink-soft); line-height: 1.65; margin-bottom: 18px; }
         .home-step-visual { height: 130px; border-radius: 10px; background: var(--ink); display: flex; align-items: center; justify-content: center; margin-top: auto; }
 
@@ -372,7 +371,7 @@ function Home({ onStart }) {
         .faq-chev { transition: transform 0.2s; color: var(--accent-2); }
 
         .home-final { background: var(--ink); color: var(--surface); text-align: center; padding: 155px 32px; }
-        .home-final h2 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 38px; line-height: 1.4; margin-bottom: 32px; }
+        .home-final h2 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 38px; line-height: 1.4; margin-bottom: 32px; color: var(--surface); }
         .home-final h2 span { color: #D8B98A; }
 
         .home-footer { background: var(--ink); color: #B0A797; padding: 32px; border-top: 1px solid rgba(255,255,255,0.1); }
