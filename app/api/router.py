@@ -24,13 +24,7 @@ def resize_to_instagram(image: Image.Image) -> Image.Image:
     """
     target_size = (1080, 1080)
 
-    width, height = image.size
-    min_side = min(width, height)
-    left = (width - min_side) // 2
-    top = (height - min_side) // 2
-    right = left + min_side
-    bottom = top + min_side
-    image = image.crop((left, top, right, bottom))
+    width, height = image.size bottom))
 
     image = image.resize(target_size, Image.LANCZOS)
     return image
@@ -66,14 +60,13 @@ async def get_references():
 @router.post("/generate")
 async def generate(
     product_image: UploadFile = File(...),
-    reference_id: str = Form(...)
+    reference_id: str = Form(...),
+    workflow_id: Optional[str] = Form(None),
 ):
     """
-    사용자가 올린 사진 + 고른 레퍼런스(reference_id)를 기반으로
+    사용자가 올린 사진 + 고른 레퍼런스(reference_id) + (선택) workflow_id를 기반으로
     같은 분위기/구도의 이미지를 생성해서 반환.
-
-    캡션 생성은 여기서 하지 않는다 (사용자가 이미지 결과를 먼저 확인한 뒤,
-    별도 버튼을 눌러야 /caption이 호출되는 2단계 구조).
+    workflow_id를 안 보내면 기본값(model-c-v1)이 사용됨.
     """
     reference = _find_reference(reference_id)
     if reference is None:
@@ -82,7 +75,13 @@ async def generate(
     image_data = await product_image.read()
     pil_image = Image.open(io.BytesIO(image_data)).convert("RGB")
 
-    result_image = generate_styled_image(pil_image, reference)
+    try:
+        result_image = generate_styled_image(pil_image, reference, workflow_id=workflow_id)
+    except ValueError as e:
+        return JSONResponse(status_code=400, content={"error": str(e)})
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": f"이미지 생성 실패: {e}"})
+
     result_image = resize_to_instagram(result_image)
 
     return JSONResponse(content={
