@@ -109,38 +109,6 @@
             "name": "seed"
           },
           "link": null
-        },
-        {
-          "name": "guidance_scale",
-          "type": "FLOAT",
-          "widget": {
-            "name": "guidance_scale"
-          },
-          "link": null
-        },
-        {
-          "name": "num_inference_steps",
-          "type": "INT",
-          "widget": {
-            "name": "num_inference_steps"
-          },
-          "link": null
-        },
-        {
-          "name": "width",
-          "type": "INT",
-          "widget": {
-            "name": "width"
-          },
-          "link": null
-        },
-        {
-          "name": "height",
-          "type": "INT",
-          "widget": {
-            "name": "height"
-          },
-          "link": null
         }
       ],
       "outputs": [
@@ -166,11 +134,7 @@
         "medium",
         "wood",
         "medium",
-        -1,
-        2.5,
-        28,
-        832,
-        1040
+        -1
       ]
     },
     {

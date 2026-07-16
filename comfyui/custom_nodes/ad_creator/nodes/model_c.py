@@ -1,4 +1,5 @@
 import json
+import io
 import os
 import tempfile
 from pathlib import Path
@@ -32,7 +33,7 @@ def _pil_to_tensor(image: Image.Image):
 
 
 class AdCreatorModelCGenerate:
-    DESCRIPTION = "Runs the existing model-c NF4 pipeline without modifying its implementation."
+    DESCRIPTION = "Calls the existing model-c HTTP API without importing or modifying its implementation."
     CATEGORY = "Ad Creator"
     FUNCTION = "generate"
     RETURN_TYPES = ("IMAGE", "STRING")
@@ -47,12 +48,12 @@ class AdCreatorModelCGenerate:
                 "background_style": (["vivid", "wood", "white"], {"default": "wood"}),
                 "strength": (["low", "medium", "high"], {"default": "medium"}),
                 "seed": ("INT", {"default": -1, "min": -1, "max": 2147483647}),
-                "guidance_scale": ("FLOAT", {"default": 2.5, "min": 0.0, "max": 20.0, "step": 0.1}),
-                "num_inference_steps": ("INT", {"default": 28, "min": 1, "max": 100}),
-                "width": ("INT", {"default": 832, "min": 256, "max": 2048, "step": 16}),
-                "height": ("INT", {"default": 1040, "min": 256, "max": 2048, "step": 16}),
             }
         }
+
+    @classmethod
+    def IS_CHANGED(cls, image, composition, background_style, strength, seed):
+        return float("nan") if seed < 0 else seed
 
     def generate(
         self,
@@ -61,10 +62,6 @@ class AdCreatorModelCGenerate:
         background_style,
         strength,
         seed,
-        guidance_scale,
-        num_inference_steps,
-        width,
-        height,
     ):
         input_path = None
         try:
@@ -72,28 +69,18 @@ class AdCreatorModelCGenerate:
                 input_path = Path(tmp.name)
             _tensor_to_pil(image).save(input_path, format="PNG")
 
-            result = model_c_adapter.run_model_c(
+            result, result_bytes = model_c_adapter.run_model_c(
                 image_path=input_path,
                 composition=composition,
                 background_style=background_style,
                 strength=strength,
                 seed=None if seed < 0 else int(seed),
-                guidance_scale=float(guidance_scale),
-                num_inference_steps=int(num_inference_steps),
-                width=int(width),
-                height=int(height),
             )
-            output_path = Path(str(result["output_path"])).resolve()
-            try:
-                with Image.open(output_path) as generated:
-                    output_image = _pil_to_tensor(generated)
-            finally:
-                try:
-                    output_path.unlink()
-                except FileNotFoundError:
-                    pass
+            with Image.open(io.BytesIO(result_bytes)) as generated:
+                output_image = _pil_to_tensor(generated)
 
-            result["output_path"] = None
+            result = dict(result)
+            result.pop("output_path", None)
             result["output_storage"] = "comfyui_save_image"
             metadata_json = json.dumps(result, ensure_ascii=False, sort_keys=True)
             return (output_image, metadata_json)

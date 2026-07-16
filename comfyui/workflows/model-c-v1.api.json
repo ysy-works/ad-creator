@@ -17,11 +17,7 @@
       "composition": "medium",
       "background_style": "wood",
       "strength": "medium",
-      "seed": -1,
-      "guidance_scale": 2.5,
-      "num_inference_steps": 28,
-      "width": 832,
-      "height": 1040
+      "seed": -1
     },
     "class_type": "AdCreatorModelCGenerate",
     "_meta": {
