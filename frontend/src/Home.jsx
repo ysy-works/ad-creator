@@ -58,7 +58,7 @@ const STR = {
     exploreStyles: "스타일 둘러보기",
     stat1Num: "12", stat1Label: "무드 × 구도 조합",
     stat2Num: "3", stat2Label: "단계로 끝",
-    stat3Num: "1장", stat3Label: "만 있으면 시작",
+    stat3Num: "1", stat3Label: "장만 있으면 시작",
     processKicker: "이용 방법",
     processTitle: "사진 올리고, 스타일 고르고, 기다리면 끝",
     processSub: "어려운 편집 프로그램도, 촬영 장비도 필요 없어요.",
@@ -390,7 +390,7 @@ function Home({ onStart, lang = "ko", setLang }) {
           .home-hero p { font-size: 15px; }
           .home-hero-cta { flex-direction: column; gap: 12px; }
           .home-btn-large { width: 100%; max-width: 280px; }
-          .home-stat-row { flex-direction: column; gap: 14px; }
+          .home-stat-row { flex-direction: column; gap: 24px; margin-top: 24px; }
           .home-footer-inner { flex-direction: column; gap: 8px; text-align: center; }
         }
       `}</style>
