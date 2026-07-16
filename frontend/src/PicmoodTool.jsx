@@ -34,6 +34,98 @@ const COMPOSITION_MOOD_CAPTIONS = {
 const getCardCaption = (ref) =>
   COMPOSITION_MOOD_CAPTIONS[ref.composition_id] || ref.composition_label;
 
+// 도구 화면(PicmoodTool) 자체 UI 문구 번역 사전. references.json 안의
+// mood_label/composition_label은 한국어만 있어서, id 기준 별도 매핑으로 처리.
+const MOOD_LABEL_EN = { natural_white: "Neutral White", wood: "Wood", vivid: "Vivid" };
+const COMPOSITION_LABEL_EN = {
+  product_large: "Close-up",
+  product_center: "Medium shot",
+  aerial_shot: "Aerial shot",
+  handheld_lifestyle: "Handheld",
+};
+const PURPOSE_LABEL_EN = {
+  "일상 홍보": "Everyday post",
+  "신메뉴 소개": "New menu",
+  "오늘의 추천": "Today's pick",
+  "세일·이벤트": "Sale / event",
+  "기타": "Other",
+};
+
+const T = {
+  ko: {
+    eyebrow: "COFFEE MOOD LAB",
+    title: "카페 음료 사진 보정 생성기",
+    subtitle: "사진을 올리면 어울리는 스타일로 보정하고, 바로 올릴 문구까지 만들어드립니다.",
+    step1SectionTitle: "1. 스타일 선택",
+    loadingList: "불러오는 중...",
+    step2SectionTitle: "2. 사진 업로드",
+    uploadHintSuffix: " 느낌으로 찍은 사진을 올려주세요.",
+    selectStyleFirst: "스타일을 먼저 선택해주세요.",
+    choosePhoto: "사진 선택",
+    noFileChosen: "선택된 파일 없음",
+    previewAlt: "업로드한 사진 미리보기",
+    generating: "생성 중...",
+    generateImage: "이미지 생성",
+    uploadPhotoFirst: "사진을 업로드해주세요.",
+    generateFailed: "이미지 생성에 실패했습니다.",
+    genericError: "오류가 발생했습니다.",
+    resultTitle: "완성된 한 컷",
+    resultAlt: "생성 결과",
+    downloadImage: "이미지 다운로드",
+    captionInfoTitle: "문구에 담을 정보 (선택)",
+    captionInfoHint: "비워두셔도 괜찮아요. 채워주시면 문구가 더 정확해져요.",
+    menuNameLabel: "메뉴명",
+    menuNamePlaceholder: "예: 아이스 아메리카노",
+    purposeLabel: "게시 목적",
+    purposeOtherPlaceholder: "게시 목적을 직접 입력해주세요",
+    makeCaption: "캡션·해시태그 만들기",
+    makingCaption: "문구 만드는 중...",
+    storyLabel: "스토리 문구",
+    copyText: "텍스트 복사",
+    copied: "복사됨!",
+    loadReferencesError: "레퍼런스 목록을 불러오지 못했습니다.",
+    captionFailed: "캡션 생성에 실패했습니다.",
+    captionError: "캡션 생성 중 오류가 발생했습니다.",
+    copyFailed: "복사에 실패했습니다. 직접 선택해서 복사해주세요.",
+  },
+  en: {
+    eyebrow: "COFFEE MOOD LAB",
+    title: "Cafe Drink Photo Studio",
+    subtitle: "Upload a photo and we'll style it to match your mood, captions included.",
+    step1SectionTitle: "1. Choose a style",
+    loadingList: "Loading...",
+    step2SectionTitle: "2. Upload a photo",
+    uploadHintSuffix: " — upload a photo with this mood and angle.",
+    selectStyleFirst: "Choose a style first.",
+    choosePhoto: "Choose photo",
+    noFileChosen: "No file chosen",
+    previewAlt: "Preview of uploaded photo",
+    generating: "Generating...",
+    generateImage: "Generate image",
+    uploadPhotoFirst: "Please upload a photo.",
+    generateFailed: "Failed to generate the image.",
+    genericError: "Something went wrong.",
+    resultTitle: "Your finished shot",
+    resultAlt: "Generated result",
+    downloadImage: "Download image",
+    captionInfoTitle: "Details for your caption (optional)",
+    captionInfoHint: "Feel free to leave this blank. Filling it in makes the caption more accurate.",
+    menuNameLabel: "Menu name",
+    menuNamePlaceholder: "e.g. Iced Americano",
+    purposeLabel: "Purpose",
+    purposeOtherPlaceholder: "Describe the purpose yourself",
+    makeCaption: "Create caption & hashtags",
+    makingCaption: "Writing caption...",
+    storyLabel: "Story caption",
+    copyText: "Copy text",
+    copied: "Copied!",
+    loadReferencesError: "Couldn't load the reference list.",
+    captionFailed: "Failed to generate the caption.",
+    captionError: "Something went wrong while generating the caption.",
+    copyFailed: "Couldn't copy. Please select and copy the text manually.",
+  },
+};
+
 
 // 지금 브라우저 주소창의 호스트를 그대로 따라가서 API를 호출한다.
 // -> IP가 바뀌어도(카페 Wi-Fi 등) 코드 수정 없이 그대로 동작함.
@@ -113,7 +205,8 @@ function PostFrame({ children, brand = "Picmood", caption, likeCount, selected, 
   );
 }
 
-function App() {
+function App({ lang = "ko", setLang }) {
+  const t = T[lang] || T.ko;
   const [productFile, setProductFile] = useState(null);
   const fileInputRef = useRef(null);
   const [productPreviewUrl, setProductPreviewUrl] = useState(null);
@@ -149,7 +242,7 @@ function App() {
     fetch("/references.json")
       .then((res) => res.json())
       .then((data) => setReferences(data))
-      .catch(() => setError("레퍼런스 목록을 불러오지 못했습니다."));
+      .catch(() => setError(t.loadReferencesError));
   }, []);
 
   // 업로드한 파일이 바뀌면 미리보기 URL 생성
@@ -184,11 +277,11 @@ function App() {
   // 1단계: 이미지만 생성 (캡션은 아직 만들지 않음)
   const handleGenerate = async () => {
     if (!selectedReferenceId) {
-      setError("스타일을 먼저 선택해주세요.");
+      setError(t.selectStyleFirst);
       return;
     }
     if (!productFile) {
-      setError("사진을 업로드해주세요.");
+      setError(t.uploadPhotoFirst);
       return;
     }
     setError("");
@@ -211,13 +304,13 @@ function App() {
       });
 
       if (!response.ok) {
-        throw new Error("이미지 생성에 실패했습니다.");
+        throw new Error(t.generateFailed);
       }
 
       const data = await response.json();
       setResultImage(data.result_image);
     } catch (err) {
-      setError(err.message || "오류가 발생했습니다.");
+      setError(err.message || t.genericError);
     } finally {
       setLoading(false);
     }
@@ -241,7 +334,7 @@ function App() {
       });
 
       if (!response.ok) {
-        throw new Error("캡션 생성에 실패했습니다.");
+        throw new Error(t.captionFailed);
       }
 
       const data = await response.json();
@@ -250,7 +343,7 @@ function App() {
       setStory(data.story || null);
       setCaptionReady(true);
     } catch (err) {
-      setError(err.message || "캡션 생성 중 오류가 발생했습니다.");
+      setError(err.message || t.captionError);
     } finally {
       setCaptionLoading(false);
     }
@@ -266,7 +359,7 @@ function App() {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
-      setError("복사에 실패했습니다. 직접 선택해서 복사해주세요.");
+      setError(t.copyFailed);
     }
   };
 
@@ -312,6 +405,35 @@ function App() {
           font-family: 'Pretendard', -apple-system, sans-serif;
           min-height: 100vh;
           padding: clamp(20px, 5vw, 48px);
+        }
+
+        .lang-toggle-bar {
+          position: fixed;
+          top: 16px;
+          right: 16px;
+          z-index: 100;
+          background: var(--surface);
+          border: 1px solid var(--line);
+          border-radius: 999px;
+          padding: 8px 14px;
+          font-size: 13px;
+          display: flex;
+          gap: 4px;
+          align-items: center;
+        }
+        .lang-toggle-bar button {
+          background: none;
+          border: none;
+          font-size: 13px;
+          font-weight: 700;
+          color: var(--ink-soft);
+          cursor: pointer;
+          padding: 2px;
+        }
+        .lang-toggle-bar button.is-active {
+          color: var(--ink);
+          text-decoration: underline;
+          text-underline-offset: 3px;
         }
 
         .cafe-app__inner {
@@ -659,22 +781,38 @@ function App() {
         }
       `}</style>
 
+      <div className="lang-toggle-bar">
+        <button
+          className={lang === "ko" ? "is-active" : ""}
+          onClick={() => setLang && setLang("ko")}
+        >
+          KO
+        </button>
+        /
+        <button
+          className={lang === "en" ? "is-active" : ""}
+          onClick={() => setLang && setLang("en")}
+        >
+          EN
+        </button>
+      </div>
+
       <div className="cafe-app__inner">
-        <span className="cafe-app__eyebrow">COFFEE MOOD LAB</span>
-        <h2 className="cafe-app__title">카페 음료 사진 보정 생성기</h2>
+        <span className="cafe-app__eyebrow">{t.eyebrow}</span>
+        <h2 className="cafe-app__title">{t.title}</h2>
         <p className="cafe-app__subtitle">
-          사진을 올리면 어울리는 스타일로 보정하고, 바로 올릴 문구까지 만들어드립니다.
+          {t.subtitle}
         </p>
 
         {/* 1. 레퍼런스 갤러리 */}
-        <h3 className="section-title">1. 스타일 선택</h3>
+        <h3 className="section-title">{t.step1SectionTitle}</h3>
         {Object.keys(groupedByMood).length === 0 && (
-          <p style={{ textAlign: "center", color: "var(--ink-soft)" }}>불러오는 중...</p>
+          <p style={{ textAlign: "center", color: "var(--ink-soft)" }}>{t.loadingList}</p>
         )}
 
         {Object.entries(groupedByMood).map(([moodId, group]) => (
           <div key={moodId} className="mood-block">
-            <div className="mood-block__label">{group.mood_label}</div>
+            <div className="mood-block__label">{lang === "en" ? (MOOD_LABEL_EN[moodId] || group.mood_label) : group.mood_label}</div>
             <div className="mood-grid">
               {group.items.map((ref) => (
                 <PostFrame
@@ -685,7 +823,7 @@ function App() {
                   selected={selectedReferenceId === ref.id}
                   onClick={() => setSelectedReferenceId(ref.id)}
                 >
-                  <img src={ref.thumbnail_url} alt={ref.composition_label} />
+                  <img src={ref.thumbnail_url} alt={lang === "en" ? (COMPOSITION_LABEL_EN[ref.composition_id] || ref.composition_label) : ref.composition_label} />
                 </PostFrame>
               ))}
             </div>
@@ -693,15 +831,19 @@ function App() {
         ))}
 
         {/* 2. 사진 업로드 */}
-        <h3 className="section-title" style={{ marginTop: "8px" }}>2. 사진 업로드</h3>
+        <h3 className="section-title" style={{ marginTop: "8px" }}>{t.step2SectionTitle}</h3>
         <div className="upload-panel">
           {selectedReference ? (
             <p className="upload-hint is-active">
-              <strong>{selectedReference.mood_label} · {selectedReference.composition_label}</strong>
-              {" "}느낌으로 찍은 사진을 올려주세요.
+              <strong>
+                {lang === "en"
+                  ? `${MOOD_LABEL_EN[selectedReference.mood_id] || selectedReference.mood_label} · ${COMPOSITION_LABEL_EN[selectedReference.composition_id] || selectedReference.composition_label}`
+                  : `${selectedReference.mood_label} · ${selectedReference.composition_label}`}
+              </strong>
+              {t.uploadHintSuffix}
             </p>
           ) : (
-            <p className="upload-hint">스타일을 먼저 선택해주세요.</p>
+            <p className="upload-hint">{t.selectStyleFirst}</p>
           )}
           <div className="file-input-wrap">
             <input
@@ -718,22 +860,22 @@ function App() {
               onClick={() => fileInputRef.current?.click()}
               disabled={!selectedReferenceId}
             >
-              사진 선택
+              {t.choosePhoto}
             </button>
             <span className="file-input-name">
-              {productFile ? productFile.name : "선택된 파일 없음"}
+              {productFile ? productFile.name : t.noFileChosen}
             </span>
           </div>
           {productPreviewUrl && (
             <div className="preview-thumb">
-              <img src={productPreviewUrl} alt="업로드한 사진 미리보기" />
+              <img src={productPreviewUrl} alt={t.previewAlt} />
             </div>
           )}
         </div>
 
         {/* 3. 생성 버튼 (업로드 직후 바로 생성) */}
         <button className="generate-btn" onClick={handleGenerate} disabled={loading}>
-          {loading ? "생성 중..." : "이미지 생성"}
+          {loading ? t.generating : t.generateImage}
         </button>
 
         {error && <p className="error-text">{error}</p>}
@@ -741,31 +883,31 @@ function App() {
         {/* 4. 결과 (다운로드는 프레임 제외, 순수 이미지만) */}
         {resultImage && (
           <div className="result-section">
-            <h3 className="section-title">완성된 한 컷</h3>
+            <h3 className="section-title">{t.resultTitle}</h3>
             <PostFrame brand="Picmood" likeCount={null}>
-              <img src={resultImage} alt="생성 결과" />
+              <img src={resultImage} alt={t.resultAlt} />
             </PostFrame>
-            <button className="download-btn" onClick={handleDownload}>이미지 다운로드</button>
+            <button className="download-btn" onClick={handleDownload}>{t.downloadImage}</button>
 
             {/* 문구 품질을 위한 최소 정보 (둘 다 선택 입력) - 이미지 확인 후 입력 */}
             {!captionReady && (
               <div className="upload-panel qa-panel">
-                <h3 className="section-title" style={{ marginTop: "28px" }}>문구에 담을 정보 (선택)</h3>
-                <p className="upload-hint">비워두셔도 괜찮아요. 채워주시면 문구가 더 정확해져요.</p>
+                <h3 className="section-title" style={{ marginTop: "28px" }}>{t.captionInfoTitle}</h3>
+                <p className="upload-hint">{t.captionInfoHint}</p>
 
                 <div className="qa-field">
-                  <label className="qa-field__label">메뉴명</label>
+                  <label className="qa-field__label">{t.menuNameLabel}</label>
                   <input
                     type="text"
                     className="qa-field__input"
-                    placeholder="예: 아이스 아메리카노"
+                    placeholder={t.menuNamePlaceholder}
                     value={menuName}
                     onChange={(e) => setMenuName(e.target.value)}
                   />
                 </div>
 
                 <div className="qa-field">
-                  <label className="qa-field__label">게시 목적</label>
+                  <label className="qa-field__label">{t.purposeLabel}</label>
                   <div className="qa-options">
                     {PURPOSE_OPTIONS.map((option) => (
                       <button
@@ -774,7 +916,7 @@ function App() {
                         className={`qa-chip${purpose === option ? " is-selected" : ""}`}
                         onClick={() => setPurpose(purpose === option ? "" : option)}
                       >
-                        {option}
+                        {lang === "en" ? (PURPOSE_LABEL_EN[option] || option) : option}
                       </button>
                     ))}
                   </div>
@@ -783,7 +925,7 @@ function App() {
                       type="text"
                       className="qa-field__input"
                       style={{ marginTop: "8px" }}
-                      placeholder="게시 목적을 직접 입력해주세요"
+                      placeholder={t.purposeOtherPlaceholder}
                       value={purposeOther}
                       onChange={(e) => setPurposeOther(e.target.value)}
                     />
@@ -799,7 +941,7 @@ function App() {
                 onClick={handleGenerateCaption}
                 disabled={captionLoading}
               >
-                {captionLoading ? "문구 만드는 중..." : "캡션·해시태그 만들기"}
+                {captionLoading ? t.makingCaption : t.makeCaption}
               </button>
             )}
 
@@ -811,12 +953,12 @@ function App() {
                 )}
                 {story && (
                   <>
-                    <div className="caption-box__label" style={{ marginTop: "12px" }}>스토리 문구</div>
+                    <div className="caption-box__label" style={{ marginTop: "12px" }}>{t.storyLabel}</div>
                     <p className="caption-box__text">{story}</p>
                   </>
                 )}
                 <button className="copy-btn" onClick={handleCopyCaption}>
-                  {copied ? "복사됨!" : "텍스트 복사"}
+                  {copied ? t.copied : t.copyText}
                 </button>
               </div>
             )}
