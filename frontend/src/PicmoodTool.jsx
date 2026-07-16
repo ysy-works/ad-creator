@@ -405,6 +405,8 @@ function App({ lang = "ko", setLang }) {
           font-family: 'Pretendard', -apple-system, sans-serif;
           min-height: 100vh;
           padding: clamp(20px, 5vw, 48px);
+          word-break: keep-all;
+          overflow-wrap: break-word;
         }
 
         .lang-toggle-bar {
