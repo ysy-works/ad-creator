@@ -21,9 +21,9 @@ ENABLE_VAE_TILING = True
 
 # ── 추론 기본값 ──────────────────────────────────────
 # 인스타 피드용 4:5 세로. L4 메모리 고려 832x1040 시작점.
-DEFAULT_WIDTH = 832
-DEFAULT_HEIGHT = 1040
-DEFAULT_STEPS = 28
+DEFAULT_WIDTH = 704
+DEFAULT_HEIGHT = 880
+DEFAULT_STEPS = 20
 DEFAULT_GUIDANCE = 2.5              
 DEFAULT_STRENGTH = "medium"
 DEFAULT_SEED = None

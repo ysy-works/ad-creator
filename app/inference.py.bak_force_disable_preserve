@@ -49,7 +49,7 @@ def generate_beverage_image(
         prompt = build_prompt(composition, background_style, strength)
         pipe = model_loader.load_pipeline()
 
-        result_img, used_seed = preserve_mode.DISABLED_run_preserve(
+        result_img, used_seed = preserve_mode.run_preserve(
             pipe=pipe,
             image=image,
             image_path=image_path,

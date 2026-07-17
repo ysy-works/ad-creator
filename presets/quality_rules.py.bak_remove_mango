@@ -3,10 +3,10 @@
 PRESERVATION_RULES = (
     "INPUT IMAGE IS THE SOURCE OF TRUTH. Preserve the same main product from the uploaded image. "
     "Do not convert it into another object or another drink. Preserve product type, container type, "
-    "material, color, shape, proportions, handle, lid/no-lid, only if present in the uploaded product/no-only if present in the uploaded product, logo/text/no-logo, "
+    "material, color, shape, proportions, handle, lid/no-lid, straw/no-straw, logo/text/no-logo, "
     "empty/full state, visible liquid/no-liquid state, rim/opening, label/sleeve, and all visible details. "
-    "If the upload shows only an empty cup, keep it an empty cup. Do not add beverage, foam, original product details, ice, "
-    "topping, only if present in the uploaded product, lid, label, or logo. If the upload shows a mug with a handle, keep the handle. "
+    "If the upload shows only an empty cup, keep it an empty cup. Do not add beverage, foam, syrup, ice, "
+    "topping, straw, lid, label, or logo. If the upload shows a mug with a handle, keep the handle. "
     "If the upload shows a paper cup, keep it a paper cup. If the upload shows a glass, keep it glass. "
     "Only improve the surrounding scene, background, surface, lighting, shadows, and color grading."
 )
@@ -14,7 +14,7 @@ PRESERVATION_RULES = (
 QUALITY_RULES = (
     "Photorealistic product photography. Exactly one main product. Realistic material, accurate shape, "
     "natural shadows, correct perspective. Avoid changed product type, changed cup type, missing handle, "
-    "added lid, added only if present in the uploaded product, added drink, added foam, added original product details, added logo, added text, duplicated product, "
+    "added lid, added straw, added drink, added foam, added syrup, added logo, added text, duplicated product, "
     "warped cup, distorted rim, floating object, unrealistic shadow, CGI, illustration, cartoon, fake readable text. "
     "Use neutral props only. Do not add ingredient props unless clearly present in the uploaded image."
 )

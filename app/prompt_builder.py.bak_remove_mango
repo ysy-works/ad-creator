@@ -1,13 +1,3 @@
-
-AERIAL_SHOT_LOCK = '''
-Strict top-down flat lay composition.
-Camera is directly above the product, 90-degree overhead view.
-The top ellipse/circle of the cup or product is visible.
-Do not use front-facing, eye-level, three-quarter, portrait, macro, or close-up camera angle.
-Product should be smaller in frame with surrounding vivid background props visible.
-Preserve the uploaded product identity. Do not invent mango smoothie, whipped cream, syrup drizzle, straw, plastic dome lid, fruit topping, or dessert texture unless it already exists in the uploaded image.
-'''
-
 """Build concise prompts for product-preserving scene regeneration."""
 import os
 import json

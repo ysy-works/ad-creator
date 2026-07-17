@@ -7,19 +7,19 @@
 CATEGORY_PROMPTS = {
     ("closeup", "vivid"): (
         "Create an extreme close-up Instagram product photo in a vivid editorial studio set. "
-        "The uploaded product fills 85-95% of the frame height, cropped tightly with large visible product details, container texture, lid or rim state, visible top surface, original top surface only if present, original top surface only if present, original detail only if present, label, sleeve or only if present in the uploaded product only if present. "
+        "The uploaded product fills 85-95% of the frame height, cropped tightly with large visible product details, container texture, lid or rim state, visible top surface, foam, ice, garnish, label, sleeve or straw only if present. "
         "Use bold saturated paper backdrops, colorful geometric blocks, acrylic shapes, coral, teal, yellow, orange and pink accents, crisp directional light and graphic shadows. "
         "Only hints of background are visible because the product is very close. No hand, no top-down view."
     ),
     ("closeup", "wood"): (
         "Create an extreme close-up Instagram cafe product photo. "
-        "The uploaded product fills 85-95% of the frame height, cropped tightly with large visible product details, container texture, lid or rim state, visible top surface, original top surface only if present, original top surface only if present, original detail only if present, label, sleeve or only if present in the uploaded product only if present. "
+        "The uploaded product fills 85-95% of the frame height, cropped tightly with large visible product details, container texture, lid or rim state, visible top surface, foam, ice, garnish, label, sleeve or straw only if present. "
         "Use warm wood tones, cozy cafe depth, soft window side light, gentle bokeh, warm highlights, linen or ceramic hints in the blurred background. "
         "Only a small amount of background is visible. No hand, no top-down view."
     ),
     ("closeup", "white"): (
         "Create an extreme close-up premium minimal white studio product photo. "
-        "The uploaded product fills 85-95% of the frame height, cropped tightly with large visible product details, container texture, lid or rim state, visible top surface, original top surface only if present, original top surface only if present, original detail only if present, label, sleeve or only if present in the uploaded product only if present. "
+        "The uploaded product fills 85-95% of the frame height, cropped tightly with large visible product details, container texture, lid or rim state, visible top surface, foam, ice, garnish, label, sleeve or straw only if present. "
         "Use white, ivory and pale gray matte surfaces, subtle marble or acrylic texture, soft diffused light, delicate gray shadows and airy negative space. "
         "Only hints of background are visible. No hand, no top-down view."
     ),
@@ -45,19 +45,19 @@ CATEGORY_PROMPTS = {
 
     ("aerial", "vivid"): (
         "Create a true 90-degree overhead aerial flat-lay Instagram product photo in a vivid editorial studio set. "
-        "The camera looks directly down; preserve the uploaded container shape from above and the top surface, lid or rim state, visible top surface, original top surface only if present, original top surface only if present, original detail only if present, label, sleeve or only if present in the uploaded product are visible only if present in the uploaded image. "
-        "Arrange colorful paper backdrops, geometric blocks, acrylic props and bold saturated surfaces around the uploaded product. "
+        "The camera looks directly down; preserve the uploaded container shape from above and the top surface, lid or rim state, visible top surface, foam, ice, garnish, label, sleeve or straw are visible only if present in the uploaded image. "
+        "Arrange colorful paper backdrops, geometric blocks, acrylic props and bold saturated surfaces around the drink. "
         "Use graphic shadows and playful social-media styling. No front view, no side view, no hand."
     ),
     ("aerial", "wood"): (
         "Create a true 90-degree overhead aerial flat-lay Instagram cafe product photo on a warm wooden table. "
-        "The camera looks directly down; preserve the uploaded container shape from above and the top surface, lid or rim state, visible top surface, original top surface only if present, original top surface only if present, original detail only if present, label, sleeve or only if present in the uploaded product are visible only if present in the uploaded image. "
-        "Arrange linen, spoon, product-matching props only if the uploaded product clearly suggests them, ceramic dish or tray around the uploaded product with cozy cafe styling and natural window light. "
+        "The camera looks directly down; preserve the uploaded container shape from above and the top surface, lid or rim state, visible top surface, foam, ice, garnish, label, sleeve or straw are visible only if present in the uploaded image. "
+        "Arrange linen, spoon, product-matching props only if the uploaded product clearly suggests them, ceramic dish or tray around the drink with cozy cafe styling and natural window light. "
         "No front view, no side view, no hand."
     ),
     ("aerial", "white"): (
         "Create a true 90-degree overhead aerial flat-lay Instagram product photo in a clean white minimal studio. "
-        "The camera looks directly down; preserve the uploaded container shape from above and the top surface, lid or rim state, visible top surface, original top surface only if present, original top surface only if present, original detail only if present, label, sleeve or only if present in the uploaded product are visible only if present in the uploaded image. "
+        "The camera looks directly down; preserve the uploaded container shape from above and the top surface, lid or rim state, visible top surface, foam, ice, garnish, label, sleeve or straw are visible only if present in the uploaded image. "
         "Use white marble, ivory matte surface, pale gray fabric, delicate props, clean negative space and soft diffused shadows. "
         "No front view, no side view, no hand."
     ),
