@@ -54,7 +54,7 @@ const PURPOSE_LABEL_EN = {
 const T = {
   ko: {
     eyebrow: "COFFEE MOOD LAB",
-    title: "카페 음료 사진 보정 생성기",
+    title: "카페 음료 이미지 스타일링",
     subtitle: "사진을 올리면 어울리는 스타일로 보정하고, 바로 올릴 문구까지 만들어드립니다.",
     step1SectionTitle: "1. 스타일 선택",
     loadingList: "불러오는 중...",
@@ -402,11 +402,13 @@ function App({ lang = "ko", setLang }) {
           width: 100%;
           background: var(--bg);
           color: var(--ink);
-          font-family: 'Pretendard', -apple-system, sans-serif;
+          font-family: 'PretendardVariable', 'Pretendard', -apple-system, sans-serif;
           min-height: 100vh;
           padding: clamp(20px, 5vw, 48px);
           word-break: keep-all;
           overflow-wrap: break-word;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
         }
 
         .lang-toggle-bar {

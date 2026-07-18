@@ -222,6 +222,20 @@ function Home({ onStart, lang = "ko", setLang }) {
   const compLabel = (ref) => COMPOSITION_LABEL[lang][ref.composition_id] || ref.composition_label;
   const compCaption = (ref) => COMPOSITION_CAPTION[lang][ref.composition_id] || compLabel(ref);
 
+  const renderGalleryCard = (ref) => (
+    <div
+      key={ref.id}
+      className={`home-g-card${activeCardId === ref.id ? " is-active" : ""}`}
+      onClick={() => toggleCard(ref.id)}
+    >
+      <img src={ref.thumbnail_url} alt={compLabel(ref)} />
+      <div className="home-g-overlay">
+        <b>{moodLabel(ref)}</b>
+        <span>{compLabel(ref)}</span>
+      </div>
+    </div>
+  );
+
   return (
     <div className="home">
       <style>{`
@@ -246,7 +260,7 @@ function Home({ onStart, lang = "ko", setLang }) {
           --accent-2: #5C6B4C;
           --line: #DDD2BE;
         }
-        .home { font-family: 'Pretendard', system-ui, sans-serif; color: var(--ink); background: var(--bg); word-break: keep-all; overflow-wrap: break-word; }
+        .home { font-family: 'PretendardVariable', 'Pretendard', system-ui, sans-serif; color: var(--ink); background: var(--bg); word-break: keep-all; overflow-wrap: break-word; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
         .home img { max-width: 100%; display: block; }
         .home button { font-family: inherit; cursor: pointer; border: none; }
         .home .wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
@@ -343,10 +357,13 @@ function Home({ onStart, lang = "ko", setLang }) {
         .home-ba-col.before .home-ba-tag { background: rgba(255,255,255,0.18); color: #F5F2EA; }
         .home-ba-col.after .home-ba-tag { background: var(--accent); color: #fff; z-index: 2; }
 
-        .home-gallery { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+        .home-gallery { max-width: 1180px; margin: 0 auto; display: flex; gap: 20px; }
+        .home-gallery-col { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+        .home-gallery-col.is-offset { margin-top: 64px; }
         .home-g-card {
-          border-radius: 12px; overflow: hidden;
-          position: relative; background: var(--surface); border: 1px solid var(--line);
+          border-radius: 12px;
+          overflow: hidden;
+          position: relative; background: var(--surface);
           cursor: pointer; aspect-ratio: 3 / 4;
         }
         .home-g-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.35s ease; }
@@ -378,7 +395,10 @@ function Home({ onStart, lang = "ko", setLang }) {
 
         @media (max-width: 900px) {
           .home-steps { grid-template-columns: 1fr; }
-          .home-gallery { grid-template-columns: repeat(2, 1fr); }
+          .home-gallery { flex-direction: row; flex-wrap: wrap; gap: 12px; }
+          .home-gallery-col { display: contents; }
+          .home-gallery-col.is-offset { margin-top: 0; }
+          .home-g-card { width: calc(50% - 6px); }
           .home-nav-mid { display: none; }
           .home-float-card { display: none; }
           .home-ba-grid { grid-template-columns: 1fr; }
@@ -513,19 +533,18 @@ function Home({ onStart, lang = "ko", setLang }) {
           <p>{t.gallerySub}</p>
         </div>
         <div className="home-gallery">
-          {galleryItems.map((ref) => (
-            <div
-              key={ref.id}
-              className={`home-g-card${activeCardId === ref.id ? " is-active" : ""}`}
-              onClick={() => toggleCard(ref.id)}
-            >
-              <img src={ref.thumbnail_url} alt={compLabel(ref)} />
-              <div className="home-g-overlay">
-                <b>{moodLabel(ref)}</b>
-                <span>{compLabel(ref)}</span>
-              </div>
-            </div>
-          ))}
+          <div className="home-gallery-col is-offset">
+            {galleryItems.filter((_, i) => i % 4 === 0).map(renderGalleryCard)}
+          </div>
+          <div className="home-gallery-col">
+            {galleryItems.filter((_, i) => i % 4 === 1).map(renderGalleryCard)}
+          </div>
+          <div className="home-gallery-col is-offset">
+            {galleryItems.filter((_, i) => i % 4 === 2).map(renderGalleryCard)}
+          </div>
+          <div className="home-gallery-col">
+            {galleryItems.filter((_, i) => i % 4 === 3).map(renderGalleryCard)}
+          </div>
         </div>
       </section>
 
