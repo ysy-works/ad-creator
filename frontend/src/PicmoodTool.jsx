@@ -80,6 +80,7 @@ const T = {
     purposeOtherPlaceholder: "게시 목적을 직접 입력해주세요",
     makeCaption: "캡션·해시태그 만들기",
     makingCaption: "문구 만드는 중...",
+    remakeCaption: "다시 만들기",
     storyLabel: "스토리 문구",
     copyText: "텍스트 복사",
     copied: "복사됨!",
@@ -116,6 +117,7 @@ const T = {
     purposeOtherPlaceholder: "Describe the purpose yourself",
     makeCaption: "Create caption & hashtags",
     makingCaption: "Writing caption...",
+    remakeCaption: "Regenerate",
     storyLabel: "Story caption",
     copyText: "Copy text",
     copied: "Copied!",
@@ -893,61 +895,58 @@ function App({ lang = "ko", setLang }) {
             </PostFrame>
             <button className="download-btn" onClick={handleDownload}>{t.downloadImage}</button>
 
-            {/* 문구 품질을 위한 최소 정보 (둘 다 선택 입력) - 이미지 확인 후 입력 */}
-            {!captionReady && (
-              <div className="upload-panel qa-panel">
-                <h3 className="section-title" style={{ marginTop: "28px" }}>{t.captionInfoTitle}</h3>
-                <p className="upload-hint">{t.captionInfoHint}</p>
+            {/* 문구 품질을 위한 최소 정보 (둘 다 선택 입력). 캡션을 한 번 만든 뒤에도
+                이 입력창은 그대로 두고, 값을 바꿔서 "다시 만들기"를 누르면 이미지는
+                그대로 두고 캡션만 다시 생성할 수 있게 함 (이미지 재생성 불필요). */}
+            <div className="upload-panel qa-panel">
+              <h3 className="section-title" style={{ marginTop: "28px" }}>{t.captionInfoTitle}</h3>
+              <p className="upload-hint">{t.captionInfoHint}</p>
 
-                <div className="qa-field">
-                  <label className="qa-field__label">{t.menuNameLabel}</label>
+              <div className="qa-field">
+                <label className="qa-field__label">{t.menuNameLabel}</label>
+                <input
+                  type="text"
+                  className="qa-field__input"
+                  placeholder={t.menuNamePlaceholder}
+                  value={menuName}
+                  onChange={(e) => setMenuName(e.target.value)}
+                />
+              </div>
+
+              <div className="qa-field">
+                <label className="qa-field__label">{t.purposeLabel}</label>
+                <div className="qa-options">
+                  {PURPOSE_OPTIONS.map((option) => (
+                    <button
+                      key={option}
+                      type="button"
+                      className={`qa-chip${purpose === option ? " is-selected" : ""}`}
+                      onClick={() => setPurpose(purpose === option ? "" : option)}
+                    >
+                      {lang === "en" ? (PURPOSE_LABEL_EN[option] || option) : option}
+                    </button>
+                  ))}
+                </div>
+                {purpose === "기타" && (
                   <input
                     type="text"
                     className="qa-field__input"
-                    placeholder={t.menuNamePlaceholder}
-                    value={menuName}
-                    onChange={(e) => setMenuName(e.target.value)}
+                    style={{ marginTop: "8px" }}
+                    placeholder={t.purposeOtherPlaceholder}
+                    value={purposeOther}
+                    onChange={(e) => setPurposeOther(e.target.value)}
                   />
-                </div>
-
-                <div className="qa-field">
-                  <label className="qa-field__label">{t.purposeLabel}</label>
-                  <div className="qa-options">
-                    {PURPOSE_OPTIONS.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`qa-chip${purpose === option ? " is-selected" : ""}`}
-                        onClick={() => setPurpose(purpose === option ? "" : option)}
-                      >
-                        {lang === "en" ? (PURPOSE_LABEL_EN[option] || option) : option}
-                      </button>
-                    ))}
-                  </div>
-                  {purpose === "기타" && (
-                    <input
-                      type="text"
-                      className="qa-field__input"
-                      style={{ marginTop: "8px" }}
-                      placeholder={t.purposeOtherPlaceholder}
-                      value={purposeOther}
-                      onChange={(e) => setPurposeOther(e.target.value)}
-                    />
-                  )}
-                </div>
+                )}
               </div>
-            )}
 
-            {/* 캡션/해시태그/스토리 문구는 이미지와 별개의 텍스트로, 버튼을 눌러야 생성됨 */}
-            {!captionReady && (
               <button
                 className="download-btn caption-trigger-btn"
                 onClick={handleGenerateCaption}
                 disabled={captionLoading}
               >
-                {captionLoading ? t.makingCaption : t.makeCaption}
+                {captionLoading ? t.makingCaption : captionReady ? t.remakeCaption : t.makeCaption}
               </button>
-            )}
+            </div>
 
             {captionReady && (
               <div className="caption-box">
