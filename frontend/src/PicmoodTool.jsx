@@ -1,4 +1,5 @@
 import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 
 /*
   디자인 토큰 (Picmood · 카페 무드보드 소셜카드 컨셉)
@@ -215,29 +216,31 @@ const BookmarkIcon = ({ filled }) => (
 // 안내 문구를 보여준다. 팀장 요청 사항: 업로드 안내 문구 옆에 배치,
 // 이미지 없이 텍스트 안내만.
 //
-// 위치 계산 히스토리 (같은 버그를 두 번 잘못 고쳤던 기록, 참고용으로 남겨둠):
-// 1차: 기본은 아이콘 중앙 기준으로 툴팁을 가운데 정렬(translateX(-50%))했는데,
+// 위치 계산 히스토리 (같은 버그를 세 번 거쳐 고친 기록, 참고용으로 남겨둠):
+// 1차: 아이콘 중앙 기준으로 툴팁을 가운데 정렬(translateX(-50%))했는데,
 //      아이콘이 화면 오른쪽 가장자리에 가까우면 화면 밖으로 넘어감.
 // 2차: hover/focus 시점에 위치를 보정하도록 했지만, 모바일 터치에서는 tap이
 //      CSS :hover만 트리거하고 실제 mouseenter/focus JS 이벤트는 안 붙는
 //      경우가 있어 보정 로직 자체가 실행이 안 됨.
-// 3차(이번): open을 React state로 관리하는 것까진 동일하지만, 위치를
-//      "translateX(-50%) + px 보정값" 같은 상대 계산 대신, 아이콘의 실제
-//      화면 좌표(getBoundingClientRect)를 기준으로 툴팁의 최종 left/top을
-//      뷰포트 기준 절대 px 값으로 직접 계산해서 position: fixed로 꽂아버림.
-//      이전 방식은 "이전에 열렸을 때 남아있던 offset"이 다음 계산에 섞여
-//      들어가는 문제, 부모 요소의 position/overflow에 따라 기준점이
-//      달라지는 문제 등으로 열 때마다 결과가 들쭉날쭉했음. px 절대좌표
-//      방식은 매번 아이콘의 현재 위치만 보고 새로 계산하므로 이런 문제가
-//      구조적으로 발생하지 않음.
+// 3차: open을 React state로 관리하고, 아이콘의 실제 화면 좌표를 측정해
+//      position: fixed(뷰포트 기준 절대좌표)로 위치를 고정 — 화면 밖으로
+//      넘어가는 문제는 해결됐지만, fixed는 "뷰포트"에 고정되는 성질이라
+//      스크롤해서 화면을 움직여도 툴팁이 같은 화면 자리에 그대로 붙어있고
+//      아이콘을 안 따라가는 문제가 새로 생김.
+// 4차(이번): 툴팁을 React Portal로 document.body 바로 밑에 렌더링하고,
+//      position: absolute + "페이지" 기준 좌표(스크롤 오프셋을 더한 값)로
+//      배치. absolute는 스크롤하면 페이지와 함께 자연스럽게 같이 움직이므로
+//      스크롤 이벤트를 따로 감지할 필요 없이 아이콘 옆에 계속 붙어있게 됨.
+//      body의 포탈로 뺀 이유: 부모(.guide-icon 등)의 position/overflow
+//      설정에 영향을 받지 않고 항상 화면 최상단에, 항상 페이지 전체 폭
+//      기준으로 계산되도록 하기 위함.
 function GuideIcon({ text }) {
   const iconRef = useRef(null);
   const tooltipRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const [pos, setPos] = useState(null); // { left, top } — 뷰포트 기준 px
+  const [pos, setPos] = useState(null); // { left, top } — 페이지(document) 기준 px
 
-  // 열릴 때마다(그리고 open 상태인 동안 텍스트가 바뀌어 크기가 달라져도)
-  // 매번 아이콘의 "현재" 위치를 새로 측정해서 계산 — 이전 값에 의존하지 않음.
+  // 열릴 때마다 아이콘의 "현재" 위치를 새로 측정해서 계산 — 이전 값에 의존하지 않음.
   useLayoutEffect(() => {
     if (!open) return;
     const icon = iconRef.current;
@@ -259,7 +262,9 @@ function GuideIcon({ text }) {
       top = iconRect.bottom + gap;
     }
 
-    setPos({ left, top });
+    // 지금까지는 전부 "뷰포트" 기준 좌표 -> 포탈로 body에 붙일 것이므로
+    // 현재 스크롤 위치를 더해서 "페이지" 기준 좌표로 변환.
+    setPos({ left: left + window.scrollX, top: top + window.scrollY });
   }, [open, text]);
 
   useEffect(() => {
@@ -276,6 +281,21 @@ function GuideIcon({ text }) {
 
   if (!text) return null;
 
+  const tooltipNode = (
+    <span
+      className={`guide-icon__tooltip${open ? " is-open" : ""}`}
+      role="tooltip"
+      ref={tooltipRef}
+      style={
+        pos
+          ? { position: "absolute", left: pos.left, top: pos.top }
+          : { position: "absolute", left: 0, top: 0, visibility: "hidden" }
+      }
+    >
+      {text}
+    </span>
+  );
+
   return (
     <span
       className={`guide-icon${open ? " is-open" : ""}`}
@@ -291,18 +311,7 @@ function GuideIcon({ text }) {
       }}
     >
       <span className="guide-icon__mark" aria-hidden="true">i</span>
-      <span
-        className="guide-icon__tooltip"
-        role="tooltip"
-        ref={tooltipRef}
-        style={
-          pos
-            ? { position: "fixed", left: pos.left, top: pos.top, bottom: "auto", transform: "none" }
-            : undefined
-        }
-      >
-        {text}
-      </span>
+      {typeof document !== "undefined" ? createPortal(tooltipNode, document.body) : tooltipNode}
     </span>
   );
 }
@@ -755,10 +764,6 @@ function App({ lang = "ko", setLang }) {
           vertical-align: middle;
         }
         .guide-icon__tooltip {
-          position: absolute;
-          bottom: calc(100% + 8px);
-          left: 50%;
-          transform: translateX(-50%);
           width: max-content;
           max-width: 240px;
           background: var(--ink);
@@ -776,9 +781,9 @@ function App({ lang = "ko", setLang }) {
           visibility: hidden;
           transition: opacity 0.15s ease;
           pointer-events: none;
-          z-index: 20;
+          z-index: 1000;
         }
-        .guide-icon.is-open .guide-icon__tooltip {
+        .guide-icon__tooltip.is-open {
           opacity: 1;
           visibility: visible;
         }
