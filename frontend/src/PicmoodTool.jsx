@@ -24,15 +24,48 @@ import { useState, useEffect, useRef } from "react";
 // (references.json의 composition_label 자체는 안 건드림 — 업로드 안내 등
 //  다른 곳에서는 여전히 원래 라벨을 씀. 이건 카드에서 "촬영기법 용어처럼
 //  보인다"는 피드백을 반영해, 카드에서만 보여줄 감성적 문구를 따로 둔 것.)
+// -> 기존엔 한국어 문구만 있어서 영문 모드에서도 카드 캡션이 한글로 고정
+//    되어 있던 버그가 있었음. Home.jsx의 COMPOSITION_CAPTION과 동일한
+//    영문 문구를 그대로 가져와 lang별로 분기하도록 수정.
 const COMPOSITION_MOOD_CAPTIONS = {
-  product_large: "가까이서 담은 진한 한 잔",
-  product_center: "테이블 위, 자연스러운 순간",
-  aerial_shot: "위에서 내려다본 오늘의 한 컷",
-  handheld_lifestyle: "손끝에 걸린 편안한 하루",
+  ko: {
+    product_large: "가까이서 담은 진한 한 잔",
+    product_center: "테이블 위, 자연스러운 순간",
+    aerial_shot: "위에서 내려다본 오늘의 한 컷",
+    handheld_lifestyle: "손끝에 걸린 편안한 하루",
+  },
+  en: {
+    product_large: "A rich cup, up close",
+    product_center: "A natural moment on the table",
+    aerial_shot: "Today's shot from above",
+    handheld_lifestyle: "A cozy moment in hand",
+  },
 };
 
-const getCardCaption = (ref) =>
-  COMPOSITION_MOOD_CAPTIONS[ref.composition_id] || ref.composition_label;
+const getCardCaption = (ref, lang) =>
+  COMPOSITION_MOOD_CAPTIONS[lang]?.[ref.composition_id] ||
+  (lang === "en"
+    ? COMPOSITION_LABEL_EN[ref.composition_id] || ref.composition_label
+    : ref.composition_label);
+
+// 촬영 가이드 문구 (팀장 요청, 2026-07-21). 업로드 단계에서 "i" 아이콘에
+// 마우스를 올렸을 때 표시되는 안내 문구. composition_id 기준으로 매핑되며,
+// 선택한 레퍼런스와 비슷한 각도로 찍을 수 있도록 구체적인 촬영 팁을 담음.
+// 이미지 없이 텍스트 안내만 제공 (예시 이미지는 추후 필요 시 추가 예정).
+const SHOOTING_GUIDE = {
+  ko: {
+    product_large: "레퍼런스 이미지처럼 음료가 화면에 꽉 차도록 가까이서 찍어주세요.",
+    product_center: "테이블 위에 자연스럽게 두고, 살짝 거리를 두어 찍어주세요.",
+    aerial_shot: "음료 바로 위에서 내려다보는 각도로 찍어주세요.",
+    handheld_lifestyle: "손으로 음료를 든 모습이 자연스럽게 보이도록 찍어주세요.",
+  },
+  en: {
+    product_large: "Get in close so the drink fills the frame, just like the reference.",
+    product_center: "Place it naturally on the table and shoot from a slight distance.",
+    aerial_shot: "Shoot from directly above, looking straight down at the drink.",
+    handheld_lifestyle: "Hold the drink naturally in your hand while you shoot.",
+  },
+};
 
 // 도구 화면(PicmoodTool) 자체 UI 문구 번역 사전. references.json 안의
 // mood_label/composition_label은 한국어만 있어서, id 기준 별도 매핑으로 처리.
@@ -178,14 +211,34 @@ const BookmarkIcon = ({ filled }) => (
   </svg>
 );
 
+// 촬영 가이드용 "i" 아이콘. 마우스를 올리면(또는 포커스하면) 툴팁으로
+// 안내 문구를 보여준다. 팀장 요청 사항: 업로드 안내 문구 옆에 배치,
+// 이미지 없이 텍스트 안내만.
+function GuideIcon({ text }) {
+  if (!text) return null;
+  return (
+    <span className="guide-icon" tabIndex={0}>
+      <span className="guide-icon__mark" aria-hidden="true">i</span>
+      <span className="guide-icon__tooltip" role="tooltip">{text}</span>
+    </span>
+  );
+}
+
 // 인스타그램 실제 화면이 아니라, 우리 서비스만의 "무드보드 피드 카드" 프레임
-function PostFrame({ children, brand = "Picmood", caption, likeCount, selected, badgeText, onClick }) {
+// -> "좋아요 N개"와 "선택됨" 배지가 lang과 무관하게 한글로 고정되어 있던
+//    버그 수정: lang을 받아 영문 모드에서는 "N likes" / "Selected"로 표시.
+function PostFrame({ children, brand = "Picmood", caption, likeCount, selected, badgeText, onClick, lang = "ko" }) {
+  const likeText = likeCount != null
+    ? (lang === "en" ? `${likeCount} likes` : `좋아요 ${likeCount}개`)
+    : null;
+  const stampText = badgeText || (lang === "en" ? "Selected" : "선택됨");
+
   return (
     <div className={`post-frame${selected ? " is-selected" : ""}`} onClick={onClick}>
       <div className="post-frame__header">
         <span className="post-frame__avatar" aria-hidden="true">☕</span>
         <span className="post-frame__brand">{brand}</span>
-        {selected && <span className="post-frame__stamp">{badgeText || "선택됨"}</span>}
+        {selected && <span className="post-frame__stamp">{stampText}</span>}
       </div>
 
       <div className="post-frame__photo">{children}</div>
@@ -197,9 +250,9 @@ function PostFrame({ children, brand = "Picmood", caption, likeCount, selected, 
         <span className="post-frame__icon post-frame__icon--save"><BookmarkIcon /></span>
       </div>
 
-      {(caption || likeCount) && (
+      {(caption || likeText) && (
         <div className="post-frame__caption">
-          {likeCount != null && <strong>좋아요 {likeCount}개</strong>}
+          {likeText && <strong>{likeText}</strong>}
           {caption && <span> {caption}</span>}
         </div>
       )}
@@ -585,7 +638,7 @@ function App({ lang = "ko", setLang }) {
         }
 
         .upload-panel {
-          max-width: 420px;
+          max-width: 460px;
           margin: 0 auto;
           text-align: center;
         }
@@ -596,6 +649,54 @@ function App({ lang = "ko", setLang }) {
           color: var(--ink-soft);
         }
         .upload-hint.is-active { color: var(--accent-2); font-weight: 900; }
+
+        .guide-icon {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 16px;
+          height: 16px;
+          margin-left: 6px;
+          border-radius: 50%;
+          background: var(--accent-2);
+          color: #fff;
+          font-size: 11px;
+          font-weight: 700;
+          font-style: italic;
+          font-family: Georgia, 'Times New Roman', serif;
+          cursor: default;
+          vertical-align: middle;
+        }
+        .guide-icon__tooltip {
+          position: absolute;
+          bottom: calc(100% + 8px);
+          left: 50%;
+          transform: translateX(-50%);
+          width: max-content;
+          max-width: 240px;
+          background: var(--ink);
+          color: var(--surface);
+          font-size: 12px;
+          font-weight: 500;
+          font-style: normal;
+          line-height: 1.5;
+          text-align: left;
+          padding: 9px 12px;
+          border-radius: 8px;
+          box-shadow: 0 6px 16px rgba(43,36,32,0.18);
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.15s ease;
+          pointer-events: none;
+          z-index: 20;
+        }
+        .guide-icon:hover .guide-icon__tooltip,
+        .guide-icon:focus .guide-icon__tooltip,
+        .guide-icon:focus-visible .guide-icon__tooltip {
+          opacity: 1;
+          visibility: visible;
+        }
 
         .file-input-wrap {
           display: flex;
@@ -824,10 +925,11 @@ function App({ lang = "ko", setLang }) {
                 <PostFrame
                   key={ref.id}
                   brand="Picmood"
-                  caption={getCardCaption(ref)}
+                  caption={getCardCaption(ref, lang)}
                   likeCount={seededLikeCount(ref.id)}
                   selected={selectedReferenceId === ref.id}
                   onClick={() => setSelectedReferenceId(ref.id)}
+                  lang={lang}
                 >
                   <img src={ref.thumbnail_url} alt={lang === "en" ? (COMPOSITION_LABEL_EN[ref.composition_id] || ref.composition_label) : ref.composition_label} />
                 </PostFrame>
@@ -847,6 +949,8 @@ function App({ lang = "ko", setLang }) {
                   : `${selectedReference.mood_label} · ${selectedReference.composition_label}`}
               </strong>
               {t.uploadHintSuffix}
+              {"\u00A0"}
+              <GuideIcon text={SHOOTING_GUIDE[lang]?.[selectedReference.composition_id]} />
             </p>
           ) : (
             <p className="upload-hint">{t.selectStyleFirst}</p>
@@ -890,7 +994,7 @@ function App({ lang = "ko", setLang }) {
         {resultImage && (
           <div className="result-section">
             <h3 className="section-title">{t.resultTitle}</h3>
-            <PostFrame brand="Picmood" likeCount={null}>
+            <PostFrame brand="Picmood" likeCount={null} lang={lang}>
               <img src={resultImage} alt={t.resultAlt} />
             </PostFrame>
             <button className="download-btn" onClick={handleDownload}>{t.downloadImage}</button>
