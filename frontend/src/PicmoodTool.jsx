@@ -55,15 +55,15 @@ const getCardCaption = (ref, lang) =>
 const SHOOTING_GUIDE = {
   ko: {
     product_large: "레퍼런스 이미지처럼 음료가 화면에 꽉 차도록 가까이서 찍어주세요.",
-    product_center: "테이블 위에 자연스럽게 두고, 살짝 거리를 두어 찍어주세요.",
-    aerial_shot: "음료 바로 위에서 내려다보는 각도로 찍어주세요.",
-    handheld_lifestyle: "손으로 음료를 든 모습이 자연스럽게 보이도록 찍어주세요.",
+    product_center: "테이블 위에 자연스럽게 두고, 살짝 거리를 두어 자연스럽게 내려다보는 각도로 찍어주세요.",
+    aerial_shot: "음료 바로 위에서 수직으로 내려다보는 각도로 찍어주세요.",
+    handheld_lifestyle: "음료를 테이블이나 바닥에 두고, 옆에서 바라보는 각도로 찍어주세요.",
   },
   en: {
     product_large: "Get in close so the drink fills the frame, just like the reference.",
-    product_center: "Place it naturally on the table and shoot from a slight distance.",
-    aerial_shot: "Shoot from directly above, looking straight down at the drink.",
-    handheld_lifestyle: "Hold the drink naturally in your hand while you shoot.",
+    product_center: "Place it naturally on the table and shoot from a slight distance, looking down at a natural angle.",
+    aerial_shot: "Shoot from directly above, straight down at a vertical angle.",
+    handheld_lifestyle: "Place it on a table or the floor and shoot from the side, at eye level with the drink.",
   },
 };
 
@@ -214,12 +214,57 @@ const BookmarkIcon = ({ filled }) => (
 // 촬영 가이드용 "i" 아이콘. 마우스를 올리면(또는 포커스하면) 툴팁으로
 // 안내 문구를 보여준다. 팀장 요청 사항: 업로드 안내 문구 옆에 배치,
 // 이미지 없이 텍스트 안내만.
+// -> 기본은 아이콘 중앙 기준으로 툴팁을 가운데 정렬하는데, 아이콘이
+//    화면 오른쪽 가장자리에 가까우면 툴팁이 화면 밖으로 넘어가던 버그가 있었음.
+//    호버/포커스 시점에 실제 위치를 측정해서, 화면 양쪽 여백(12px)을
+//    넘어가지 않도록 가로 위치를 보정한다.
 function GuideIcon({ text }) {
+  const iconRef = useRef(null);
+  const tooltipRef = useRef(null);
+  const [offset, setOffset] = useState(0);
+
   if (!text) return null;
+
+  const reposition = () => {
+    const icon = iconRef.current;
+    const tooltip = tooltipRef.current;
+    if (!icon || !tooltip) return;
+
+    const edgeMargin = 12; // 화면 가장자리와 떨어질 최소 여백
+    const iconRect = icon.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+    const iconCenter = iconRect.left + iconRect.width / 2;
+
+    // 보정 없이(offset 0, 즉 아이콘 중앙 정렬) 툴팁을 놓았을 때의 좌우 끝 좌표
+    const naturalLeft = iconCenter - tooltipRect.width / 2;
+    const naturalRight = naturalLeft + tooltipRect.width;
+
+    let correction = 0;
+    if (naturalRight > window.innerWidth - edgeMargin) {
+      correction = (window.innerWidth - edgeMargin) - naturalRight;
+    } else if (naturalLeft < edgeMargin) {
+      correction = edgeMargin - naturalLeft;
+    }
+    setOffset(correction);
+  };
+
   return (
-    <span className="guide-icon" tabIndex={0}>
+    <span
+      className="guide-icon"
+      tabIndex={0}
+      ref={iconRef}
+      onMouseEnter={reposition}
+      onFocus={reposition}
+    >
       <span className="guide-icon__mark" aria-hidden="true">i</span>
-      <span className="guide-icon__tooltip" role="tooltip">{text}</span>
+      <span
+        className="guide-icon__tooltip"
+        role="tooltip"
+        ref={tooltipRef}
+        style={{ transform: `translateX(calc(-50% + ${offset}px))` }}
+      >
+        {text}
+      </span>
     </span>
   );
 }
@@ -634,8 +679,10 @@ function App({ lang = "ko", setLang }) {
           text-align: left;
         }
         .post-frame__caption strong {
+          display: block;
           color: var(--ink);
           font-weight: 700;
+          margin-bottom: 2px;
         }
 
         .upload-panel {
