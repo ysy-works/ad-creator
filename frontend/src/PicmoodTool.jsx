@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 
 /*
   디자인 토큰 (Picmood · 카페 무드보드 소셜카드 컨셉)
@@ -214,24 +214,57 @@ const BookmarkIcon = ({ filled }) => (
 // 촬영 가이드용 "i" 아이콘. 마우스를 올리면(호버) 또는 클릭/탭하면 툴팁으로
 // 안내 문구를 보여준다. 팀장 요청 사항: 업로드 안내 문구 옆에 배치,
 // 이미지 없이 텍스트 안내만.
-// -> 기본은 아이콘 중앙 기준으로 툴팁을 가운데 정렬하는데, 아이콘이
-//    화면 오른쪽 가장자리에 가까우면 툴팁이 화면 밖으로 넘어가던 버그가 있었음.
-// -> 1차 수정(hover/focus 시점에 위치 보정)까지는 데스크톱에서만 제대로 동작했음.
-//    모바일 터치에서는 tap이 CSS :hover만 트리거하고 실제 mouseenter/focus
-//    JS 이벤트는 안 붙는 경우가 있어서, 위치 보정 함수 자체가 아예 실행이
-//    안 된 채로 기본(중앙 정렬) 위치로 툴팁만 보이는 문제가 있었음.
-// -> open 상태를 React state로 직접 관리하고, "보여주기"와 "위치 계산"을
-//    항상 같은 클릭/탭 핸들러 안에서 함께 실행하도록 바꿔서 모바일에서도
-//    확실히 위치 보정이 먼저 되고 나서 보이도록 수정.
+//
+// 위치 계산 히스토리 (같은 버그를 두 번 잘못 고쳤던 기록, 참고용으로 남겨둠):
+// 1차: 기본은 아이콘 중앙 기준으로 툴팁을 가운데 정렬(translateX(-50%))했는데,
+//      아이콘이 화면 오른쪽 가장자리에 가까우면 화면 밖으로 넘어감.
+// 2차: hover/focus 시점에 위치를 보정하도록 했지만, 모바일 터치에서는 tap이
+//      CSS :hover만 트리거하고 실제 mouseenter/focus JS 이벤트는 안 붙는
+//      경우가 있어 보정 로직 자체가 실행이 안 됨.
+// 3차(이번): open을 React state로 관리하는 것까진 동일하지만, 위치를
+//      "translateX(-50%) + px 보정값" 같은 상대 계산 대신, 아이콘의 실제
+//      화면 좌표(getBoundingClientRect)를 기준으로 툴팁의 최종 left/top을
+//      뷰포트 기준 절대 px 값으로 직접 계산해서 position: fixed로 꽂아버림.
+//      이전 방식은 "이전에 열렸을 때 남아있던 offset"이 다음 계산에 섞여
+//      들어가는 문제, 부모 요소의 position/overflow에 따라 기준점이
+//      달라지는 문제 등으로 열 때마다 결과가 들쭉날쭉했음. px 절대좌표
+//      방식은 매번 아이콘의 현재 위치만 보고 새로 계산하므로 이런 문제가
+//      구조적으로 발생하지 않음.
 function GuideIcon({ text }) {
   const iconRef = useRef(null);
   const tooltipRef = useRef(null);
-  const [offset, setOffset] = useState(0);
   const [open, setOpen] = useState(false);
+  const [pos, setPos] = useState(null); // { left, top } — 뷰포트 기준 px
+
+  // 열릴 때마다(그리고 open 상태인 동안 텍스트가 바뀌어 크기가 달라져도)
+  // 매번 아이콘의 "현재" 위치를 새로 측정해서 계산 — 이전 값에 의존하지 않음.
+  useLayoutEffect(() => {
+    if (!open) return;
+    const icon = iconRef.current;
+    const tooltip = tooltipRef.current;
+    if (!icon || !tooltip) return;
+
+    const edgeMargin = 12; // 화면 가장자리와 떨어질 최소 여백
+    const gap = 8; // 아이콘과 툴팁 사이 간격
+    const iconRect = icon.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+
+    let left = iconRect.left + iconRect.width / 2 - tooltipRect.width / 2;
+    const maxLeft = window.innerWidth - tooltipRect.width - edgeMargin;
+    left = Math.min(Math.max(left, edgeMargin), Math.max(maxLeft, edgeMargin));
+
+    let top = iconRect.top - tooltipRect.height - gap;
+    if (top < edgeMargin) {
+      // 위쪽에 자리가 없으면(화면 맨 위 근처) 아이콘 아래쪽에 표시
+      top = iconRect.bottom + gap;
+    }
+
+    setPos({ left, top });
+  }, [open, text]);
 
   useEffect(() => {
     if (!open) return;
-    // 탭한 아이콘 바깥을 클릭/탭하면 닫히도록 (모바일에서 열어둔 채 방치 방지)
+    // 아이콘 바깥을 클릭/탭하면 닫히도록 (모바일에서 열어둔 채 방치 방지)
     const handleOutside = (e) => {
       if (iconRef.current && !iconRef.current.contains(e.target)) {
         setOpen(false);
@@ -243,51 +276,18 @@ function GuideIcon({ text }) {
 
   if (!text) return null;
 
-  const reposition = () => {
-    const icon = iconRef.current;
-    const tooltip = tooltipRef.current;
-    if (!icon || !tooltip) return;
-
-    const edgeMargin = 12; // 화면 가장자리와 떨어질 최소 여백
-    const iconRect = icon.getBoundingClientRect();
-    const tooltipRect = tooltip.getBoundingClientRect();
-    const iconCenter = iconRect.left + iconRect.width / 2;
-
-    // 보정 없이(offset 0, 즉 아이콘 중앙 정렬) 툴팁을 놓았을 때의 좌우 끝 좌표
-    const naturalLeft = iconCenter - tooltipRect.width / 2;
-    const naturalRight = naturalLeft + tooltipRect.width;
-
-    let correction = 0;
-    if (naturalRight > window.innerWidth - edgeMargin) {
-      correction = (window.innerWidth - edgeMargin) - naturalRight;
-    } else if (naturalLeft < edgeMargin) {
-      correction = edgeMargin - naturalLeft;
-    }
-    setOffset(correction);
-  };
-
-  // 위치부터 계산한 다음에 열어야, 잘못된 위치가 잠깐이라도 보이지 않는다.
-  const openWithReposition = () => {
-    reposition();
-    setOpen(true);
-  };
-
   return (
     <span
       className={`guide-icon${open ? " is-open" : ""}`}
       tabIndex={0}
       ref={iconRef}
-      onMouseEnter={openWithReposition}
+      onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
-      onFocus={openWithReposition}
+      onFocus={() => setOpen(true)}
       onBlur={() => setOpen(false)}
       onClick={(e) => {
         e.stopPropagation();
-        if (open) {
-          setOpen(false);
-        } else {
-          openWithReposition();
-        }
+        setOpen((prev) => !prev);
       }}
     >
       <span className="guide-icon__mark" aria-hidden="true">i</span>
@@ -295,7 +295,11 @@ function GuideIcon({ text }) {
         className="guide-icon__tooltip"
         role="tooltip"
         ref={tooltipRef}
-        style={{ transform: `translateX(calc(-50% + ${offset}px))` }}
+        style={
+          pos
+            ? { position: "fixed", left: pos.left, top: pos.top, bottom: "auto", transform: "none" }
+            : undefined
+        }
       >
         {text}
       </span>
