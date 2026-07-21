@@ -2,7 +2,7 @@
 
 이 문서는 백엔드·프론트엔드 담당자가 ComfyUI의 두 프리셋 파일럿을 연결할 때 따라야 할 고정 계약입니다. 기존 `model-c-v1`은 삭제하지 않으며, 신규 워크플로를 병렬 배포한 뒤 환경변수로 전환합니다.
 
-현재 검증 완료 범위와 실제 유료 smoke 미실행 사유는 `OPENAI_PILOT_VALIDATION_20260721_KO.md`에 기록합니다.
+현재 검증 범위와 adapter-level 실제 유료 smoke 결과는 `OPENAI_PILOT_VALIDATION_20260721_KO.md`에 기록합니다.
 
 ## 1. 고정값
 

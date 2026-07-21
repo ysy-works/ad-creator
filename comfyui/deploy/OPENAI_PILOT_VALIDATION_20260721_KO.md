@@ -36,26 +36,43 @@ git diff --check                         통과
 - preset registry 손상은 `503`, 미지원 preset은 `400`으로 구분됩니다.
 - 기존 `model-c-v1`은 기본값과 롤백 경로로 유지됩니다.
 
-## 실제 유료 smoke 상태
+## 실제 유료 smoke 결과
 
-실제 제품 사진을 이용한 화이트 1회 호출을 준비했으나, 실행 환경의 외부 데이터 전송 승인 단계에서 중단됐습니다. 따라서 다음은 모두 0건입니다.
+사용자가 제품 원본과 검수된 우드 scene hint의 외부 전송 및 `low` 2회 과금을 명시적으로 승인한 뒤 실행했습니다. 성공한 유료 호출은 정확히 2건이며 자동 재시도는 없었습니다.
+
+| preset | provider 입력 | OpenAI request ID | 시간 | 결과 |
+| --- | --- | --- | ---: | --- |
+| `natural_white__product_center` | 제품 원본 | `req_b664c9f6148b436bad53e5cef12936ed` | 36.828초 | 성공 |
+| `wood__product_center` | 제품 원본 + sanitized scene hint | `req_7b0b71553c02421d98f90a8128e082b6` | 38.431초 | 성공 |
+
+두 provider 원본은 `1024x1280` PNG, 전달 결과는 crop 없는 `880x1100` PNG로 확인했습니다. 출력은 Git에 넣지 않고 다음 로컬 경로에 각각 독립 파일로 저장했습니다.
 
 ```text
-OpenAI 업로드       0건
-OpenAI API 호출     0건
-과금                0건
-실제 생성 결과      0건
+outputs/openai-gpt-image-2-low-pilot-20260721/white/natural_white__product_center.png
+outputs/openai-gpt-image-2-low-pilot-20260721/wood/wood__product_center.png
 ```
 
-mock 성공을 실제 OpenAI E2E 성공으로 간주하지 않습니다. 화이트·우드 실제 low 생성과 육안 QA는 아직 출시 차단 조건입니다.
+provider 호출 전 실패도 기록합니다. 첫 시도는 `.env` 값이 자식 프로세스로 export되지 않아 키 검증에서 중단됐고, 다음 시도는 로컬 Python CA 경로 문제로 TLS handshake에서 중단됐습니다. 두 경우 모두 OpenAI HTTP 본문 전송 전에 실패했으며 결과·request ID·과금 가능한 응답이 없었습니다. CA 검증은 끄지 않고 certifi CA bundle을 명시해 해결했습니다.
+
+## 실제 결과 육안 QA
+
+| 항목 | 화이트 | 우드 |
+| --- | --- | --- |
+| 단일 제품·잘림·복제 | 통과 | 통과 |
+| 제품 종류·층·용기 정체성 | 통과 | 통과 |
+| 핵심 로고·라벨 가독성 | 육안 통과 | 육안 통과 |
+| 4:5·무크롭 | 통과 | 통과 |
+| 무드·조명 방향 | 통과 | 통과 |
+| preset 수치형 bbox/배치 | 재검토 필요: 제품이 계약보다 크게 보임 | 재검토 필요: 제품 중심·크기가 계약 범위를 벗어난 것으로 보임 |
+
+따라서 OpenAI adapter와 provider 입출력 계약은 실제 유료 E2E를 통과했습니다. 이번 호출은 명시적 smoke script로 adapter를 직접 실행했으므로 Gateway job과 ComfyUI prompt ID는 없습니다. ComfyUI 노드·Gateway 조립은 mock 통합 테스트를 통과했지만 실제 GCP ComfyUI 서버 E2E는 배포 뒤 별도로 수행해야 합니다. 또한 CommonQA가 아직 구현되지 않았고 수치형 bbox는 육안 추정이므로 두 이미지를 곧바로 최종 preset 합격본으로 승격하지 않습니다.
 
 ## 남은 출시 차단 조건
 
-1. 사용자 제품 사진과 우드 sanitized scene hint의 OpenAI 외부 전송 및 low 두 건 과금을 명시적으로 승인합니다.
-2. GCP ComfyUI에 `OPENAI_API_KEY`, `OPENAI_IMAGE_TIMEOUT_SECONDS`, `AD_CREATOR_OPENAI_AUDIT_DIR`을 안전하게 주입합니다.
-3. 백엔드의 `1080x1080` 중앙 crop을 신규 workflow에서 제거하고 4:5를 보존합니다.
-4. 프론트는 두 preset만 활성화하고 나머지 10개를 비활성화하며 결과를 4:5로 표시합니다.
-5. 화이트·우드를 각각 독립 파일로 1회 생성하고 로고·라벨, 제품 수, 잘림, 구도, 조명과 sidecar 연결을 확인합니다.
-6. 위 검증이 끝난 뒤에만 Render의 `COMFYUI_WORKFLOW_ID`와 Gateway의 `AD_CREATOR_HEALTH_WORKFLOW_ID`를 전환합니다.
+1. GCP ComfyUI에 `OPENAI_API_KEY`, `OPENAI_IMAGE_TIMEOUT_SECONDS`, `AD_CREATOR_OPENAI_AUDIT_DIR`을 안전하게 주입합니다.
+2. 백엔드의 `1080x1080` 중앙 crop을 신규 workflow에서 제거하고 4:5를 보존합니다.
+3. 프론트는 두 preset만 활성화하고 나머지 10개를 비활성화하며 결과를 4:5로 표시합니다.
+4. CommonQA 또는 동등한 bbox 측정을 붙여 수치형 구도 계약을 검증하고, 필요한 prompt·hint 보정은 새 profile/version에서 수행합니다.
+5. 위 검증이 끝난 뒤에만 Render의 `COMFYUI_WORKFLOW_ID`와 Gateway의 `AD_CREATOR_HEALTH_WORKFLOW_ID`를 전환합니다.
 
 상세 연동 계약은 `OPENAI_GPT_IMAGE_2_PILOT_HANDOFF_KO.md`, 장기 구조는 `COMFYUI_REDESIGN_PLAN_KO.md`를 기준으로 합니다.
