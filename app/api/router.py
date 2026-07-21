@@ -100,6 +100,7 @@ class CaptionRequest(BaseModel):
     result_image_base64: str
     menu_name: Optional[str] = None
     purpose: Optional[str] = None
+    lang: Optional[str] = "ko"
 
 
 @router.post("/caption")
@@ -110,6 +111,10 @@ async def caption(payload: CaptionRequest):
 
     /generate와 분리된 이유: 사용자가 이미지 결과부터 먼저 확인하고,
     "캡션·해시태그 만들기" 버튼을 눌렀을 때만 (선택적으로) 호출되는 구조이기 때문.
+
+    lang: 프론트 화면 언어("ko"/"en")를 그대로 받아 caption_generator.py로
+    전달 -> 영어 화면에서는 GPT가 생성하는 캡션도 영어로 나오게 됨.
+    프론트가 값을 안 보내도 기존과 동일하게 "ko"로 동작(하위 호환).
     """
     reference = _find_reference(payload.reference_id)
     if reference is None:
@@ -122,6 +127,7 @@ async def caption(payload: CaptionRequest):
             composition_label=reference["composition_label"],
             menu_name=payload.menu_name,
             purpose=payload.purpose,
+            lang=payload.lang or "ko",
         )
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": f"캡션 생성 실패: {e}"})
