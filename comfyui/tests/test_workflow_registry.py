@@ -16,9 +16,12 @@ SPEC.loader.exec_module(VALIDATOR)
 class WorkflowRegistryTest(unittest.TestCase):
     def test_default_registry_is_valid(self):
         registry_path = COMFYUI_DIR / "workflows" / "registry.json"
-        self.assertEqual(VALIDATOR.validate_registry(registry_path), ["model-c-v1"])
+        self.assertEqual(
+            VALIDATOR.validate_registry(registry_path),
+            ["openai-gpt-image-2-low-v1", "model-c-v1"],
+        )
 
-    def test_default_workflow_is_model_c_v1(self):
+    def test_default_workflow_remains_model_c_until_pilot_cutover(self):
         registry = json.loads((COMFYUI_DIR / "workflows" / "registry.json").read_text(encoding="utf-8"))
         self.assertEqual(registry["default_workflow_id"], "model-c-v1")
 

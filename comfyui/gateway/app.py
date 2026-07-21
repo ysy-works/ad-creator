@@ -5,6 +5,7 @@ import hmac
 import io
 import json
 import os
+import re
 import secrets
 import sqlite3
 import time
@@ -19,7 +20,16 @@ from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadF
 from fastapi.responses import JSONResponse, Response
 from PIL import Image, UnidentifiedImageError
 
-from comfyui.orchestrator import WorkflowRouterError, build_prompt
+from comfyui.orchestrator import (
+    PresetRegistryConfigurationError,
+    PresetSelectionError,
+    UnknownWorkflowError,
+    WorkflowRouterError,
+    build_prompt,
+    published_preset_ids,
+    resolve_published_preset,
+    workflow_input_names,
+)
 
 
 MAX_IMAGE_BYTES = 20 * 1024 * 1024
@@ -40,6 +50,7 @@ class Settings:
     signing_key: str
     database_path: Path
     max_queued: int
+    health_workflow_id: str
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -66,6 +77,9 @@ class Settings:
                 os.environ.get("AD_CREATOR_GATEWAY_DB", "data/gateway.sqlite3")
             ).expanduser(),
             max_queued=max_queued,
+            health_workflow_id=os.environ.get(
+                "AD_CREATOR_HEALTH_WORKFLOW_ID", "model-c-v1"
+            ),
         )
 
 
@@ -307,26 +321,96 @@ def _request_hash(
     data: bytes,
     content_type: str,
     workflow_id: str,
-    composition: str,
-    background_style: str,
-    strength: str,
-    seed: int | None,
+    workflow_values: dict[str, Any],
 ) -> str:
     canonical = json.dumps(
         {
-            "background_style": background_style,
-            "composition": composition,
             "content_type": content_type,
             "image_sha256": hashlib.sha256(data).hexdigest(),
-            "seed": seed,
-            "strength": strength,
             "workflow_id": workflow_id,
+            "workflow_values": workflow_values,
         },
         ensure_ascii=True,
         separators=(",", ":"),
         sort_keys=True,
     ).encode("utf-8")
     return hashlib.sha256(canonical).hexdigest()
+
+
+def _canonical_workflow_values(
+    *,
+    workflow_id: str,
+    preset_id: str | None,
+    composition: str,
+    background_style: str,
+    strength: str,
+    seed: int | None,
+) -> dict[str, Any]:
+    try:
+        accepted = workflow_input_names(workflow_id=workflow_id)
+    except UnknownWorkflowError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    except WorkflowRouterError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Workflow registry is unavailable.",
+        ) from exc
+    possible: dict[str, Any] = {
+        "preset_id": preset_id,
+        "composition": composition,
+        "background_style": background_style,
+        "strength": strength,
+        "seed": seed,
+    }
+    return {
+        name: possible[name]
+        for name in sorted(accepted)
+        if name in possible
+    }
+
+
+def _resolved_preset_id(
+    *,
+    workflow_id: str,
+    preset_id: str | None,
+    background_style: str,
+    composition: str,
+) -> str | None:
+    try:
+        input_names = workflow_input_names(workflow_id=workflow_id)
+    except UnknownWorkflowError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    except WorkflowRouterError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Workflow registry is unavailable.",
+        ) from exc
+
+    supplied = (preset_id or "").strip() or None
+    if "preset_id" not in input_names:
+        if supplied is not None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Workflow {workflow_id} does not accept preset_id.",
+            )
+        return None
+
+    try:
+        return resolve_published_preset(
+            preset_id=supplied,
+            background_style=background_style,
+            composition=composition,
+        )
+    except PresetSelectionError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        ) from exc
+    except PresetRegistryConfigurationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Preset registry is unavailable.",
+        ) from exc
 
 
 def _idempotency_key(value: str | None) -> str:
@@ -482,6 +566,8 @@ async def _submit_generation(
     strength: str,
     seed: int | None,
     settings: Settings,
+    request_id: str,
+    preset_id: str | None = None,
 ) -> tuple[str, str, str]:
     extension = _validate_image(data, content_type)
     async with _SUBMISSION_LOCK:
@@ -510,15 +596,23 @@ async def _submit_generation(
             raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail="ComfyUI upload failed.")
         source_image = f"{uploaded_subfolder}/{uploaded_name}" if uploaded_subfolder else uploaded_name
 
-        values: dict[str, Any] = {
+        possible_values: dict[str, Any] = {
             "source_image": source_image,
             "composition": composition,
             "background_style": background_style,
             "strength": strength,
+            "preset_id": preset_id,
+            "request_id": request_id,
         }
         if seed is not None:
-            values["seed"] = seed
+            possible_values["seed"] = seed
         try:
+            accepted_inputs = workflow_input_names(workflow_id=workflow_id)
+            values = {
+                name: value
+                for name, value in possible_values.items()
+                if name in accepted_inputs and value is not None
+            }
             resolved = build_prompt(workflow_id=workflow_id, values=values)
         except WorkflowRouterError as exc:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
@@ -580,7 +674,25 @@ def _failure_message(entry: dict[str, Any]) -> str | None:
                 continue
             detail = message[1].get("exception_message")
             if isinstance(detail, str) and detail:
-                return detail[:500]
+                match = re.match(r"^\[([A-Za-z0-9_]{2,80})\]", detail)
+                code = match.group(1) if match else None
+                safe_messages = {
+                    "AUDIT_STORAGE_UNAVAILABLE": "Generation audit storage is unavailable.",
+                    "IMAGE_TOO_LARGE": "An image input is too large for generation.",
+                    "INVALID_IMAGE": "An image input is invalid.",
+                    "INVALID_OPENAI_RESPONSE": "The image provider returned an invalid result.",
+                    "INVALID_PRESET_CONFIGURATION": "The generation preset is unavailable.",
+                    "INVALID_PROVIDER_PROFILE": "The image provider configuration is unavailable.",
+                    "OPENAI_API_KEY_MISSING": "The image provider credential is unavailable.",
+                    "OPENAI_REQUEST_FAILED": "The image provider request failed.",
+                    "PRESET_ASSET_DIMENSION_MISMATCH": "A generation preset asset is invalid.",
+                    "PRESET_ASSET_HASH_MISMATCH": "A generation preset asset is invalid.",
+                    "moderation_blocked": "The request was blocked during image safety review.",
+                    "rate_limit_exceeded": "The image provider is temporarily rate limited.",
+                }
+                if code in safe_messages:
+                    return f"{code}: {safe_messages[code]}"
+                return "Generation failed."
     return "Generation failed."
 
 
@@ -690,18 +802,41 @@ async def health() -> JSONResponse:
         checks["storage"] = True
     except (OSError, sqlite3.Error):
         checks["storage"] = False
-    for name, url in (
-        ("comfyui", f"{settings.comfyui_url}/system_stats"),
-        ("model_c", f"{settings.model_c_url}/health"),
-    ):
+    try:
+        workflow_input_names(workflow_id=settings.health_workflow_id)
+        checks["workflow_registry"] = True
+    except WorkflowRouterError:
+        checks["workflow_registry"] = False
+
+    upstreams = [("comfyui", f"{settings.comfyui_url}/system_stats")]
+    if settings.health_workflow_id == "model-c-v1":
+        upstreams.append(("model_c", f"{settings.model_c_url}/health"))
+    for name, url in upstreams:
         try:
             await _json_request("GET", url, timeout=5.0)
             checks[name] = True
         except HTTPException:
             checks[name] = False
+    if settings.health_workflow_id == "openai-gpt-image-2-low-v1":
+        try:
+            checks["preset_registry"] = published_preset_ids() == (
+                "natural_white__product_center",
+                "wood__product_center",
+            )
+        except PresetRegistryConfigurationError:
+            checks["preset_registry"] = False
+        try:
+            object_info = await _json_request(
+                "GET",
+                f"{settings.comfyui_url}/object_info/AdCreatorOpenAIImageGenerate",
+                timeout=5.0,
+            )
+            checks["openai_node"] = "AdCreatorOpenAIImageGenerate" in object_info
+        except HTTPException:
+            checks["openai_node"] = False
     healthy = all(checks.values())
     return JSONResponse(
-        {"ok": healthy, **checks},
+        {"ok": healthy, "health_workflow_id": settings.health_workflow_id, **checks},
         status_code=status.HTTP_200_OK if healthy else status.HTTP_503_SERVICE_UNAVAILABLE,
     )
 
@@ -710,6 +845,7 @@ async def health() -> JSONResponse:
 async def create_generation(
     image: Annotated[UploadFile, File()],
     workflow_id: Annotated[str, Form()] = "model-c-v1",
+    preset_id: Annotated[str | None, Form()] = None,
     composition: Annotated[Literal["closeup", "medium", "aerial", "handheld"], Form()] = "medium",
     background_style: Annotated[Literal["vivid", "wood", "white"], Form()] = "wood",
     strength: Annotated[Literal["low", "medium", "high"], Form()] = "medium",
@@ -730,14 +866,25 @@ async def create_generation(
     data = await image.read(MAX_IMAGE_BYTES + 1)
     content_type = image.content_type or "application/octet-stream"
     _validate_image(data, content_type)
-    request_hash = _request_hash(
-        data=data,
-        content_type=content_type,
+    selected_preset_id = _resolved_preset_id(
         workflow_id=workflow_id,
+        preset_id=preset_id,
+        background_style=background_style,
+        composition=composition,
+    )
+    canonical_values = _canonical_workflow_values(
+        workflow_id=workflow_id,
+        preset_id=selected_preset_id,
         composition=composition,
         background_style=background_style,
         strength=strength,
         seed=seed,
+    )
+    request_hash = _request_hash(
+        data=data,
+        content_type=content_type,
+        workflow_id=workflow_id,
+        workflow_values=canonical_values,
     )
     job_id = str(uuid.uuid4())
     generation_id = encode_generation_id(job_id=job_id, secret=settings.signing_key)
@@ -793,6 +940,8 @@ async def create_generation(
             strength=strength,
             seed=seed,
             settings=settings,
+            request_id=job_id,
+            preset_id=selected_preset_id,
         )
     except _PromptSubmissionUncertain as exc:
         message = str(exc.error.detail)

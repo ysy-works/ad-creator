@@ -36,6 +36,27 @@ def _safe_child(parent: Path, relative_path: str) -> Path:
     return candidate
 
 
+def workflow_input_names(
+    *,
+    workflow_id: str | None = None,
+    registry_path: str | Path = DEFAULT_REGISTRY_PATH,
+) -> set[str]:
+    """Return the public input names declared by one enabled workflow."""
+    registry_path = Path(registry_path).resolve()
+    registry = _read_json(registry_path)
+    selected_id = workflow_id or registry.get("default_workflow_id")
+    workflows = registry.get("workflows")
+    if not isinstance(workflows, dict) or selected_id not in workflows:
+        raise UnknownWorkflowError(f"Unknown workflow_id: {selected_id}")
+    entry = workflows[selected_id]
+    if not isinstance(entry, dict) or not entry.get("enabled"):
+        raise UnknownWorkflowError(f"Disabled workflow_id: {selected_id}")
+    bindings = entry.get("input_bindings")
+    if not isinstance(bindings, dict):
+        raise WorkflowRouterError(f"Workflow has no input bindings: {selected_id}")
+    return set(bindings)
+
+
 def build_prompt(
     *,
     workflow_id: str | None = None,
@@ -62,6 +83,17 @@ def build_prompt(
     unknown_values = set(values) - set(bindings)
     if unknown_values:
         raise WorkflowRouterError(f"Unsupported workflow values: {', '.join(sorted(unknown_values))}")
+
+    required_inputs = entry.get("required_inputs", ["source_image"])
+    if not isinstance(required_inputs, list) or any(
+        not isinstance(name, str) or name not in bindings for name in required_inputs
+    ):
+        raise WorkflowRouterError(f"Workflow has invalid required_inputs: {selected_id}")
+    missing_values = set(required_inputs) - set(values)
+    if missing_values:
+        raise WorkflowRouterError(
+            f"Missing workflow values: {', '.join(sorted(missing_values))}"
+        )
 
     for name, value in values.items():
         binding = bindings[name]

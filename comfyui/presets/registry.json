@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "provider_profile": "../config/providers/openai-gpt-image-2-low.json",
+  "slots": {
+    "natural_white__product_large": {
+      "enabled": false,
+      "status": "not_ready",
+      "family": "natural_white",
+      "composition": "closeup"
+    },
+    "natural_white__product_center": {
+      "enabled": true,
+      "status": "published",
+      "family": "natural_white",
+      "composition": "medium",
+      "preset_id": "instagram_white_diffuse_wall_table_v1",
+      "legacy_gateway": {
+        "background_style": "white",
+        "composition": "medium"
+      },
+      "bundle": "natural_white__product_center/preset.json"
+    },
+    "natural_white__aerial_shot": {
+      "enabled": false,
+      "status": "not_ready",
+      "family": "natural_white",
+      "composition": "aerial"
+    },
+    "natural_white__handheld_lifestyle": {
+      "enabled": false,
+      "status": "not_ready",
+      "family": "natural_white",
+      "composition": "handheld"
+    },
+    "wood__product_large": {
+      "enabled": false,
+      "status": "not_ready",
+      "family": "wood",
+      "composition": "closeup"
+    },
+    "wood__product_center": {
+      "enabled": true,
+      "status": "published",
+      "family": "wood",
+      "composition": "medium",
+      "preset_id": "instagram_wood_45deg_relational_v3",
+      "legacy_gateway": {
+        "background_style": "wood",
+        "composition": "medium"
+      },
+      "bundle": "wood__product_center/preset.json"
+    },
+    "wood__aerial_shot": {
+      "enabled": false,
+      "status": "not_ready",
+      "family": "wood",
+      "composition": "aerial"
+    },
+    "wood__handheld_lifestyle": {
+      "enabled": false,
+      "status": "not_ready",
+      "family": "wood",
+      "composition": "handheld"
+    },
+    "vivid__product_large": {
+      "enabled": false,
+      "status": "planned_family_replacement",
+      "family": "vivid",
+      "composition": "closeup"
+    },
+    "vivid__product_center": {
+      "enabled": false,
+      "status": "planned_family_replacement",
+      "family": "vivid",
+      "composition": "medium"
+    },
+    "vivid__aerial_shot": {
+      "enabled": false,
+      "status": "planned_family_replacement",
+      "family": "vivid",
+      "composition": "aerial"
+    },
+    "vivid__handheld_lifestyle": {
+      "enabled": false,
+      "status": "planned_family_replacement",
+      "family": "vivid",
+      "composition": "handheld"
+    }
+  }
+}

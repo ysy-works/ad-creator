@@ -12,15 +12,13 @@ Frontend
     -> HTTPS Generation Gateway (Bearer 인증)
       -> ComfyUI /upload/image + /prompt
       -> workflow registry
-        -> model-c-v1 custom node
-          -> HTTP POST: 기존 model-c /generate
-            -> GCP의 FLUX.1 Kontext NF4 파이프라인
-          <- 결과 이미지
+        -> model-c-v1 custom node -> 기존 model-c HTTP API
+        -> openai-gpt-image-2-low-v1 custom node -> OpenAI Images API
       -> ComfyUI SaveImage
     <- generation_id / 상태 / 결과
 ```
 
-ComfyUI와 `model-c`는 **별도 프로세스·별도 Python 환경**으로 실행합니다. 두 프로젝트가 모두 최상위 패키지명 `app`을 사용하고 GPU 라이브러리 버전도 다를 수 있어, 같은 프로세스에서 직접 import하지 않습니다.
+ComfyUI와 `model-c`는 **별도 프로세스·별도 Python 환경**으로 실행합니다. OpenAI 파일럿은 ComfyUI 프로세스가 직접 API를 호출하며 `OPENAI_API_KEY`는 그 프로세스에만 주입합니다.
 
 ## 브랜치 역할
 
@@ -51,9 +49,17 @@ comfyui/
     registry.json
     model-c-v1.api.json
     model-c-v1.ui.json
+    openai-gpt-image-2-low-v1.api.json
+    openai-gpt-image-2-low-v1.ui.json
+  presets/
+    registry.json
+    natural_white__product_center/
+    wood__product_center/
   custom_nodes/ad_creator/
     nodes/model_c.py
+    nodes/openai_image.py
     adapters/model_c.py
+    adapters/openai_image.py
   orchestrator/workflow_router.py
   scripts/validate_workflows.py
   tests/
@@ -81,6 +87,14 @@ POST /generate (multipart/form-data)
 
 `guidance_scale`, `steps`, `width`, `height`, 자유 프롬프트, 별도 레퍼런스 이미지는 현재 API 계약에 없으므로 임의로 노출하지 않습니다.
 
+## OpenAI GPT Image 2 low 파일럿
+
+`openai-gpt-image-2-low-v1`은 `gpt-image-2`, `quality=low`를 서버 profile에서 고정합니다. 서비스 ID는 `natural_white__product_center`, `wood__product_center` 두 개만 published이며 나머지 10개는 provider 호출 전에 거부합니다. 화이트는 사용자 원본만, 우드는 사용자 원본과 검수된 sanitized scene hint만 provider 입력으로 사용합니다. provider는 정확한 4:5 `1024x1280` PNG를 생성하고, ComfyUI는 crop 없이 `880x1100`으로 축소합니다.
+
+각 성공 실행은 Gateway job ID와 연결된 provider 원본 PNG 및 JSON audit manifest를 `output/ad_creator/audit`에 별도 저장합니다. manifest에는 preset/profile/prompt/input hash, OpenAI·client request ID, usage, 소요 시간과 결과 hash만 기록하며 prompt 본문, 비밀키, 사용자 원본 파일과 로컬 경로는 기록하지 않습니다.
+
+정확한 백엔드·프론트 계약과 전환 순서는 `deploy/OPENAI_GPT_IMAGE_2_PILOT_HANDOFF_KO.md`, 장기 구조는 `deploy/COMFYUI_REDESIGN_PLAN_KO.md`를 따릅니다.
+
 ## 실행 설정
 
 model-c 서버는 GCP에서 기존 환경으로 실행하고, ComfyUI에는 내부 주소만 주입합니다.
@@ -88,6 +102,9 @@ model-c 서버는 GCP에서 기존 환경으로 실행하고, ComfyUI에는 내�
 ```env
 AD_CREATOR_MODEL_C_URL=http://127.0.0.1:8001
 AD_CREATOR_MODEL_C_TIMEOUT_SECONDS=420
+OPENAI_API_KEY=서버에서만-주입
+OPENAI_IMAGE_TIMEOUT_SECONDS=1200
+AD_CREATOR_OPENAI_AUDIT_DIR=/opt/comfyui/ComfyUI/output/ad_creator/audit
 ```
 
 - 같은 VM이면 loopback 주소를 사용합니다.
@@ -101,7 +118,7 @@ ComfyUI tag: v0.28.0
 commit: 700821e1364eaab0e8f21c538a2131719fec57bf
 ```
 
-`comfyui/custom_nodes/ad_creator`를 ComfyUI의 `custom_nodes/ad_creator`에 복사하거나 외부 custom node 경로로 연결한 뒤 실행합니다.
+`comfyui/custom_nodes/ad_creator`를 ComfyUI의 `custom_nodes/ad_creator`에 심볼릭 링크로 연결한 뒤 실행합니다. 프리셋과 provider profile을 함께 찾기 위해 디렉터리만 따로 복사하는 설치 방식은 지원하지 않습니다.
 
 ## 백엔드 호출 예시
 
@@ -158,6 +175,7 @@ composition        closeup | medium | aerial | handheld
 background_style   vivid | wood | white
 strength           low | medium | high
 seed               선택 정수
+preset_id          OpenAI workflow에서 canonical service preset ID
 ```
 
 Gateway는 업로드 후 즉시 `202 Accepted`와 서명된 `generation_id`를 반환합니다. 백엔드는 상태 URL을 폴링하고 `succeeded`가 되면 결과 URL을 내려받습니다.
@@ -188,6 +206,7 @@ AD_CREATOR_GATEWAY_API_KEY=32자-이상의-랜덤-비밀키
 AD_CREATOR_GENERATION_SIGNING_KEY=API-키와-다른-32자-이상의-비밀키
 AD_CREATOR_GATEWAY_DB=/var/lib/ad-creator-gateway/gateway.sqlite3
 AD_CREATOR_MAX_QUEUED=3
+AD_CREATOR_HEALTH_WORKFLOW_ID=model-c-v1
 ```
 
 Gateway는 다음처럼 로컬에서 실행합니다.
@@ -227,6 +246,7 @@ Internet :443
 
 ```bash
 python comfyui/scripts/validate_workflows.py
+python comfyui/scripts/validate_presets.py
 python -B -m unittest discover -s comfyui/tests -v
 ```
 
@@ -248,7 +268,7 @@ model-c GET /health
 | `workflow_id` | 상태 | 설명 |
 | --- | --- | --- |
 | `model-c-v1` | 현재 기본값 | 기존 NF4 API 파이프라인 |
-| `openai-v1` | 후속 | 전처리·프롬프트 조립·OpenAI API·후처리 파이프라인 |
+| `openai-gpt-image-2-low-v1` | 두 프리셋 파일럿 | GPT Image 2 low·4:5 파이프라인 |
 
 - 모델의 내부 구현만 바뀌고 입출력 계약이 같으면 같은 ID를 유지합니다.
 - 필수 입력, 노드 연결, 결과 계약이 바뀌면 새 ID를 추가합니다.

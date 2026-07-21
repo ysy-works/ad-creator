@@ -103,13 +103,30 @@ def validate_registry(registry_path: Path) -> list[str]:
         if output_node_id not in api_workflow:
             raise WorkflowValidationError(f"{workflow_id}: output_node_id is missing from API workflow.")
 
-        for binding_name, binding in entry.get("input_bindings", {}).items():
+        bindings = entry.get("input_bindings", {})
+        if not isinstance(bindings, dict):
+            raise WorkflowValidationError(
+                f"{workflow_id}: input_bindings must be an object."
+            )
+        for binding_name, binding in bindings.items():
+            if not isinstance(binding, dict):
+                raise WorkflowValidationError(
+                    f"{workflow_id}: input binding {binding_name} must be an object."
+                )
             node_id = str(binding.get("node_id", ""))
             input_name = binding.get("input")
             if node_id not in api_workflow or input_name not in api_workflow[node_id]["inputs"]:
                 raise WorkflowValidationError(
                     f"{workflow_id}: invalid input binding {binding_name}."
                 )
+        required_inputs = entry.get("required_inputs", ["source_image"])
+        if not isinstance(required_inputs, list) or any(
+            not isinstance(name, str) or name not in bindings
+            for name in required_inputs
+        ):
+            raise WorkflowValidationError(
+                f"{workflow_id}: required_inputs must reference declared bindings."
+            )
         validated.append(workflow_id)
     return validated
 

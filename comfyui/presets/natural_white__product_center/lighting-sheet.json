@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0.0",
+  "lighting_sheet_id": "instagram_white_diffuse_wall_table_sheet_v1",
+  "mood": "quiet warm-neutral white wall and table under one large left diffused window",
+  "reference_cluster": {
+    "anchor_preset_id": "instagram_white_diffuse_wall_table_v1",
+    "minimum_cluster_size": 6,
+    "runtime_pixels_allowed": false,
+    "selection_rule": "single product, top-heavy white negative space, low wall-table boundary and no direct sun patch",
+    "source_images": [
+      "화이트_뉴트럴_저대비_자연광/1831f62e755ecf16cfe3012825f165e7.jpg",
+      "화이트_뉴트럴_저대비_자연광/6d6cec98e6349d2f6af18368531a0d1f.jpg",
+      "화이트_뉴트럴_저대비_자연광/b4b4612e26c6002b1eddc8a95376c94c.jpg",
+      "화이트_뉴트럴_저대비_자연광/d86ca8a827437a0c9ef31bba55251cdc.jpg",
+      "화이트_뉴트럴_저대비_자연광/fef6392ec7efc941966905280ad0688c.jpg",
+      "화이트_뉴트럴_저대비_자연광/미디엄/45d43a2ace2d8cff291eec9395be7c16.jpg"
+    ]
+  },
+  "key_light": {
+    "source": "one very large side window diffused by an overcast sky or thin curtain",
+    "direction": "left to right with a low-density rightward shadow",
+    "relative_size": "very large, producing broad highlights and soft attached shadows",
+    "subject_to_wall_distance_cm": [35, 80]
+  },
+  "ambient_fill": "weak neutral room bounce below the key; preserve local contact and glass edge modeling",
+  "shadow_contract": {
+    "density": [0.1, 0.22],
+    "edge": "soft, attached and gradually fading",
+    "attachment": "small contact occlusion at the base plus one broad low-density rightward cast shadow",
+    "transparent_material": "glass retains a faint connected transmitted lift and background-dependent refraction",
+    "contact_shadow": {
+      "opacity": [0.16, 0.3],
+      "footprint": [0.04, 0.14],
+      "behavior": "small denser attachment directly beneath the product base"
+    },
+    "cast_shadow": {
+      "opacity": [0.05, 0.14],
+      "footprint": [0.28, 0.72],
+      "behavior": "broad soft rightward falloff without a graphic silhouette"
+    },
+    "transmitted_light": {
+      "opacity": [0.08, 0.28],
+      "footprint": [0.16, 0.5],
+      "behavior": "faint beverage-colored lift only inside a physically connected transparent shadow"
+    },
+    "qa_ratios": {
+      "cast_area_to_cup_bbox": [0.25, 1.1],
+      "wrist_length_to_cup_height": [0.0, 0.0],
+      "transparent_lift_inside_shadow": [0.06, 0.34]
+    }
+  },
+  "capture_contract": {
+    "exposure_compensation_ev": [-0.16, 0.04],
+    "hdr": "restrained social-photo HDR with protected white detail and no halo",
+    "white_balance": "warm-neutral white with quiet neutral-to-cool shadows",
+    "texture": "subtle wall and table irregularity, readable product detail and faint luminance grain"
+  },
+  "grade_strengths": {
+    "natural": 0.16,
+    "balanced": 0.28,
+    "expressive": 0.4
+  },
+  "forbidden": [
+    "direct sunbeam or bright graphic light patch",
+    "hard-edged shadow",
+    "shadowless studio sweep",
+    "clipped broad white area",
+    "heavy beige cast",
+    "portrait-mode cutout blur"
+  ],
+  "reference_anchor": {
+    "asset_id": "ref_edbb2b01b3166422",
+    "pixel_sha256": "00dc0f2e7b2683eec205599b2420e259058e86fa4de9b4ac9c24bfbc34daca46",
+    "role": "offline camera, composition, white-surface and diffuse-light measurement authority"
+  },
+  "camera_coupling": {
+    "support_plane": "one matte white tabletop below a low wall-table boundary in a 50-60mm normal perspective",
+    "shadow_projection": "product highlights, base contact and the soft rightward table shadow agree with the same left window",
+    "depth_response": "product scale, support-plane edge and gentle tonal falloff establish depth without portrait blur"
+  },
+  "color_separation": {
+    "lit_neutral": "warm-neutral textured white below clipping",
+    "shadow_neutral": "quiet neutral to faintly cool gray",
+    "material_locality": "the user product keeps source-authoritative local color while wall and table remain low-saturation neutrals"
+  },
+  "qa_geometry": {
+    "shadow_vector_tolerance_degrees": 18,
+    "lit_area_tolerance": 0.12,
+    "penumbra_ratio_tolerance": 0.12
+  }
+}

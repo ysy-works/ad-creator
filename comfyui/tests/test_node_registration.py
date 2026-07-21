@@ -19,11 +19,15 @@ class NodeRegistrationTest(unittest.TestCase):
             self.assertIn(class_type, ad_creator.NODE_CLASS_MAPPINGS)
 
     def test_registered_node_has_legacy_comfyui_contract(self):
-        node = ad_creator.NODE_CLASS_MAPPINGS["AdCreatorModelCGenerate"]
-        self.assertTrue(callable(node.INPUT_TYPES))
-        self.assertEqual(node.FUNCTION, "generate")
-        self.assertEqual(node.RETURN_TYPES, ("IMAGE", "STRING"))
-        self.assertEqual(node.CATEGORY, "Ad Creator")
+        for node_name in (
+            "AdCreatorModelCGenerate",
+            "AdCreatorOpenAIImageGenerate",
+        ):
+            node = ad_creator.NODE_CLASS_MAPPINGS[node_name]
+            self.assertTrue(callable(node.INPUT_TYPES))
+            self.assertEqual(node.FUNCTION, "generate")
+            self.assertEqual(node.RETURN_TYPES, ("IMAGE", "STRING"))
+            self.assertEqual(node.CATEGORY, "Ad Creator")
 
 
 if __name__ == "__main__":

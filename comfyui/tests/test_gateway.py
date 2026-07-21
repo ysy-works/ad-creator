@@ -36,6 +36,7 @@ from comfyui.gateway.app import (
     decode_generation_id,
     encode_generation_id,
 )
+from comfyui.orchestrator import PresetRegistryConfigurationError
 
 
 API_KEY = "test-key-" + "x" * 40
@@ -103,7 +104,14 @@ class GatewayHelpersTest(unittest.TestCase):
                 ],
             }
         }
-        self.assertEqual(_failure_message(failed), "model failed")
+        self.assertEqual(_failure_message(failed), "Generation failed.")
+        failed["status"]["messages"][0][1]["exception_message"] = (
+            "[rate_limit_exceeded] provider details must stay private"
+        )
+        self.assertEqual(
+            _failure_message(failed),
+            "rate_limit_exceeded: The image provider is temporarily rate limited.",
+        )
 
     def test_extracts_queue_prompt_ids(self):
         self.assertEqual(_queued_prompt_ids([[1, "a"], [2, "b"]]), {"a", "b"})
@@ -231,15 +239,47 @@ class GatewayApiTest(unittest.TestCase):
             response.json(), {"ok": False, "gateway": "misconfigured"}
         )
 
+    @patch("comfyui.gateway.app._json_request", new_callable=AsyncMock)
+    def test_openai_health_does_not_require_model_c(self, json_request):
+        async def response_for(method, url, **kwargs):
+            if "/object_info/" in url:
+                return {"AdCreatorOpenAIImageGenerate": {"input": {}}}
+            return {"system": "ready"}
+
+        json_request.side_effect = response_for
+        with patch.dict(
+            os.environ,
+            {"AD_CREATOR_HEALTH_WORKFLOW_ID": "openai-gpt-image-2-low-v1"},
+            clear=False,
+        ):
+            response = self.client.get("/health")
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertTrue(payload["ok"])
+        self.assertEqual(
+            payload["health_workflow_id"], "openai-gpt-image-2-low-v1"
+        )
+        self.assertTrue(payload["workflow_registry"])
+        self.assertTrue(payload["preset_registry"])
+        self.assertTrue(payload["openai_node"])
+        self.assertTrue(payload["comfyui"])
+        self.assertNotIn("model_c", payload)
+        self.assertEqual(json_request.await_count, 2)
+
     @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
     def test_submits_generation_and_returns_signed_job(self, submit_generation):
         prompt_id = str(uuid.uuid4())
-        submit_generation.return_value = (prompt_id, "model-c-v1", "3")
+        submit_generation.return_value = (
+            prompt_id,
+            "openai-gpt-image-2-low-v1",
+            "3",
+        )
         response = self.client.post(
             "/v1/generations",
             headers=_request_headers(),
             files={"image": ("input.png", _png(), "image/png")},
             data={
+                "workflow_id": "openai-gpt-image-2-low-v1",
                 "composition": "medium",
                 "background_style": "white",
                 "strength": "low",
@@ -257,6 +297,99 @@ class GatewayApiTest(unittest.TestCase):
         self.assertEqual(decoded["j"], record["job_id"])
         self.assertEqual(record["prompt_id"], prompt_id)
         self.assertEqual(record["output_node_id"], "3")
+        self.assertEqual(
+            submit_generation.await_args.kwargs["preset_id"],
+            "natural_white__product_center",
+        )
+        self.assertEqual(
+            submit_generation.await_args.kwargs["request_id"], record["job_id"]
+        )
+
+    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    def test_explicit_preset_id_selects_published_wood_preset(self, submit_generation):
+        submit_generation.return_value = (
+            str(uuid.uuid4()),
+            "openai-gpt-image-2-low-v1",
+            "3",
+        )
+        response = self.client.post(
+            "/v1/generations",
+            headers=_request_headers("explicit-preset-key"),
+            files={"image": ("input.png", _png(), "image/png")},
+            data={
+                "workflow_id": "openai-gpt-image-2-low-v1",
+                "preset_id": "wood__product_center",
+            },
+        )
+        self.assertEqual(response.status_code, 202)
+        self.assertEqual(
+            submit_generation.await_args.kwargs["preset_id"], "wood__product_center"
+        )
+
+    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    def test_unpublished_preset_is_rejected_before_submission(self, submit_generation):
+        response = self.client.post(
+            "/v1/generations",
+            headers=_request_headers("unpublished-preset-key"),
+            files={"image": ("input.png", _png(), "image/png")},
+            data={
+                "workflow_id": "openai-gpt-image-2-low-v1",
+                "preset_id": "natural_white__product_large",
+            },
+        )
+        self.assertEqual(response.status_code, 400)
+        submit_generation.assert_not_awaited()
+
+    @patch("comfyui.gateway.app.resolve_published_preset")
+    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    def test_broken_preset_registry_is_service_unavailable(
+        self, submit_generation, resolve_preset
+    ):
+        resolve_preset.side_effect = PresetRegistryConfigurationError("broken")
+        response = self.client.post(
+            "/v1/generations",
+            headers=_request_headers("broken-preset-registry"),
+            files={"image": ("input.png", _png(), "image/png")},
+            data={"workflow_id": "openai-gpt-image-2-low-v1"},
+        )
+        self.assertEqual(response.status_code, 503)
+        self.assertEqual(response.json()["detail"], "Preset registry is unavailable.")
+        submit_generation.assert_not_awaited()
+
+    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    def test_openai_idempotency_ignores_legacy_fields(self, submit_generation):
+        submit_generation.return_value = (
+            str(uuid.uuid4()),
+            "openai-gpt-image-2-low-v1",
+            "3",
+        )
+        image = _png()
+        first = self.client.post(
+            "/v1/generations",
+            headers=_request_headers("openai-canonical-retry"),
+            files={"image": ("input.png", image, "image/png")},
+            data={
+                "workflow_id": "openai-gpt-image-2-low-v1",
+                "preset_id": "natural_white__product_center",
+            },
+        )
+        second = self.client.post(
+            "/v1/generations",
+            headers=_request_headers("openai-canonical-retry"),
+            files={"image": ("input.png", image, "image/png")},
+            data={
+                "workflow_id": "openai-gpt-image-2-low-v1",
+                "preset_id": "natural_white__product_center",
+                "background_style": "white",
+                "composition": "aerial",
+                "strength": "high",
+                "seed": "42",
+            },
+        )
+        self.assertEqual(first.status_code, 202)
+        self.assertEqual(second.status_code, 202)
+        self.assertEqual(first.json()["generation_id"], second.json()["generation_id"])
+        self.assertEqual(submit_generation.await_count, 1)
 
     @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
     def test_same_idempotent_request_is_submitted_once(self, submit_generation):
@@ -292,10 +425,12 @@ class GatewayApiTest(unittest.TestCase):
                 data=data,
                 content_type="image/png",
                 workflow_id="model-c-v1",
-                composition="medium",
-                background_style="wood",
-                strength="medium",
-                seed=None,
+                workflow_values={
+                    "background_style": "wood",
+                    "composition": "medium",
+                    "seed": None,
+                    "strength": "medium",
+                },
             ),
             workflow_id="model-c-v1",
             output_node_id="pending",
@@ -306,6 +441,7 @@ class GatewayApiTest(unittest.TestCase):
             "/v1/generations",
             headers=_request_headers(request_key),
             files={"image": ("input.png", data, "image/png")},
+            data={"workflow_id": "model-c-v1"},
         )
         self.assertEqual(duplicate.status_code, 409)
         self.assertEqual(duplicate.headers["Retry-After"], "2")
@@ -340,10 +476,12 @@ class GatewayApiTest(unittest.TestCase):
                 data=data,
                 content_type="image/png",
                 workflow_id="model-c-v1",
-                composition="medium",
-                background_style="wood",
-                strength="medium",
-                seed=None,
+                workflow_values={
+                    "background_style": "wood",
+                    "composition": "medium",
+                    "seed": None,
+                    "strength": "medium",
+                },
             ),
             workflow_id="model-c-v1",
             output_node_id="pending",
@@ -360,6 +498,7 @@ class GatewayApiTest(unittest.TestCase):
             "/v1/generations",
             headers=_request_headers(request_key),
             files={"image": ("input.png", data, "image/png")},
+            data={"workflow_id": "model-c-v1"},
         )
         self.assertEqual(response.status_code, 202)
         self.assertEqual(response.json()["generation_id"], generation_id)
@@ -538,6 +677,7 @@ class GatewayQueueTest(unittest.IsolatedAsyncioTestCase):
                             strength="medium",
                             seed=None,
                             settings=Settings.from_env(),
+                            request_id=str(uuid.uuid4()),
                         )
                 self.assertEqual(caught.exception.status_code, 429)
 

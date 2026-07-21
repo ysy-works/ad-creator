@@ -1,5 +1,9 @@
 # Backend handoff: ComfyUI Gateway v1
 
+> OpenAI GPT Image 2 low 두-프리셋 파일럿은
+> `OPENAI_GPT_IMAGE_2_PILOT_HANDOFF_KO.md`의 계약을 우선합니다.
+> 이 문서 아래의 `model-c-v1` 계약은 롤백 호환을 위해 유지됩니다.
+
 백엔드는 ComfyUI `8188`이나 model-c `8001`을 직접 호출하지 않고 HTTPS Gateway만 호출합니다.
 
 ## 환경변수

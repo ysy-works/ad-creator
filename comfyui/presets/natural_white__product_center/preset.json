@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "slot_id": "natural_white__product_center",
+  "preset_id": "instagram_white_diffuse_wall_table_v1",
+  "family": "natural_white",
+  "composition": "medium",
+  "status": "published",
+  "source_review_status": "passed_by_user_review",
+  "prompt_template": {
+    "path": "prompt-template.txt",
+    "sha256": "f3ca2c69e5ac54a5a4e3c0bd45ebc9b71c70bc9280da3d3c3a8806a9d31554f8"
+  },
+  "lighting_sheet": {
+    "path": "lighting-sheet.json",
+    "sha256": "8dbb0d25849168546931912977111935d4567112d36bc222105d3ea8aa3549f1"
+  },
+  "grade_profile": {
+    "path": "grade-profile.json",
+    "sha256": "6b360f212e7d34b3263487b8c61b3d293440b47fc2210fee1c1e767b7be9f69a",
+    "apply_in_pilot": false
+  },
+  "hint_images": [
+    {
+      "role": "authoring_reference_only",
+      "path": "../assets/white-medium-authoring-reference.jpg",
+      "sha256": "b779788b91b542cecc628e9a4855d1db705bcb2e24c732598969c5d6ca8f915b",
+      "width": 675,
+      "height": 1200,
+      "send_to_provider": false,
+      "reason": "The approved white preset is contract-driven; raw authoring pixels must not control runtime generation."
+    }
+  ],
+  "delivery": {
+    "generation_size": "1024x1280",
+    "safe_crop": "none_exact_4x5",
+    "width": 880,
+    "height": 1100,
+    "format": "png"
+  },
+  "qa_contract": {
+    "phase": "common_qa_pending",
+    "hard_gates": ["identity", "logo_ocr", "crop"],
+    "comparative_scores": ["naturalness", "mood_adherence"]
+  }
+}

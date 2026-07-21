@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "provider": "openai_images_api",
+  "model": "gpt-image-2",
+  "endpoint": "https://api.openai.com/v1/images/edits",
+  "quality": "low",
+  "size": "1024x1280",
+  "output_format": "png",
+  "moderation": "auto",
+  "automatic_retries": 0,
+  "maximum_input_images": 16,
+  "delivery_size": [880, 1100]
+}

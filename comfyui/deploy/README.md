@@ -105,10 +105,14 @@ sudo bash -c '
     "AD_CREATOR_GATEWAY_API_KEY=$api_key" \
     "AD_CREATOR_GENERATION_SIGNING_KEY=$signing_key" \
     "AD_CREATOR_GATEWAY_DB=/var/lib/ad-creator-gateway/gateway.sqlite3" \
-    "AD_CREATOR_MAX_QUEUED=3" > /etc/ad-creator/gateway.env
+    "AD_CREATOR_MAX_QUEUED=3" \
+    "AD_CREATOR_HEALTH_WORKFLOW_ID=model-c-v1" > /etc/ad-creator/gateway.env
   printf "%s\n" \
     "AD_CREATOR_MODEL_C_URL=http://127.0.0.1:8001" \
-    "AD_CREATOR_MODEL_C_TIMEOUT_SECONDS=420" > /etc/ad-creator/comfyui.env
+    "AD_CREATOR_MODEL_C_TIMEOUT_SECONDS=420" \
+    "OPENAI_IMAGE_TIMEOUT_SECONDS=1200" \
+    "AD_CREATOR_OPENAI_AUDIT_DIR=/opt/comfyui/ComfyUI/output/ad_creator/audit" \
+    > /etc/ad-creator/comfyui.env
 '
 sudo install -m 0644 /opt/ad-creator/comfyui/deploy/systemd/*.service /etc/systemd/system/
 sudo install -m 0644 /opt/ad-creator/comfyui/deploy/tmpfiles.conf \
@@ -117,6 +121,11 @@ sudo systemd-tmpfiles --create /etc/tmpfiles.d/ad-creator-comfyui.conf
 sudo systemctl daemon-reload
 sudo systemctl enable --now ad-creator-comfyui ad-creator-gateway
 ```
+
+OpenAI 파일럿을 실행하기 전에는 실제 `OPENAI_API_KEY`를 Secret Manager 또는
+권한 `0640`의 `/etc/ad-creator/comfyui.env`에 별도로 주입합니다. 실제 키를 이
+명령, Git, 셸 히스토리 또는 채팅에 넣지 않습니다. 두 프리셋 파일럿의 전환 순서는
+`OPENAI_GPT_IMAGE_2_PILOT_HANDOFF_KO.md`를 따릅니다.
 
 API 인증키와 generation 서명키는 서로 다른 값으로 서버에서 생성합니다. API 키만 백엔드에 안전하게 전달하며, 서명키는 GCP 밖으로 내보내지 않습니다. 키를 Git, 로그 또는 채팅에 출력하지 않습니다. 기존 env 파일이 있으면 설치 명령은 실패합니다.
 

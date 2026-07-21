@@ -1,6 +1,7 @@
 import io
 import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -13,6 +14,7 @@ CUSTOM_NODES_DIR = Path(__file__).resolve().parents[1] / "custom_nodes"
 sys.path.insert(0, str(CUSTOM_NODES_DIR))
 
 from ad_creator.nodes.model_c import AdCreatorModelCGenerate
+from ad_creator.nodes.openai_image import AdCreatorOpenAIImageGenerate
 
 
 class NodeExecutionTest(unittest.TestCase):
@@ -67,6 +69,64 @@ class NodeExecutionTest(unittest.TestCase):
         self.assertEqual(metadata["output_storage"], "comfyui_save_image")
         self.assertIsNotNone(observed_input)
         self.assertFalse(observed_input.exists())
+
+    def test_openai_node_calls_published_preset_adapter_and_cleans_temp_input(self):
+        observed_input: Path | None = None
+
+        def fake_run_openai_image(**kwargs):
+            nonlocal observed_input
+            observed_input = Path(kwargs["image_path"])
+            self.assertTrue(observed_input.is_file())
+            self.assertEqual(
+                kwargs["preset_slot_id"], "natural_white__product_center"
+            )
+            self.assertEqual(kwargs["run_id"], "gateway-job-123")
+            self.assertTrue(str(kwargs["audit_dir"]).endswith("/audit"))
+            with Image.open(observed_input) as prepared:
+                self.assertEqual(prepared.format, "JPEG")
+                self.assertLessEqual(max(prepared.size), 3072)
+            return (
+                Image.new("RGB", (880, 1100), (240, 235, 225)),
+                {
+                    "provider": "openai_images_api",
+                    "model": "gpt-image-2",
+                    "quality": "low",
+                },
+            )
+
+        source = torch.zeros((1, 12, 4096, 3), dtype=torch.float32)
+        with tempfile.TemporaryDirectory() as directory:
+            with patch.dict(
+                "os.environ",
+                {"AD_CREATOR_OPENAI_AUDIT_DIR": str(Path(directory) / "audit")},
+                clear=False,
+            ):
+                with patch(
+                    "ad_creator.nodes.openai_image.run_openai_image",
+                    side_effect=fake_run_openai_image,
+                ):
+                    image, metadata_json = AdCreatorOpenAIImageGenerate().generate(
+                        image=source,
+                        preset_id="natural_white__product_center",
+                        request_id="gateway-job-123",
+                    )
+
+        self.assertEqual(tuple(image.shape), (1, 1100, 880, 3))
+        metadata = json.loads(metadata_json)
+        self.assertEqual(metadata["model"], "gpt-image-2")
+        self.assertEqual(metadata["quality"], "low")
+        self.assertIsNotNone(observed_input)
+        self.assertFalse(observed_input.exists())
+
+    def test_openai_node_always_disables_comfyui_cache(self):
+        self.assertNotEqual(
+            AdCreatorOpenAIImageGenerate.IS_CHANGED(
+                None, "natural_white__product_center", "request-1"
+            ),
+            AdCreatorOpenAIImageGenerate.IS_CHANGED(
+                None, "natural_white__product_center", "request-1"
+            ),
+        )
 
 
 if __name__ == "__main__":

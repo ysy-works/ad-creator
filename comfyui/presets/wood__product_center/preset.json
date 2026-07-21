@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "slot_id": "wood__product_center",
+  "preset_id": "instagram_wood_45deg_relational_v3",
+  "family": "wood",
+  "composition": "medium",
+  "status": "published",
+  "source_review_status": "passed_by_user_review",
+  "prompt_template": {
+    "path": "prompt-template.txt",
+    "sha256": "aab42e3fa422b2a50539428c3c0603115a564e8bc4d8c5422b6ba6a514856806"
+  },
+  "lighting_sheet": {
+    "path": "lighting-sheet.json",
+    "sha256": "faa451866022bf10d6ffe0d316b57e8f71b58301869a688c7558ef5629ded9dc"
+  },
+  "grade_profile": {
+    "path": "grade-profile.json",
+    "sha256": "9a6a81287444095d1d1371804f6c943b8765a57e710cf0918680e5286d0b343b",
+    "apply_in_pilot": false
+  },
+  "hint_images": [
+    {
+      "role": "sanitized_scene_hint",
+      "path": "../assets/wood-medium-scene-hint.png",
+      "sha256": "93fc553f83d85c4d3d4cbeea8cb250b1dff1602e6352a21256386108f6ff61f7",
+      "width": 768,
+      "height": 1024,
+      "send_to_provider": true,
+      "allowed_transfer": ["camera_distance", "subject_scale", "round_table_relationships", "light_distribution", "palette"],
+      "forbidden_transfer": ["reference_beverage", "text", "logo", "exact_props", "exact_shadow"]
+    },
+    {
+      "role": "material_review_board",
+      "path": "../assets/wood-medium-material-board.png",
+      "sha256": "a5b905fa5800d32dc33c8e601aaddb2e62941ccc56746a0aa4c59649295a155d",
+      "width": 512,
+      "height": 256,
+      "send_to_provider": false,
+      "allowed_transfer": ["wood_color", "wood_chroma", "wood_grain", "wood_finish"]
+    }
+  ],
+  "delivery": {
+    "generation_size": "1024x1280",
+    "safe_crop": "none_exact_4x5",
+    "width": 880,
+    "height": 1100,
+    "format": "png"
+  },
+  "qa_contract": {
+    "phase": "common_qa_pending",
+    "hard_gates": ["identity", "logo_ocr", "crop"],
+    "comparative_scores": ["naturalness", "mood_adherence"]
+  }
+}
