@@ -211,17 +211,35 @@ const BookmarkIcon = ({ filled }) => (
   </svg>
 );
 
-// 촬영 가이드용 "i" 아이콘. 마우스를 올리면(또는 포커스하면) 툴팁으로
+// 촬영 가이드용 "i" 아이콘. 마우스를 올리면(호버) 또는 클릭/탭하면 툴팁으로
 // 안내 문구를 보여준다. 팀장 요청 사항: 업로드 안내 문구 옆에 배치,
 // 이미지 없이 텍스트 안내만.
 // -> 기본은 아이콘 중앙 기준으로 툴팁을 가운데 정렬하는데, 아이콘이
 //    화면 오른쪽 가장자리에 가까우면 툴팁이 화면 밖으로 넘어가던 버그가 있었음.
-//    호버/포커스 시점에 실제 위치를 측정해서, 화면 양쪽 여백(12px)을
-//    넘어가지 않도록 가로 위치를 보정한다.
+// -> 1차 수정(hover/focus 시점에 위치 보정)까지는 데스크톱에서만 제대로 동작했음.
+//    모바일 터치에서는 tap이 CSS :hover만 트리거하고 실제 mouseenter/focus
+//    JS 이벤트는 안 붙는 경우가 있어서, 위치 보정 함수 자체가 아예 실행이
+//    안 된 채로 기본(중앙 정렬) 위치로 툴팁만 보이는 문제가 있었음.
+// -> open 상태를 React state로 직접 관리하고, "보여주기"와 "위치 계산"을
+//    항상 같은 클릭/탭 핸들러 안에서 함께 실행하도록 바꿔서 모바일에서도
+//    확실히 위치 보정이 먼저 되고 나서 보이도록 수정.
 function GuideIcon({ text }) {
   const iconRef = useRef(null);
   const tooltipRef = useRef(null);
   const [offset, setOffset] = useState(0);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    // 탭한 아이콘 바깥을 클릭/탭하면 닫히도록 (모바일에서 열어둔 채 방치 방지)
+    const handleOutside = (e) => {
+      if (iconRef.current && !iconRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("click", handleOutside);
+    return () => document.removeEventListener("click", handleOutside);
+  }, [open]);
 
   if (!text) return null;
 
@@ -248,13 +266,29 @@ function GuideIcon({ text }) {
     setOffset(correction);
   };
 
+  // 위치부터 계산한 다음에 열어야, 잘못된 위치가 잠깐이라도 보이지 않는다.
+  const openWithReposition = () => {
+    reposition();
+    setOpen(true);
+  };
+
   return (
     <span
-      className="guide-icon"
+      className={`guide-icon${open ? " is-open" : ""}`}
       tabIndex={0}
       ref={iconRef}
-      onMouseEnter={reposition}
-      onFocus={reposition}
+      onMouseEnter={openWithReposition}
+      onMouseLeave={() => setOpen(false)}
+      onFocus={openWithReposition}
+      onBlur={() => setOpen(false)}
+      onClick={(e) => {
+        e.stopPropagation();
+        if (open) {
+          setOpen(false);
+        } else {
+          openWithReposition();
+        }
+      }}
     >
       <span className="guide-icon__mark" aria-hidden="true">i</span>
       <span
@@ -713,7 +747,7 @@ function App({ lang = "ko", setLang }) {
           font-weight: 700;
           font-style: italic;
           font-family: Georgia, 'Times New Roman', serif;
-          cursor: default;
+          cursor: pointer;
           vertical-align: middle;
         }
         .guide-icon__tooltip {
@@ -730,6 +764,7 @@ function App({ lang = "ko", setLang }) {
           font-style: normal;
           line-height: 1.5;
           text-align: left;
+          word-break: keep-all;
           padding: 9px 12px;
           border-radius: 8px;
           box-shadow: 0 6px 16px rgba(43,36,32,0.18);
@@ -739,9 +774,7 @@ function App({ lang = "ko", setLang }) {
           pointer-events: none;
           z-index: 20;
         }
-        .guide-icon:hover .guide-icon__tooltip,
-        .guide-icon:focus .guide-icon__tooltip,
-        .guide-icon:focus-visible .guide-icon__tooltip {
+        .guide-icon.is-open .guide-icon__tooltip {
           opacity: 1;
           visibility: visible;
         }
