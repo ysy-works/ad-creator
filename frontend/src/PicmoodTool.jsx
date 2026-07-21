@@ -766,8 +766,10 @@ function App({ lang = "ko", setLang }) {
         .guide-icon__tooltip {
           width: max-content;
           max-width: 240px;
-          background: var(--ink);
-          color: var(--surface);
+          /* body로 포탈되어 .cafe-app 밖으로 나가므로 var(--ink)/var(--surface)를
+             못 받아옴 -> 실제 값을 직접 지정 (index.css: --ink #2B2420, --surface #FFFDF9) */
+          background: #2B2420;
+          color: #FFFDF9;
           font-size: 12px;
           font-weight: 500;
           font-style: normal;
