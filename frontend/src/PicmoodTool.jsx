@@ -385,6 +385,7 @@ function App({ lang = "ko", setLang }) {
           result_image_base64: resultImage,
           menu_name: menuName || null,
           purpose: purpose === "기타" ? (purposeOther || null) : (purpose || null),
+          lang,
         }),
       });
 
