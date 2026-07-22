@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "slot_id": "natural_white__aerial_shot",
+  "preset_id": "instagram_white_neutral_overhead_spatial_v1",
+  "family": "natural_white",
+  "composition": "aerial",
+  "status": "published",
+  "source_review_status": "passed_by_user_review",
+  "prompt_template": {
+    "path": "prompt-template.txt",
+    "sha256": "f137de84d115a6bdbeea585013494bff4fd05e06b55d7585ff358780ca7c961d"
+  },
+  "lighting_sheet": {
+    "path": "lighting-sheet.json",
+    "sha256": "324fa0b246557719ca7f61457fed101c28820242b85fc4d00ed38bf823435e8a"
+  },
+  "grade_profile": {
+    "path": "grade-profile.json",
+    "sha256": "7a22e671508f3354ce487ead495135841acdca5ea81a83443bcd61beaba33c1f",
+    "apply_in_pilot": false
+  },
+  "contract_assets": {
+    "scene_recipe": {
+      "path": "scene-recipe.json",
+      "sha256": "2ae8ddeaa9571dbc8de27ac0cf68c70fe7613468ff2f074bf3d702b6e8b24925"
+    },
+    "scene_graph": {
+      "path": "scene-graph.json",
+      "sha256": "7eab7028cc5bbd57579742325d7b5d10c0461f909c8d3f70d91fbaa0e8252015"
+    },
+    "container_design": {
+      "path": "container-design.json",
+      "sha256": "af119a0c3e11f20838e1fe2694ded7d8a4993faef616f5fd0734d6b82f926d7a"
+    }
+  },
+  "hint_images": [
+    {
+      "role": "reference_container_and_companion_scene",
+      "path": "../assets/white-overhead-reference-with-basque-cheesecake-and-magazine-clean-table-v3.png",
+      "sha256": "6f61d2e807c50a9e60538e629f11acba8875792553ef2d93886dd3d733b799b0",
+      "width": 1024,
+      "height": 1536,
+      "send_to_provider": true,
+      "container_mode_scope": ["adopt_reference"],
+      "transfer_scope": [
+        "plain white glazed-ceramic mug design and handle direction",
+        "Basque cheesecake, warm-white plate and fork arrangement",
+        "partially cropped BAUHAUS magazine design and placement",
+        "clean plain warm-neutral white matte tabletop finish without marble-like material pattern",
+        "relative scene layout, scale, perspective and contact-shadow behavior"
+      ],
+      "excluded_transfer": [
+        "reference coffee, crema, latte art, bubbles and beverage recipe",
+        "exact environmental shadow silhouette and pixel layout"
+      ],
+      "reason": "Provider reference input for adopt-reference mode. It supplies the declared mug and companion-scene design while the user image remains the sole beverage-identity authority."
+    }
+  ],
+  "scene_props_contract": {
+    "enabled_container_modes": ["adopt_reference"],
+    "reference_image_role": "reference_container_and_companion_scene",
+    "relative_to_primary_beverage": true,
+    "declared_companion_groups": 2,
+    "dessert_group": {
+      "anchor": "12 o'clock above the primary mug",
+      "plate": "one modest warm-white to off-white matte ceramic dessert plate with a shallow raised rim, subtle handmade irregularity and a soft physically attached contact shadow",
+      "cheesecake": {
+        "type": "one triangular slice of Basque burnt cheesecake",
+        "geometry": "most of the triangular top is visible; the center is gently sunken while the irregular outer curved edge is slightly higher; retain only a narrow physically plausible cut sidewall",
+        "top": "thin irregular deeply caramelized dark-brown skin with amber variation, subtle ripples and creases; never a flat uniform orange plane or fully black surface",
+        "middle": "thick pale ivory to light custard-yellow cream-cheese center, dense yet tender, moist, finely porous and softly crumbly; never sponge, castella, chiffon, pound cake or bread crumb",
+        "base": "thin distinctly darker golden-brown baked biscuit or crust band",
+        "forbidden": ["fruit", "cream", "sauce", "ice cream", "label card", "garnish", "loose crumbs"]
+      },
+      "fork": "one slim realistic four-tine stainless-steel dessert fork across the lower half of the plate below the cake; tines point left, handle extends right almost horizontally with a slight upward rise; it does not touch or cover the cake"
+    },
+    "magazine_group": {
+      "anchor": "far right edge at approximately 2-3 o'clock",
+      "appearance": "only a peripheral cropped portion of the same white BAUHAUS magazine, with bold black BAUHAUS typography, gray architectural cover graphic and visible white book edge or spine",
+      "priority": "secondary peripheral prop that never competes with the beverage or dessert",
+      "forbidden": ["different title", "invented lettering", "enlarged magazine", "full magazine inside frame"]
+    },
+    "undeclared_props_forbidden": true
+  },
+  "runtime_input_policy": {
+    "analysis_source": "full_user_image",
+    "provider_source": "beverage_surface_crop",
+    "camera_pose_authority": "preset",
+    "invalid_geometry_fallback": "full_user_image",
+    "crop_contract": {
+      "geometry_source": "product_analysis.geometry",
+      "container_bbox_fallback": "subject_bbox",
+      "subject_bbox_fallback": "container_bbox",
+      "horizontal_margin_container_width_ratio": 0.08,
+      "top_container_height_offset_ratio": -0.03,
+      "bottom_container_height_ratio": 0.34,
+      "clamp_to_image": true,
+      "minimum_crop_pixels": 2
+    }
+  },
+  "default_container_mode": "adopt_reference",
+  "container_modes": {
+    "preserve_source": {
+      "container_identity_scope": "source_family_and_material_only",
+      "preserve": [
+        "beverage identity",
+        "top-surface color and opacity",
+        "ice, foam, fruit and garnish",
+        "approximate top-surface arrangement",
+        "broad source container family and material"
+      ],
+      "discard": [
+        "source camera pose and rim ellipse",
+        "exact source height, taper and sidewall geometry",
+        "source background, lighting and shadow",
+        "sidewall branding that is not naturally visible from overhead"
+      ],
+      "prompt_addendum": "Rebuild a simple container in the same broad source family and material under the preset camera. Exact source height, taper, sidewall geometry, decoration and branding are not invariants. Never tilt or rotate the container to reveal branding; omit sidewall branding when it is not naturally visible and invent no replacement."
+    },
+    "adopt_reference": {
+      "container_identity_scope": "discard_source_container",
+      "container_design_path": "container-design.json",
+      "preserve": [
+        "beverage identity",
+        "top-surface color and opacity",
+        "ice, foam, fruit and garnish",
+        "approximate top-surface arrangement"
+      ],
+      "discard": [
+        "source container geometry",
+        "source sidewall liquid-layer patterns",
+        "source camera pose and rim ellipse"
+      ],
+      "prompt_addendum": "Use the versioned compact plain white glazed-ceramic mug. Keep beverage color, syrup, fruit, ice and foam strictly inside the inner rim. Keep the complete exterior and base clean plain white ceramic with no colored stain, band, transparency or beverage layer."
+    }
+  },
+  "camera_contract": {
+    "pitch_degrees": [82, 88],
+    "focal_length_equivalent_mm": [42, 52],
+    "projection": "rectilinear overhead with slight real perspective",
+    "outer_and_inner_rim": "nearly circular",
+    "sidewall_visibility": "slight and physically plausible",
+    "discard_source_pose": true,
+    "forbid_tilt_for_branding_or_vertical_layers": true
+  },
+  "aspect_ratio_contracts": {
+    "4:5": {
+      "status": "published",
+      "visual_review_status": "pending_current_low_review",
+      "prompt_addendum": "Generate the exact final 4:5 canvas. Keep one complete primary overhead beverage, including the full adopted handle, 0.27-0.34 of frame width and 0.17-0.22 of frame height, centered around x=0.55-0.60 and y=0.58-0.63. The product bbox applies only to the primary beverage. Add exactly the declared dessert group above it and the cropped magazine at the far right edge. Preserve 0.55-0.70 meaningful table-and-floor negative space, a right-dominant round table occupying 0.66-0.82 of the frame, and a narrow left gray tiled-floor wedge with receding grout.",
+      "generation_size": "1024x1280",
+      "safe_crop": "none_exact_4x5",
+      "width": 880,
+      "height": 1100,
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [0.27, 0.34],
+        "product_height_ratio": [0.17, 0.22],
+        "center_x_ratio": [0.55, 0.60],
+        "center_y_ratio": [0.58, 0.63],
+        "negative_space_ratio": [0.70, 0.80],
+        "table_occupancy_ratio": [0.66, 0.82],
+        "expected_subject_count": 1,
+        "crop_allowed": false
+      }
+    },
+    "1:1": {
+      "status": "prepared_pending_visual_qa",
+      "visual_review_status": "not_yet_generated",
+      "prompt_addendum": "Generate the exact final 1:1 square canvas from the start; do not crop a portrait composition. Keep one complete primary overhead beverage, including the full adopted handle, 0.25-0.32 of frame width and 0.20-0.27 of frame height, centered around x=0.54-0.60 and y=0.56-0.63. The product bbox applies only to the primary beverage. Recompose exactly the declared dessert group above it and the cropped magazine at the far right edge for the square canvas. Preserve 0.48-0.64 meaningful table-and-floor negative space, the right-dominant round table and a narrow left gray tiled-floor wedge with receding grout.",
+      "generation_size": "1024x1024",
+      "safe_crop": "none_exact_1x1",
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [0.25, 0.32],
+        "product_height_ratio": [0.20, 0.27],
+        "center_x_ratio": [0.54, 0.60],
+        "center_y_ratio": [0.56, 0.63],
+        "negative_space_ratio": [0.62, 0.74],
+        "expected_subject_count": 1,
+        "crop_allowed": false
+      }
+    }
+  },
+  "qa_contract": {
+    "phase": "current_low_visual_review_pending",
+    "hard_gates": [
+      "beverage_identity",
+      "camera_pitch",
+      "rim_geometry",
+      "opaque_exterior_cleanliness",
+      "clean_non_marble_table_surface",
+      "basque_cheesecake_identity",
+      "fork_orientation",
+      "magazine_reference_fidelity",
+      "crop",
+      "subject_count",
+      "round_table_and_floor_depth"
+    ],
+    "hard_fail": [
+      "output inherits the oblique source camera",
+      "cup rim is strongly elliptical or too much sidewall is visible",
+      "beverage, syrup or fruit appears on an opaque container exterior or base",
+      "round table edge or left gray floor wedge disappears",
+      "floor grout does not recede or the table reads as a flat background",
+      "broad off-frame environmental shadow atmosphere is absent",
+      "fabric, coaster, napkin, saucer or an undeclared decorative prop appears",
+      "the cheesecake reads as castella, sponge, bread or a flat uniform cake",
+      "the fork tines do not point left or the handle does not extend right below the cake",
+      "the declared BAUHAUS magazine is missing, enlarged, relocated or replaced with a different design",
+      "the tabletop has marble veining, cloudy mottling, faux-stone patches, plaster texture, repeated procedural noise or synthetic render smoothness",
+      "reference coffee, crema or latte art replaces the user's beverage, or the exact reference shadow silhouette leaks"
+    ],
+    "comparative_scores": ["naturalness", "mood_adherence", "beverage_surface_preservation"],
+    "aspect_ratio_specific_bbox": true
+  }
+}

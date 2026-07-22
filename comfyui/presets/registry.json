@@ -21,10 +21,16 @@
       "bundle": "natural_white__product_center/preset.json"
     },
     "natural_white__aerial_shot": {
-      "enabled": false,
-      "status": "not_ready",
+      "enabled": true,
+      "status": "published",
       "family": "natural_white",
-      "composition": "aerial"
+      "composition": "aerial",
+      "preset_id": "instagram_white_neutral_overhead_spatial_v1",
+      "legacy_gateway": {
+        "background_style": "white",
+        "composition": "aerial"
+      },
+      "bundle": "natural_white__aerial_shot/preset.json"
     },
     "natural_white__handheld_lifestyle": {
       "enabled": false,

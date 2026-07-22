@@ -1,0 +1,263 @@
+{
+  "schema_version": "2.0.0",
+  "analysis_metadata": {
+    "provider": "manual_visual_review",
+    "model": "human_approved_reference_contract",
+    "prompt_version": "reference_scene_graph_v3_companions",
+    "analyzed_at": "2026-07-22T00:00:00+09:00",
+    "confidence": 0.97
+  },
+  "asset": {
+    "asset_id": "ref_6f61d2e807c50a9e",
+    "relative_path": "presets/assets/white-overhead-reference-with-basque-cheesecake-and-magazine-clean-table-v3.png",
+    "file_sha256": "6f61d2e807c50a9e60538e629f11acba8875792553ef2d93886dd3d733b799b0",
+    "pixel_sha256": "3833b668f012f7efebf7140859a31c45b98558dc32f9e8bc23f1d2f39a4e1ab0",
+    "width_px": 1024,
+    "height_px": 1536,
+    "format": "PNG",
+    "source_folder_tags": ["pending_final_review", "white_neutral", "overhead", "spatial", "basque_cheesecake", "bauhaus_magazine"],
+    "dhash": "e7d9999c999c8c87",
+    "duplicate_of": null
+  },
+  "scene_mode": "primary_with_declared_companions",
+  "observed_major_subject_count": 3,
+  "object_inventory_complete": true,
+  "objects": [
+    {
+      "slot_id": "beverage_primary",
+      "kind": "beverage",
+      "role": "primary",
+      "description": "latte in a compact plain white handled ceramic mug; beverage contents are excluded from transfer",
+      "body_bbox": {"left": 0.45, "top": 0.515, "right": 0.73, "bottom": 0.69, "confidence": 0.98},
+      "full_bbox": {"left": 0.4, "top": 0.505, "right": 0.735, "bottom": 0.705, "confidence": 0.98},
+      "straw": {"present": false, "bbox": null, "centerline": null, "emergence_point": null, "angle_degrees": null},
+      "container": {
+        "class": "open handled mug",
+        "material": "white glazed ceramic",
+        "silhouette": "compact circular body with one complete lower-left handle",
+        "components": ["thin circular rim", "round body", "single lower-left handle", "plain unbranded exterior"]
+      },
+      "interaction": "resting",
+      "support_surface_id": "surface_round_white_table",
+      "depth_order": 1,
+      "occlusion_fraction": 0,
+      "replaceable": true,
+      "allowed_kinds": ["beverage", "dessert"],
+      "visible_text": [],
+      "brand_or_watermark_state": "absent",
+      "crop_safe": true
+    },
+    {
+      "slot_id": "dessert_plate_secondary",
+      "kind": "plate",
+      "role": "secondary_support",
+      "description": "modest warm-white matte ceramic dessert plate with shallow raised rim",
+      "body_bbox": {"left": 0.385, "top": 0.155, "right": 0.77, "bottom": 0.415, "confidence": 0.96},
+      "full_bbox": {"left": 0.385, "top": 0.155, "right": 0.77, "bottom": 0.415, "confidence": 0.96},
+      "interaction": "resting",
+      "support_surface_id": "surface_round_white_table",
+      "depth_order": 1,
+      "occlusion_fraction": 0.12,
+      "replaceable": false,
+      "allowed_kinds": ["plate"],
+      "visible_text": [],
+      "brand_or_watermark_state": "absent",
+      "crop_safe": true
+    },
+    {
+      "slot_id": "basque_cheesecake_secondary",
+      "kind": "dessert",
+      "role": "secondary",
+      "description": "triangular Basque burnt cheesecake with gently sunken center, higher irregular outer rim, thin dark caramelized top, thick pale finely porous cream-cheese middle and thin darker baked base",
+      "body_bbox": {"left": 0.44, "top": 0.17, "right": 0.7, "bottom": 0.33, "confidence": 0.96},
+      "full_bbox": {"left": 0.44, "top": 0.17, "right": 0.7, "bottom": 0.33, "confidence": 0.96},
+      "interaction": "resting on dessert plate",
+      "support_surface_id": "surface_round_white_table",
+      "depth_order": 2,
+      "occlusion_fraction": 0,
+      "replaceable": false,
+      "allowed_kinds": ["dessert"],
+      "visible_text": [],
+      "brand_or_watermark_state": "absent",
+      "crop_safe": true
+    },
+    {
+      "slot_id": "dessert_fork_secondary",
+      "kind": "utensil",
+      "role": "secondary",
+      "description": "slim realistic four-tine stainless-steel dessert fork below the cake with tines left and handle right",
+      "body_bbox": {"left": 0.41, "top": 0.315, "right": 0.765, "bottom": 0.365, "confidence": 0.95},
+      "full_bbox": {"left": 0.41, "top": 0.315, "right": 0.765, "bottom": 0.365, "confidence": 0.95},
+      "interaction": "resting across lower half of dessert plate without touching cake",
+      "support_surface_id": "surface_round_white_table",
+      "depth_order": 3,
+      "occlusion_fraction": 0,
+      "replaceable": false,
+      "allowed_kinds": ["utensil"],
+      "visible_text": [],
+      "brand_or_watermark_state": "absent",
+      "crop_safe": true
+    },
+    {
+      "slot_id": "bauhaus_magazine_peripheral",
+      "kind": "magazine",
+      "role": "peripheral_secondary",
+      "description": "cropped white BAUHAUS magazine with bold black title, gray architectural cover graphic and visible white edge or spine",
+      "body_bbox": {"left": 0.835, "top": 0.12, "right": 1.0, "bottom": 0.38, "confidence": 0.94},
+      "full_bbox": {"left": 0.835, "top": 0.12, "right": 1.0, "bottom": 0.38, "confidence": 0.94},
+      "interaction": "resting and intentionally cropped by right frame edge",
+      "support_surface_id": "surface_round_white_table",
+      "depth_order": 1,
+      "occlusion_fraction": 0.45,
+      "replaceable": false,
+      "allowed_kinds": ["magazine"],
+      "visible_text": ["BAUHAUS"],
+      "brand_or_watermark_state": "declared_reference_text_only",
+      "crop_safe": false
+    }
+  ],
+  "relations": [
+    {"subject": "dessert_plate_secondary", "predicate": "above_at_twelve_oclock", "object": "beverage_primary"},
+    {"subject": "basque_cheesecake_secondary", "predicate": "rests_on", "object": "dessert_plate_secondary"},
+    {"subject": "dessert_fork_secondary", "predicate": "rests_below_without_overlap", "object": "basque_cheesecake_secondary"},
+    {"subject": "bauhaus_magazine_peripheral", "predicate": "cropped_at_right_edge_of", "object": "surface_round_white_table"}
+  ],
+  "support_surfaces": [
+    {
+      "surface_id": "surface_round_white_table",
+      "kind": "table",
+      "bbox": {"left": 0.14, "top": 0, "right": 1, "bottom": 1, "confidence": 0.98},
+      "plane_description": "large raised clean plain warm-neutral white painted or matte-laminate circular tabletop entering from the right, with extremely subtle real material grain and no marble-like or cloudy material pattern",
+      "supports_objects": true,
+      "perspective_scale": [0.93, 1.07]
+    },
+    {
+      "surface_id": "surface_gray_tile_floor",
+      "kind": "ground",
+      "bbox": {"left": 0, "top": 0, "right": 0.34, "bottom": 1, "confidence": 0.96},
+      "plane_description": "narrow gray tiled cafe floor wedge with grout lines receding past the curved table edge",
+      "supports_objects": false,
+      "perspective_scale": [0.82, 1.18]
+    }
+  ],
+  "protected_regions": [
+    {
+      "region_id": "region_left_floor_depth",
+      "kind": "negative_space",
+      "bbox": {"left": 0, "top": 0, "right": 0.34, "bottom": 1, "confidence": 0.96},
+      "reason": "preserve the narrow floor wedge, receding grout and table-to-floor height cue"
+    },
+    {
+      "region_id": "region_room_shadows",
+      "kind": "shadow",
+      "bbox": {"left": 0, "top": 0, "right": 0.75, "bottom": 1, "confidence": 0.92},
+      "reason": "retain broad environmental shadow atmosphere while changing the exact silhouette"
+    }
+  ],
+  "insertion_zones": [
+    {
+      "zone_id": "zone_product_on_round_table",
+      "bbox": {"left": 0.4, "top": 0.5, "right": 0.75, "bottom": 0.72, "confidence": 0.98},
+      "support_surface_id": "surface_round_white_table",
+      "allowed_kinds": ["beverage", "dessert"],
+      "scale_range": [0.9, 1.1],
+      "confidence": 0.98,
+      "reason": "reviewed single-product slot with complete support contact and surrounding negative space"
+    },
+    {
+      "zone_id": "zone_declared_dessert_above_product",
+      "bbox": {"left": 0.38, "top": 0.15, "right": 0.78, "bottom": 0.42, "confidence": 0.96},
+      "support_surface_id": "surface_round_white_table",
+      "allowed_kinds": ["plate", "dessert", "utensil"],
+      "scale_range": [0.92, 1.08],
+      "confidence": 0.96,
+      "reason": "declared secondary Basque cheesecake grouping at twelve o'clock above the primary beverage"
+    },
+    {
+      "zone_id": "zone_declared_magazine_right_edge",
+      "bbox": {"left": 0.83, "top": 0.1, "right": 1.0, "bottom": 0.4, "confidence": 0.94},
+      "support_surface_id": "surface_round_white_table",
+      "allowed_kinds": ["magazine"],
+      "scale_range": [0.92, 1.08],
+      "confidence": 0.94,
+      "reason": "declared BAUHAUS magazine remains peripheral and intentionally cropped by the right edge"
+    }
+  ],
+  "composition": {
+    "shot_type": "overhead",
+    "camera_height": "overhead",
+    "camera_pitch": "strict overhead with slight real perspective, approximately 82-88 degrees",
+    "lens_character": "phone_normal",
+    "subject_position": "primary beverage just below center, dessert group above at twelve o'clock and cropped magazine at the far right edge",
+    "negative_space": "warm-neutral white tabletop remains open between the declared groups with a narrow gray floor wedge",
+    "asymmetry_source": "right-dominant circular table, left floor wedge, upper dessert group, peripheral right-edge magazine and partial off-frame shadows",
+    "crop_character": "portrait social crop retaining the full beverage and dessert group, intentionally cropping only the peripheral magazine, and retaining the curved table edge and receding floor grout"
+  },
+  "depth": {
+    "plane_count": 3,
+    "foreground": "raised curved edge of the circular white tabletop",
+    "product_plane": "primary beverage plus the declared dessert plate, cheesecake, fork and peripheral magazine resting on the tabletop",
+    "midground": "matte white tabletop with broad soft shadow falloff",
+    "background": "gray tiled floor visibly below the table",
+    "perspective_cues": ["curved raised table edge", "receding floor grout", "product contact shadow", "broad environmental shadows crossing different planes"],
+    "far_plane_softness": "subtle",
+    "atmospheric_separation": "mild"
+  },
+  "lighting": {
+    "source_type": "soft_window",
+    "direction": "upper left toward lower right",
+    "source_size": "large",
+    "hardness": 0.34,
+    "contrast": 0.38,
+    "shadow": "short attached product shadow plus broad irregular soft-edged partial shadows from unseen room elements",
+    "highlight": "protected warm-neutral table and ceramic highlights",
+    "transmitted_light": "subtle and physically connected when the inserted source container is transparent",
+    "white_balance": "neutral"
+  },
+  "color": {
+    "exposure": "bright",
+    "saturation": "restrained",
+    "contrast": "soft",
+    "black_point": "natural",
+    "palette_hex": ["#BEBAB8", "#736C66", "#A5A19E", "#CCCACA", "#D8D7D7"],
+    "mean_luminance": 0.6574,
+    "luminance_stddev": 0.3079,
+    "mean_saturation": 0.0511,
+    "edge_energy": 0.0192
+  },
+  "facets": {
+    "mood_tags": ["white neutral", "low contrast", "quiet spatial", "natural cafe"],
+    "environment_tags": ["round white table", "gray tiled floor", "off-frame room shadows", "declared cafe companions"],
+    "material_tags": ["clean plain matte white laminate table", "gray tile", "white glazed ceramic", "Basque cheesecake", "stainless steel", "printed magazine"],
+    "shot_tags": ["overhead", "primary beverage", "secondary dessert", "peripheral magazine", "portrait social crop"]
+  },
+  "taxonomy": {
+    "environment_family": "white_neutral",
+    "lighting_family": "soft_window",
+    "camera_angle": "overhead",
+    "capture_style": "tabletop",
+    "scene_complexity": "primary_with_declared_companions",
+    "dominant_surface": "matte white circular tabletop",
+    "wood_prominence": 0,
+    "accent_color_prominence": 0.08,
+    "frontend_mood": "white",
+    "frontend_angle": "overhead",
+    "confidence": 0.98
+  },
+  "runtime_policy": {
+    "scene_pixels_allowed": true,
+    "container_pixels_allowed": true,
+    "copy_exclusions": [
+      "reference coffee, crema, latte art, bubbles and recipe",
+      "exact table-edge curve, grout intersections and pixel layout",
+      "exact environmental shadow silhouette",
+      "visible text, logos and watermarks outside the declared BAUHAUS magazine",
+      "fabric, coaster, napkin, saucer and undeclared props"
+    ],
+    "maximum_exact_products": 1,
+    "maximum_generic_companions": 0,
+    "maximum_major_subjects": 3,
+    "maximum_props": 4
+  },
+  "quality_flags": []
+}

@@ -1,0 +1,107 @@
+{
+  "schema_version": "1.0.0",
+  "lighting_sheet_id": "instagram_white_neutral_overhead_spatial_sheet_v1",
+  "mood": "white-neutral overhead cafe table with broad upper-left window light and off-frame room shadows",
+  "reference_cluster": {
+    "anchor_preset_id": "instagram_white_neutral_overhead_spatial_v1",
+    "minimum_cluster_size": 4,
+    "runtime_pixels_allowed": false,
+    "selection_rule": "right-dominant circular white table, narrow left gray tiled floor wedge, complete single product and spatial off-frame shadows",
+    "source_images": [
+      "white_neutral_overhead_reference_v1.png",
+      "74071cf27cad38aff54b9b66f51a3f2d.jpg",
+      "83a9ae22150d11bd029c3a9b8a3bf357.jpg",
+      "3be2c477b9cd5a2a95e080dfd68bb828.jpg"
+    ]
+  },
+  "key_light": {
+    "source": "one large upper-left window diffused by room air and partial unseen architecture",
+    "direction": "upper left toward lower right",
+    "relative_size": "large; product shadow is soft while broader environmental shadows retain readable but feathered boundaries",
+    "subject_to_wall_distance_cm": [40, 90]
+  },
+  "ambient_fill": "neutral room bounce below the key; retain floor grout, table texture and contact depth",
+  "fill_contract": {
+    "key_to_fill_ratio": [1.8, 3.2],
+    "source": "weak neutral room bounce from the surrounding white interior",
+    "color_bias": "neutral to faintly cool relative to the warm-neutral key"
+  },
+  "screen_light_map": {
+    "lit_area_ratio": [0.56, 0.76],
+    "shadow_area_ratio": [0.18, 0.38],
+    "dominant_shadow_vector_degrees": [112, 138],
+    "falloff": "broad irregular environmental shadow fields cross table and floor without copying the anchor silhouette",
+    "gobo_geometry": "partial off-frame architecture or furniture represented only as soft abstract shadow masses"
+  },
+  "specular_contract": {
+    "highlight_shape": "broad upper-left arcs on glass or ceramic with protected white detail",
+    "highlight_width_ratio": [0.04, 0.16],
+    "rim_continuity": "continuous readable upper rim with no melted or broken vessel edge",
+    "transparent_caustic": "subtle and physically connected only when the preserved source container is transparent"
+  },
+  "shadow_contract": {
+    "density": [0.16, 0.34],
+    "edge": "soft to moderately soft, physically attached and naturally irregular",
+    "attachment": "small denser contact occlusion beneath the product plus one short lower-right product shadow",
+    "transparent_material": "transparent source containers retain a connected transmitted lift and background-dependent refraction",
+    "contact_shadow": {
+      "opacity": [0.2, 0.38],
+      "footprint": [0.04, 0.16],
+      "behavior": "compact attachment directly beneath the vessel"
+    },
+    "cast_shadow": {
+      "opacity": [0.08, 0.24],
+      "footprint": [0.42, 1.4],
+      "behavior": "one short soft product shadow plus broad partial off-frame room shadows crossing table and floor"
+    },
+    "transmitted_light": {
+      "opacity": [0.06, 0.24],
+      "footprint": [0.12, 0.42],
+      "behavior": "subtle beverage-colored lift only inside a physically connected transparent shadow"
+    },
+    "qa_ratios": {
+      "cast_area_to_cup_bbox": [0.35, 1.5],
+      "wrist_length_to_cup_height": [0, 0],
+      "transparent_lift_inside_shadow": [0.04, 0.28]
+    }
+  },
+  "capture_contract": {
+    "exposure_compensation_ev": [-0.18, 0.02],
+    "hdr": "restrained social-photo HDR with protected white detail and no halo",
+    "white_balance": "warm-neutral white table with neutral-to-faintly-cool gray floor and shadows",
+    "texture": "plain matte table, lightly mottled tile, readable product detail and faint luminance grain"
+  },
+  "grade_strengths": {
+    "natural": 0.16,
+    "balanced": 0.28,
+    "expressive": 0.4
+  },
+  "forbidden": [
+    "shadowless studio sweep",
+    "hard graphic shadow silhouette",
+    "clipped broad white area",
+    "heavy beige cast",
+    "blue cast",
+    "portrait-mode cutout blur"
+  ],
+  "reference_anchor": {
+    "asset_id": "ref_499763da87e8bf0e",
+    "pixel_sha256": "c8c0ab483a488577a3789eeaf5ed6301778a475d5c4f12b1b6cc2f6898ebb739",
+    "role": "user-approved spatial anchor; provider submission forbidden"
+  },
+  "camera_coupling": {
+    "support_plane": "light preserves the raised circular table edge against the lower gray floor",
+    "shadow_projection": "product and environmental shadows project consistently from upper left toward lower right across both planes",
+    "depth_response": "falloff, edge height and receding floor grout remain readable under an 82-88 degree camera pitch"
+  },
+  "color_separation": {
+    "lit_neutral": "warm-neutral textured white",
+    "shadow_neutral": "quiet neutral to faintly cool gray",
+    "material_locality": "source-authoritative beverage color, ice and garnish remain inside the reconstructed drink; sidewall branding is not forced at the overhead camera, and opaque adopted-cup exteriors remain clean"
+  },
+  "qa_geometry": {
+    "shadow_vector_tolerance_degrees": 18,
+    "lit_area_tolerance": 0.12,
+    "penumbra_ratio_tolerance": 0.14
+  }
+}
