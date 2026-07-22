@@ -1,253 +1,71 @@
+# Ad Creator Presets
 
-카페 제품 사진 1장을 입력받아, 제품의 형태와 주요 특징을 유지하면서 인스타그램 감성의 제품 사진으로 재생성하는 모델링/추론 파이프라인입니다.
+이 브랜치는 Ad Creator 서비스의 **ComfyUI 프리셋 실행 구조**를 개발·검증하기 위한 브랜치입니다. 기존 로컬 모델 설명서가 아니라, 서비스 프리셋과 OpenAI 이미지 생성 파일럿을 기준으로 관리합니다.
 
+## 현재 범위
 
-## 주요 기능
+- 서비스 선택값 12개를 `comfyui/presets/registry.json`에서 단일 관리
+- 승인된 화이트 미디엄·우드 미디엄 프리셋 2개만 활성화
+- OpenAI `gpt-image-2`, `quality=low` provider profile 고정
+- 프리셋별 prompt, lighting sheet, grade profile, hint asset과 SHA-256 검증
+- provider 원본 `1024x1280`과 무크롭 전달 이미지 `880x1100`을 독립 저장
+- 기존 `model-c-v1`은 삭제하지 않고 롤백 경로로 유지
 
-- 입력 음료 사진 기반 이미지 재생성
-- 4가지 구도 지원
-  - `closeup`
-  - `medium`
-  - `aerial`
-  - `handheld`
-- 3가지 배경/무드 지원
-  - `vivid`
-  - `wood`
-  - `white`
-- 총 12개 조합 생성 가능
-- FLUX.1-Kontext-dev 기반 로컬 추론
-- 참조 이미지 분석 기반 스타일 시트 적용
-- OpenAI API를 이용해 `templates_lib` 참조 이미지들의 공통 무드/조명/구도 분석
+## 활성 프리셋
 
-## 폴더 구조
+| 서비스 preset ID | 내부 contract | 런타임 provider 입력 |
+| --- | --- | --- |
+| `natural_white__product_center` | `instagram_white_diffuse_wall_table_v1` | 사용자 제품 원본 |
+| `wood__product_center` | `instagram_wood_45deg_relational_v3` | 사용자 제품 원본 + 검수된 scene hint |
 
-```text
-kh_v2/
-  app/
-    config.py
-    inference.py
-    model_loader.py
-    preprocessing.py
-    prompt_builder.py
-    validation.py
+나머지 10개 선택값은 아직 비활성화되어 있으며 provider 호출 전에 거부됩니다. Vivid 계열은 교체 예정이므로 신규 계약으로 확정하지 않습니다.
 
-  presets/
-    backgrounds.py
-    category_prompts.py
-    compositions.py
-    quality_rules.py
-    style_sheets.json
+> 제품 입력의 기본값을 사용자 원본으로 유지할지, 레퍼런스 컵을 기본값 또는 선택 옵션으로 제공할지는 회의 결정 전입니다. 결정 전에는 현재 입력 정책을 변경하지 않습니다.
 
-  scripts/
-    analyze_templates_openai.py
-    generate_single.py
-    generate_matrix.py
-
-  input/
-  output/
-  templates_lib/
-
-  requirements.txt
-  README.md
-```
-
-## 별도 배치 파일
-
-다음 파일과 폴더는 GitHub에 올리지 않고 서버에 별도로 배치합니다.
+## 실행 흐름
 
 ```text
-.env
-templates_lib/
-input/
-output/
-모델 캐시
+Frontend reference_id
+  -> Backend
+  -> Generation Gateway
+  -> openai-gpt-image-2-low-v1
+  -> preset registry / bundle 검증
+  -> OpenAI Images API
+  -> provider 원본 + audit sidecar 저장
+  -> crop 없는 4:5 결과 반환
 ```
 
-`templates_lib` 구조는 아래와 같아야 합니다.
+프론트와 백엔드는 내부 prompt나 contract ID를 추론하지 않고 canonical 서비스 preset ID만 전달합니다.
+
+## 주요 디렉터리
 
 ```text
-templates_lib/
-  neutral_white_minimal/
-    aerial_shot/
-    handheld_lifestyle/
-    product_center/
-    product_large/
-
-  vivid_color/
-    aerial_shot/
-    handheld_lifestyle/
-    product_center/
-    product_large/
-
-  wood/
-    aerial_shot/
-    handheld_lifestyle/
-    product_center/
-    product_large/
+comfyui/
+  config/providers/                 # provider model·quality·출력 계약
+  presets/                          # 12-slot registry와 프리셋 bundle·자산
+  workflows/                        # API/UI workflow와 workflow registry
+  custom_nodes/ad_creator/          # ComfyUI node와 provider adapter
+  orchestrator/                     # workflow·preset routing
+  gateway/                          # 업로드·큐·상태·결과 API
+  deploy/                           # 담당자 인계·배포·검증 문서
+  scripts/                          # registry validator와 명시적 smoke script
+  tests/                            # gateway·node·adapter 회귀 테스트
 ```
 
-각 폴더 안에는 해당 무드/구도를 대표하는 참조 이미지를 여러 장 넣습니다.
-
-## 환경 변수
-
-`.env` 예시:
-
-```env
-HF_TOKEN=hf_xxxxxxxxxxxxxxxxx
-HF_HOME=/opt/hf_cache
-HF_HUB_CACHE=/opt/hf_cache/hub
-TRANSFORMERS_CACHE=/opt/hf_cache/hub
-
-OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxx
-OPENAI_VISION_MODEL=gpt-4.1-mini
-```
-
-주의: `.env`는 GitHub에 올리지 않습니다.
-
-## 설치
+## 검증
 
 ```bash
-cd /home/wina0901/kh_v2
-source /opt/venv/product_swap/bin/activate
-
-pip install -r requirements.txt
-pip install openai python-dotenv
+python comfyui/scripts/validate_workflows.py
+python comfyui/scripts/validate_presets.py
+python -m unittest discover -s comfyui/tests -v
 ```
 
-Hugging Face 로그인 및 FLUX.1-Kontext-dev 라이선스 동의가 필요합니다.
+현재 기준은 workflow 2개, preset slot 12개, published preset 2개와 단위 테스트 55개입니다. 실제 OpenAI adapter-level `low` 화이트·우드 smoke도 각각 1회 성공했지만, GCP ComfyUI·Gateway 전체 E2E와 CommonQA는 아직 출시 차단 조건입니다.
 
-```bash
-hf auth login
-```
+## 연동 문서
 
-## 참조 이미지 분석
+- 백엔드·프론트 계약: `comfyui/deploy/OPENAI_GPT_IMAGE_2_PILOT_HANDOFF_KO.md`
+- ComfyUI 재설계 계획: `comfyui/deploy/COMFYUI_REDESIGN_PLAN_KO.md`
+- 실제 검증 기록: `comfyui/deploy/OPENAI_PILOT_VALIDATION_20260721_KO.md`
 
-`templates_lib`를 서버에 배치한 뒤 실행합니다.
-
-```bash
-cd /home/wina0901/kh_v2
-python scripts/analyze_templates_openai.py
-```
-
-성공하면 아래 파일이 생성됩니다.
-
-```text
-presets/style_sheets.json
-```
-
-이 파일은 각 카테고리의 공통 무드, 조명, 구도, 배경 특징을 담고 있으며 생성 프롬프트에 자동 반영됩니다.
-
-## 단일 이미지 생성
-
-```bash
-python scripts/generate_single.py input/drink.jpg \
-  --comp medium \
-  --bg wood \
-  --strength medium \
-  --seed 42
-```
-
-옵션:
-
-```text
---comp      closeup | medium | aerial | handheld
---bg        vivid | wood | white
---strength  low | medium | high
---seed      optional int
---steps     optional int
---guidance  optional float
-```
-
-## 12개 조합 생성
-
-```bash
-python scripts/generate_matrix.py input/drink.jpg --seed 42 --sheet
-```
-
-결과는 `output/`에 저장됩니다.
-
-컨택트시트:
-
-```text
-output/matrix_sheet.png
-```
-
-## 백엔드 연동
-
-백엔드는 아래 함수만 호출하면 됩니다.
-
-```python
-from app.inference import generate_beverage_image
-
-result = generate_beverage_image(
-    image_path="/home/wina0901/kh_v2/input/request_001.jpg",
-    composition="medium",
-    background_style="wood",
-    strength="medium",
-    seed=42,
-    output_dir="/home/wina0901/kh_v2/output",
-)
-```
-
-성공 응답 예시:
-
-```json
-{
-  "success": true,
-  "output_path": "/home/wina0901/kh_v2/output/20260715_123456_ab12cd.png",
-  "composition": "medium",
-  "background_style": "wood",
-  "strength": "medium",
-  "seed": 42,
-  "width": 832,
-  "height": 1040,
-  "elapsed_seconds": 31.2,
-  "model": "black-forest-labs/FLUX.1-Kontext-dev",
-  "mode": "recreate"
-}
-```
-
-실패 응답 예시:
-
-```json
-{
-  "success": false,
-  "error_code": "MODEL_LOAD_FAILED",
-  "error_message": "..."
-}
-```
-
-## 백엔드 담당자 전달 사항
-
-백엔드는 업로드 이미지를 파일로 저장한 뒤 `image_path`를 모델 함수에 전달합니다.
-
-```text
-입력:
-- image_path
-- composition
-- background_style
-- seed optional
-
-출력:
-- success
-- output_path
-- error_code / error_message
-```
-
-`output_path`는 백엔드에서 프론트가 접근 가능한 URL로 변환하면 됩니다.
-
-예:
-
-```text
-/home/wina0901/kh_v2/output/result.png
--> /static/results/result.png
-```
-
-## 운영 주의사항
-
-- FLUX 모델은 매우 무겁기 때문에 첫 요청은 모델 로딩으로 오래 걸립니다.
-- `model_loader.py`는 싱글톤 방식으로 파이프라인을 캐시하므로 두 번째 요청부터는 모델을 재사용합니다.
-- GPU 메모리 문제를 피하려면 동시 요청은 1개로 제한하는 것을 권장합니다.
-- 여러 요청은 백엔드에서 큐 처리하는 것이 안전합니다.
-- `input/`, `output/`, `.env`, 모델 캐시, 참조 이미지는 Git에 올리지 않습니다.
-
+백엔드의 정사각형 중앙 crop 제거와 프론트의 4:5 결과 표시가 완료되기 전에는 신규 workflow를 서비스 기본값으로 전환하지 않습니다.
