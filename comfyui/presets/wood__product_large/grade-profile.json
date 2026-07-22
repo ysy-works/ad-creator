@@ -1,0 +1,79 @@
+{
+  "schema_version": "2.0.0",
+  "grade_profile_id": "instagram_wood_calm_window_closeup_grade_v1",
+  "input_color_space": "sRGB",
+  "output_color_space": "sRGB",
+  "transform": {
+    "exposure_ev": -0.015,
+    "contrast": 0.965,
+    "saturation": 0.93,
+    "warmth": 0.008,
+    "shadow_lift": 0.014,
+    "highlight_rolloff": 0.18
+  },
+  "tone_curve": [
+    [
+      0.0,
+      0.015
+    ],
+    [
+      0.18,
+      0.19
+    ],
+    [
+      0.5,
+      0.5
+    ],
+    [
+      0.82,
+      0.8
+    ],
+    [
+      1.0,
+      0.97
+    ]
+  ],
+  "split_tone": {
+    "shadow_rgb": [
+      0.49,
+      0.5,
+      0.52
+    ],
+    "highlight_rgb": [
+      0.54,
+      0.51,
+      0.47
+    ],
+    "balance": 0.5,
+    "strength": 0.006
+  },
+  "selective_saturation": {
+    "red": 0.96,
+    "yellow": 0.88,
+    "green": 0.92,
+    "cyan": 0.94,
+    "blue": 0.92,
+    "magenta": 0.96
+  },
+  "local_contrast": {
+    "radius": 2.2,
+    "amount": 0.04,
+    "threshold": 10
+  },
+  "strength": {
+    "default": 0.12,
+    "min": 0.06,
+    "max": 0.22
+  },
+  "protection": {
+    "regions": [
+      "product",
+      "logo"
+    ],
+    "mask_strength": 0.94
+  },
+  "qa_limits": {
+    "max_dark_clip_ratio": 0.006,
+    "max_bright_clip_ratio": 0.01
+  }
+}

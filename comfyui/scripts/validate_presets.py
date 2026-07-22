@@ -25,6 +25,8 @@ EXPECTED_SLOTS = {
 }
 EXPECTED_PUBLISHED = (
     "natural_white__product_center",
+    "natural_white__aerial_shot",
+    "wood__product_large",
     "wood__product_center",
 )
 EXPECTED_WOOD_DEFAULT = "tokyo_a6_relational_scene_hint_v4"

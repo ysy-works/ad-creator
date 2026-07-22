@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "container_design_id": "wood_clear_plastic_cup_open_rim_v1",
+  "display_name": "Reference clear plastic cold cup with open rim for wood window close-up",
+  "design": {
+    "class": "open clear cold cup",
+    "material": "thin clear PET plastic",
+    "geometry": "tall straight-to-gently-tapered disposable cold cup with a readable rolled circular rim, a narrow clear base ring and one simple black straw rising from the open top",
+    "components": [
+      "rolled clear circular rim without a lid",
+      "tall transparent gently tapered wall",
+      "narrow clear base ring",
+      "one straight plain black straw with an exposed rise 1.05-1.12 times the cup bottom diameter and 0.52-0.58 times the cup body height",
+      "one small vertical off-white rectangular paper label attached barely toward the viewer-right front curve, naturally foreshortened by only a 3-5 degree whole-cup yaw rather than independently skewed",
+      "exact lowercase heading cafe with several lines of tiny understated English editorial body copy"
+    ],
+    "height_to_width_ratio": [1.47, 1.55]
+  },
+  "allowed_transfer": [
+    "clear PET material and disposable cold-cup construction",
+    "tall gently tapered silhouette with readable rim and base",
+    "one plain black straw whose exposed rise is 1.05-1.12 times the cup bottom diameter and 0.52-0.58 times the cup body height",
+    "the attached rectangular paper label with exact heading cafe and tiny English body copy",
+    "reference cup scale and front-left placement with only a 3-5 degree whole-cup yaw that turns the paper label very slightly toward the viewer-right curvature"
+  ],
+  "forbidden_transfer": [
+    "reference cafe latte recipe, milk diffusion, coffee color, ice arrangement or foam",
+    "the words cafe latte or any heading other than exact lowercase cafe",
+    "logos, watermarks, brand marks or extra labels beyond the one authorized paper rectangle",
+    "reference condensation droplets, scratches, exact highlights, shadows or pixels",
+    "reference table, plant, window or secondary paper cup as container design"
+  ],
+  "compatibility": {
+    "beverage_temperatures": ["cold", "ambient"],
+    "supports_toppings": true,
+    "supports_straw": true,
+    "brand_surface": "unbranded clear wall carrying one authorized non-brand editorial paper label: exact heading cafe plus tiny English body copy"
+  }
+}

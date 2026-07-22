@@ -57,10 +57,15 @@ class PublishedPresetTest(unittest.TestCase):
     def test_node_choices_are_derived_from_published_registry_slots(self):
         self.assertEqual(
             published_preset_slots(),
-            ("natural_white__product_center", "wood__product_center"),
+            (
+                "natural_white__product_center",
+                "natural_white__aerial_shot",
+                "wood__product_large",
+                "wood__product_center",
+            ),
         )
 
-    def test_registry_declares_twelve_slots_and_only_two_published(self):
+    def test_registry_declares_twelve_slots_and_reviewed_presets_are_published(self):
         registry = json.loads(
             (COMFYUI_DIR / "presets" / "registry.json").read_text(encoding="utf-8")
         )
@@ -74,6 +79,8 @@ class PublishedPresetTest(unittest.TestCase):
             enabled,
             {
                 "natural_white__product_center": "instagram_white_diffuse_wall_table_v1",
+                "natural_white__aerial_shot": "instagram_white_neutral_overhead_spatial_v1",
+                "wood__product_large": "instagram_wood_calm_window_closeup_v1",
                 "wood__product_center": "tokyo_a6_relational_scene_hint_v4",
             },
         )

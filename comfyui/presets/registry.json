@@ -39,10 +39,16 @@
       "composition": "handheld"
     },
     "wood__product_large": {
-      "enabled": false,
-      "status": "not_ready",
+      "enabled": true,
+      "status": "published",
       "family": "wood",
-      "composition": "closeup"
+      "composition": "closeup",
+      "preset_id": "instagram_wood_calm_window_closeup_v1",
+      "legacy_gateway": {
+        "background_style": "wood",
+        "composition": "closeup"
+      },
+      "bundle": "wood__product_large/preset.json"
     },
     "wood__product_center": {
       "enabled": true,
