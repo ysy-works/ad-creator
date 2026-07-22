@@ -82,7 +82,7 @@ class NodeExecutionTest(unittest.TestCase):
             )
             self.assertEqual(kwargs["run_id"], "gateway-job-123")
             self.assertEqual(kwargs["aspect_ratio"], "4:5")
-            self.assertTrue(str(kwargs["audit_dir"]).endswith("/audit"))
+            self.assertEqual(Path(kwargs["audit_dir"]).name, "audit")
             with Image.open(observed_input) as prepared:
                 self.assertEqual(prepared.format, "PNG")
                 self.assertEqual(prepared.size, (4096, 12))

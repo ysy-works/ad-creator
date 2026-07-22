@@ -142,11 +142,10 @@ def _safe_path(root: Path, base: Path, relative_path: str) -> Path:
 
 
 def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as file:
-        for block in iter(lambda: file.read(1024 * 1024), b""):
-            digest.update(block)
-    return digest.hexdigest()
+    content = path.read_bytes()
+    if path.suffix.lower() in {".json", ".txt"}:
+        content = content.replace(b"\r\n", b"\n")
+    return hashlib.sha256(content).hexdigest()
 
 
 def _canonical_json_sha256(value: Any) -> str:

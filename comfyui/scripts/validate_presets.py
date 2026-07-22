@@ -34,7 +34,10 @@ EXPECTED_WOOD_ALTERNATIVE = "instagram_wood_45deg_relational_v3"
 
 
 def _sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    content = path.read_bytes()
+    if path.suffix.lower() in {".json", ".txt"}:
+        content = content.replace(b"\r\n", b"\n")
+    return hashlib.sha256(content).hexdigest()
 
 
 def main() -> int:
@@ -45,7 +48,7 @@ def main() -> int:
         raise ValueError("Preset registry must declare the exact 12 service slots.")
     published = published_preset_slots(registry_path=registry_path)
     if published != EXPECTED_PUBLISHED:
-        raise ValueError("Pilot must publish exactly the two approved medium presets.")
+        raise ValueError("Published presets do not match the currently reviewed registry set.")
     if slots["wood__product_center"].get("preset_id") != EXPECTED_WOOD_DEFAULT:
         raise ValueError("The routed wood medium preset must be the approved A6 preset.")
     alternatives = registry.get("alternatives")
