@@ -57,7 +57,7 @@ def main() -> int:
         _require(crop.get(key) == value, f"Crop contract mismatch: {key}")
 
     camera = bundle.get("camera_contract")
-    _require(camera.get("pitch_degrees") == [82, 88], "Camera pitch contract changed.")
+    _require(camera.get("pitch_degrees") == [84, 89], "Camera pitch contract changed.")
     _require(camera.get("discard_source_pose") is True, "Source-pose override is required.")
     _require(camera.get("forbid_tilt_for_branding_or_vertical_layers") is True, "Branding tilt guard is required.")
 
@@ -76,12 +76,26 @@ def main() -> int:
     _require(len(hints) == 1, "Exactly one provider scene reference is required.")
     _require(hints[0].get("send_to_provider") is True, "Scene reference must be sent to the provider.")
     _require(hints[0].get("role") == "reference_container_and_companion_scene", "Scene-reference role changed.")
-    _require(hints[0].get("container_mode_scope") == ["adopt_reference"], "Scene reference must remain scoped to adopt-reference mode.")
+    _require(hints[0].get("container_mode_scope") == ["preserve_source", "adopt_reference"], "Scene reference must support both container modes.")
     hint_path = bundle_path.parent / hints[0]["path"]
     _require(hint_path.is_file(), "Provider scene-reference image is missing.")
     _require(_sha256(hint_path) == hints[0]["sha256"], "Provider scene-reference hash mismatch.")
     _require(hints[0].get("width") == 1024, "Provider scene-reference width changed.")
     _require(hints[0].get("height") == 1536, "Provider scene-reference height changed.")
+
+    provider_policy = bundle.get("provider_reference_policy")
+    _require(isinstance(provider_policy, dict), "Provider-reference policy is missing.")
+    _require(provider_policy.get("maximum_images") == 2, "Provider-reference limit must remain two images.")
+    _require(provider_policy.get("required_roles") == ["user_product", "integrated_scene_hint"], "Provider-reference roles changed.")
+
+    preserve_prompt = modes["preserve_source"].get("prompt_template")
+    _require(isinstance(preserve_prompt, dict), "Preserve-source prompt template is missing.")
+    preserve_prompt_path = bundle_path.parent / preserve_prompt["path"]
+    _require(preserve_prompt_path.is_file(), "Preserve-source prompt file is missing.")
+    _require(_sha256(preserve_prompt_path) == preserve_prompt["sha256"], "Preserve-source prompt hash mismatch.")
+    preserve_prompt_text = preserve_prompt_path.read_text(encoding="utf-8")
+    for fragment in ("sole authority", "white mug", "Preserve a source cup saucer", "source spoon"):
+        _require(fragment in preserve_prompt_text, f"Preserve-source prompt is missing: {fragment}")
 
     props = bundle.get("scene_props_contract")
     _require(isinstance(props, dict), "Scene-props contract is missing.")
@@ -100,7 +114,7 @@ def main() -> int:
     _require(resolved.provider_profile["model"] == "gpt-image-2", "Model profile changed.")
     _require(resolved.provider_profile["quality"] == "low", "Quality profile changed.")
     required_prompt_fragments = (
-        "82-88 degrees",
+        "84-89 degrees",
         "nearly circular",
         "strictly inside the inner rim",
         "clean plain white ceramic",

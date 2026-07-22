@@ -92,7 +92,7 @@
   "camera_coupling": {
     "support_plane": "light preserves the raised circular table edge against the lower gray floor",
     "shadow_projection": "product and environmental shadows project consistently from upper left toward lower right across both planes",
-    "depth_response": "falloff, edge height and receding floor grout remain readable under an 82-88 degree camera pitch"
+    "depth_response": "falloff, edge height and receding floor grout remain readable under an 84-89 degree camera pitch"
   },
   "color_separation": {
     "lit_neutral": "warm-neutral textured white",

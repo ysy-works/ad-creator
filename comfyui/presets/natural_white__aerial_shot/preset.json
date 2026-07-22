@@ -8,11 +8,11 @@
   "source_review_status": "passed_by_user_review",
   "prompt_template": {
     "path": "prompt-template.txt",
-    "sha256": "f137de84d115a6bdbeea585013494bff4fd05e06b55d7585ff358780ca7c961d"
+    "sha256": "56161ad54ea7faa076f511f6459fd1f9205332f3a3b51539c0fb68e253583db4"
   },
   "lighting_sheet": {
     "path": "lighting-sheet.json",
-    "sha256": "324fa0b246557719ca7f61457fed101c28820242b85fc4d00ed38bf823435e8a"
+    "sha256": "486a6d83dc29741ab78ea4cca29bc2a41d005e1b6174a7c805e7ad165d56d931"
   },
   "grade_profile": {
     "path": "grade-profile.json",
@@ -22,16 +22,21 @@
   "contract_assets": {
     "scene_recipe": {
       "path": "scene-recipe.json",
-      "sha256": "2ae8ddeaa9571dbc8de27ac0cf68c70fe7613468ff2f074bf3d702b6e8b24925"
+      "sha256": "e57bb7efa16fb5d4cdf4654c0be5e5c6abe585098436e8218820c4da7242c21f"
     },
     "scene_graph": {
       "path": "scene-graph.json",
-      "sha256": "7eab7028cc5bbd57579742325d7b5d10c0461f909c8d3f70d91fbaa0e8252015"
+      "sha256": "0ad57160aec94eed916bbcae10d6f1058196c1ae8110cc08fb72b5e202054572"
     },
     "container_design": {
       "path": "container-design.json",
       "sha256": "af119a0c3e11f20838e1fe2694ded7d8a4993faef616f5fd0734d6b82f926d7a"
     }
+  },
+  "provider_reference_policy": {
+    "maximum_images": 2,
+    "required_roles": ["user_product", "integrated_scene_hint"],
+    "cost_control": "Submit one user-product image and one integrated scene hint only. Do not split the mug, dessert, magazine, tabletop or lighting into additional provider images."
   },
   "hint_images": [
     {
@@ -41,14 +46,17 @@
       "width": 1024,
       "height": 1536,
       "send_to_provider": true,
-      "container_mode_scope": ["adopt_reference"],
+      "container_mode_scope": ["preserve_source", "adopt_reference"],
       "transfer_scope": [
-        "plain white glazed-ceramic mug design and handle direction",
         "Basque cheesecake, warm-white plate and fork arrangement",
         "partially cropped BAUHAUS magazine design and placement",
         "clean plain warm-neutral white matte tabletop finish without marble-like material pattern",
         "relative scene layout, scale, perspective and contact-shadow behavior"
       ],
+      "container_transfer_by_mode": {
+        "preserve_source": "Do not transfer the reference mug. Preserve only the user's broad container family, transparent material, rim and simple structural design under the preset overhead camera.",
+        "adopt_reference": "Transfer the plain white glazed-ceramic mug design and handle direction from the integrated scene hint."
+      },
       "excluded_transfer": [
         "reference coffee, crema, latte art, bubbles and beverage recipe",
         "exact environmental shadow silhouette and pixel layout"
@@ -102,12 +110,18 @@
   "container_modes": {
     "preserve_source": {
       "container_identity_scope": "source_family_and_material_only",
+      "prompt_template": {
+        "path": "prompt-template-preserve-source.txt",
+        "sha256": "79b763352fa0b96b013ea40d3f86a1ae2777a392bbf09a886dea50b66a7f91d8"
+      },
       "preserve": [
         "beverage identity",
         "top-surface color and opacity",
         "ice, foam, fruit and garnish",
         "approximate top-surface arrangement",
-        "broad source container family and material"
+        "broad source container family and material",
+        "source cup saucer or support plate when visibly paired with the cup",
+        "source spoon design when visibly paired with the cup or its saucer"
       ],
       "discard": [
         "source camera pose and rim ellipse",
@@ -115,7 +129,13 @@
         "source background, lighting and shadow",
         "sidewall branding that is not naturally visible from overhead"
       ],
-      "prompt_addendum": "Rebuild a simple container in the same broad source family and material under the preset camera. Exact source height, taper, sidewall geometry, decoration and branding are not invariants. Never tilt or rotate the container to reveal branding; omit sidewall branding when it is not naturally visible and invent no replacement."
+      "source_serviceware_contract": {
+        "preserve_if_present": ["cup saucer", "support plate", "spoon"],
+        "identity_scope": "preserve source design, material, color, count and cup-relative arrangement while adapting only the projection to the preset overhead camera",
+        "absence_rule": "do not invent a saucer, plate or spoon when it is absent from the user source",
+        "reference_exclusion": "never replace source serviceware with serviceware from the integrated scene hint"
+      },
+      "prompt_addendum": "Rebuild a simple container in the same broad source family and material under the preset camera. When the source cup is visibly paired with a cup saucer or support plate and spoon, preserve their design, material, color, count and cup-relative arrangement while adapting their projection to the overhead camera. Do not invent missing serviceware. Exact source height, taper, sidewall geometry, decoration and branding are not invariants. Never tilt or rotate the container to reveal branding; omit sidewall branding when it is not naturally visible and invent no replacement."
     },
     "adopt_reference": {
       "container_identity_scope": "discard_source_container",
@@ -135,7 +155,7 @@
     }
   },
   "camera_contract": {
-    "pitch_degrees": [82, 88],
+    "pitch_degrees": [84, 89],
     "focal_length_equivalent_mm": [42, 52],
     "projection": "rectilinear overhead with slight real perspective",
     "outer_and_inner_rim": "nearly circular",
@@ -206,7 +226,7 @@
       "round table edge or left gray floor wedge disappears",
       "floor grout does not recede or the table reads as a flat background",
       "broad off-frame environmental shadow atmosphere is absent",
-      "fabric, coaster, napkin, saucer or an undeclared decorative prop appears",
+      "fabric, coaster, napkin or an undeclared decorative prop appears; a source saucer, support plate or spoon is allowed only in preserve_source mode when visibly present in the user image",
       "the cheesecake reads as castella, sponge, bread or a flat uniform cake",
       "the fork tines do not point left or the handle does not extend right below the cake",
       "the declared BAUHAUS magazine is missing, enlarged, relocated or replaced with a different design",

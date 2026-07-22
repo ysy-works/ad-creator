@@ -186,7 +186,7 @@
   "composition": {
     "shot_type": "overhead",
     "camera_height": "overhead",
-    "camera_pitch": "strict overhead with slight real perspective, approximately 82-88 degrees",
+    "camera_pitch": "strict overhead with slight real perspective, approximately 84-89 degrees",
     "lens_character": "phone_normal",
     "subject_position": "primary beverage just below center, dessert group above at twelve o'clock and cropped magazine at the far right edge",
     "negative_space": "warm-neutral white tabletop remains open between the declared groups with a narrow gray floor wedge",
@@ -252,7 +252,7 @@
       "exact table-edge curve, grout intersections and pixel layout",
       "exact environmental shadow silhouette",
       "visible text, logos and watermarks outside the declared BAUHAUS magazine",
-      "fabric, coaster, napkin, saucer and undeclared props"
+      "fabric, coaster, napkin and undeclared props; preserve source saucer, support plate and spoon only when present in preserve_source mode"
     ],
     "maximum_exact_products": 1,
     "maximum_generic_companions": 0,
