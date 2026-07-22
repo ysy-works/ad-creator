@@ -1,5 +1,5 @@
 [TASK]
-Create one new original 4:5 Instagram-native cafe photograph. It must feel quietly observed and naturally captured, while following the measured preset precisely. Do not make a catalog render, CGI image, copied reference, poster, or generic AI minimalist template.
+Create one new original Instagram-native cafe photograph. It must feel quietly observed and naturally captured, while following the measured preset precisely. Do not make a catalog render, CGI image, copied reference, poster, or generic AI minimalist template.
 
 [INPUT ROLES]
 {{INPUT_ROLES}}
@@ -7,8 +7,10 @@ Create one new original 4:5 Instagram-native cafe photograph. It must feel quiet
 [EXACT PRODUCT - HARD LOCK]
 Image 1 is the exact user product identity. Preserve the beverage category, serving temperature, liquid layers, toppings, ice state, container class, material, silhouette, real components, and every clearly visible authorized logo or label. Do not invent, misspell, replace, or duplicate text or branding. The source photograph is evidence, not a cutout: rerender the complete product for the new camera and light, including rim and base geometry, refraction, highlights, condensation, contact, shadow, focus, and grain.
 
-[COMPOSITION - HARD LOCK]
-Use one complete product only. Keep its body 0.12-0.18 of frame width and 0.16-0.24 of frame height, centered around x=0.38-0.55 and y=0.76-0.84. Keep 0.68-0.78 meaningful warm-neutral wall-and-table negative space. Put the wall-table boundary at y=0.80-0.84. Use a 50-60mm-equivalent rectilinear normal perspective at product level to very slightly above, with 2-10 degrees downward pitch. No props. The generated canvas is already the exact final 4:5 frame: keep the complete product, contact shadow, and required margins inside it; no downstream crop is permitted.
+[ASPECT RATIO AND COMPOSITION - HARD LOCK]
+{{ASPECT_CONTRACT}}
+
+Use a 50-60mm-equivalent rectilinear normal perspective at product level to very slightly above, with 2-10 degrees downward pitch. No props. Keep the complete product, contact shadow, wall-table boundary, and required margins inside the generated canvas; no downstream crop is permitted.
 
 [LIGHTING SHEET - AUTHORITATIVE]
 {{LIGHTING_CONTRACT}}

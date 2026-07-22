@@ -12,6 +12,7 @@
     "inputs": {
       "image": ["1", 0],
       "preset_id": "natural_white__product_center",
+      "aspect_ratio": "4:5",
       "request_id": "__REQUEST_ID__"
     },
     "class_type": "AdCreatorOpenAIImageGenerate",
@@ -26,7 +27,7 @@
     },
     "class_type": "SaveImage",
     "_meta": {
-      "title": "Save 880x1100 delivery image"
+      "title": "Save aspect-native delivery image"
     }
   }
 }

@@ -8,15 +8,17 @@ import os
 import re
 import secrets
 import ssl
+import tempfile
 import time
 import urllib.error
 import urllib.request
 import uuid
+from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
 
-from PIL import Image
+from PIL import Image, ImageOps
 
 
 COMFYUI_PACKAGE_ROOT = Path(__file__).resolve().parents[3]
@@ -67,8 +69,11 @@ class PublishedPreset:
     provider_profile: dict[str, Any]
     provider_image_paths: tuple[Path, ...]
     provider_image_roles: tuple[str, ...]
+    aspect_ratio: str
+    aspect_status: str
     delivery_width: int
     delivery_height: int
+    bbox_qa: dict[str, Any]
     bundle_sha256: str
     prompt_sha256: str
     provider_profile_sha256: str
@@ -208,7 +213,9 @@ def _lighting_prompt(sheet: dict[str, Any]) -> str:
     )
 
 
-def _provider_profile(registry: dict[str, Any], registry_path: Path) -> dict[str, Any]:
+def _provider_profile(
+    registry: dict[str, Any], registry_path: Path, aspect_ratio: str
+) -> dict[str, Any]:
     package_root = registry_path.parent.parent.resolve()
     profile_path = _safe_path(
         package_root,
@@ -230,31 +237,85 @@ def _provider_profile(registry: dict[str, Any], registry_path: Path) -> dict[str
                 "INVALID_PROVIDER_PROFILE",
                 f"OpenAI pilot requires {field}={expected!r}.",
             )
-    if profile.get("size") != "1024x1280":
+    if profile.get("default_aspect_ratio") != "4:5":
         raise OpenAIImageExecutionError(
-            "INVALID_PROVIDER_PROFILE", "OpenAI pilot generation size must be 1024x1280."
+            "INVALID_PROVIDER_PROFILE", "OpenAI pilot default aspect ratio must be 4:5."
         )
     if "input_fidelity" in profile:
         raise OpenAIImageExecutionError(
             "INVALID_PROVIDER_PROFILE",
             "gpt-image-2 always uses high-fidelity inputs; input_fidelity must be omitted.",
         )
-    delivery = profile.get("delivery_size")
-    if delivery != [880, 1100]:
+    aspect_ratios = profile.get("aspect_ratios")
+    if not isinstance(aspect_ratios, dict) or set(aspect_ratios) != {"4:5", "1:1"}:
         raise OpenAIImageExecutionError(
-            "INVALID_PROVIDER_PROFILE", "Pilot delivery size must be 880x1100."
+            "INVALID_PROVIDER_PROFILE", "Provider aspect-ratio settings are invalid."
+        )
+    if aspect_ratio not in aspect_ratios:
+        raise OpenAIImageExecutionError(
+            "UNSUPPORTED_ASPECT_RATIO", f"Unsupported aspect ratio: {aspect_ratio}"
+        )
+    expected_aspects = {
+        "4:5": {
+            "status": "published",
+            "size": "1024x1280",
+            "delivery_size": [880, 1100],
+            "safe_crop": "none_exact_4x5",
+        },
+        "1:1": {
+            "status": "prepared_pending_visual_qa",
+            "size": "1024x1024",
+            "delivery_size": [1024, 1024],
+            "safe_crop": "none_exact_1x1",
+        },
+    }
+    for ratio, expected in expected_aspects.items():
+        contract = aspect_ratios.get(ratio)
+        if not isinstance(contract, dict) or any(
+            contract.get(field) != value for field, value in expected.items()
+        ):
+            raise OpenAIImageExecutionError(
+                "INVALID_PROVIDER_PROFILE", f"Provider {ratio} contract is invalid."
+            )
+    preprocessing = profile.get("source_preprocessing")
+    expected_preprocessing = {
+        "default_max_long_edge": 1536,
+        "comparison_max_long_edges": [1536, 3072],
+        "upscale_small_inputs": False,
+        "strip_metadata": True,
+        "normalized_format": "jpeg",
+        "jpeg_quality": 95,
+    }
+    if not isinstance(preprocessing, dict) or any(
+        preprocessing.get(field) != value
+        for field, value in expected_preprocessing.items()
+    ):
+        raise OpenAIImageExecutionError(
+            "INVALID_PROVIDER_PROFILE", "Provider source preprocessing is invalid."
         )
     if profile.get("moderation") != "auto" or profile.get("maximum_input_images") != 16:
         raise OpenAIImageExecutionError(
             "INVALID_PROVIDER_PROFILE",
             "Pilot moderation and maximum image-input settings are invalid.",
         )
-    return profile
+    selected = dict(profile)
+    selected_contract = aspect_ratios[aspect_ratio]
+    selected.update(
+        {
+            "aspect_ratio": aspect_ratio,
+            "aspect_status": selected_contract["status"],
+            "size": selected_contract["size"],
+            "delivery_size": selected_contract["delivery_size"],
+            "safe_crop": selected_contract["safe_crop"],
+        }
+    )
+    return selected
 
 
 def load_published_preset(
     slot_id: str,
     *,
+    aspect_ratio: str = "4:5",
     registry_path: str | Path = DEFAULT_PRESET_REGISTRY,
 ) -> PublishedPreset:
     registry_path = Path(registry_path).resolve()
@@ -381,23 +442,51 @@ def load_published_preset(
         raise OpenAIImageExecutionError(
             "INVALID_PRESET_CONFIGURATION", "Cannot read preset prompt template."
         ) from exc
-    if template.count("{{INPUT_ROLES}}") != 1 or template.count("{{LIGHTING_CONTRACT}}") != 1:
+    if (
+        template.count("{{INPUT_ROLES}}") != 1
+        or template.count("{{LIGHTING_CONTRACT}}") != 1
+        or template.count("{{ASPECT_CONTRACT}}") != 1
+    ):
         raise OpenAIImageExecutionError(
             "INVALID_PRESET_CONFIGURATION", "Prompt template placeholders are invalid."
         )
-    prompt = template.replace("{{INPUT_ROLES}}", "\n".join(input_lines)).replace(
-        "{{LIGHTING_CONTRACT}}", _lighting_prompt(_read_json(lighting_path))
+    aspect_contracts = bundle.get("aspect_ratio_contracts")
+    if not isinstance(aspect_contracts, dict) or set(aspect_contracts) != {"4:5", "1:1"}:
+        raise OpenAIImageExecutionError(
+            "INVALID_PRESET_CONFIGURATION", "Preset aspect-ratio contracts are invalid."
+        )
+    aspect_contract = aspect_contracts.get(aspect_ratio)
+    if not isinstance(aspect_contract, dict):
+        raise OpenAIImageExecutionError(
+            "UNSUPPORTED_ASPECT_RATIO", f"Unsupported aspect ratio: {aspect_ratio}"
+        )
+    prompt_addendum = aspect_contract.get("prompt_addendum")
+    bbox_qa = aspect_contract.get("bbox_qa")
+    if (
+        not isinstance(prompt_addendum, str)
+        or not prompt_addendum.strip()
+        or not isinstance(bbox_qa, dict)
+        or bbox_qa.get("crop_allowed") is not False
+    ):
+        raise OpenAIImageExecutionError(
+            "INVALID_PRESET_CONFIGURATION", "Preset aspect prompt or bbox QA is invalid."
+        )
+    prompt = (
+        template.replace("{{INPUT_ROLES}}", "\n".join(input_lines))
+        .replace("{{LIGHTING_CONTRACT}}", _lighting_prompt(_read_json(lighting_path)))
+        .replace("{{ASPECT_CONTRACT}}", prompt_addendum.strip())
     )
     if "{{" in prompt or "}}" in prompt:
         raise OpenAIImageExecutionError(
             "INVALID_PRESET_CONFIGURATION", "Prompt template has unresolved placeholders."
         )
 
-    profile = _provider_profile(registry, registry_path)
-    delivery = bundle.get("delivery")
+    profile = _provider_profile(registry, registry_path, aspect_ratio)
+    delivery = aspect_contract
     expected_delivery = {
+        "status": profile["aspect_status"],
         "generation_size": profile["size"],
-        "safe_crop": "none_exact_4x5",
+        "safe_crop": profile["safe_crop"],
         "width": profile["delivery_size"][0],
         "height": profile["delivery_size"][1],
         "format": profile["output_format"],
@@ -420,8 +509,11 @@ def load_published_preset(
         provider_profile=profile,
         provider_image_paths=tuple(provider_paths),
         provider_image_roles=tuple(provider_roles),
+        aspect_ratio=aspect_ratio,
+        aspect_status=str(aspect_contract.get("status") or ""),
         delivery_width=int(delivery["width"]),
         delivery_height=int(delivery["height"]),
+        bbox_qa=dict(bbox_qa),
         bundle_sha256=bundle_hash,
         prompt_sha256=hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
         provider_profile_sha256=_canonical_json_sha256(profile),
@@ -652,10 +744,96 @@ def _prepare_audit_directory(directory: str | Path) -> Path:
     return audit_dir
 
 
+def _source_max_edge(profile: dict[str, Any]) -> int:
+    preprocessing = profile["source_preprocessing"]
+    default = int(preprocessing["default_max_long_edge"])
+    allowed = tuple(int(value) for value in preprocessing["comparison_max_long_edges"])
+    raw = os.environ.get("AD_CREATOR_OPENAI_SOURCE_MAX_EDGE", "").strip()
+    if not raw:
+        return default
+    try:
+        selected = int(raw)
+    except ValueError as exc:
+        raise OpenAIImageExecutionError(
+            "INVALID_CONFIGURATION",
+            "AD_CREATOR_OPENAI_SOURCE_MAX_EDGE must be 1536 or 3072.",
+        ) from exc
+    if selected not in allowed:
+        raise OpenAIImageExecutionError(
+            "INVALID_CONFIGURATION",
+            "AD_CREATOR_OPENAI_SOURCE_MAX_EDGE must be 1536 or 3072.",
+        )
+    return selected
+
+
+def _input_image_descriptor(role: str, path: Path) -> dict[str, Any]:
+    try:
+        with Image.open(path) as opened:
+            dimensions = [opened.width, opened.height]
+            image_format = str(opened.format or "").upper()
+            opened.verify()
+    except (OSError, Image.DecompressionBombError) as exc:
+        raise OpenAIImageExecutionError("INVALID_IMAGE", "Invalid image input.") from exc
+    return {
+        "role": role,
+        "sha256": _sha256(path),
+        "bytes": path.stat().st_size,
+        "dimensions": dimensions,
+        "format": image_format,
+    }
+
+
+@contextmanager
+def _normalized_product_source(source: Path, profile: dict[str, Any]):
+    max_edge = _source_max_edge(profile)
+    preprocessing = profile["source_preprocessing"]
+    temporary_path: Path | None = None
+    try:
+        try:
+            with Image.open(source) as opened:
+                original_format = str(opened.format or "").upper()
+                normalized = ImageOps.exif_transpose(opened).convert("RGB")
+                original_dimensions = [normalized.width, normalized.height]
+                if max(normalized.size) > max_edge:
+                    normalized.thumbnail((max_edge, max_edge), Image.Resampling.LANCZOS)
+                uploaded_dimensions = [normalized.width, normalized.height]
+        except (OSError, Image.DecompressionBombError) as exc:
+            raise OpenAIImageExecutionError("INVALID_IMAGE", "Invalid product source image.") from exc
+
+        with tempfile.NamedTemporaryFile(
+            prefix="ad_creator_openai_source_", suffix=".jpg", delete=False
+        ) as temporary:
+            temporary_path = Path(temporary.name)
+        normalized.save(
+            temporary_path,
+            format="JPEG",
+            quality=int(preprocessing["jpeg_quality"]),
+            subsampling=0,
+            optimize=True,
+        )
+        yield temporary_path, {
+            "original_dimensions": original_dimensions,
+            "uploaded_dimensions": uploaded_dimensions,
+            "original_format": original_format,
+            "uploaded_format": "JPEG",
+            "max_long_edge": max_edge,
+            "resized": uploaded_dimensions != original_dimensions,
+            "upscaled": False,
+            "metadata_stripped": True,
+        }
+    finally:
+        if temporary_path is not None:
+            try:
+                temporary_path.unlink()
+            except OSError:
+                pass
+
+
 def run_openai_image(
     *,
     image_path: str | Path,
     preset_slot_id: str,
+    aspect_ratio: str = "4:5",
     api_key: str | None = None,
     timeout_seconds: float = 1200.0,
     registry_path: str | Path = DEFAULT_PRESET_REGISTRY,
@@ -667,6 +845,38 @@ def run_openai_image(
     if not source.is_file():
         raise OpenAIImageExecutionError("INVALID_IMAGE", "Product source image does not exist.")
     _mime_type(source)
+    preset = load_published_preset(
+        preset_slot_id,
+        aspect_ratio=aspect_ratio,
+        registry_path=registry_path,
+    )
+    with _normalized_product_source(source, preset.provider_profile) as (
+        normalized_source,
+        source_preprocessing,
+    ):
+        return _run_openai_image_prepared(
+            source=normalized_source,
+            preset=preset,
+            source_preprocessing=source_preprocessing,
+            api_key=api_key,
+            timeout_seconds=timeout_seconds,
+            transport=transport,
+            run_id=run_id,
+            audit_dir=audit_dir,
+        )
+
+
+def _run_openai_image_prepared(
+    *,
+    source: Path,
+    preset: PublishedPreset,
+    source_preprocessing: dict[str, Any],
+    api_key: str | None,
+    timeout_seconds: float,
+    transport: Transport | None,
+    run_id: str | None,
+    audit_dir: str | Path | None,
+) -> tuple[Image.Image, dict[str, Any]]:
     key = api_key or os.environ.get("OPENAI_API_KEY")
     if not key:
         raise OpenAIImageExecutionError(
@@ -675,24 +885,21 @@ def run_openai_image(
     if timeout_seconds <= 0:
         raise OpenAIImageExecutionError("INVALID_CONFIGURATION", "OpenAI timeout must be positive.")
 
-    preset = load_published_preset(preset_slot_id, registry_path=registry_path)
     profile = preset.provider_profile
     image_paths = (source, *preset.provider_image_paths)
     roles = ("product_source", *preset.provider_image_roles)
     input_images = [
-        {
-            "role": role,
-            "sha256": _sha256(path),
-            "bytes": path.stat().st_size,
-        }
+        _input_image_descriptor(role, path)
         for role, path in zip(roles, image_paths, strict=True)
     ]
+    input_images[0]["preprocessing"] = dict(source_preprocessing)
     request_hash = _canonical_json_sha256(
         {
             "bundle_sha256": preset.bundle_sha256,
             "input_images": input_images,
             "preset_id": preset.preset_id,
             "preset_slot_id": preset.slot_id,
+            "aspect_ratio": preset.aspect_ratio,
             "prompt_sha256": preset.prompt_sha256,
             "provider_profile_sha256": preset.provider_profile_sha256,
         }
@@ -769,12 +976,16 @@ def run_openai_image(
         "quality": profile["quality"],
         "preset_slot_id": preset.slot_id,
         "preset_id": preset.preset_id,
+        "aspect_ratio": preset.aspect_ratio,
+        "aspect_status": preset.aspect_status,
         "run_id": resolved_run_id,
         "request_hash": request_hash,
         "request_id": response.request_id,
         "client_request_id": client_request_id,
         "image_roles": list(roles),
         "input_images": input_images,
+        "source_preprocessing": dict(source_preprocessing),
+        "bbox_qa_contract": dict(preset.bbox_qa),
         "bundle_sha256": preset.bundle_sha256,
         "prompt_sha256": preset.prompt_sha256,
         "provider_profile_sha256": preset.provider_profile_sha256,

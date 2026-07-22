@@ -1,5 +1,7 @@
 # OpenAI 두 프리셋 파일럿 검증 기록 — 2026-07-21
 
+> 이 문서는 당시 45도 우드 preset의 과거 유료 smoke 증거입니다. 현재 기본 우드는 `tokyo_a6_relational_scene_hint_v4`이며, A6 및 1:1은 별도 시각 검증 전이므로 이 결과를 현재 기본 preset 검증으로 해석하지 않습니다.
+
 ## 대상
 
 - 기준: `upstream/comfyui` `7b098bd`

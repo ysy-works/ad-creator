@@ -14,7 +14,7 @@ Use exactly one exact user beverage. Its body occupies 0.16-0.20 of frame width 
 {{LIGHTING_CONTRACT}}
 
 [WOOD AND COLOR - HARD LOCK]
-The support is one round, medium-lightness, low-saturation honey-oak table with straight directional grain and an oiled-matte finish. Wood warmth stays local. Keep the exact user beverage color source-authoritative and preserve neutral curtain and highlight colors independently. Reject orange wash, yellow pine, flat beige laminate, black featureless wood, glossy synthetic grain, a rectangular tray, or A6 dark-tray scene leakage.
+The support is one round, medium-lightness, low-saturation honey-oak table with straight directional grain and an oiled-matte finish. Wood warmth stays local. Keep the exact user beverage color source-authoritative and preserve neutral curtain and highlight colors independently. Reject orange wash, yellow pine, flat beige laminate, black featureless wood, glossy synthetic grain, or a rectangular tray.
 
 [REFERENCE SAFETY]
 The sanitized scene hint may control only low-frequency camera distance, product scale, round-table relationships, light distribution, palette, and material response. It must not supply any reference beverage, cup mark, text, logo, exact pastry, exact utensil, exact eyewear, furniture identity, curtain fold, crop, or shadow silhouette. Regenerate all scene pixels, props, contacts, occlusions, and shadows.

@@ -4,11 +4,11 @@
   "preset_id": "instagram_wood_45deg_relational_v3",
   "family": "wood",
   "composition": "medium",
-  "status": "published",
+  "status": "available_not_routed",
   "source_review_status": "passed_by_user_review",
   "prompt_template": {
     "path": "prompt-template.txt",
-    "sha256": "aab42e3fa422b2a50539428c3c0603115a564e8bc4d8c5422b6ba6a514856806"
+    "sha256": "7268dcd5dbe36cc3c5ab1e6e213f43e8d86825bd2b4e87e43aeaa4147d2bdfb3"
   },
   "lighting_sheet": {
     "path": "lighting-sheet.json",

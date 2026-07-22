@@ -8,7 +8,7 @@
   "source_review_status": "passed_by_user_review",
   "prompt_template": {
     "path": "prompt-template.txt",
-    "sha256": "f3ca2c69e5ac54a5a4e3c0bd45ebc9b71c70bc9280da3d3c3a8806a9d31554f8"
+    "sha256": "3db26d0fac4789e1d22a7d5d362b6fca06889807e8966529fb6db570c2a96971"
   },
   "lighting_sheet": {
     "path": "lighting-sheet.json",
@@ -30,16 +30,48 @@
       "reason": "The approved white preset is contract-driven; raw authoring pixels must not control runtime generation."
     }
   ],
-  "delivery": {
-    "generation_size": "1024x1280",
-    "safe_crop": "none_exact_4x5",
-    "width": 880,
-    "height": 1100,
-    "format": "png"
+  "aspect_ratio_contracts": {
+    "4:5": {
+      "status": "published",
+      "visual_review_status": "passed_by_user_review",
+      "prompt_addendum": "Generate the exact final 4:5 canvas. Keep the one product body 0.12-0.18 of frame width and 0.16-0.24 of frame height, centered around x=0.38-0.55 and y=0.76-0.84. Preserve 0.68-0.78 meaningful warm-neutral wall-and-table negative space and place the wall-table boundary at y=0.80-0.84.",
+      "generation_size": "1024x1280",
+      "safe_crop": "none_exact_4x5",
+      "width": 880,
+      "height": 1100,
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [0.12, 0.18],
+        "product_height_ratio": [0.16, 0.24],
+        "center_x_ratio": [0.38, 0.55],
+        "center_y_ratio": [0.76, 0.84],
+        "negative_space_ratio": [0.68, 0.78],
+        "crop_allowed": false
+      }
+    },
+    "1:1": {
+      "status": "prepared_pending_visual_qa",
+      "visual_review_status": "not_yet_generated",
+      "prompt_addendum": "Generate the exact final 1:1 square canvas from the start; do not derive it by cropping a portrait image. Keep the one product body 0.14-0.20 of frame width and 0.20-0.30 of frame height, centered around x=0.42-0.58 and y=0.72-0.80. Preserve 0.58-0.70 meaningful warm-neutral wall-and-table negative space and place the wall-table boundary at y=0.76-0.82.",
+      "generation_size": "1024x1024",
+      "safe_crop": "none_exact_1x1",
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [0.14, 0.20],
+        "product_height_ratio": [0.20, 0.30],
+        "center_x_ratio": [0.42, 0.58],
+        "center_y_ratio": [0.72, 0.80],
+        "negative_space_ratio": [0.58, 0.70],
+        "crop_allowed": false
+      }
+    }
   },
   "qa_contract": {
     "phase": "common_qa_pending",
     "hard_gates": ["identity", "logo_ocr", "crop"],
-    "comparative_scores": ["naturalness", "mood_adherence"]
+    "comparative_scores": ["naturalness", "mood_adherence"],
+    "aspect_ratio_specific_bbox": true
   }
 }

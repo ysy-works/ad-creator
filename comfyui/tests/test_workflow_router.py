@@ -35,6 +35,7 @@ class WorkflowRouterTest(unittest.TestCase):
             values={
                 "source_image": "uploads/request.png",
                 "preset_id": "wood__product_center",
+                "aspect_ratio": "1:1",
                 "request_id": "job-123",
             }
         )
@@ -44,6 +45,7 @@ class WorkflowRouterTest(unittest.TestCase):
             resolved["prompt"]["2"]["inputs"]["preset_id"], "wood__product_center"
         )
         self.assertEqual(resolved["prompt"]["2"]["inputs"]["request_id"], "job-123")
+        self.assertEqual(resolved["prompt"]["2"]["inputs"]["aspect_ratio"], "1:1")
 
     def test_default_model_c_workflow_remains_available_for_rollback(self):
         resolved = build_prompt(
@@ -85,6 +87,7 @@ class WorkflowRouterTest(unittest.TestCase):
             values={
                 "source_image": "request.png",
                 "preset_id": "natural_white__product_center",
+                "aspect_ratio": "4:5",
                 "request_id": "job-123",
             }
         )
@@ -105,7 +108,7 @@ class WorkflowRouterTest(unittest.TestCase):
     def test_reports_workflow_input_names(self):
         self.assertEqual(
             workflow_input_names(workflow_id="openai-gpt-image-2-low-v1"),
-            {"source_image", "preset_id", "request_id"},
+            {"source_image", "preset_id", "aspect_ratio", "request_id"},
         )
 
 

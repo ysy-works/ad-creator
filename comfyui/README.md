@@ -55,6 +55,7 @@ comfyui/
     registry.json
     natural_white__product_center/
     wood__product_center/
+    wood__product_center_a6/
   custom_nodes/ad_creator/
     nodes/model_c.py
     nodes/openai_image.py
@@ -89,7 +90,9 @@ POST /generate (multipart/form-data)
 
 ## OpenAI GPT Image 2 low 파일럿
 
-`openai-gpt-image-2-low-v1`은 `gpt-image-2`, `quality=low`를 서버 profile에서 고정합니다. 서비스 ID는 `natural_white__product_center`, `wood__product_center` 두 개만 published이며 나머지 10개는 provider 호출 전에 거부합니다. 화이트는 사용자 원본만, 우드는 사용자 원본과 검수된 sanitized scene hint만 provider 입력으로 사용합니다. provider는 정확한 4:5 `1024x1280` PNG를 생성하고, ComfyUI는 crop 없이 `880x1100`으로 축소합니다.
+`openai-gpt-image-2-low-v1`은 `gpt-image-2`, `quality=low`를 서버 profile에서 고정합니다. 서비스 ID는 `natural_white__product_center`, `wood__product_center` 두 개만 published이며 나머지 10개는 provider 호출 전에 거부합니다. 우드 기본값은 A6 다중 피사체 preset이고, 기존 45도 preset은 라우팅하지 않은 대안으로 보존합니다. `aspect_ratio=4:5`는 `1024x1280` 생성 후 무크롭 `880x1100`, `aspect_ratio=1:1`은 처음부터 `1024x1024`로 생성합니다. 1:1은 시각 QA 전까지 공개 UI에서 숨깁니다.
+
+제품 원본은 기본적으로 EXIF·파일명을 제거하고 긴 변 1536px까지만 축소하며 작은 사진은 확대하지 않습니다. 비용·OCR·제품 보존 비교 시에만 `AD_CREATOR_OPENAI_SOURCE_MAX_EDGE=3072`를 명시합니다.
 
 각 성공 실행은 Gateway job ID와 연결된 provider 원본 PNG 및 JSON audit manifest를 `output/ad_creator/audit`에 별도 저장합니다. manifest에는 preset/profile/prompt/input hash, OpenAI·client request ID, usage, 소요 시간과 결과 hash만 기록하며 prompt 본문, 비밀키, 사용자 원본 파일과 로컬 경로는 기록하지 않습니다.
 
@@ -105,6 +108,7 @@ AD_CREATOR_MODEL_C_TIMEOUT_SECONDS=420
 OPENAI_API_KEY=서버에서만-주입
 OPENAI_IMAGE_TIMEOUT_SECONDS=1200
 AD_CREATOR_OPENAI_AUDIT_DIR=/opt/comfyui/ComfyUI/output/ad_creator/audit
+AD_CREATOR_OPENAI_SOURCE_MAX_EDGE=1536
 ```
 
 - 같은 VM이면 loopback 주소를 사용합니다.
@@ -176,6 +180,7 @@ background_style   vivid | wood | white
 strength           low | medium | high
 seed               선택 정수
 preset_id          OpenAI workflow에서 canonical service preset ID
+aspect_ratio       4:5(기본) | 1:1
 ```
 
 Gateway는 업로드 후 즉시 `202 Accepted`와 서명된 `generation_id`를 반환합니다. 백엔드는 상태 URL을 폴링하고 `succeeded`가 되면 결과 URL을 내려받습니다.

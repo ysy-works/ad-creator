@@ -15,7 +15,7 @@ from ..adapters.openai_image import (
 )
 
 
-MAX_SOURCE_EDGE = 3072
+SUPPORTED_ASPECT_RATIOS = ["4:5", "1:1"]
 
 
 def _tensor_to_pil(image) -> Image.Image:
@@ -38,10 +38,8 @@ def _pil_to_tensor(image: Image.Image):
 
 
 def _normalized_product_source(image) -> Image.Image:
-    normalized = _tensor_to_pil(image)
-    if max(normalized.size) > MAX_SOURCE_EDGE:
-        normalized.thumbnail((MAX_SOURCE_EDGE, MAX_SOURCE_EDGE), Image.Resampling.LANCZOS)
-    return normalized
+    """Convert a ComfyUI tensor losslessly; adapter owns metadata stripping and resizing."""
+    return _tensor_to_pil(image)
 
 
 def _audit_directory() -> Path:
@@ -91,6 +89,7 @@ class AdCreatorOpenAIImageGenerate:
             "required": {
                 "image": ("IMAGE",),
                 "preset_id": (preset_slots, {"default": preset_slots[0]}),
+                "aspect_ratio": (SUPPORTED_ASPECT_RATIOS, {"default": "4:5"}),
                 "request_id": (
                     "STRING",
                     {"default": "__AUTO__", "multiline": False},
@@ -99,28 +98,27 @@ class AdCreatorOpenAIImageGenerate:
         }
 
     @classmethod
-    def IS_CHANGED(cls, image, preset_id, request_id):
+    def IS_CHANGED(cls, image, preset_id, aspect_ratio, request_id):
         # A new queued user action is an explicit new paid generation. Gateway
         # idempotency prevents network retries from creating a second prompt.
         return float("nan")
 
-    def generate(self, image, preset_id, request_id):
+    def generate(self, image, preset_id, aspect_ratio, request_id):
         input_path = None
         try:
             with tempfile.NamedTemporaryFile(
-                prefix="ad_creator_openai_", suffix=".jpg", delete=False
+                prefix="ad_creator_openai_", suffix=".png", delete=False
             ) as temporary:
                 input_path = Path(temporary.name)
             _normalized_product_source(image).save(
                 input_path,
-                format="JPEG",
-                quality=95,
-                subsampling=0,
+                format="PNG",
                 optimize=True,
             )
             generated, metadata = run_openai_image(
                 image_path=input_path,
                 preset_slot_id=preset_id,
+                aspect_ratio=aspect_ratio,
                 timeout_seconds=_timeout_seconds(),
                 run_id=_resolved_run_id(request_id),
                 audit_dir=_audit_directory(),

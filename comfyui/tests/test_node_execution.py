@@ -81,10 +81,11 @@ class NodeExecutionTest(unittest.TestCase):
                 kwargs["preset_slot_id"], "natural_white__product_center"
             )
             self.assertEqual(kwargs["run_id"], "gateway-job-123")
+            self.assertEqual(kwargs["aspect_ratio"], "4:5")
             self.assertTrue(str(kwargs["audit_dir"]).endswith("/audit"))
             with Image.open(observed_input) as prepared:
-                self.assertEqual(prepared.format, "JPEG")
-                self.assertLessEqual(max(prepared.size), 3072)
+                self.assertEqual(prepared.format, "PNG")
+                self.assertEqual(prepared.size, (4096, 12))
             return (
                 Image.new("RGB", (880, 1100), (240, 235, 225)),
                 {
@@ -108,6 +109,7 @@ class NodeExecutionTest(unittest.TestCase):
                     image, metadata_json = AdCreatorOpenAIImageGenerate().generate(
                         image=source,
                         preset_id="natural_white__product_center",
+                        aspect_ratio="4:5",
                         request_id="gateway-job-123",
                     )
 
@@ -121,10 +123,10 @@ class NodeExecutionTest(unittest.TestCase):
     def test_openai_node_always_disables_comfyui_cache(self):
         self.assertNotEqual(
             AdCreatorOpenAIImageGenerate.IS_CHANGED(
-                None, "natural_white__product_center", "request-1"
+                None, "natural_white__product_center", "4:5", "request-1"
             ),
             AdCreatorOpenAIImageGenerate.IS_CHANGED(
-                None, "natural_white__product_center", "request-1"
+                None, "natural_white__product_center", "4:5", "request-1"
             ),
         )
 

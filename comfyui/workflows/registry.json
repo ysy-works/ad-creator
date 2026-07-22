@@ -18,6 +18,10 @@
           "node_id": "2",
           "input": "preset_id"
         },
+        "aspect_ratio": {
+          "node_id": "2",
+          "input": "aspect_ratio"
+        },
         "request_id": {
           "node_id": "2",
           "input": "request_id"
@@ -26,6 +30,7 @@
       "required_inputs": [
         "source_image",
         "preset_id",
+        "aspect_ratio",
         "request_id"
       ],
       "output_node_id": "3"

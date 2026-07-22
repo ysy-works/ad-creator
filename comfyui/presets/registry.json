@@ -43,12 +43,12 @@
       "status": "published",
       "family": "wood",
       "composition": "medium",
-      "preset_id": "instagram_wood_45deg_relational_v3",
+      "preset_id": "tokyo_a6_relational_scene_hint_v4",
       "legacy_gateway": {
         "background_style": "wood",
         "composition": "medium"
       },
-      "bundle": "wood__product_center/preset.json"
+      "bundle": "wood__product_center_a6/preset.json"
     },
     "wood__aerial_shot": {
       "enabled": false,
@@ -85,6 +85,16 @@
       "status": "planned_family_replacement",
       "family": "vivid",
       "composition": "handheld"
+    }
+  },
+  "alternatives": {
+    "instagram_wood_45deg_relational_v3": {
+      "enabled": false,
+      "status": "available_not_routed",
+      "family": "wood",
+      "composition": "medium",
+      "bundle": "wood__product_center/preset.json",
+      "activation_rule": "Add a new service slot or explicit preset option after backend/frontend contract approval; never replace the A6 default silently."
     }
   }
 }

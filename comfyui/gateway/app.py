@@ -345,6 +345,7 @@ def _canonical_workflow_values(
     background_style: str,
     strength: str,
     seed: int | None,
+    aspect_ratio: str,
 ) -> dict[str, Any]:
     try:
         accepted = workflow_input_names(workflow_id=workflow_id)
@@ -361,6 +362,7 @@ def _canonical_workflow_values(
         "background_style": background_style,
         "strength": strength,
         "seed": seed,
+        "aspect_ratio": aspect_ratio,
     }
     return {
         name: possible[name]
@@ -568,6 +570,7 @@ async def _submit_generation(
     settings: Settings,
     request_id: str,
     preset_id: str | None = None,
+    aspect_ratio: str = "4:5",
 ) -> tuple[str, str, str]:
     extension = _validate_image(data, content_type)
     async with _SUBMISSION_LOCK:
@@ -603,6 +606,7 @@ async def _submit_generation(
             "strength": strength,
             "preset_id": preset_id,
             "request_id": request_id,
+            "aspect_ratio": aspect_ratio,
         }
         if seed is not None:
             possible_values["seed"] = seed
@@ -850,6 +854,7 @@ async def create_generation(
     background_style: Annotated[Literal["vivid", "wood", "white"], Form()] = "wood",
     strength: Annotated[Literal["low", "medium", "high"], Form()] = "medium",
     seed: Annotated[int | None, Form(ge=-1, le=2147483647)] = None,
+    aspect_ratio: Annotated[Literal["4:5", "1:1"], Form()] = "4:5",
     idempotency_key: Annotated[str | None, Header(alias="Idempotency-Key")] = None,
     settings: Settings = Depends(require_api_key),
 ) -> dict[str, Any]:
@@ -879,6 +884,7 @@ async def create_generation(
         background_style=background_style,
         strength=strength,
         seed=seed,
+        aspect_ratio=aspect_ratio,
     )
     request_hash = _request_hash(
         data=data,
@@ -942,6 +948,7 @@ async def create_generation(
             settings=settings,
             request_id=job_id,
             preset_id=selected_preset_id,
+            aspect_ratio=aspect_ratio,
         )
     except _PromptSubmissionUncertain as exc:
         message = str(exc.error.detail)

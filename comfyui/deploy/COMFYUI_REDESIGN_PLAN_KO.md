@@ -14,14 +14,14 @@
 4. 레퍼런스·hint manifest 일부가 개발 Mac의 절대경로와 결합되어 GCP에서 재현되지 않습니다.
 5. 런타임 보조 이미지, 오프라인 authoring reference, 품질 검사용 이미지의 역할이 분리되지 않았습니다.
 6. 생성과 provider 고유 QA가 한 노드에 묶이면 비용·실패 원인·비교 기준을 분리할 수 없습니다.
-7. 4:5 생성 뒤 백엔드가 다시 1:1로 중앙 크롭해 preset의 구도 계약을 깨뜨립니다.
+7. 한 비율의 생성물을 다른 비율로 중앙 crop해 preset의 구도 계약을 깨뜨립니다.
 8. 여러 provider 결과를 한 grid 이미지로 합치면 개별 원본, 메타데이터와 QA를 잃습니다.
 9. Gateway health가 기존 model-c의 생존 여부와 결합되어 신규 provider의 준비 상태를 정확히 표현하지 못합니다.
 
 ## 3. 브랜치와 이관 원칙
 
 - 배포 기준선은 `upstream/comfyui`입니다.
-- 신규 브랜치는 `codex/openai-gpt-image-2-presets`이며 기존 연구 브랜치 전체를 merge하지 않습니다.
+- 작업 브랜치는 `presets`이며 기존 연구 브랜치 전체를 merge하지 않습니다.
 - 연구 브랜치에서는 검수된 preset contract, lighting sheet, sanitized hint/material board와 필요한 최소 로직만 선별 이관합니다.
 - `model-c-v1`을 삭제·덮어쓰기 하지 않고 신규 `openai-gpt-image-2-low-v1`을 병렬 등록합니다.
 - 배포 전 untracked 자산이 하나라도 preset registry에서 참조되면 실패 처리합니다.
@@ -35,6 +35,9 @@ natural_white__product_center
   -> instagram_white_diffuse_wall_table_v1
 
 wood__product_center
+  -> tokyo_a6_relational_scene_hint_v4
+
+wood medium alternative (unrouted)
   -> instagram_wood_45deg_relational_v3
 ```
 
@@ -78,8 +81,8 @@ comfyui/
       "status": "published",
       "family": "wood",
       "composition": "medium",
-      "preset_id": "instagram_wood_45deg_relational_v3",
-      "bundle": "wood__product_center/preset.json"
+      "preset_id": "tokyo_a6_relational_scene_hint_v4",
+      "bundle": "wood__product_center_a6/preset.json"
     }
   }
 }
@@ -88,15 +91,17 @@ comfyui/
 ```json
 {
   "slot_id": "wood__product_center",
-  "preset_id": "instagram_wood_45deg_relational_v3",
+  "preset_id": "tokyo_a6_relational_scene_hint_v4",
   "prompt_template": {"path": "prompt-template.txt", "sha256": "..."},
   "lighting_sheet": {"path": "lighting-sheet.json", "sha256": "..."},
   "grade_profile": {"path": "grade-profile.json", "sha256": "...", "apply_in_pilot": false},
   "hint_images": [
-    {"role": "sanitized_scene_hint", "path": "../assets/wood-medium-scene-hint.png", "sha256": "...", "send_to_provider": true},
-    {"role": "material_review_board", "path": "../assets/wood-medium-material-board.png", "sha256": "...", "send_to_provider": false}
+    {"role": "sanitized_a6_scene_hint", "path": "../assets/wood-a6-multi-scene-hint.png", "sha256": "...", "send_to_provider": true}
   ],
-  "delivery": {"generation_size": "1024x1280", "safe_crop": "none_exact_4x5", "width": 880, "height": 1100, "format": "png"}
+  "aspect_ratio_contracts": {
+    "4:5": {"generation_size": "1024x1280", "width": 880, "height": 1100, "safe_crop": "none_exact_4x5"},
+    "1:1": {"generation_size": "1024x1024", "width": 1024, "height": 1024, "safe_crop": "none_exact_1x1"}
+  }
 }
 ```
 
@@ -153,12 +158,12 @@ provider subgraph는 다음 공통 입력·출력을 지킵니다.
       elapsed_ms, cost_metadata, provider_error
 ```
 
-OpenAI 구현은 `gpt-image-2`, `quality=low`, 정확한 4:5인 `1024x1280`으로 생성한 뒤 crop 없이 `880x1100`으로 축소합니다. `gpt-image-2`의 입력 이미지는 별도 `input_fidelity` 옵션을 보내지 않습니다. quality를 medium으로 올릴 때는 preset이나 workflow ID를 조용히 덮어쓰지 말고 새 provider profile과 회귀 테스트를 먼저 만듭니다.
+OpenAI 구현은 `gpt-image-2`, `quality=low`를 유지하며 4:5는 `1024x1280` 생성 후 무크롭 `880x1100`, 1:1은 처음부터 `1024x1024`로 생성합니다. 입력 원본은 기본 긴 변 1536px 상한이며 확대하지 않습니다. `3072`는 승인된 OCR·identity·usage 비교 실험에서만 사용합니다. `gpt-image-2`에는 별도 `input_fidelity` 옵션을 보내지 않습니다.
 
 ### `AD_NormalizeOutput`
 
-- provider 결과 하나를 `880x1100` PNG로 정규화합니다.
-- provider부터 정확한 4:5 `1024x1280`을 요청하고 제품 전체, 그림자와 preset 여백을 crop 없이 보존합니다. provider가 다른 크기·비율을 반환하면 자르지 않고 실패합니다.
+- provider 결과를 요청 비율의 전달 크기(4:5 `880x1100`, 1:1 `1024x1024`)로 정규화합니다.
+- provider부터 요청 비율의 정확한 canvas를 요청하고 제품 전체, 그림자와 preset 여백을 crop 없이 보존합니다. provider가 다른 크기·비율을 반환하면 자르지 않고 실패합니다.
 - 백엔드가 추가로 정사각형 크롭하지 않도록 output manifest에 크기와 aspect ratio를 기록합니다.
 - 원본 provider 결과와 전달 결과를 서로 다른 파일로 저장해 회귀 원인을 추적합니다.
 
@@ -187,14 +192,13 @@ composition              작은 단일 제품, 상단 중심의 넓은 여백, 4
 
 ```text
 service preset_id       wood__product_center
-internal contract       instagram_wood_45deg_relational_v3
-runtime provider input  사용자 제품 + sanitized scene hint
-offline authority        material board는 prompt 작성·검수에만 사용, provider 제출 금지
-lighting                 좌상단의 큰 창광, 중명도 oak, 넓은 공간 그림자
-composition              45도 원형 테이블, 단일 제품과 제한된 관계형 소품, 4:5
+internal contract       tokyo_a6_relational_scene_hint_v4
+runtime provider input  사용자 제품 + sanitized A6 scene hint
+lighting                 먼 방의 단단한 건축광, 전경 open shade와 넓은 반사광
+composition              완전한 원형 어두운 tray 위 3개 피사체의 A6 관계형 구도
 ```
 
-scene hint는 원본 음료·로고를 제거한 승인 버전만 사용합니다. Material board는 wood 재질의 prompt 작성·검수 authority로 Git에 보존하되 이번 파일럿에서는 OpenAI 이미지 입력으로 보내지 않습니다. 각 역할은 manifest와 checksum으로 고정합니다.
+scene hint는 원본 음료·로고를 제거한 승인 버전만 사용합니다. 기존 45도 contract는 삭제하지 않고 `available_not_routed` 대안으로 보존합니다. 각 역할은 manifest와 checksum으로 고정합니다.
 
 ## 7. 현재 파일럿 그래프와 다음 분리점
 
@@ -207,7 +211,7 @@ LoadImage(user product)
   -> AdCreatorOpenAIImageGenerate
        [ResolvePreset -> VerifyAssets -> BuildRequest
         -> OpenAIProvider(quality=low, retries=0)
-        -> Verify exact 4:5 -> Normalize without crop / 880x1100
+        -> Verify requested aspect -> Normalize without crop
         -> Save provider raw + audit sidecar]
   -> SaveImage
 ```
@@ -341,9 +345,9 @@ AD_ResolveRequest
 | Provider | model/quality/size 고정, `input_fidelity` 미전송, timeout, secret redaction, retries 0 |
 | Workflow | API/UI topology, binding, 최종 output node, legacy `model-c-v1` 보존 |
 | Gateway | canonical `preset_id`, legacy 두 조합 fallback, 나머지 400, idempotency |
-| Output | PNG, 880x1100, 4:5, 제품·그림자·여백 무크롭 |
-| Backend | workflow allowlist, 4:5 보존, 1080x1080 회귀 차단, rollback |
-| Frontend | 두 카드만 선택 가능, 10개 준비 중, 결과 4:5 표시 |
+| Output | 4:5 `880x1100` 또는 1:1 `1024x1024`, 제품·그림자·여백 무크롭 |
+| Backend | workflow·비율 allowlist, 요청 비율 보존, 임의 crop 차단, rollback |
+| Frontend | 두 카드만 선택 가능, 10개 준비 중, 요청 비율 표시; 1:1은 QA 전 숨김 |
 | Paid smoke | 화이트·우드 각 1회, 독립 파일, 시간·오류·prompt ID 기록 |
 
 실제 API 키가 없는 환경에서는 mock E2E까지 완료하고 `실제 생성 미검증`을 명확히 남깁니다. mock 성공을 실제 OpenAI 성공으로 보고하지 않습니다.
@@ -353,7 +357,7 @@ AD_ResolveRequest
 - 두 서비스 ID가 정확한 내부 preset contract로만 해석됩니다.
 - lighting sheet, preset, hint/material 역할과 checksum이 모두 재현 가능합니다.
 - OpenAI model과 quality가 profile에서 고정되고 레거시 `strength`와 분리됩니다.
-- 4:5가 ComfyUI, Gateway, backend, frontend, 다운로드까지 보존됩니다.
+- 요청 비율이 ComfyUI, Gateway, backend, frontend, 다운로드까지 보존됩니다.
 - 나머지 10개는 provider 비용이 발생하기 전에 차단됩니다.
 - `model-c-v1`은 독립적으로 계속 동작하며 환경변수 하나로 롤백할 수 있습니다.
 - 실제 화이트·우드 low smoke test와 결과 검수 기록이 남습니다.

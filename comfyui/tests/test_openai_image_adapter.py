@@ -24,21 +24,25 @@ from ad_creator.adapters.openai_image import (
 )
 
 
-def _generated_base64(color: tuple[int, int, int] = (238, 232, 220)) -> str:
+def _generated_base64(
+    color: tuple[int, int, int] = (238, 232, 220),
+    size: tuple[int, int] = (1024, 1280),
+) -> str:
     stream = io.BytesIO()
-    Image.new("RGB", (1024, 1280), color).save(stream, format="PNG")
+    Image.new("RGB", size, color).save(stream, format="PNG")
     return base64.b64encode(stream.getvalue()).decode("ascii")
 
 
 class StubTransport:
-    def __init__(self):
+    def __init__(self, size: tuple[int, int] = (1024, 1280)):
         self.calls = []
+        self.size = size
 
     def __call__(self, url, headers, body, timeout_seconds):
         self.calls.append((url, headers, body, timeout_seconds))
         return OpenAIHTTPResponse(
             payload={
-                "data": [{"b64_json": _generated_base64()}],
+                "data": [{"b64_json": _generated_base64(size=self.size)}],
                 "usage": {
                     "input_tokens": 120,
                     "output_tokens": 240,
@@ -70,7 +74,7 @@ class PublishedPresetTest(unittest.TestCase):
             enabled,
             {
                 "natural_white__product_center": "instagram_white_diffuse_wall_table_v1",
-                "wood__product_center": "instagram_wood_45deg_relational_v3",
+                "wood__product_center": "tokyo_a6_relational_scene_hint_v4",
             },
         )
 
@@ -82,10 +86,11 @@ class PublishedPresetTest(unittest.TestCase):
         self.assertEqual(white.provider_profile["quality"], "low")
         self.assertNotIn("input_fidelity", white.provider_profile)
         self.assertEqual(white.provider_image_paths, ())
-        self.assertEqual(wood.provider_image_roles, ("sanitized_scene_hint",))
+        self.assertEqual(wood.provider_image_roles, ("sanitized_a6_scene_hint",))
         self.assertNotIn("{{", white.prompt)
         self.assertIn("Sheet=instagram_white_diffuse_wall_table_sheet_v1", white.prompt)
-        self.assertIn("material review board", wood.prompt)
+        self.assertIn("three-point group", wood.prompt)
+        self.assertEqual(wood.aspect_ratio, "4:5")
 
     def test_unpublished_slot_is_rejected(self):
         with self.assertRaisesRegex(OpenAIImageExecutionError, "PRESET_NOT_READY"):
@@ -121,6 +126,11 @@ class OpenAIImageAdapterTest(unittest.TestCase):
                 self.assertEqual(metadata["model"], "gpt-image-2")
                 self.assertEqual(metadata["quality"], "low")
                 self.assertEqual(metadata["delivery_dimensions"], [880, 1100])
+                self.assertEqual(metadata["aspect_ratio"], "4:5")
+                self.assertEqual(metadata["aspect_status"], "published")
+                self.assertEqual(metadata["source_preprocessing"]["uploaded_dimensions"], [480, 640])
+                self.assertFalse(metadata["source_preprocessing"]["upscaled"])
+                self.assertEqual(metadata["source_preprocessing"]["max_long_edge"], 1536)
                 self.assertEqual(metadata["automatic_retries"], 0)
                 self.assertEqual(metadata["run_id"], f"test-{slot_id}")
                 self.assertEqual(metadata["raw_dimensions"], [1024, 1280])
@@ -140,11 +150,49 @@ class OpenAIImageAdapterTest(unittest.TestCase):
                 self.assertIn(b'name="size"\r\n\r\n1024x1280\r\n', body)
                 self.assertNotIn(b"input_fidelity", body)
                 self.assertEqual(body.count(b'name="image[]"'), expected_inputs)
-                self.assertLess(body.index(b'filename="image-1.png"'), body.rindex(b"--"))
+                self.assertLess(body.index(b'filename="image-1.jpg"'), body.rindex(b"--"))
                 self.assertEqual(timeout, 1200.0)
                 self.assertNotEqual(headers["X-Client-Request-Id"], metadata["request_hash"])
                 client_request_ids.add(headers["X-Client-Request-Id"])
             self.assertEqual(len(client_request_ids), 2)
+
+    def test_square_uses_native_canvas_without_portrait_crop(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = self._source(Path(directory))
+            transport = StubTransport(size=(1024, 1024))
+            image, metadata = run_openai_image(
+                image_path=source,
+                preset_slot_id="wood__product_center",
+                aspect_ratio="1:1",
+                api_key="test-key",
+                transport=transport,
+            )
+            self.assertEqual(image.size, (1024, 1024))
+            self.assertEqual(metadata["raw_dimensions"], [1024, 1024])
+            self.assertEqual(metadata["aspect_ratio"], "1:1")
+            self.assertEqual(metadata["aspect_status"], "prepared_pending_visual_qa")
+            self.assertIn(b'name="size"\r\n\r\n1024x1024\r\n', transport.calls[0][2])
+
+    def test_source_preprocessing_supports_auditable_1536_and_3072_comparison(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "large.png"
+            Image.new("RGB", (2400, 3200), "white").save(source, format="PNG")
+            hashes = []
+            dimensions = []
+            for edge in (1536, 3072):
+                with patch.dict(
+                    "os.environ", {"AD_CREATOR_OPENAI_SOURCE_MAX_EDGE": str(edge)}
+                ):
+                    _, metadata = run_openai_image(
+                        image_path=source,
+                        preset_slot_id="natural_white__product_center",
+                        api_key="test-key",
+                        transport=StubTransport(),
+                    )
+                dimensions.append(metadata["source_preprocessing"]["uploaded_dimensions"])
+                hashes.append(metadata["request_hash"])
+            self.assertEqual(dimensions, [[1152, 1536], [2304, 3072]])
+            self.assertNotEqual(hashes[0], hashes[1])
 
     def test_missing_api_key_fails_before_transport(self):
         with tempfile.TemporaryDirectory() as directory:

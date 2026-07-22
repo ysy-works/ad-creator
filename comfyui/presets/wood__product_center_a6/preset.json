@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "slot_id": "wood__product_center",
+  "preset_id": "tokyo_a6_relational_scene_hint_v4",
+  "family": "wood",
+  "composition": "medium",
+  "status": "published",
+  "source_review_status": "passed_by_user_review",
+  "prompt_template": {
+    "path": "prompt-template.txt",
+    "sha256": "d1503a595ff9d598b00d9c88eed32ca22f7b6505d1bf730dd7b4e0598a3c3fcb"
+  },
+  "lighting_sheet": {
+    "path": "lighting-sheet.json",
+    "sha256": "9a4b11f6c088bc2a7ed32b96a950546c5574dcc72ea76e8f44ffe514a19f9173"
+  },
+  "grade_profile": {
+    "path": "grade-profile.json",
+    "sha256": "5f14e191a110601f458948a6e96824875a95a062793a1a99d450807bbc40289b",
+    "apply_in_pilot": false
+  },
+  "hint_images": [
+    {
+      "role": "sanitized_a6_scene_hint",
+      "path": "../assets/wood-a6-multi-scene-hint.png",
+      "sha256": "26d5e84e61e9942477624faa8ce23ab40100809d0a8280185393d45ca7214b66",
+      "width": 768,
+      "height": 1024,
+      "send_to_provider": true,
+      "allowed_transfer": ["camera_distance", "compact_three_item_scale", "round_dark_tray_relationships", "light_distribution", "restrained_palette", "material_response"],
+      "forbidden_transfer": ["reference_beverage_identity", "reference_beverage_recipe", "text", "logo", "identifiable_room_objects", "exact_crop", "exact_shadow"]
+    }
+  ],
+  "aspect_ratio_contracts": {
+    "4:5": {
+      "status": "published",
+      "visual_review_status": "passed_by_user_review",
+      "prompt_addendum": "Generate the exact final 4:5 canvas. Keep the exact right-front product 0.13-0.15 of frame width and 0.15-0.18 of frame height, centered around x=0.61-0.63 and y=0.565-0.59. Keep the complete round tray 0.44-0.50 of frame width and no more than 0.31 of frame height, with 0.50-0.60 meaningful room-and-table release.",
+      "generation_size": "1024x1280",
+      "safe_crop": "none_exact_4x5",
+      "width": 880,
+      "height": 1100,
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [0.13, 0.15],
+        "product_height_ratio": [0.15, 0.18],
+        "center_x_ratio": [0.61, 0.63],
+        "center_y_ratio": [0.565, 0.59],
+        "tray_width_ratio": [0.44, 0.50],
+        "tray_height_ratio": [0.0, 0.31],
+        "negative_space_ratio": [0.50, 0.60],
+        "expected_subject_count": 3,
+        "crop_allowed": false
+      }
+    },
+    "1:1": {
+      "status": "prepared_pending_visual_qa",
+      "visual_review_status": "not_yet_generated",
+      "prompt_addendum": "Generate the exact final 1:1 square canvas from the start; do not crop a portrait composition. Keep the exact right-front product 0.14-0.17 of frame width and 0.18-0.22 of frame height, centered around x=0.60-0.65 and y=0.60-0.66. Keep the complete round tray 0.46-0.54 of frame width and no more than 0.36 of frame height, with 0.42-0.52 meaningful room-and-table release around the compact three-item group.",
+      "generation_size": "1024x1024",
+      "safe_crop": "none_exact_1x1",
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [0.14, 0.17],
+        "product_height_ratio": [0.18, 0.22],
+        "center_x_ratio": [0.60, 0.65],
+        "center_y_ratio": [0.60, 0.66],
+        "tray_width_ratio": [0.46, 0.54],
+        "tray_height_ratio": [0.0, 0.36],
+        "negative_space_ratio": [0.42, 0.52],
+        "expected_subject_count": 3,
+        "crop_allowed": false
+      }
+    }
+  },
+  "qa_contract": {
+    "phase": "common_qa_pending",
+    "hard_gates": ["identity", "logo_ocr", "crop", "subject_count", "tray_complete"],
+    "comparative_scores": ["naturalness", "mood_adherence", "relational_composition"],
+    "aspect_ratio_specific_bbox": true
+  }
+}

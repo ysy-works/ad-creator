@@ -4,10 +4,31 @@
   "model": "gpt-image-2",
   "endpoint": "https://api.openai.com/v1/images/edits",
   "quality": "low",
-  "size": "1024x1280",
   "output_format": "png",
   "moderation": "auto",
   "automatic_retries": 0,
   "maximum_input_images": 16,
-  "delivery_size": [880, 1100]
+  "default_aspect_ratio": "4:5",
+  "aspect_ratios": {
+    "4:5": {
+      "status": "published",
+      "size": "1024x1280",
+      "delivery_size": [880, 1100],
+      "safe_crop": "none_exact_4x5"
+    },
+    "1:1": {
+      "status": "prepared_pending_visual_qa",
+      "size": "1024x1024",
+      "delivery_size": [1024, 1024],
+      "safe_crop": "none_exact_1x1"
+    }
+  },
+  "source_preprocessing": {
+    "default_max_long_edge": 1536,
+    "comparison_max_long_edges": [1536, 3072],
+    "upscale_small_inputs": false,
+    "strip_metadata": true,
+    "normalized_format": "jpeg",
+    "jpeg_quality": 95
+  }
 }

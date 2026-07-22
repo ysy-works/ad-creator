@@ -11,8 +11,9 @@
 | Gateway workflow ID | `openai-gpt-image-2-low-v1` |
 | OpenAI model | `gpt-image-2` |
 | OpenAI quality | `low` — 서버 provider profile에서 고정 |
-| Provider 생성 | PNG, `1024x1280`, 정확한 4:5 |
-| ComfyUI 결과 | PNG, `880x1100`, crop 없는 4:5 축소 |
+| 기본 비율 | `4:5` |
+| 4:5 계약 | PNG `1024x1280` 생성 → crop 없이 `880x1100` 전달 |
+| 1:1 계약 | PNG `1024x1024` 생성·전달; 시각 QA 전 공개 UI 비활성 |
 | 활성 프리셋 | 화이트 미디엄, 우드 미디엄 두 개만 |
 | 브라우저의 OpenAI 직접 호출 | 금지 |
 | Gateway의 OpenAI 직접 호출 | 금지; OpenAI 호출은 ComfyUI 프로세스가 담당 |
@@ -20,7 +21,7 @@
 
 `strength=low|medium|high`는 기존 로컬 모델의 편집 강도입니다. OpenAI의 `quality`와 의미가 다르므로 서로 매핑하거나 재사용하면 안 됩니다. 이번 파일럿의 OpenAI quality는 사용자가 보내는 값과 무관하게 항상 `low`입니다.
 
-## 2. 출시 차단 조건: 정사각형 중앙 크롭 제거
+## 2. 출시 차단 조건: 비율별 원본 생성과 크롭 제거
 
 현재 serving 백엔드의 `resize_to_instagram()`은 모든 결과를 가운데에서 정사각형으로 잘라 `1080x1080`으로 만듭니다. 이 처리가 남아 있으면 4:5 프리셋의 제품 크기, 여백, 그림자와 구도가 손상되므로 파일럿을 켜면 안 됩니다.
 
@@ -29,10 +30,11 @@
 1. Gateway가 받은 `880x1100` PNG를 그대로 반환한다.
 2. 백엔드가 리사이즈해야 한다면 전체 프레임을 보존해 `1080x1350`으로만 바꾼다.
 3. 중앙 크롭, `ImageOps.fit()` 기반 크롭, 1:1 변환은 금지한다.
-4. 신규 워크플로 결과가 4:5가 아니면 조용히 자르지 말고 통합 오류로 실패시킨다.
-5. `model-c-v1`의 기존 정사각형 처리가 필요하다면 workflow ID별로 분기해 레거시 동작만 유지한다.
+4. `aspect_ratio=1:1`은 처음부터 `1024x1024`로 생성하고 4:5 결과를 자르지 않는다.
+5. 요청 비율과 결과 비율이 다르면 조용히 자르지 말고 통합 오류로 실패시킨다.
+6. `model-c-v1`의 기존 정사각형 처리가 필요하다면 workflow ID별로 분기해 레거시 동작만 유지한다.
 
-프론트 결과 카드도 현재 공통 `aspect-ratio: 1 / 1`을 사용합니다. 레퍼런스 카드와 분리해 생성 결과 영역만 `aspect-ratio: 4 / 5`로 렌더링해야 합니다.
+프론트 결과 카드는 요청한 `aspect_ratio`에 따라 `4 / 5` 또는 `1 / 1`로 렌더링하고 `object-fit: cover`로 자르지 않습니다. 1:1은 두 preset의 실제 시각 QA를 통과한 뒤에만 사용자 선택지로 공개합니다.
 
 ## 3. 프리셋 매핑
 
@@ -41,11 +43,13 @@ Gateway의 canonical `preset_id`에는 프론트의 기존 `reference_id`를 그
 | 프론트 `reference_id` = Gateway `preset_id` | 표시 | 내부 ComfyUI preset contract | 상태 |
 | --- | --- | --- | --- |
 | `natural_white__product_center` | 뉴트럴 화이트 · 미디엄샷 | `instagram_white_diffuse_wall_table_v1` | 활성 |
-| `wood__product_center` | 우드 · 미디엄샷 | `instagram_wood_45deg_relational_v3` | 활성 |
+| `wood__product_center` | 우드 · A6 다중 피사체 미디엄샷 | `tokyo_a6_relational_scene_hint_v4` | 활성 |
 
-화이트 authoring reference는 오프라인 구도·조명 설계 근거이며 OpenAI에 보내는 런타임 입력이 아닙니다. 우드 프리셋은 검수·비식별화된 scene hint만 런타임 보조 이미지로 사용할 수 있습니다. 우드 material board는 Git에 포함하되 prompt 작성·검수 authority일 뿐 이번 파일럿의 provider 이미지 입력이 아닙니다. 원본 레퍼런스, 로컬 Mac 절대경로, 원본 속 음료·로고 픽셀을 전송하면 안 됩니다.
+화이트 authoring reference는 오프라인 구도·조명 설계 근거이며 OpenAI에 보내는 런타임 입력이 아닙니다. A6 우드 프리셋은 검수·비식별화된 A6 scene hint만 런타임 보조 이미지로 사용할 수 있습니다. 원본 레퍼런스, 로컬 Mac 절대경로, 원본 속 음료·로고 픽셀을 전송하면 안 됩니다. 기존 45도 `instagram_wood_45deg_relational_v3`는 `available_not_routed`로 보존하며 별도 옵션 계약 없이 자동 선택하지 않습니다.
 
-사용자 제품 사진은 ComfyUI에서 EXIF·파일명을 제거하고 긴 변을 최대 3072px로 제한한 고품질 JPEG로 정규화한 뒤 OpenAI에 전송합니다. 우드 선택 시에는 이 파일과 sanitized scene hint가 함께 외부 전송됩니다. 운영 전 개인정보·영업기밀 처리 고지와 사용자 동의 범위를 백엔드 정책에서 확인해야 합니다.
+사용자 제품 사진은 ComfyUI에서 EXIF·파일명을 제거하고 기본 긴 변 최대 1536px의 고품질 JPEG로 정규화한 뒤 OpenAI에 전송합니다. 긴 변이 1536px 이하인 입력은 확대하지 않습니다. 우드 선택 시에는 이 파일과 sanitized A6 scene hint가 함께 외부 전송됩니다. `3072`는 동일 입력·동일 prompt 조건의 OCR·identity·usage 비교 실험에서만 명시적으로 사용하며 자동 운영값으로 쓰지 않습니다. 유료 비교 실험은 별도 승인 후 실행합니다.
+
+레퍼런스 컵을 기본 입력으로 쓸지 사용자 옵션으로 둘지는 회의 미확정입니다. 현재 A6 계약은 사용자 제품 원본의 용기·브랜딩을 authority로 유지하며, 백엔드가 레퍼런스 컵을 임의 추가해서는 안 됩니다.
 
 ### 아직 지원하지 않는 10개 ID
 
@@ -76,6 +80,7 @@ Content-Type: multipart/form-data
 
 product_image=<JPEG 또는 PNG>
 reference_id=natural_white__product_center
+aspect_ratio=4:5
 ```
 
 정상 응답도 기존 형식을 유지합니다.
@@ -101,9 +106,11 @@ Content-Type: multipart/form-data
 image=<사용자 원본>
 workflow_id=openai-gpt-image-2-low-v1
 preset_id=wood__product_center
+aspect_ratio=4:5
 ```
 
 - HTTP 라이브러리가 multipart boundary를 만들게 두고 `Content-Type` 헤더를 직접 조립하지 않습니다.
+- `aspect_ratio`는 `4:5` 또는 `1:1`만 허용하며 생략 시 Gateway 기본값은 `4:5`입니다.
 - OpenAI 파일럿에는 `strength`, `seed`, `background_style`, `composition`을 보내지 않는 것을 기본으로 합니다.
 - 기존 백엔드 호환을 위해 `preset_id`가 없을 때에만 Gateway가 다음 두 조합을 명시적으로 변환합니다.
 
@@ -135,13 +142,14 @@ Gateway의 `202 Accepted`, 상태 폴링, 결과 다운로드 계약은 기존�
 1. `WORKFLOW_REGISTRY` 또는 동등한 allowlist에 `openai-gpt-image-2-low-v1`을 등록합니다. `model-c-v1`은 유지합니다.
 2. 서비스 기본 workflow를 코드 상수가 아닌 `COMFYUI_WORKFLOW_ID`로 선택할 수 있게 합니다.
 3. `/generate`에서 검증한 `reference_id`를 Gateway의 `preset_id`에 그대로 전달합니다.
-4. 신규 workflow에서는 두 활성 ID 외 요청을 Gateway 호출 전에 차단합니다.
-5. 신규 workflow payload에는 `strength="medium"`을 넣지 않습니다. 넣더라도 OpenAI quality가 바뀌어서는 안 됩니다.
-6. 신규 결과에는 정사각형 크롭을 적용하지 않습니다. 원본 `880x1100`을 유지하거나 무크롭 `1080x1350` 리사이즈만 합니다.
-7. 성공 결과는 즉시 영구 저장소로 복사합니다. Gateway 임시 결과는 기존 정책상 만료될 수 있습니다.
-8. 동일 논리 요청의 네트워크 재시도에는 같은 `Idempotency-Key`와 같은 바이트·필드를 사용합니다. 사용자가 재생성을 명시했을 때만 새 키를 만듭니다.
-9. `failed`, `unknown`, `expired` 상태를 자동으로 새 유료 생성으로 재실행하지 않습니다.
-10. OpenAI/Gateway 내부 오류 원문에 비밀키, 파일 경로, provider response body가 섞이지 않게 사용자 메시지를 정제합니다.
+4. 프론트의 `aspect_ratio`를 allowlist(`4:5`, `1:1`) 검증해 Gateway에 그대로 전달합니다. 누락 시 `4:5`를 사용합니다.
+5. 신규 workflow에서는 두 활성 ID 외 요청을 Gateway 호출 전에 차단합니다.
+6. 신규 workflow payload에는 `strength="medium"`을 넣지 않습니다. 넣더라도 OpenAI quality가 바뀌어서는 안 됩니다.
+7. 신규 결과에는 정사각형 중앙 크롭을 적용하지 않습니다. 4:5는 `880x1100` 또는 무크롭 `1080x1350`, 1:1은 `1024x1024` 계약으로 검증합니다.
+8. 성공 결과는 즉시 영구 저장소로 복사합니다. Gateway 임시 결과는 기존 정책상 만료될 수 있습니다.
+9. 동일 논리 요청의 네트워크 재시도에는 같은 `Idempotency-Key`와 같은 바이트·필드를 사용합니다. 사용자가 재생성을 명시했을 때만 새 키를 만듭니다.
+10. `failed`, `unknown`, `expired` 상태를 자동으로 새 유료 생성으로 재실행하지 않습니다.
+11. OpenAI/Gateway 내부 오류 원문에 비밀키, 파일 경로, provider response body가 섞이지 않게 사용자 메시지를 정제합니다.
 
 권장 전환 방식은 다음과 같습니다.
 
@@ -155,12 +163,13 @@ COMFYUI_WORKFLOW_ID=openai-gpt-image-2-low-v1
 
 1. 정적 `references.json`에서 활성 두 항목에 `enabled: true`, 나머지 10개에 `enabled: false`를 추가합니다.
 2. 비활성 카드는 `준비 중`으로 표시하거나 목록에서 숨깁니다. 비활성 카드가 `selectedReferenceId`가 되지 않도록 이벤트 단계와 생성 직전 양쪽에서 막습니다.
-3. `/generate`에는 기존처럼 `product_image`, `reference_id`만 전송합니다.
+3. `/generate`에는 `product_image`, `reference_id`, `aspect_ratio`를 전송합니다. 공개 전까지는 `aspect_ratio=4:5`만 보냅니다.
 4. `natural_white__product_center`, `wood__product_center` 문자열을 변경하지 않습니다.
-5. 생성 결과 프레임은 4:5로 표시합니다. 결과 `<img>`에 정사각형 `object-fit: cover`가 적용되어 잘리지 않는지 확인합니다.
-6. 미지원 ID의 서버 오류는 일반적인 `생성 실패`가 아니라 `아직 준비 중인 스타일입니다`로 표시합니다.
-7. 생성 중 중복 클릭을 막되, 사용자가 명시적으로 다시 생성하면 새 논리 요청으로 처리합니다.
-8. `/caption`은 이미지 생성 성공 뒤에만 호출하는 현재 2단계 동작을 유지합니다.
+5. 생성 결과 프레임은 요청 비율로 표시합니다. 결과 `<img>`에 `object-fit: cover`가 적용되어 잘리지 않는지 확인합니다.
+6. 1:1 선택 UI는 ComfyUI 담당자가 두 preset의 시각 QA 통과를 알린 뒤에만 활성화합니다.
+7. 미지원 ID의 서버 오류는 일반적인 `생성 실패`가 아니라 `아직 준비 중인 스타일입니다`로 표시합니다.
+8. 생성 중 중복 클릭을 막되, 사용자가 명시적으로 다시 생성하면 새 논리 요청으로 처리합니다.
+9. `/caption`은 이미지 생성 성공 뒤에만 호출하는 현재 2단계 동작을 유지합니다.
 
 프론트 정적 `references.json`과 백엔드 `references.json`을 따로 손으로 고치는 구조는 장기적으로 제거합니다. 이번 파일럿에서는 두 파일의 ID·활성 상태를 동일하게 맞추고, 다음 단계에서 ComfyUI preset registry로부터 생성하도록 전환합니다.
 
@@ -171,6 +180,7 @@ COMFYUI_WORKFLOW_ID=openai-gpt-image-2-low-v1
 | GCP ComfyUI 서비스 | `OPENAI_API_KEY` | 필수. systemd 환경 파일 또는 Secret Manager에서만 주입 |
 | GCP ComfyUI 서비스 | `OPENAI_IMAGE_TIMEOUT_SECONDS` | 선택. 기본 `1200`, 허용 범위 `30`~`3600`초 |
 | GCP ComfyUI 서비스 | `AD_CREATOR_OPENAI_AUDIT_DIR` | provider 원본·sidecar 저장 경로. 권장 `/opt/comfyui/ComfyUI/output/ad_creator/audit` |
+| GCP ComfyUI 서비스 | `AD_CREATOR_OPENAI_SOURCE_MAX_EDGE` | 기본 `1536`; 승인된 비교 실험에서만 `3072` |
 | GCP Gateway | `COMFYUI_BASE_URL` | 기존 내부 URL 유지 |
 | GCP Gateway | `AD_CREATOR_GATEWAY_API_KEY` | 기존 32자 이상 비밀키 유지 |
 | GCP Gateway | `AD_CREATOR_GENERATION_SIGNING_KEY` | API 키와 다른 값 유지 |
@@ -199,7 +209,7 @@ Gateway `/health`는 저장소, workflow registry, ComfyUI를 항상 확인하�
 | OpenAI rate limit/결제/정책 오류 | 작업 `failed` | 자동 유료 재생성 금지, 분류해 운영 로그 기록 | 안전한 일반 오류 문구 |
 | ComfyUI 재시작 중 작업 유실 | `unknown` | 자동 재실행 금지 | 상태 확인 또는 수동 재생성 안내 |
 | 결과 만료 | `expired` 또는 `410` | 영구 저장 누락 조사 | 수동 재생성 안내 |
-| 결과 비율이 4:5가 아님 | 백엔드 통합 검증 실패 | 자르지 말고 실패, 배포 회귀로 알림 | 일시적 서비스 오류 |
+| 결과 비율이 요청과 다름 | 백엔드 통합 검증 실패 | 자르지 말고 실패, 배포 회귀로 알림 | 일시적 서비스 오류 |
 
 OpenAI provider profile의 `automatic_retries`는 파일럿에서 `0`입니다. Gateway 수준의 제출 재시도와 새 OpenAI 유료 생성은 다른 동작이므로 혼동하지 않습니다.
 
@@ -211,7 +221,7 @@ OpenAI provider profile의 `automatic_retries`는 파일럿에서 `0`입니다. 
 - manifest에는 파일 역할, 픽셀 크기, SHA-256, provider 전송 허용 여부를 기록합니다.
 - Mac의 `/Users/...` 절대경로나 원본 reference 경로가 런타임 검증 조건으로 남아 있으면 배포하지 않습니다.
 - 화이트 authoring reference는 `send_to_provider: false`를 유지합니다.
-- 우드 sanitized scene hint만 `send_to_provider: true`인 순서와 역할로 전송합니다. Material board는 `send_to_provider: false`로 고정합니다.
+- 우드 sanitized A6 scene hint만 `send_to_provider: true`인 순서와 역할로 전송합니다.
 - 추후 GCS로 옮길 때 preset ID와 프롬프트를 바꾸지 말고 asset resolver만 `repo-relative -> gs://... + checksum`으로 교체합니다.
 - GCS 객체는 mutable한 `latest` 경로가 아니라 버전 경로와 checksum으로 고정합니다.
 
