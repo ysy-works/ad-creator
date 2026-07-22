@@ -12,14 +12,9 @@
 - 제품 원본은 기본 긴 변 1536px 상한, 저해상도 무확대·메타데이터 제거
 - 기존 `model-c-v1`은 삭제하지 않고 롤백 경로로 유지
 
-## 활성 프리셋
+## 프리셋 진행 상태
 
-| 서비스 preset ID | 내부 contract | 런타임 provider 입력 |
-| --- | --- | --- |
-| `natural_white__product_center` | `instagram_white_diffuse_wall_table_v1` | 사용자 제품 원본 |
-| `wood__product_center` | `tokyo_a6_relational_scene_hint_v4` | 사용자 제품 원본 + 검수된 A6 scene hint |
-
-나머지 10개 선택값은 아직 비활성화되어 있으며 provider 호출 전에 거부됩니다. Vivid 계열은 교체 예정이므로 신규 계약으로 확정하지 않습니다.
+프리셋은 여러 작업 환경에서 계속 수정·추가·검증되고 있습니다. 특정 시점의 공개·검증 프리셋 목록이나 개수를 README에 고정하지 않습니다. 실제 서비스 사용 가능 여부, 내부 contract와 provider 입력 정책은 항상 `comfyui/presets/registry.json` 및 각 preset bundle을 기준으로 확인합니다.
 
 기존 `instagram_wood_45deg_relational_v3`는 삭제하지 않고 `available_not_routed` 대안으로 보존합니다. 새 서비스 옵션이 합의될 때만 별도 라우팅합니다.
 
@@ -63,7 +58,7 @@ python comfyui/scripts/validate_presets.py
 python -m unittest discover -s comfyui/tests -v
 ```
 
-현재 기준은 workflow 2개, preset slot 12개, published preset 2개입니다. 과거 45도 우드의 실제 OpenAI adapter-level `low` smoke 기록은 보존하지만, 새 A6 기본값과 1:1은 별도 승인된 유료 시각 검증 전입니다. GCP ComfyUI·Gateway 전체 E2E와 CommonQA도 출시 차단 조건입니다.
+프리셋은 현재 여러 작업 환경에서 수정·추가·시각 검증 중이며, 검증을 통과한 항목부터 registry에 순차 반영됩니다. 따라서 README에 published preset 개수를 고정하지 않으며, 현재 상태와 활성 여부는 `comfyui/presets/registry.json`을 기준으로 확인합니다. GCP ComfyUI·Gateway 전체 E2E와 CommonQA는 출시 차단 조건입니다.
 
 ## 연동 문서
 

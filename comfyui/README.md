@@ -90,7 +90,7 @@ POST /generate (multipart/form-data)
 
 ## OpenAI GPT Image 2 low 파일럿
 
-`openai-gpt-image-2-low-v1`은 `gpt-image-2`, `quality=low`를 서버 profile에서 고정합니다. 서비스 ID는 `natural_white__product_center`, `wood__product_center` 두 개만 published이며 나머지 10개는 provider 호출 전에 거부합니다. 우드 기본값은 A6 다중 피사체 preset이고, 기존 45도 preset은 라우팅하지 않은 대안으로 보존합니다. `aspect_ratio=4:5`는 `1024x1280` 생성 후 무크롭 `880x1100`, `aspect_ratio=1:1`은 처음부터 `1024x1024`로 생성합니다. 1:1은 시각 QA 전까지 공개 UI에서 숨깁니다.
+`openai-gpt-image-2-low-v1`은 `gpt-image-2`, `quality=low`를 서버 profile에서 고정합니다. 프리셋은 현재 여러 작업 환경에서 수정·추가·시각 검증 중이며, 검증을 통과한 항목부터 registry에 순차 반영됩니다. README에 published 개수를 고정하지 않고 `presets/registry.json`의 현재 상태와 활성 여부를 기준으로 합니다. 기존 대안 프리셋은 실행 의존성과 비교 검증을 위해 삭제하지 않습니다. `aspect_ratio=4:5`는 `1024x1280` 생성 후 무크롭 `880x1100`, `aspect_ratio=1:1`은 처음부터 `1024x1024`로 생성합니다. 1:1은 시각 QA 전까지 공개 UI에서 숨깁니다.
 
 제품 원본은 기본적으로 EXIF·파일명을 제거하고 긴 변 1536px까지만 축소하며 작은 사진은 확대하지 않습니다. 비용·OCR·제품 보존 비교 시에만 `AD_CREATOR_OPENAI_SOURCE_MAX_EDGE=3072`를 명시합니다.
 
