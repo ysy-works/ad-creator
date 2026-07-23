@@ -72,19 +72,10 @@ class PresetRuntimeTest(unittest.TestCase):
             self.assertIn("Brand input is disabled", contract.prompt)
 
     def test_white_handheld_has_atomic_temperature_and_cup_policy(self):
-        with self.assertRaises(PresetRuntimeError) as raised:
-            resolve_preset_contract(
-                "natural_white__handheld_lifestyle",
-                container_mode="adopt_reference",
-                serving_temperature="auto",
-                registry_path=REGISTRY,
-            )
-        self.assertEqual(raised.exception.code, "SERVING_TEMPERATURE_REVIEW_REQUIRED")
-
         adopted = resolve_preset_contract(
             "natural_white__handheld_lifestyle",
             container_mode="adopt_reference",
-            serving_temperature="cold",
+            serving_temperature="auto",
             registry_path=REGISTRY,
         )
         reconstructed = resolve_preset_contract(
@@ -95,6 +86,7 @@ class PresetRuntimeTest(unittest.TestCase):
         )
         self.assertEqual(adopted.provider_image_roles, ("sanitized_scene_hint",))
         self.assertEqual(adopted.serving_temperature, "cold")
+        self.assertEqual(adopted.temperature_resolution_source, "preset_default")
         self.assertEqual(reconstructed.serving_temperature, "source_authoritative")
         self.assertIn("unbranded straight-sided clear plastic cold-drink cup", adopted.prompt)
         self.assertIn("Preserve the source beverage recipe", reconstructed.prompt)

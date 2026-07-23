@@ -332,6 +332,19 @@ def _temperature(
         auto_action = rule.get("auto_action")
         if auto_action == "preserve_source_state":
             return "source_authoritative", "user_product_image"
+        if auto_action == "use_preset_default_state":
+            default_state = str(rule.get("default_state") or "")
+            normalized = (
+                "cold"
+                if default_state == "iced" and "iced" not in allowed_set
+                else default_state
+            )
+            if default_state not in allowed_set and normalized not in allowed_set:
+                raise PresetRuntimeError(
+                    "INVALID_PRESET_CONFIGURATION",
+                    "Temperature preset default is not allowed for this container mode.",
+                )
+            return default_state, "preset_default"
         if auto_action == "requires_explicit_state":
             raise PresetRuntimeError(
                 "SERVING_TEMPERATURE_REVIEW_REQUIRED",
