@@ -70,7 +70,7 @@ const SHOOTING_GUIDE = {
 
 // 도구 화면(PicmoodTool) 자체 UI 문구 번역 사전. references.json 안의
 // mood_label/composition_label은 한국어만 있어서, id 기준 별도 매핑으로 처리.
-const MOOD_LABEL_EN = { natural_white: "Neutral White", wood: "Wood", vivid: "Vivid" };
+const MOOD_LABEL_EN = { natural_white: "Neutral White", wood: "Wood", vivid: "Dark Gray" };
 const COMPOSITION_LABEL_EN = {
   product_large: "Close-up",
   product_center: "Medium shot",
@@ -102,7 +102,10 @@ const T = {
     generateImage: "이미지 생성",
     uploadPhotoFirst: "사진을 업로드해주세요.",
     generateFailed: "이미지 생성에 실패했습니다.",
+    styleNotReady: "아직 준비 중인 스타일입니다.",
     genericError: "오류가 발생했습니다.",
+    aspectRatioLabel: "결과 비율",
+    aspectRatioComingSoon: "준비 중",
     resultTitle: "완성된 한 컷",
     resultAlt: "생성 결과",
     downloadImage: "이미지 다운로드",
@@ -139,7 +142,10 @@ const T = {
     generateImage: "Generate image",
     uploadPhotoFirst: "Please upload a photo.",
     generateFailed: "Failed to generate the image.",
+    styleNotReady: "This style isn't available yet.",
     genericError: "Something went wrong.",
+    aspectRatioLabel: "Result ratio",
+    aspectRatioComingSoon: "Coming soon",
     resultTitle: "Your finished shot",
     resultAlt: "Generated result",
     downloadImage: "Download image",
@@ -319,21 +325,27 @@ function GuideIcon({ text }) {
 // 인스타그램 실제 화면이 아니라, 우리 서비스만의 "무드보드 피드 카드" 프레임
 // -> "좋아요 N개"와 "선택됨" 배지가 lang과 무관하게 한글로 고정되어 있던
 //    버그 수정: lang을 받아 영문 모드에서는 "N likes" / "Selected"로 표시.
-function PostFrame({ children, brand = "Picmood", caption, likeCount, selected, badgeText, onClick, lang = "ko" }) {
+function PostFrame({ children, brand = "Picmood", caption, likeCount, selected, badgeText, onClick, lang = "ko", disabled = false, disabledLabel, photoClassName = "" }) {
   const likeText = likeCount != null
     ? (lang === "en" ? `${likeCount} likes` : `좋아요 ${likeCount}개`)
     : null;
   const stampText = badgeText || (lang === "en" ? "Selected" : "선택됨");
+  const comingSoonText = disabledLabel || (lang === "en" ? "Coming soon" : "준비 중");
 
   return (
-    <div className={`post-frame${selected ? " is-selected" : ""}`} onClick={onClick}>
+    <div
+      className={`post-frame${selected ? " is-selected" : ""}${disabled ? " is-disabled" : ""}`}
+      onClick={disabled ? undefined : onClick}
+      aria-disabled={disabled || undefined}
+    >
       <div className="post-frame__header">
         <span className="post-frame__avatar" aria-hidden="true">☕</span>
         <span className="post-frame__brand">{brand}</span>
-        {selected && <span className="post-frame__stamp">{stampText}</span>}
+        {selected && !disabled && <span className="post-frame__stamp">{stampText}</span>}
+        {disabled && <span className="post-frame__stamp post-frame__stamp--muted">{comingSoonText}</span>}
       </div>
 
-      <div className="post-frame__photo">{children}</div>
+      <div className={`post-frame__photo${photoClassName ? " " + photoClassName : ""}`}>{children}</div>
 
       <div className="post-frame__actions">
         <span className="post-frame__icon post-frame__icon--like"><HeartIcon /></span>
@@ -360,6 +372,9 @@ function App({ lang = "ko", setLang }) {
 
   const [references, setReferences] = useState([]); // GET /references 결과 (그루핑 전 원본)
   const [selectedReferenceId, setSelectedReferenceId] = useState(null);
+  // 결과 비율 토글. 지금은 4:5만 실제로 동작 — 1:1은 팀장님 쪽에서 별도
+  // provider profile 준비 중이라 UI만 미리 만들어두고 선택은 막아둔다.
+  const [aspectRatio, setAspectRatio] = useState("4:5");
 
   // 캡션 품질 향상을 위한 최소 질문 (둘 다 선택 입력)
   const [menuName, setMenuName] = useState("");
@@ -427,6 +442,11 @@ function App({ lang = "ko", setLang }) {
       setError(t.selectStyleFirst);
       return;
     }
+    // 생성 직전 이중 체크 — 카드 클릭은 막아뒀지만(disabled), 혹시 모를 경우 대비.
+    if (selectedReference?.enabled === false) {
+      setError(t.styleNotReady);
+      return;
+    }
     if (!productFile) {
       setError(t.uploadPhotoFirst);
       return;
@@ -444,6 +464,7 @@ function App({ lang = "ko", setLang }) {
       const formData = new FormData();
       formData.append("product_image", productFile);
       formData.append("reference_id", selectedReferenceId);
+      formData.append("aspect_ratio", aspectRatio);
 
       const response = await fetch(`${API_BASE}/generate`, {
         method: "POST",
@@ -451,7 +472,18 @@ function App({ lang = "ko", setLang }) {
       });
 
       if (!response.ok) {
-        throw new Error(t.generateFailed);
+        // 미지원 preset(400)은 "생성 실패"가 아니라 "아직 준비 중인 스타일"로 구분 표시
+        // (백엔드 model.py가 활성 2개 외 요청에 이 메시지를 담아 400을 반환함).
+        let message = t.generateFailed;
+        try {
+          const errBody = await response.json();
+          if (response.status === 400 && /지원하지 않는|not.*available/i.test(errBody.error || "")) {
+            message = t.styleNotReady;
+          }
+        } catch (_) {
+          // 응답 본문이 JSON이 아니면 기본 메시지 사용
+        }
+        throw new Error(message);
       }
 
       const data = await response.json();
@@ -662,6 +694,17 @@ function App({ lang = "ko", setLang }) {
           outline: 2px solid var(--accent);
           outline-offset: 2px;
         }
+        .post-frame.is-disabled {
+          cursor: default;
+          opacity: 0.55;
+        }
+        .post-frame.is-disabled:hover {
+          transform: none;
+          box-shadow: 0 1px 2px rgba(43,36,32,0.04);
+        }
+        .post-frame.is-disabled .post-frame__photo img {
+          filter: grayscale(0.6);
+        }
 
         .post-frame__header {
           display: flex;
@@ -694,12 +737,25 @@ function App({ lang = "ko", setLang }) {
           border-radius: 999px;
           letter-spacing: 0.02em;
         }
+        .post-frame__stamp--muted {
+          background: var(--ink-soft);
+        }
 
         .post-frame__photo {
           width: 100%;
           aspect-ratio: 1 / 1;
           overflow: hidden;
           background: var(--bg);
+        }
+        /* 생성 결과 카드 전용: 레퍼런스 카드(1:1)와 달리 실제 반환된 이미지의
+           원본 비율 그대로 보여준다. 지금은 model-c-v1이면 1:1, openai 신규
+           workflow로 전환되면 4:5로 자연스럽게 바뀜 — 프론트가 비율을 미리
+           단정하지 않아도 되는 구조. */
+        .post-frame__photo--result {
+          aspect-ratio: auto;
+        }
+        .post-frame__photo--result img {
+          height: auto;
         }
         .post-frame__photo img {
           width: 100%;
@@ -744,6 +800,56 @@ function App({ lang = "ko", setLang }) {
           color: var(--ink-soft);
         }
         .upload-hint.is-active { color: var(--accent-2); font-weight: 900; }
+
+        .ratio-toggle {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          margin: 0 0 18px;
+          padding: 4px;
+          background: var(--surface);
+          border: 1px solid var(--line);
+          border-radius: 999px;
+        }
+        .ratio-toggle__label {
+          font-size: 12px;
+          font-weight: 700;
+          color: var(--ink-soft);
+          padding-left: 8px;
+        }
+        .ratio-toggle__btn {
+          position: relative;
+          font-family: inherit;
+          font-size: 13px;
+          font-weight: 700;
+          color: var(--ink-soft);
+          background: transparent;
+          border: none;
+          border-radius: 999px;
+          padding: 7px 16px;
+          cursor: pointer;
+          transition: background 0.15s ease, color 0.15s ease;
+        }
+        .ratio-toggle__btn.is-active {
+          background: var(--accent-2);
+          color: #fff;
+        }
+        .ratio-toggle__btn.is-disabled {
+          cursor: not-allowed;
+          color: var(--line);
+        }
+        .ratio-toggle__badge {
+          position: absolute;
+          top: -9px;
+          right: -6px;
+          font-size: 8.5px;
+          font-weight: 700;
+          color: #fff;
+          background: var(--ink-soft);
+          padding: 2px 5px;
+          border-radius: 999px;
+          white-space: nowrap;
+        }
 
         .guide-icon {
           position: relative;
@@ -1022,6 +1128,7 @@ function App({ lang = "ko", setLang }) {
                   selected={selectedReferenceId === ref.id}
                   onClick={() => setSelectedReferenceId(ref.id)}
                   lang={lang}
+                  disabled={ref.enabled === false}
                 >
                   <img src={ref.thumbnail_url} alt={lang === "en" ? (COMPOSITION_LABEL_EN[ref.composition_id] || ref.composition_label) : ref.composition_label} />
                 </PostFrame>
@@ -1047,6 +1154,29 @@ function App({ lang = "ko", setLang }) {
           ) : (
             <p className="upload-hint">{t.selectStyleFirst}</p>
           )}
+
+          {selectedReference && (
+            <div className="ratio-toggle" role="group" aria-label={t.aspectRatioLabel}>
+              <span className="ratio-toggle__label">{t.aspectRatioLabel}</span>
+              <button
+                type="button"
+                className={`ratio-toggle__btn${aspectRatio === "4:5" ? " is-active" : ""}`}
+                onClick={() => setAspectRatio("4:5")}
+              >
+                4:5
+              </button>
+              <button
+                type="button"
+                className="ratio-toggle__btn is-disabled"
+                disabled
+                title={t.aspectRatioComingSoon}
+              >
+                1:1
+                <span className="ratio-toggle__badge">{t.aspectRatioComingSoon}</span>
+              </button>
+            </div>
+          )}
+
           <div className="file-input-wrap">
             <input
               ref={fileInputRef}
@@ -1086,7 +1216,7 @@ function App({ lang = "ko", setLang }) {
         {resultImage && (
           <div className="result-section">
             <h3 className="section-title">{t.resultTitle}</h3>
-            <PostFrame brand="Picmood" likeCount={null} lang={lang}>
+            <PostFrame brand="Picmood" likeCount={null} lang={lang} photoClassName="post-frame__photo--result">
               <img src={resultImage} alt={t.resultAlt} />
             </PostFrame>
             <button className="download-btn" onClick={handleDownload}>{t.downloadImage}</button>

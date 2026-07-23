@@ -12,8 +12,8 @@ import { useState, useEffect } from "react";
 */
 
 const MOOD_LABEL = {
-  ko: { natural_white: "뉴트럴 화이트", wood: "우드", vivid: "Vivid" },
-  en: { natural_white: "Neutral White", wood: "Wood", vivid: "Vivid" },
+  ko: { natural_white: "뉴트럴 화이트", wood: "우드", vivid: "다크 그레이" },
+  en: { natural_white: "Neutral White", wood: "Wood", vivid: "Dark Gray" },
 };
 const COMPOSITION_LABEL = {
   ko: {
@@ -65,7 +65,7 @@ const STR = {
     step1Title: "사진 업로드",
     step1Desc: "휴대폰으로 편하게 찍은 음료 사진 올리기",
     step2Title: "스타일 선택",
-    step2Desc: "뉴트럴 화이트, 우드, Vivid 중 원하는 무드와 구도를 골라요.",
+    step2Desc: "뉴트럴 화이트, 우드, 다크 그레이 중 원하는 무드와 구도를 골라요.",
     step3Title: "결과 확인",
     step3Desc: "완성된 사진과 캡션까지 바로 받아 게시하면 끝.",
     baKicker: "비포 앤 애프터",
@@ -109,7 +109,7 @@ const STR = {
     step1Title: "Upload a photo",
     step1Desc: "A casual phone shot of your drink is enough.",
     step2Title: "Pick a style",
-    step2Desc: "Choose a mood and angle from Neutral White, Wood, or Vivid.",
+    step2Desc: "Choose a mood and angle from Neutral White, Wood, or Dark Gray.",
     step3Title: "See the result",
     step3Desc: "Get your finished photo and caption, ready to post.",
     baKicker: "Before & after",
@@ -193,7 +193,7 @@ function Home({ onStart, lang = "ko", setLang }) {
   }, []);
 
   // 히어로에 보여줄 카드는 무드마다 하나씩, 구도까지 지정해서 고정 선택
-  // (뉴트럴화이트-클로즈업, 우드-미디움샷, Vivid-손에든샷)
+  // (뉴트럴화이트-클로즈업, 우드-미디움샷, 다크그레이-손에든샷)
   const HERO_PICKS = [
     { mood: "natural_white", comp: "product_large" },
     { mood: "wood", comp: "product_center" },
@@ -203,7 +203,7 @@ function Home({ onStart, lang = "ko", setLang }) {
     .map((p) => references.find((r) => r.mood_id === p.mood && r.composition_id === p.comp))
     .filter(Boolean);
 
-  // 레퍼런스 카드 정렬: 뉴트럴화이트→우드→Vivid, 각 무드 안에서는
+  // 레퍼런스 카드 정렬: 뉴트럴화이트→우드→다크그레이, 각 무드 안에서는
   // 클로즈업→미디움샷→항공샷→손에든샷 순서로 고정. JSON 안의 원래 순서와
   // 무관하게 항상 이 순서로 보이게 함.
   const MOOD_ORDER = ["natural_white", "wood", "vivid"];
