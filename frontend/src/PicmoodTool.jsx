@@ -105,7 +105,7 @@ const T = {
     styleNotReady: "아직 준비 중인 스타일입니다.",
     genericError: "오류가 발생했습니다.",
     aspectRatioLabel: "결과 비율",
-    aspectRatioComingSoon: "준비 중",
+    selectRatioFirst: "결과 비율(4:5 또는 1:1)을 선택해주세요.",
     resultTitle: "완성된 한 컷",
     resultAlt: "생성 결과",
     downloadImage: "이미지 다운로드",
@@ -145,7 +145,7 @@ const T = {
     styleNotReady: "This style isn't available yet.",
     genericError: "Something went wrong.",
     aspectRatioLabel: "Result ratio",
-    aspectRatioComingSoon: "Coming soon",
+    selectRatioFirst: "Please choose a result ratio (4:5 or 1:1).",
     resultTitle: "Your finished shot",
     resultAlt: "Generated result",
     downloadImage: "Download image",
@@ -372,9 +372,10 @@ function App({ lang = "ko", setLang }) {
 
   const [references, setReferences] = useState([]); // GET /references 결과 (그루핑 전 원본)
   const [selectedReferenceId, setSelectedReferenceId] = useState(null);
-  // 결과 비율 토글. 지금은 4:5만 실제로 동작 — 1:1은 팀장님 쪽에서 별도
-  // provider profile 준비 중이라 UI만 미리 만들어두고 선택은 막아둔다.
-  const [aspectRatio, setAspectRatio] = useState("4:5");
+  // 결과 비율 토글. 2026-07-23 팀장 정정: 4:5(1024x1280)/1:1(1024x1024) 둘 다
+  // 실제로 지원되며, 사용자가 반드시 하나를 선택해야만 생성 가능 — 그래서
+  // 기본값을 미리 골라두지 않고 null로 시작한다.
+  const [aspectRatio, setAspectRatio] = useState(null);
 
   // 캡션 품질 향상을 위한 최소 질문 (둘 다 선택 입력)
   const [menuName, setMenuName] = useState("");
@@ -449,6 +450,10 @@ function App({ lang = "ko", setLang }) {
     }
     if (!productFile) {
       setError(t.uploadPhotoFirst);
+      return;
+    }
+    if (!aspectRatio) {
+      setError(t.selectRatioFirst);
       return;
     }
     setError("");
@@ -834,22 +839,6 @@ function App({ lang = "ko", setLang }) {
           background: var(--accent-2);
           color: #fff;
         }
-        .ratio-toggle__btn.is-disabled {
-          cursor: not-allowed;
-          color: var(--line);
-        }
-        .ratio-toggle__badge {
-          position: absolute;
-          top: -9px;
-          right: -6px;
-          font-size: 8.5px;
-          font-weight: 700;
-          color: #fff;
-          background: var(--ink-soft);
-          padding: 2px 5px;
-          border-radius: 999px;
-          white-space: nowrap;
-        }
 
         .guide-icon {
           position: relative;
@@ -1167,12 +1156,10 @@ function App({ lang = "ko", setLang }) {
               </button>
               <button
                 type="button"
-                className="ratio-toggle__btn is-disabled"
-                disabled
-                title={t.aspectRatioComingSoon}
+                className={`ratio-toggle__btn${aspectRatio === "1:1" ? " is-active" : ""}`}
+                onClick={() => setAspectRatio("1:1")}
               >
                 1:1
-                <span className="ratio-toggle__badge">{t.aspectRatioComingSoon}</span>
               </button>
             </div>
           )}
