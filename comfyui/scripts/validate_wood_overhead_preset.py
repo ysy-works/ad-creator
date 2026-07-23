@@ -38,13 +38,13 @@ def _asset(binding: dict, label: str) -> Path:
 def main() -> int:
     registry = json.loads((COMFYUI_DIR / "presets" / "registry.json").read_text(encoding="utf-8"))
     slot = registry["slots"]["wood__aerial_shot"]
-    _require(slot.get("enabled") is False, "Wood overhead must remain disabled before paid visual approval.")
-    _require(slot.get("status") == "visual_qa_pending", "Wood overhead review status changed.")
+    _require(slot.get("enabled") is True, "Wood overhead must be enabled after visual approval.")
+    _require(slot.get("status") == "published", "Wood overhead review status changed.")
     _require(slot.get("bundle") == "wood__aerial_shot/preset.json", "Wood overhead bundle path changed.")
 
     bundle = json.loads(BUNDLE_PATH.read_text(encoding="utf-8"))
     _require(bundle.get("preset_id") == "instagram_wood_cane_brownie_overhead_v1", "Preset ID mismatch.")
-    _require(bundle.get("status") == "visual_qa_pending", "Bundle must remain pending visual QA.")
+    _require(bundle.get("status") == "published", "Bundle must be published after visual QA.")
     policy = bundle.get("runtime_policy")
     _require(isinstance(policy, dict), "Shared runtime policy is missing.")
     _require(policy.get("compiler_version") == "preset-runtime-v1", "Runtime compiler changed.")
@@ -104,13 +104,13 @@ def main() -> int:
         _require(fragment in preserve_text, f"Preserve-source prompt is missing: {fragment}")
 
     delivery = bundle["aspect_ratio_contracts"]["4:5"]
-    _require(delivery["status"] == "prepared_pending_visual_qa", "4:5 status changed.")
+    _require(delivery["status"] == "published", "4:5 status changed.")
     _require(delivery.get("generation_size") == "1024x1280", "4:5 must use the shared provider canvas.")
     _require([delivery.get("width"), delivery.get("height")] == [1024, 1280], "4:5 delivery must preserve the provider canvas.")
     _require(delivery.get("safe_crop") == "none_exact_4x5", "4:5 must not crop provider output.")
     _require(delivery["bbox_qa"].get("crop_allowed") is False, "4:5 crop must remain disabled.")
     _require(delivery["bbox_qa"].get("protected_objects_must_remain_complete") is True, "4:5 crop protection changed.")
-    print("Validated pending wood overhead preset, shared runtime policy, hashes, sanitized control board, light/shadow and product-to-wood integration contracts.")
+    print("Validated published wood overhead preset, shared runtime policy, hashes, sanitized control board, light/shadow and product-to-wood integration contracts.")
     return 0
 
 

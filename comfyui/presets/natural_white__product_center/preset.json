@@ -87,8 +87,8 @@
       }
     },
     "1:1": {
-      "status": "prepared_pending_visual_qa",
-      "visual_review_status": "not_yet_generated",
+      "status": "published",
+      "visual_review_status": "passed_by_user_review",
       "prompt_addendum": "Generate the exact final 1:1 square canvas from the start; do not derive it by cropping a portrait image. Keep the one product body 0.14-0.20 of frame width and 0.20-0.30 of frame height, centered around x=0.42-0.58 and y=0.72-0.80. Preserve 0.58-0.70 meaningful warm-neutral wall-and-table negative space and place the wall-table boundary at y=0.76-0.82.",
       "generation_size": "1024x1024",
       "safe_crop": "none_exact_1x1",

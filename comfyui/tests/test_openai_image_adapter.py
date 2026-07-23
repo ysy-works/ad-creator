@@ -60,9 +60,13 @@ class PublishedPresetTest(unittest.TestCase):
         self.assertEqual(
             published_preset_slots(),
             (
+                "natural_white__product_large",
                 "natural_white__product_center",
+                "natural_white__aerial_shot",
                 "natural_white__handheld_lifestyle",
+                "wood__product_large",
                 "wood__product_center",
+                "wood__aerial_shot",
             ),
         )
 
@@ -72,11 +76,7 @@ class PublishedPresetTest(unittest.TestCase):
     def test_reviewed_presets_remain_available_for_validation(self):
         self.assertEqual(
             validated_preset_slots(),
-            (
-                "natural_white__product_large",
-                "natural_white__aerial_shot",
-                "wood__product_large",
-            ),
+            (),
         )
 
     def test_registry_declares_twelve_slots_and_reviewed_presets_are_published(self):
@@ -92,9 +92,13 @@ class PublishedPresetTest(unittest.TestCase):
         self.assertEqual(
             enabled,
             {
+                "natural_white__product_large": "instagram_white_diffuse_closeup_v1",
                 "natural_white__product_center": "instagram_white_diffuse_wall_table_v1",
+                "natural_white__aerial_shot": "instagram_white_neutral_overhead_spatial_v1",
                 "natural_white__handheld_lifestyle": "instagram_white_direct_handheld_refined_v5",
+                "wood__product_large": "instagram_wood_calm_window_closeup_v1",
                 "wood__product_center": "tokyo_a6_relational_scene_hint_v4",
+                "wood__aerial_shot": "instagram_wood_cane_brownie_overhead_v1",
             },
         )
 
@@ -126,7 +130,7 @@ class PublishedPresetTest(unittest.TestCase):
 
     def test_unpublished_slot_is_rejected(self):
         with self.assertRaisesRegex(OpenAIImageExecutionError, "PRESET_NOT_READY"):
-            load_published_preset("natural_white__product_large")
+            load_published_preset("wood__handheld_lifestyle")
 
     def test_white_handheld_resolves_its_two_declared_cup_policies(self):
         adopted = load_published_preset(
@@ -149,28 +153,28 @@ class PublishedPresetTest(unittest.TestCase):
             "natural_white__product_large",
             container_mode="adopt_reference",
             serving_temperature="auto",
-            allowed_statuses=("validated",),
+            allowed_statuses=("published",),
         )
         white_reference = load_published_preset(
             "natural_white__aerial_shot",
             container_mode="adopt_reference",
-            allowed_statuses=("validated",),
+            allowed_statuses=("published",),
         )
         white_source = load_published_preset(
             "natural_white__aerial_shot",
             container_mode="reconstruct_source",
-            allowed_statuses=("validated",),
+            allowed_statuses=("published",),
         )
         wood_reference = load_published_preset(
             "wood__product_large",
             container_mode="adopt_reference",
             serving_temperature="cold",
-            allowed_statuses=("validated",),
+            allowed_statuses=("published",),
         )
         wood_source = load_published_preset(
             "wood__product_large",
             container_mode="reconstruct_source",
-            allowed_statuses=("validated",),
+            allowed_statuses=("published",),
         )
         self.assertEqual(white_reference.container_mode, "adopt_reference")
         self.assertEqual(white_source.container_mode, "reconstruct_source")
@@ -192,14 +196,20 @@ class PublishedPresetTest(unittest.TestCase):
         self.assertIn("CAFE AMERICANO", wood_reference.prompt)
 
     def test_cold_reference_container_rejects_hot_and_unknown_state(self):
-        for serving_temperature in ("hot", "auto"):
+        for serving_temperature in ("hot",):
             with self.assertRaises(OpenAIImageExecutionError):
                 load_published_preset(
                     "wood__product_large",
                     container_mode="adopt_reference",
                     serving_temperature=serving_temperature,
-                    allowed_statuses=("validated",),
+                    allowed_statuses=("published",),
                 )
+        auto = load_published_preset(
+            "wood__product_large",
+            container_mode="adopt_reference",
+            serving_temperature="auto",
+        )
+        self.assertEqual(auto.serving_temperature, "source_authoritative")
 class OpenAIImageAdapterTest(unittest.TestCase):
     def _source(self, root: Path) -> Path:
         source = root / "source.png"
@@ -275,7 +285,7 @@ class OpenAIImageAdapterTest(unittest.TestCase):
             self.assertEqual(image.size, (1024, 1024))
             self.assertEqual(metadata["raw_dimensions"], [1024, 1024])
             self.assertEqual(metadata["aspect_ratio"], "1:1")
-            self.assertEqual(metadata["aspect_status"], "prepared_pending_visual_qa")
+            self.assertEqual(metadata["aspect_status"], "published")
             self.assertIn(b'name="size"\r\n\r\n1024x1024\r\n', transport.calls[0][2])
 
     def test_source_preprocessing_supports_auditable_1536_and_3072_comparison(self):

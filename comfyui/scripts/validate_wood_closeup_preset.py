@@ -33,9 +33,9 @@ def main() -> int:
     bundle = json.loads(BUNDLE_PATH.read_text(encoding="utf-8"))
     _require(bundle.get("slot_id") == "wood__product_large", "Wrong service slot.")
     _require(bundle.get("preset_id") == "instagram_wood_calm_window_closeup_v1", "Wrong preset id.")
-    _require(bundle.get("status") == "validated", "Preset must remain validated pending provider review.")
+    _require(bundle.get("status") == "published", "Preset must be published after visual QA.")
     _require(
-        bundle.get("source_review_status") == "pending_provider_visual_validation",
+        bundle.get("source_review_status") == "passed_by_user_review",
         "Provider visual validation state changed.",
     )
 
@@ -74,8 +74,8 @@ def main() -> int:
     _require(set(bundle.get("aspect_ratio_contracts", {})) == {"4:5", "1:1"}, "Aspect contracts changed.")
     _require(bundle["aspect_ratio_contracts"]["4:5"]["status"] == "published", "4:5 must be published.")
     _require(
-        bundle["aspect_ratio_contracts"]["1:1"]["status"] == "prepared_pending_visual_qa",
-        "Square mode must remain pending visual QA.",
+        bundle["aspect_ratio_contracts"]["1:1"]["status"] == "published",
+        "Square mode must be published after visual QA.",
     )
 
     print("Validated wood close-up preset bundle, contracts, hashes and two provider hint images.")

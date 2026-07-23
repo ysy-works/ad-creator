@@ -136,8 +136,8 @@
       }
     },
     "1:1": {
-      "status": "prepared_pending_visual_qa",
-      "visual_review_status": "not_yet_generated",
+      "status": "published",
+      "visual_review_status": "passed_by_user_review",
       "prompt_addendum": "Generate the exact final 1:1 canvas from the start; never crop a portrait result. Keep the full hand-cup unit at product width 0.17-0.21 and product height 0.25-0.31, with at least 0.60 meaningful wall negative space and no cropped cup or invented foreground surface.",
       "generation_size": "1024x1024",
       "safe_crop": "none_exact_1x1",

@@ -35,9 +35,13 @@ class NodeRegistrationTest(unittest.TestCase):
         self.assertEqual(
             tuple(inputs["required"]["preset_id"][0]),
             (
+                "natural_white__product_large",
                 "natural_white__product_center",
+                "natural_white__aerial_shot",
                 "natural_white__handheld_lifestyle",
+                "wood__product_large",
                 "wood__product_center",
+                "wood__aerial_shot",
             ),
         )
 

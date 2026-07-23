@@ -4,8 +4,8 @@
   "preset_id": "instagram_white_diffuse_closeup_v1",
   "family": "natural_white",
   "composition": "closeup",
-  "status": "validated",
-  "source_review_status": "pending_provider_visual_validation",
+  "status": "published",
+  "source_review_status": "passed_by_user_review",
   "runtime_policy": {
     "schema_version": 1,
     "compiler_version": "preset-runtime-v1",
@@ -53,8 +53,8 @@
   ],
   "aspect_ratio_contracts": {
     "4:5": {
-      "status": "validated",
-      "visual_review_status": "not_yet_generated",
+      "status": "published",
+      "visual_review_status": "passed_by_user_review",
       "prompt_addendum": "Generate the exact final 4:5 canvas at 1024x1280. Keep the complete cup, saucer and spoon assembly inside x=0.26-0.76 and y=0.25-0.83 with 0.42-0.50 meaningful warm-neutral tabletop negative space. Keep the waffle and magazine as narrow peripheral edge traces only; no crop of the primary assembly.",
       "generation_size": "1024x1280",
       "safe_crop": "none_exact_4x5",
@@ -64,8 +64,8 @@
       "bbox_qa": {"product_width_ratio": [0.46, 0.52], "product_height_ratio": [0.50, 0.60], "center_x_ratio": [0.47, 0.53], "center_y_ratio": [0.47, 0.55], "negative_space_ratio": [0.42, 0.50], "crop_allowed": false}
     },
     "1:1": {
-      "status": "prepared_pending_visual_qa",
-      "visual_review_status": "not_yet_generated",
+      "status": "published",
+      "visual_review_status": "passed_by_user_review",
       "prompt_addendum": "Generate the exact final 1:1 canvas at 1024x1024 from the start; never crop a portrait result. Keep the complete cup, saucer and spoon assembly readable with at least 0.38 meaningful warm-neutral tabletop negative space and no cropped primary object.",
       "generation_size": "1024x1024",
       "safe_crop": "none_exact_1x1",

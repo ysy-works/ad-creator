@@ -102,8 +102,8 @@ def main() -> int:
         )
         if portrait.aspect_status != "published":
             raise ValueError(f"4:5 must be published: {slot_id}")
-        if square.aspect_status != "prepared_pending_visual_qa":
-            raise ValueError(f"1:1 must remain pending visual QA: {slot_id}")
+        if square.aspect_status != "published":
+            raise ValueError(f"1:1 must be published: {slot_id}")
         for resolved in (portrait, square):
             if len(resolved.prompt) > 12_000:
                 raise ValueError(f"Prompt exceeds 12,000 characters: {slot_id}")

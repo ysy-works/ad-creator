@@ -345,7 +345,7 @@ class GatewayApiTest(unittest.TestCase):
             files={"image": ("input.png", _png(), "image/png")},
             data={
                 "workflow_id": "openai-gpt-image-2-low-v1",
-                "preset_id": "natural_white__product_large",
+                "preset_id": "wood__handheld_lifestyle",
             },
         )
         self.assertEqual(response.status_code, 400)

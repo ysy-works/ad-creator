@@ -4,8 +4,8 @@
   "preset_id": "instagram_wood_cane_brownie_overhead_v1",
   "family": "wood",
   "composition": "aerial",
-  "status": "visual_qa_pending",
-  "source_review_status": "sanitized_control_board_prepared_preset_output_pending",
+  "status": "published",
+  "source_review_status": "passed_by_user_review",
   "runtime_policy": {
     "schema_version": 1,
     "compiler_version": "preset-runtime-v1",
@@ -140,8 +140,8 @@
   },
   "aspect_ratio_contracts": {
     "4:5": {
-      "status": "prepared_pending_visual_qa",
-      "visual_review_status": "not_yet_generated",
+      "status": "published",
+      "visual_review_status": "passed_by_user_review",
       "prompt_addendum": "Generate the exact final 4:5 portrait canvas from the start; do not crop or resize after generation. Keep one complete primary beverage 0.20-0.27 of frame width and 0.17-0.24 of frame height, centered around x=0.61-0.70 and y=0.64-0.73. Keep the brownie plate 0.25-0.32 of frame width, centered around x=0.73-0.82 and y=0.46-0.55, with a small open gap from the beverage. Preserve the round table on the right, partial cane chair at upper-left and 0.28-0.42 meaningful pale floor-and-wall negative space. Keep every declared object and its attached shadow complete inside the frame.",
       "generation_size": "1024x1280",
       "safe_crop": "none_exact_4x5",
@@ -161,8 +161,8 @@
       }
     },
     "1:1": {
-      "status": "prepared_pending_visual_qa",
-      "visual_review_status": "not_yet_generated",
+      "status": "published",
+      "visual_review_status": "passed_by_user_review",
       "prompt_addendum": "Generate the exact final 1:1 square canvas from the start; do not crop a portrait composition. Recompose the same diagonal cane-chair, round-table, beverage, brownie and teaspoon relationships with 0.22-0.31 pale environmental negative space and preserve the complete product and declared companion group.",
       "generation_size": "1024x1024",
       "safe_crop": "none_exact_1x1",

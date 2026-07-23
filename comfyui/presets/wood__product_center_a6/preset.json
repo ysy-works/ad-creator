@@ -93,8 +93,8 @@
       }
     },
     "1:1": {
-      "status": "prepared_pending_visual_qa",
-      "visual_review_status": "not_yet_generated",
+      "status": "published",
+      "visual_review_status": "passed_by_user_review",
       "prompt_addendum": "Generate the exact final 1:1 square canvas from the start; do not crop a portrait composition. Keep the exact right-front product 0.14-0.17 of frame width and 0.18-0.22 of frame height, centered around x=0.60-0.65 and y=0.60-0.66. Keep the complete round tray 0.46-0.54 of frame width and no more than 0.36 of frame height, with 0.42-0.52 meaningful room-and-table release around the compact three-item group.",
       "generation_size": "1024x1024",
       "safe_crop": "none_exact_1x1",

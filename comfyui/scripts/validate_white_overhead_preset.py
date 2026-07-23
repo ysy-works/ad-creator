@@ -34,7 +34,7 @@ def main() -> int:
     registry = json.loads(registry_path.read_text(encoding="utf-8"))
     slot = registry["slots"][SLOT_ID]
     _require(slot.get("enabled") is True, "White overhead review slot must be enabled.")
-    _require(slot.get("status") == "validated", "White overhead review slot must remain validated pending provider review.")
+    _require(slot.get("status") == "published", "White overhead review slot must be published after visual QA.")
     _require(slot.get("preset_id") == PRESET_ID, "Registry preset ID mismatch.")
 
     bundle_path = registry_path.parent / slot["bundle"]
@@ -112,7 +112,7 @@ def main() -> int:
         aspect_ratio="4:5",
         container_mode="adopt_reference",
         registry_path=registry_path,
-        allowed_statuses=("validated",),
+        allowed_statuses=("published",),
     )
     _require(len(resolved.provider_image_paths) == 1, "Exactly one scene-reference image must be submitted.")
     _require(resolved.provider_image_roles == ("reference_container_and_companion_scene",), "Provider scene-reference role changed.")

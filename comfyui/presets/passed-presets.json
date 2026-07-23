@@ -9,14 +9,14 @@
       "status": "published_default",
       "runtime_state": "routed",
       "bundle": "wood__product_center_a6/preset.json",
-      "bundle_sha256": "412df4c95b95ea11506e99025cc6c010abd6789b199789e1321b8df189d38246"
+      "bundle_sha256": "9d972790b1679e089b1ced4ac808dffffef88136ef2a9bebc84c599a7e49a914"
     },
     {
       "preset_id": "instagram_white_diffuse_wall_table_v1",
       "status": "passed_by_user_review",
       "runtime_state": "published_non_default",
       "bundle": "natural_white__product_center/preset.json",
-      "bundle_sha256": "6ba1a03d4a67853005f3dce9722d22d7710639bfa4f43a5e61890196bd1733b2"
+      "bundle_sha256": "fd37b8b402c8125a4f34754d9ee4eead71d1e9ceb4797f1751723e54152d534b"
     },
     {
       "preset_id": "instagram_wood_45deg_relational_v3",
@@ -30,7 +30,35 @@
       "status": "passed_by_user_review",
       "runtime_state": "published_non_default",
       "bundle": "natural_white__handheld_lifestyle/preset.json",
-      "bundle_sha256": "9318d955c9cc2a6c5af973e91186681b9ce88e5d5d2654ef8a9b27195950b31e"
+      "bundle_sha256": "6dc04ee137e41185abca53b3c1e40e389be6e50516fa198e5ae4c855d91323dc"
+    },
+    {
+      "preset_id": "instagram_white_diffuse_closeup_v1",
+      "status": "passed_by_user_review",
+      "runtime_state": "published_non_default",
+      "bundle": "natural_white__product_large/preset.json",
+      "bundle_sha256": "efe8ed974d90b4504bc3f650072f4b28f0938013269e3f82cffa195838f2e32b"
+    },
+    {
+      "preset_id": "instagram_white_neutral_overhead_spatial_v1",
+      "status": "passed_by_user_review",
+      "runtime_state": "published_non_default",
+      "bundle": "natural_white__aerial_shot/preset.json",
+      "bundle_sha256": "aee5c672df5c8124f055688a7e828aac4e2da01423e8939292e41699d98d3692"
+    },
+    {
+      "preset_id": "instagram_wood_calm_window_closeup_v1",
+      "status": "passed_by_user_review",
+      "runtime_state": "published_non_default",
+      "bundle": "wood__product_large/preset.json",
+      "bundle_sha256": "bfd6955d000164f4983194cc68f56b2081bae9a55b54a5a546fa4fbf190c27fa"
+    },
+    {
+      "preset_id": "instagram_wood_cane_brownie_overhead_v1",
+      "status": "passed_by_user_review",
+      "runtime_state": "published_non_default",
+      "bundle": "wood__aerial_shot/preset.json",
+      "bundle_sha256": "782317e120250eb3a4e14c27b317a1da656964d3f74e6db01aaa571733964afb"
     }
   ],
   "excluded": [

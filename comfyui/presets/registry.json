@@ -6,7 +6,7 @@
   "slots": {
     "natural_white__product_large": {
       "enabled": true,
-      "status": "validated",
+      "status": "published",
       "family": "natural_white",
       "composition": "closeup",
       "preset_id": "instagram_white_diffuse_closeup_v1",
@@ -30,7 +30,7 @@
     },
     "natural_white__aerial_shot": {
       "enabled": true,
-      "status": "validated",
+      "status": "published",
       "family": "natural_white",
       "composition": "aerial",
       "preset_id": "instagram_white_neutral_overhead_spatial_v1",
@@ -54,7 +54,7 @@
     },
     "wood__product_large": {
       "enabled": true,
-      "status": "validated",
+      "status": "published",
       "family": "wood",
       "composition": "closeup",
       "preset_id": "instagram_wood_calm_window_closeup_v1",
@@ -78,7 +78,7 @@
     },
     "wood__aerial_shot": {
       "enabled": true,
-      "status": "visual_qa_pending",
+      "status": "published",
       "family": "wood",
       "composition": "aerial",
       "preset_id": "instagram_wood_cane_brownie_overhead_v1",

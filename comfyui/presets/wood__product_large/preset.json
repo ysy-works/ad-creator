@@ -4,8 +4,8 @@
   "preset_id": "instagram_wood_calm_window_closeup_v1",
   "family": "wood",
   "composition": "closeup",
-  "status": "validated",
-  "source_review_status": "pending_provider_visual_validation",
+  "status": "published",
+  "source_review_status": "passed_by_user_review",
   "runtime_policy": {
     "schema_version": 1,
     "compiler_version": "preset-runtime-v1",
@@ -155,6 +155,7 @@
   "aspect_ratio_contracts": {
     "4:5": {
       "status": "published",
+      "visual_review_status": "passed_by_user_review",
       "prompt_addendum": "Generate the exact final 4:5 portrait canvas. Keep the complete primary cup at front-left around x=0.28-0.63 and y=0.41-0.82; keep the smaller rear paper cup around x=0.58-0.86 and y=0.31-0.67. Preserve the full rims, bases, contacts, round table edge, diagonal sill and distant planter. Do not crop or enlarge after generation.",
       "generation_size": "1024x1280",
       "safe_crop": "none_exact_4x5",
@@ -173,7 +174,8 @@
       }
     },
     "1:1": {
-      "status": "prepared_pending_visual_qa",
+      "status": "published",
+      "visual_review_status": "passed_by_user_review",
       "prompt_addendum": "Generate a native square composition rather than cropping the portrait layout. Keep the complete primary cup front-left and the smaller rear paper cup behind-right, with the diagonal sill, distant planter and enough wood-table margin for both attached shadows.",
       "generation_size": "1024x1024",
       "safe_crop": "none_exact_1x1",

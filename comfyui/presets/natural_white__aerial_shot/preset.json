@@ -4,8 +4,8 @@
   "preset_id": "instagram_white_neutral_overhead_spatial_v1",
   "family": "natural_white",
   "composition": "aerial",
-  "status": "validated",
-  "source_review_status": "pending_provider_visual_validation",
+  "status": "published",
+  "source_review_status": "passed_by_user_review",
   "runtime_policy": {
     "schema_version": 1,
     "compiler_version": "preset-runtime-v1",
@@ -207,7 +207,7 @@
   "aspect_ratio_contracts": {
     "4:5": {
       "status": "published",
-      "visual_review_status": "pending_current_low_review",
+      "visual_review_status": "passed_by_user_review",
       "prompt_addendum": "Generate the exact final 4:5 canvas. Keep one complete primary overhead beverage, including the full adopted handle, 0.27-0.34 of frame width and 0.17-0.22 of frame height, centered around x=0.55-0.60 and y=0.58-0.63. The product bbox applies only to the primary beverage. Add exactly the declared dessert group above it and the cropped magazine at the far right edge. Preserve 0.55-0.70 meaningful table-and-floor negative space, a right-dominant round table occupying 0.66-0.82 of the frame, and a narrow left gray tiled-floor wedge with receding grout.",
       "generation_size": "1024x1280",
       "safe_crop": "none_exact_4x5",
@@ -226,8 +226,8 @@
       }
     },
     "1:1": {
-      "status": "prepared_pending_visual_qa",
-      "visual_review_status": "not_yet_generated",
+      "status": "published",
+      "visual_review_status": "passed_by_user_review",
       "prompt_addendum": "Generate the exact final 1:1 square canvas from the start; do not crop a portrait composition. Keep one complete primary overhead beverage, including the full adopted handle, 0.25-0.32 of frame width and 0.20-0.27 of frame height, centered around x=0.54-0.60 and y=0.56-0.63. The product bbox applies only to the primary beverage. Recompose exactly the declared dessert group above it and the cropped magazine at the far right edge for the square canvas. Preserve 0.48-0.64 meaningful table-and-floor negative space, the right-dominant round table and a narrow left gray tiled-floor wedge with receding grout.",
       "generation_size": "1024x1024",
       "safe_crop": "none_exact_1x1",

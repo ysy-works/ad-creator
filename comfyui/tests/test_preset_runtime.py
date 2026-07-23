@@ -118,6 +118,7 @@ class PresetRuntimeTest(unittest.TestCase):
         candidate_registry["slots"]["wood__aerial_shot"]["enabled"] = True
         candidate_registry["slots"]["wood__aerial_shot"]["status"] = "validated"
         candidate_bundle["status"] = "validated"
+        candidate_bundle["source_review_status"] = "pending_provider_visual_validation"
         original_read_json = runtime_contract._read_json
 
         def read_candidate(path: Path):
