@@ -96,6 +96,24 @@ class PresetRuntimeTest(unittest.TestCase):
         self.assertIn("unbranded straight-sided clear plastic cold-drink cup", adopted.prompt)
         self.assertIn("Preserve the source beverage recipe", reconstructed.prompt)
 
+    def test_auto_temperature_uses_only_the_user_product_image(self):
+        contract = resolve_preset_contract(
+            "wood__product_center",
+            serving_temperature="auto",
+            registry_path=REGISTRY,
+        )
+        self.assertEqual(contract.serving_temperature, "source_authoritative")
+        self.assertEqual(
+            contract.temperature_resolution_source,
+            "user_product_image",
+        )
+        self.assertIn("Image 1 is the sole authority", contract.prompt)
+        self.assertIn(
+            "Reference and control images have no beverage or serving-state authority",
+            contract.prompt,
+        )
+        self.assertIn("do not invent ice, condensation or steam", contract.prompt)
+
     def test_declared_crop_uses_analyzed_geometry_or_audited_fallback(self):
         with tempfile.TemporaryDirectory() as directory:
             source = Path(directory) / "source.png"

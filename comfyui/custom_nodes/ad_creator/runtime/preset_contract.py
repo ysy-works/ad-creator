@@ -331,7 +331,7 @@ def _temperature(
     if requested == "auto":
         auto_action = rule.get("auto_action")
         if auto_action == "preserve_source_state":
-            return "source_authoritative", "preset"
+            return "source_authoritative", "user_product_image"
         if auto_action == "requires_explicit_state":
             raise PresetRuntimeError(
                 "SERVING_TEMPERATURE_REVIEW_REQUIRED",
@@ -474,7 +474,13 @@ def _runtime_prompt_clause(
     else:
         companion_clause = "Generate only companions explicitly supplied by the request."
     temperature_clause = (
-        "Preserve the source serving temperature exactly."
+        "SERVING STATE AUTHORITY: Image 1 is the sole authority for beverage type, "
+        "source serving temperature, visible ice state, liquid layers, foam or crema, "
+        "toppings, garnish and beverage color. Reference and control images have no "
+        "beverage or serving-state authority: never copy their drink, hot-or-cold state, "
+        "ice or no-ice state, foam, crema, steam, garnish, recipe or beverage color. "
+        "Preserve only serving cues actually visible in Image 1; do not invent ice, "
+        "condensation or steam."
         if serving_temperature == "source_authoritative"
         else f"The product serving state is explicitly {serving_temperature}; keep its vessel and visible service cues physically compatible."
     )
