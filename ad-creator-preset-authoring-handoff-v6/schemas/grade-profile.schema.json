@@ -91,6 +91,8 @@
         "exposure_ev": { "type": "number", "minimum": -0.5, "maximum": 0.5 },
         "saturation": { "type": "number", "minimum": 0.5, "maximum": 1.5 },
         "warmth": { "type": "number", "minimum": -1, "maximum": 1 },
+        "reflected_tint_rgb": { "$ref": "#/$defs/rgbTriplet" },
+        "reflected_tint_strength": { "type": "number", "minimum": 0, "maximum": 0.25 },
         "blend_strength": { "type": "number", "minimum": 0, "maximum": 1 }
         ,
         "spatial_focus": {

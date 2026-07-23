@@ -13,7 +13,7 @@
   },
   "composition": {
     "inherit_preset_bbox": true,
-    "subject_anchor_priority": "one large complete cup-saucer-spoon assembly; narrow off-frame waffle sliver upper-left and small off-frame magazine corner upper-right",
+    "subject_anchor_priority": "one complete restrained cup-saucer-spoon assembly with real tabletop air; narrow off-frame waffle sliver upper-left and small off-frame magazine corner upper-right",
     "asymmetry_sources": [
       "unequal peripheral edge crops",
       "soft off-frame occupancy shadows"
@@ -115,7 +115,7 @@
       "missing or malformed spoon",
       "watermark",
       "pasted product",
-      "product too small",
+      "hero-scale product crop that removes the surrounding tabletop air",
       "light and shadows do not communicate room volume"
     ],
     "weights": {

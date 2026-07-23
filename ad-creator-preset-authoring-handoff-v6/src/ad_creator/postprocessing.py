@@ -221,6 +221,11 @@ def _apply_targeted_relight(
     relit = relit_luma[:, :, None] + (
         relit - relit_luma[:, :, None]
     ) * float(policy["saturation"])
+    reflected_tint = policy.get("reflected_tint_rgb")
+    reflected_tint_strength = float(policy.get("reflected_tint_strength", 0.0))
+    if reflected_tint is not None and reflected_tint_strength > 0:
+        tint = np.asarray(reflected_tint, dtype=np.float32).reshape((1, 1, 3))
+        relit = relit * (1.0 - reflected_tint_strength) + tint * reflected_tint_strength
     alpha = (selection * float(policy["blend_strength"]))[:, :, None]
     output = np.clip(rgb * (1.0 - alpha) + relit * alpha, 0.0, 1.0)
     return Image.fromarray(np.rint(output * 255.0).astype(np.uint8), mode="RGB")

@@ -3,7 +3,7 @@
   "schema_version": "2.0.0",
   "preset_id": "instagram_white_diffuse_closeup_v1",
   "display_name": "화이트계열 클로즈업",
-  "concept": "large_white_interior_closeup_with_diffuse_room_air",
+  "concept": "restrained_white_interior_closeup_with_diffuse_room_air",
   "source": {
     "reference_image": "comfyui-inputs/ad_creator_reference_white_closeup_cylindrical_v2.png",
     "width_px": 1164,
@@ -23,7 +23,7 @@
     "runtime_reference_image": false,
     "novel_scene_required": true,
     "allowed_style_features": [
-      "one large close product assembly on a warm ivory-white matte table",
+      "one restrained complete product assembly on a warm ivory-white matte table",
       "broad upper-left diffuse window light and soft lower-right shadows",
       "narrow off-frame sliver of a normal-size waffle plate at upper-left",
       "small off-frame corner of a normal-size Barton Springs magazine at upper-right",
@@ -53,16 +53,16 @@
       0.55
     ],
     "subject_width_ratio": [
-      0.53,
-      0.62
+      0.46,
+      0.52
     ],
     "subject_height_ratio": [
-      0.46,
-      0.57
+      0.50,
+      0.60
     ],
     "negative_space_ratio": [
-      0.32,
-      0.42
+      0.42,
+      0.50
     ],
     "focal_length_mm": [
       52,
@@ -127,19 +127,19 @@
   },
   "subject_layout": {
     "main_subject": {
-      "role": "one large exact user beverage and serving assembly",
+      "role": "one complete exact user beverage and serving assembly with surrounding tabletop air",
       "center": {
         "x_ratio": 0.5,
         "y_ratio": 0.51
       },
       "bbox": {
-        "x_ratio": 0.21,
-        "y_ratio": 0.24,
-        "width_ratio": 0.58,
-        "height_ratio": 0.54
+        "x_ratio": 0.27,
+        "y_ratio": 0.25,
+        "width_ratio": 0.46,
+        "height_ratio": 0.5
       },
-      "area_ratio": 0.30,
-      "height_ratio": 0.54
+      "area_ratio": 0.25,
+      "height_ratio": 0.5
     },
     "secondary_subjects": [
       {
@@ -181,13 +181,13 @@
     }
   },
   "composition": {
-    "shot_type": "large close environmental tabletop product",
+    "shot_type": "restrained close environmental tabletop product",
     "camera_angle": "natural high three-quarter view at 42-49 degrees",
     "camera_height": "close above the table",
     "focal_length_equivalent_mm": 55,
     "horizon_visibility": "none; room depth is implied by light, overlap, edge crops and finite focus falloff",
     "depth_of_field": "complete product and spoon readable; edge props mildly and physically defocused",
-    "alignment": "large central product balanced by peripheral edge crops"
+    "alignment": "restrained central product balanced by tabletop air and peripheral edge crops"
   },
   "lighting": {
     "type": "one very large diffuse window source plus weak neutral white-room bounce",
@@ -239,7 +239,7 @@
   "preservation_policy": {
     "hard_lock": [
       "exact user beverage identity, layers, ice and toppings",
-      "one large central cup-saucer-spoon serving assembly",
+      "one complete restrained cup-saucer-spoon serving assembly with real tabletop air",
       "low straight cylindrical reference glass, complete warm-white saucer and wood-handled teaspoon together in adopt-reference mode",
       "exact user cup centered on the approved saucer with the approved teaspoon in preserve-source mode",
       "single diffuse upper-left light",
@@ -261,7 +261,7 @@
   },
   "prompt_blocks": {
     "input_roles": "Image 1 owns beverage identity and the user cup when selected. Image 2 owns the approved white-closeup composition, diffuse light, saucer, wood-handled teaspoon and peripheral depth cues.",
-    "composition": "One large cup-saucer-spoon serving assembly fills the central-lower 4:5 frame at 110% of the prior white-closeup guide, while the entire saucer and spoon remain visible; only a narrow off-frame sliver of a normal-size waffle plate enters upper-left and a small off-frame corner of a normal-size Barton Springs magazine enters upper-right; preserve the approved perspective and scale hierarchy.",
+    "composition": "One complete cup-saucer-spoon serving assembly occupies roughly 46-52% of frame width and 54-60% of frame height in the central-lower 4:5 frame, with the entire saucer and spoon visible and real tabletop air around it; only a narrow off-frame sliver of a normal-size waffle plate enters upper-left and a small off-frame corner of a normal-size Barton Springs magazine enters upper-right; preserve the approved perspective and scale hierarchy.",
     "look": "Warm-neutral white interior, one broad upper-left/left-front diffuse window at 5050-5250K, soft lower-right contacts, long feathered penumbrae, restrained transmission through glass and liquid, and faint off-frame occupancy shadows with real room air.",
     "preservation": "Preserve beverage identity and internal color relationships, not its original absolute white point. In adopt mode use the approved low straight cylindrical reference glass, complete saucer and wood-handled teaspoon; in preserve mode keep the exact user cup on that same approved saucer with that teaspoon.",
     "negative": "No overhead view, round-table edge, table leg, tiled floor, grout, flat white void, studio sweep, miniature waffle, centered magazine, hard sunlight, beige veil, missing saucer, missing or malformed spoon, floating product, CGI liquid, HDR halo or watermark."
@@ -269,13 +269,13 @@
   "quality_gates": {
     "logo_text": "do not tilt the overhead camera to reveal source sidewall branding; omit branding when it is not naturally visible, and keep the adopted reference mug plain unless a separate target brand contract authorizes otherwise",
     "product_identity": "beverage and selected cup remain authoritative",
-    "preset_adherence": "large close cup-saucer-spoon assembly, two peripheral edge props, white-room air and one diffuse light all pass",
+    "preset_adherence": "complete restrained cup-saucer-spoon assembly, two peripheral edge props, white-room air and one diffuse light all pass",
     "artifact_policy": "reject flat white, missing or malformed serving components, miniature props, hard shadows, clipped whites, pasted edges or copied scene pixels"
   },
   "failure_recovery": [
     "restore exact beverage and selected cup",
     "restore the complete saucer and wood-handled teaspoon",
-    "restore large close scale",
+    "restore restrained serving scale and surrounding tabletop air",
     "restore partial edge props",
     "restore one broad diffuse source and spatial shadows"
   ]

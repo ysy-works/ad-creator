@@ -479,7 +479,7 @@ def _white_closeup_master_contract(
 [WHITE CLOSE-UP MASTER CONTRACT - FULL PHOTOMETRIC FIDELITY]
 INPUT AUTHORITY: Image 1 owns beverage identity, opacity, layer boundaries, ice and toppings. {serving_rule} {scene_authority} Reconstruct the whole frame as one photograph; never average drinks, paste a cutout or reuse input boundaries.
 
-CORE COMPOSITION: one large assembly at bbox x=0.20-0.82, y=0.21-0.93, centered near (0.51,0.57). Scale the beverage, cup, saucer and teaspoon assembly to 110 percent of the prior white-closeup guide while retaining the complete saucer and teaspoon inside frame. Use rectilinear 54-56mm, 58-72cm distance, 44-47 degree pitch, near-zero yaw/roll; show sidewall and open top. No overhead view, table edge, floor or tile grout; one continuous warm ivory-white tabletop.
+CORE COMPOSITION: one complete, restrained assembly at bbox x=0.26-0.76, y=0.25-0.83, centered near (0.51,0.55). The beverage, cup, saucer and teaspoon assembly occupies about 46-52 percent of frame width and 54-60 percent of frame height: prominent but never hero-scale, with real tabletop air on every side. Retain the complete saucer and teaspoon inside frame. Use rectilinear 54-56mm, 68-86cm distance, 44-47 degree pitch, near-zero yaw/roll; show sidewall and open top. No overhead view, table edge, floor or tile grout; one continuous warm ivory-white tabletop.
 
 {cup_silhouette_rule}
 
@@ -1017,15 +1017,16 @@ def build_generation_request(
         sampled["asymmetry_source"] = rng.choice(asymmetry_sources)
     if preset.get("preset_id") == "instagram_white_diffuse_closeup_v1":
         # White Close-up is a signature composition, not a broad sampling family.
-        # Keep the complete cup/saucer/spoon assembly in one stable corridor and
-        # vary only material microdetail, peripheral crop detail and room air.
+        # Keep the complete cup/saucer/spoon assembly in one stable, restrained
+        # corridor. The preset must retain real tabletop air instead of turning
+        # into a hero-scale product crop.
         sampled.update(
             {
                 "subject_center_x": 0.51,
-                "subject_center_y": 0.57,
-                "subject_width_ratio": 0.62,
-                "subject_height_ratio": 0.72,
-                "negative_space_ratio": 0.36,
+                "subject_center_y": 0.55,
+                "subject_width_ratio": 0.50,
+                "subject_height_ratio": 0.58,
+                "negative_space_ratio": 0.46,
                 "focal_length_mm": 55.0,
                 "camera_pitch_degrees": 45.5,
             }
@@ -1845,7 +1846,7 @@ Return the image only when exact beverage identity, selected container policy, {
         quality_gate["weights"] = scene_recipe["quality_gate"]["weights"]
     if preset.get("preset_id") == "instagram_white_diffuse_closeup_v1":
         for failure in (
-            "white close-up core composition drifted from one large cup-saucer-spoon assembly",
+            "white close-up serving assembly exceeds the restrained scale corridor or loses surrounding tabletop air",
             "saucer or wood-handled teaspoon is missing, cropped, floating or malformed",
             "adopted reference cup is a tall highball, stepped vessel, decorative band, crack, seam, sleeve or stacked vessel instead of one compact low straight cylinder",
             "product_source and scene_hint are identical or the scene/light anchor is absent",

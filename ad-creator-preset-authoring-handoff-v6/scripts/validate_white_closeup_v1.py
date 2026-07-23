@@ -56,6 +56,7 @@ def main() -> None:
         assert request["scene_graph_json"] == ["4", 2]
         assert workflow["13"]["inputs"]["image"] == expected_hint
         assert workflow["1"]["inputs"]["image"] != workflow["13"]["inputs"]["image"]
+        assert workflow["9"]["inputs"]["protection_mask"] == ["14", 0]
         print("PASS", relative)
 
     assert (ROOT / "comfyui-inputs/ad_creator_reference_white_closeup_cylindrical_v2.png").is_file()
@@ -91,9 +92,26 @@ def main() -> None:
     assert container["design"]["height_to_width_ratio"] == [0.95, 1.05]
     assert "inward shoulder" not in container["design"]["geometry"].lower()
     grade = load_json(ROOT / "presets/moods/instagram_white_diffuse_closeup_v1/grade-profile.json")
-    assert grade["targeted_relight"]["policy_id"] == "bright_low_chroma_product_relight_v1"
+    assert grade["targeted_relight"]["policy_id"] == "bright_low_chroma_relight_v2"
     assert grade["targeted_relight"]["scope"] == "protection_mask"
-    print("PASS low cylindrical reference-cup geometry, relational beverage color, serving assembly and distinct-input guard")
+    assert grade["targeted_relight"]["reflected_tint_rgb"] == [0.9, 0.9, 0.84]
+    assert grade["targeted_relight"]["reflected_tint_strength"] == 0.07
+
+    reference = load_json(ROOT / "presets/editorial/instagram_white_diffuse_closeup_v1/reference-preset.json")
+    assert reference["sampling_ranges"]["subject_width_ratio"] == [0.46, 0.52]
+    assert reference["sampling_ranges"]["subject_height_ratio"] == [0.5, 0.6]
+    assert reference["sampling_ranges"]["negative_space_ratio"] == [0.42, 0.5]
+
+    scene_graph = load_json(ROOT / "data/reference-library/scene-graphs-v2/ref_white_closeup_v1.json")
+    primary = scene_graph["objects"][0]
+    assert primary["full_bbox"] == {
+        "left": 0.26,
+        "top": 0.25,
+        "right": 0.76,
+        "bottom": 0.83,
+        "confidence": 0.96,
+    }
+    print("PASS restrained serving scale, bright low-chroma relight, relational beverage color and distinct-input guard")
 
 
 if __name__ == "__main__":

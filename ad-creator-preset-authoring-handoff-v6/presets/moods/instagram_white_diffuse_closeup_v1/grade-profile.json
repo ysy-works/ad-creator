@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0.0",
-  "grade_profile_id": "instagram_white_diffuse_closeup_grade_v2",
+  "grade_profile_id": "instagram_white_diffuse_closeup_grade_v3",
   "input_color_space": "sRGB",
   "output_color_space": "sRGB",
   "transform": {
@@ -21,16 +21,18 @@
     "mask_strength": 0.9
   },
   "targeted_relight": {
-    "policy_id": "bright_low_chroma_product_relight_v1",
+    "policy_id": "bright_low_chroma_relight_v2",
     "scope": "protection_mask",
-    "luma_range": [0.78, 0.99],
-    "max_saturation": 0.16,
-    "luma_feather": 0.12,
-    "saturation_feather": 0.06,
-    "exposure_ev": -0.18,
-    "saturation": 0.92,
-    "warmth": 0.05,
-    "blend_strength": 0.58,
+    "luma_range": [0.74, 0.98],
+    "max_saturation": 0.18,
+    "luma_feather": 0.11,
+    "saturation_feather": 0.05,
+    "exposure_ev": -0.14,
+    "saturation": 0.9,
+    "warmth": 0.035,
+    "reflected_tint_rgb": [0.9, 0.9, 0.84],
+    "reflected_tint_strength": 0.07,
+    "blend_strength": 0.54,
     "spatial_focus": {
       "center": [0.5, 0.45],
       "radius": [0.42, 0.54],

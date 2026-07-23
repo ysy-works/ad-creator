@@ -6,7 +6,7 @@
     "anchor_preset_id": "instagram_white_diffuse_closeup_v1",
     "minimum_cluster_size": 4,
     "runtime_pixels_allowed": false,
-    "selection_rule": "large central serving assembly, edge-cropped waffle and magazine, diffuse white-room space",
+    "selection_rule": "restrained complete serving assembly with tabletop air, edge-cropped waffle and magazine, diffuse white-room space",
     "source_images": [
       "ad_creator_reference_white_closeup_cylindrical_v2.png"
     ]

@@ -108,7 +108,7 @@
     ],
     "intent": "translate the tall source product into the approved white close-up serving composition while preserving drink identity and serving details",
     "preferred_capture": {
-      "camera_distance": "58-72 cm, close enough for the complete cup-saucer-spoon assembly to dominate the frame",
+      "camera_distance": "68-86 cm, close enough for the complete cup-saucer-spoon assembly to read clearly but with real tabletop air around it",
       "camera_height": "slightly above the tabletop at a 44-47 degree pitch",
       "focal_length_mm": [
         54,

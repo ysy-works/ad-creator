@@ -32,19 +32,19 @@
       "slot_id": "beverage_primary",
       "kind": "beverage",
       "role": "primary",
-      "description": "large central replaceable low cylindrical-glass beverage assembly with mandatory saucer and wood-handled teaspoon",
+      "description": "restrained central replaceable low cylindrical-glass beverage assembly with mandatory saucer, wood-handled teaspoon and real tabletop air",
       "body_bbox": {
-        "left": 0.3,
-        "top": 0.25,
-        "right": 0.72,
-        "bottom": 0.74,
+        "left": 0.34,
+        "top": 0.3,
+        "right": 0.68,
+        "bottom": 0.7,
         "confidence": 0.96
       },
       "full_bbox": {
-        "left": 0.2,
-        "top": 0.21,
-        "right": 0.82,
-        "bottom": 0.93,
+        "left": 0.26,
+        "top": 0.25,
+        "right": 0.76,
+        "bottom": 0.83,
         "confidence": 0.96
       },
       "straw": {
@@ -131,10 +131,10 @@
     {
       "zone_id": "zone_product_on_white_table",
       "bbox": {
-        "left": 0.2,
-        "top": 0.21,
-        "right": 0.82,
-        "bottom": 0.93,
+        "left": 0.26,
+        "top": 0.25,
+        "right": 0.76,
+        "bottom": 0.83,
         "confidence": 0.98
       },
       "support_surface_id": "surface_white_table",
@@ -143,8 +143,8 @@
         "dessert"
       ],
       "scale_range": [
-        1.08,
-        1.12
+        0.88,
+        0.94
       ],
       "confidence": 0.98,
       "reason": "reviewed signature cup-saucer-spoon assembly with complete support contact"
@@ -155,19 +155,19 @@
     "camera_height": "slightly_above",
     "camera_pitch": "42-49 degrees",
     "lens_character": "phone_mild_tele",
-    "subject_position": "large near center",
-    "negative_space": "quiet continuous warm-white tabletop with distant peripheral depth cues",
+    "subject_position": "restrained near center with surrounding tabletop air",
+    "negative_space": "42-50 percent quiet continuous warm-white tabletop with distant peripheral depth cues",
     "asymmetry_source": "narrow off-frame waffle sliver upper-left and small off-frame magazine corner upper-right",
     "crop_character": "4:5 close social crop with no table edge or floor"
   },
   "depth": {
     "plane_count": 3,
-    "foreground": "large complete cup-saucer-spoon assembly with physically attached contacts and coherent shadow",
+    "foreground": "complete restrained cup-saucer-spoon assembly with physically attached contacts and coherent shadow",
     "product_plane": "cup, complete saucer and wood-handled teaspoon on one continuous tabletop",
     "midground": "warm ivory-white matte tabletop with broad directional light falloff",
     "background": "distant narrow off-frame waffle sliver upper-left and small off-frame magazine corner upper-right on the same continuous tabletop",
     "perspective_cues": [
-      "large foreground serving-assembly scale",
+      "restrained foreground serving-assembly scale with surrounding tabletop air",
       "peripheral objects cropped by opposite frame edges",
       "distance-dependent microcontrast reduction",
       "overlapping attached shadows and broad light falloff"
@@ -225,7 +225,7 @@
     ],
     "shot_tags": [
       "high three-quarter close-up",
-      "single large product",
+      "single restrained product",
       "portrait social crop"
     ]
   },
