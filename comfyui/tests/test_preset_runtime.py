@@ -129,19 +129,9 @@ class PresetRuntimeTest(unittest.TestCase):
             return original_read_json(path)
 
         with patch.object(runtime_contract, "_read_json", side_effect=read_candidate):
-            with self.assertRaises(PresetRuntimeError) as raised:
-                resolve_preset_contract(
-                    "wood__aerial_shot",
-                    serving_temperature="auto",
-                    registry_path=REGISTRY,
-                    allowed_statuses=("validated",),
-                )
-            self.assertEqual(
-                raised.exception.code, "SERVING_TEMPERATURE_REVIEW_REQUIRED"
-            )
             adopted = resolve_preset_contract(
                 "wood__aerial_shot",
-                serving_temperature="cold",
+                serving_temperature="auto",
                 registry_path=REGISTRY,
                 allowed_statuses=("validated",),
             )
@@ -154,7 +144,8 @@ class PresetRuntimeTest(unittest.TestCase):
             )
 
         self.assertEqual(adopted.container_mode, "adopt_reference")
-        self.assertEqual(adopted.serving_temperature, "cold")
+        self.assertEqual(adopted.serving_temperature, "source_authoritative")
+        self.assertEqual(adopted.temperature_resolution_source, "user_product_image")
         self.assertEqual(
             adopted.provider_image_roles,
             ("sanitized_wood_cane_brownie_control_board",),

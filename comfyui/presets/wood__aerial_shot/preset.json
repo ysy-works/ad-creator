@@ -30,7 +30,7 @@
         },
         "adopt_reference": {
           "allowed_product_states": ["iced", "cold", "ambient", "hot"],
-          "auto_action": "requires_explicit_state"
+          "auto_action": "preserve_source_state"
         }
       },
       "emergency_fallback": {
