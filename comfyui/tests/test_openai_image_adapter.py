@@ -66,8 +66,10 @@ class PublishedPresetTest(unittest.TestCase):
             ),
         )
 
-    def test_a6_is_the_default_and_new_presets_remain_validated(self):
+    def test_default_is_declared_by_the_registry(self):
         self.assertEqual(default_published_preset_slot(), "wood__product_center")
+
+    def test_reviewed_presets_remain_available_for_validation(self):
         self.assertEqual(
             validated_preset_slots(),
             ("natural_white__aerial_shot", "wood__product_large"),
@@ -122,6 +124,28 @@ class PublishedPresetTest(unittest.TestCase):
         with self.assertRaisesRegex(OpenAIImageExecutionError, "PRESET_NOT_READY"):
             load_published_preset("natural_white__product_large")
 
+    def test_white_handheld_resolves_its_two_declared_cup_policies(self):
+        with self.assertRaisesRegex(
+            OpenAIImageExecutionError, "SERVING_TEMPERATURE_REVIEW_REQUIRED"
+        ):
+            load_published_preset(
+                "natural_white__handheld_lifestyle",
+                container_mode="adopt_reference",
+                serving_temperature="auto",
+            )
+        adopted = load_published_preset(
+            "natural_white__handheld_lifestyle",
+            container_mode="adopt_reference",
+            serving_temperature="cold",
+        )
+        reconstructed = load_published_preset(
+            "natural_white__handheld_lifestyle",
+            container_mode="reconstruct_source",
+            serving_temperature="auto",
+        )
+        self.assertEqual(adopted.provider_image_roles, ("sanitized_scene_hint",))
+        self.assertEqual(reconstructed.serving_temperature, "source_authoritative")
+
     def test_validated_presets_resolve_both_declared_container_modes(self):
         white_reference = load_published_preset(
             "natural_white__aerial_shot",
@@ -169,8 +193,6 @@ class PublishedPresetTest(unittest.TestCase):
                     serving_temperature=serving_temperature,
                     allowed_statuses=("validated",),
                 )
-
-
 class OpenAIImageAdapterTest(unittest.TestCase):
     def _source(self, root: Path) -> Path:
         source = root / "source.png"
