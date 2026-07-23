@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/run-manifest.schema.json",
+  "title": "Ad Creator Run Manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "request_hash", "status", "created_at", "updated_at", "request", "provider", "cost", "artifacts", "metrics", "events"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "run_id": { "type": "string", "pattern": "^[0-9a-f]{20}$" },
+    "request_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "status": { "enum": ["prepared", "submitting", "queued", "running", "provider_completed", "evaluating", "repairing", "quality_passed", "needs_review", "rejected", "completed", "failed"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "request": { "type": "object" },
+    "provider": {
+      "type": "object",
+      "required": ["name", "job_id", "status", "submit_started", "metadata"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "job_id": { "type": ["string", "null"] },
+        "status": { "type": "string", "minLength": 1 },
+        "submit_started": { "type": "boolean" },
+        "metadata": { "type": "object" }
+      }
+    },
+    "cost": {
+      "type": "object",
+      "required": ["estimated_credits", "actual_credits", "ledger_recorded"],
+      "properties": {
+        "estimated_credits": { "type": "number", "minimum": 0 },
+        "actual_credits": { "type": ["number", "null"], "minimum": 0 },
+        "ledger_recorded": { "type": "boolean" },
+        "repair_credits": { "type": "number", "minimum": 0, "maximum": 2 },
+        "total_credits": { "type": ["number", "null"], "minimum": 0, "maximum": 4 }
+      }
+    },
+    "artifacts": { "type": "object", "additionalProperties": { "type": "string" } },
+    "metrics": { "type": "object" },
+    "postprocess": { "type": "object" },
+    "repair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "attempts", "status", "request_hash", "manifest"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "attempts": { "type": "integer", "minimum": 0, "maximum": 1 },
+        "status": { "enum": ["not_required", "disabled", "needs_review", "awaiting_approval", "rejected", "submitted", "accepted", "failed"] },
+        "request_hash": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "manifest": { "type": ["string", "null"] }
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["at", "type"],
+        "properties": {
+          "at": { "type": "string", "format": "date-time" },
+          "type": { "type": "string", "minLength": 1 },
+          "job_id": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "features": {
+    "container_choice": {
+      "enabled": true,
+      "fallback_when_disabled": "preserve_source"
+    },
+    "auto_paid_repair": {
+      "enabled": true,
+      "default_for_request": true,
+      "minimum_trigger_confidence": 0.85,
+      "maximum_attempts": 1,
+      "maximum_additional_credits": 2
+    }
+  }
+}

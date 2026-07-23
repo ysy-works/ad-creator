@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/service-features.schema.json",
+  "title": "Ad Creator Service Features v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "features"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "features": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["container_choice", "auto_paid_repair"],
+      "properties": {
+        "container_choice": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["enabled", "fallback_when_disabled"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "fallback_when_disabled": { "const": "preserve_source" }
+          }
+        },
+        "auto_paid_repair": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabled",
+            "default_for_request",
+            "minimum_trigger_confidence",
+            "maximum_attempts",
+            "maximum_additional_credits"
+          ],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "default_for_request": { "type": "boolean" },
+            "minimum_trigger_confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+            "maximum_attempts": { "type": "integer", "minimum": 0, "maximum": 1 },
+            "maximum_additional_credits": { "type": "number", "minimum": 0, "maximum": 2 }
+          }
+        }
+      }
+    }
+  }
+}

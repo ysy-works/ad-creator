@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/container-design.schema.json",
+  "title": "Ad Creator Container Design v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "container_design_id",
+    "display_name",
+    "design",
+    "allowed_transfer",
+    "forbidden_transfer",
+    "compatibility"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "container_design_id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+    "display_name": { "type": "string", "minLength": 1 },
+    "design": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["class", "material", "geometry", "components", "height_to_width_ratio"],
+      "properties": {
+        "class": { "type": "string", "minLength": 1 },
+        "material": { "type": "string", "minLength": 1 },
+        "geometry": { "type": "string", "minLength": 1 },
+        "components": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "height_to_width_ratio": {
+          "type": "array",
+          "prefixItems": [
+            { "type": "number", "exclusiveMinimum": 0 },
+            { "type": "number", "exclusiveMinimum": 0 }
+          ],
+          "minItems": 2,
+          "maxItems": 2
+        }
+      }
+    },
+    "allowed_transfer": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "forbidden_transfer": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["beverage_temperatures", "supports_toppings", "supports_straw", "brand_surface"],
+      "properties": {
+        "beverage_temperatures": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "enum": ["cold", "hot", "ambient"] }
+        },
+        "supports_toppings": { "type": "boolean" },
+        "supports_straw": { "type": "boolean" },
+        "brand_surface": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

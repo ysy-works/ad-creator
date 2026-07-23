@@ -1,0 +1,13 @@
+{
+  "schema_version": "3.0.0",
+  "base_id": "white_diffuse_base_v1",
+  "family": "diffuse",
+  "signature": {
+    "direction_degrees": 315.0,
+    "elevation_degrees": 42.0,
+    "hardness": 0.28,
+    "shadow_density": 0.17,
+    "exposure_ev": 0.02,
+    "white_balance_mired": 185.0
+  }
+}

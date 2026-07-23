@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools==80.9.0", "wheel==0.46.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cafe-ad-creator"
+version = "0.1.0"
+description = "Natural smartphone cafe-photo restyling orchestration"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+  "certifi>=2026.6.17,<2027",
+  "jsonschema>=4.26,<5",
+  "Pillow>=12.2,<13",
+]
+
+[project.scripts]
+ad-creator = "ad_creator.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "."]
+testpaths = ["tests"]

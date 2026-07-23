@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "mood_package_id": "instagram_wood_calm_window_closeup_v1",
+  "display_name": "우드 클로즈업 샷",
+  "preset_path": "presets/editorial/instagram_wood_calm_window_closeup_v1/reference-preset.json",
+  "runtime_profile_path": "presets/editorial/runtime-profile-v1.json",
+  "scene_recipe_path": "presets/moods/instagram_wood_calm_window_closeup_v1/scene-recipe.json",
+  "lighting_sheet_path": "presets/moods/instagram_wood_calm_window_closeup_v1/lighting-sheet.json",
+  "grade_profile_path": "presets/moods/instagram_wood_calm_window_closeup_v1/grade-profile.json",
+  "photographic_style_contract_path": "presets/editorial/instagram_wood_calm_window_closeup_v1/photographic-style-contract.json",
+  "product_integration_contract_path": "presets/editorial/product-integration-contract-v1.json",
+  "reference_control_board_path": "data/reference-library/control-boards/wood-closeup-shot-v3/reference-4x5-close.png",
+  "reference_control_board_manifest_path": "data/reference-library/control-boards/wood-closeup-shot-v3/reference-4x5-manifest.json",
+  "runtime_reference_policy": "offline_contract_only",
+  "compatibility": {
+    "composition_modes": [
+      "measured_front_left_primary_with_behind_right_double_paper_companion"
+    ],
+    "materials": [
+      "glass",
+      "plastic",
+      "paper",
+      "ceramic"
+    ]
+  }
+}

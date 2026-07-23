@@ -1,0 +1,170 @@
+{
+  "artifact_type": "sanitized_photographic_scene_hint",
+  "aspect_ratio": "3:4",
+  "checks": [
+    {
+      "check_id": "dimensions_3_by_4",
+      "evidence": {
+        "observed_px": [
+          768,
+          1024
+        ]
+      },
+      "status": "pass"
+    },
+    {
+      "check_id": "no_technical_panels_or_labels_drawn",
+      "evidence": {
+        "drawing_operations": "photo plate, masks and seam feathers only"
+      },
+      "status": "pass"
+    },
+    {
+      "check_id": "beverage_content_masks_applied",
+      "evidence": {
+        "mask_ids": [
+          "left_drink_interior",
+          "rear_carafe_interior",
+          "right_drink_interior"
+        ]
+      },
+      "status": "pass"
+    },
+    {
+      "check_id": "output_differs_from_raw_source",
+      "evidence": {
+        "output_pixel_sha256": "eb696b3295ee8eef99a89b2eeb8e51769645622121700c3d7f3b4f6c45b2fec2",
+        "source_pixel_sha256": "08b015d7d4c1e18a875b023aad6fdb5d5f2c0a487d951d20308e6e1ae136b560"
+      },
+      "status": "pass"
+    }
+  ],
+  "construction": {
+    "background_low_pass": {
+      "fade_out_at_source_y_ratio": 0.6,
+      "full_strength_until_source_y_ratio": 0.42,
+      "gaussian_blur_px": 7.0,
+      "intermediate_px": [
+        96,
+        96
+      ]
+    },
+    "canvas_extension": "mirrored low-frequency top field and stretched clean-table bottom field with feathered seams",
+    "canvas_px": [
+      768,
+      1024
+    ],
+    "content_masks": [
+      {
+        "bbox_normalized_in_square_source": [
+          0.285,
+          0.515,
+          0.445,
+          0.745
+        ],
+        "bbox_px_in_square_source": {
+          "bottom": 572,
+          "left": 219,
+          "right": 342,
+          "top": 396
+        },
+        "feather_px": 11.0,
+        "mask_id": "left_drink_interior",
+        "operation": "neutralized low-frequency luminance fill"
+      },
+      {
+        "bbox_normalized_in_square_source": [
+          0.405,
+          0.36,
+          0.535,
+          0.655
+        ],
+        "bbox_px_in_square_source": {
+          "bottom": 503,
+          "left": 311,
+          "right": 411,
+          "top": 276
+        },
+        "feather_px": 11.0,
+        "mask_id": "rear_carafe_interior",
+        "operation": "neutralized low-frequency luminance fill"
+      },
+      {
+        "bbox_normalized_in_square_source": [
+          0.505,
+          0.405,
+          0.705,
+          0.685
+        ],
+        "bbox_px_in_square_source": {
+          "bottom": 526,
+          "left": 388,
+          "right": 541,
+          "top": 311
+        },
+        "feather_px": 11.0,
+        "mask_id": "right_drink_interior",
+        "operation": "neutralized low-frequency luminance fill"
+      }
+    ],
+    "final_information_ceiling_px": [
+      384,
+      512
+    ],
+    "source_square_placement_px": {
+      "bottom": 896,
+      "left": 0,
+      "right": 768,
+      "top": 128
+    },
+    "spatial_precompensation": {
+      "content_scale": 0.76,
+      "purpose": "counter measured model-side enlargement of the A6 tray group"
+    }
+  },
+  "forbidden_transfer": [
+    "reference beverage identity, recipe or color layers",
+    "reference text, logo, watermark or mark",
+    "identifiable heater, plant, lamp or furniture detail",
+    "exact room geometry",
+    "exact crop, shadow silhouette or sunlight-band spacing",
+    "source pixels as final output pixels"
+  ],
+  "height_px": 1024,
+  "manifest_content_sha256": "e46c78b0ae9e368385e7f8606db8011aff0bee1fb2226496fa57a81d01d061c2",
+  "manifest_path": "/Users/apple/Documents/ad-creator/data/reference-library/control-boards/a6-relational-scene-hint-v4/scene-hint-manifest.json",
+  "manifest_relative_path": "data/reference-library/control-boards/a6-relational-scene-hint-v4/scene-hint-manifest.json",
+  "path": "/Users/apple/Documents/ad-creator/data/reference-library/control-boards/a6-relational-scene-hint-v4/scene-hint.png",
+  "pixel_sha256": "eb696b3295ee8eef99a89b2eeb8e51769645622121700c3d7f3b4f6c45b2fec2",
+  "policy_version": "a6_relational_scene_hint_v4",
+  "relative_path": "data/reference-library/control-boards/a6-relational-scene-hint-v4/scene-hint.png",
+  "retained_relationships": [
+    "complete round dark tray on a white circular table",
+    "left-front drink, rear-center carafe and right-front cup assembly",
+    "tray and item scale relative to the 3:4 frame",
+    "hard far-room daylight and quieter open-shade foreground",
+    "broad palette and dark-wood light absorption",
+    "low-frequency support, overlap and contact relationships"
+  ],
+  "role": "scene_hint",
+  "sanitation": {
+    "beverage_interiors_neutralized": true,
+    "borderless_photo_like_plate": true,
+    "panel_boundaries": false,
+    "raw_reference_provider_submission_allowed": false,
+    "technical_panels": false,
+    "unique_background_objects_strongly_low_passed": true,
+    "visible_labels": false
+  },
+  "schema_version": "1.0.0",
+  "sha256": "1a53514fabdbcb5508401504bc3cca1bcb8914318e98a8b1ab14acda17a91c9b",
+  "source_binding": {
+    "asset_id": "ref_381224f47976e566",
+    "height_px": 746,
+    "path": "/Users/apple/Desktop/ad-creator/reference/우드_저채도_차분/미디엄/d7b081a0435a26b0dd79f58771e18d94.jpg",
+    "pixel_sha256": "08b015d7d4c1e18a875b023aad6fdb5d5f2c0a487d951d20308e6e1ae136b560",
+    "sha256": "8d7ef6fb5733f3d6e738e57d23b789c43b139413b6451471b3a0d3f4d0c782f4",
+    "width_px": 746
+  },
+  "width_px": 768
+}

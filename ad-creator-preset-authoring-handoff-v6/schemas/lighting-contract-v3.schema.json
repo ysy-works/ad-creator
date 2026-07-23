@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/lighting-contract-v3.schema.json",
+  "title": "Ad Creator White Lighting Base or Reference Delta v3",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "base_id", "family", "signature"],
+      "properties": {
+        "schema_version": { "const": "3.0.0" },
+        "base_id": { "$ref": "#/$defs/id" },
+        "family": { "enum": ["direct", "diffuse"] },
+        "signature": { "$ref": "#/$defs/signature" }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "reference_id", "base_id", "source_pixel_sha256", "confidence", "delta"],
+      "properties": {
+        "schema_version": { "const": "3.0.0" },
+        "reference_id": { "$ref": "#/$defs/id" },
+        "base_id": { "$ref": "#/$defs/id" },
+        "source_pixel_sha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "delta": { "$ref": "#/$defs/delta" }
+      }
+    }
+  ],
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$" },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["direction_degrees", "elevation_degrees", "hardness", "shadow_density", "exposure_ev", "white_balance_mired"],
+      "properties": {
+        "direction_degrees": { "type": "number", "minimum": 0, "exclusiveMaximum": 360 },
+        "elevation_degrees": { "type": "number", "minimum": 0, "maximum": 90 },
+        "hardness": { "type": "number", "minimum": 0, "maximum": 1 },
+        "shadow_density": { "type": "number", "minimum": 0, "maximum": 1 },
+        "exposure_ev": { "type": "number", "minimum": -3, "maximum": 3 },
+        "white_balance_mired": { "type": "number", "minimum": 100, "maximum": 500 }
+      }
+    },
+    "delta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["direction_degrees", "elevation_degrees", "hardness", "shadow_density", "exposure_ev", "white_balance_mired"],
+      "properties": {
+        "direction_degrees": { "type": "number" },
+        "elevation_degrees": { "type": "number" },
+        "hardness": { "type": "number" },
+        "shadow_density": { "type": "number" },
+        "exposure_ev": { "type": "number" },
+        "white_balance_mired": { "type": "number" }
+      }
+    }
+  }
+}

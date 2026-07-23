@@ -1,0 +1,781 @@
+{
+  "brand_contract": {
+    "allowed_main_text": null,
+    "non_text_mark": null,
+    "state": "verified_absent",
+    "visible_text": []
+  },
+  "brand_transfer_resolution": {
+    "action": "omit_branding",
+    "checks": {
+      "application_medium_match": false,
+      "carrier_component_match": false,
+      "material_family_match": false,
+      "reference_confidence_sufficient": false,
+      "reference_verified_present": false,
+      "source_application_complete": true,
+      "source_confidence_sufficient": true,
+      "source_state_known": true,
+      "surface_allowed": false
+    },
+    "policy_version": "strict_auto_v1",
+    "reason_codes": [
+      "reference_brand_not_verified_present",
+      "brand_transfer_forbidden"
+    ]
+  },
+  "capture_contract": {
+    "spatial_depth": {
+      "focus_behavior": "Keep the exact product resolved; reduce only far-plane microcontrast when physically distant.",
+      "forbidden": [
+        "portrait cutout blur",
+        "uniform Gaussian blur",
+        "large decorative bokeh",
+        "tilt-shift miniature effect"
+      ],
+      "scene_geometry": "Establish depth through support-plane convergence, overlap, diminishing scale and light falloff.",
+      "subject_sharpness": "complete product, rim, contents and verified branding"
+    }
+  },
+  "container_design": {
+    "allowed_transfer": [
+      "glass material and curved footed silhouette",
+      "rim, waist, rounded bowl and short foot geometry",
+      "the complete white ceramic saucer and the glass-on-saucer support relation"
+    ],
+    "compatibility": {
+      "beverage_temperatures": [
+        "cold",
+        "ambient"
+      ],
+      "brand_surface": "plain unobstructed front glass only; the saucer never receives branding",
+      "supports_straw": false,
+      "supports_toppings": true
+    },
+    "container_design_id": "a6_curved_glass_white_saucer_v1",
+    "design": {
+      "class": "open footed glass",
+      "components": [
+        "wide open oval glass rim",
+        "curved clear glass body",
+        "short narrow glass foot",
+        "broad low round white ceramic saucer"
+      ],
+      "geometry": "compact wide oval rim, inward waist, rounded lower bowl and short narrow glass foot; centered on a broad low circular saucer approximately 1.55 times the glass width",
+      "height_to_width_ratio": [
+        1.34,
+        1.62
+      ],
+      "material": "clear glass"
+    },
+    "display_name": "A6 curved footed glass with white ceramic saucer",
+    "forbidden_transfer": [
+      "reference coffee, cream, cocoa, color layers, garnish or toppings",
+      "reference text, logo, watermark or decorative brand mark",
+      "reference heater, plants, furniture, background, tray layout or exact shadow silhouette"
+    ],
+    "schema_version": "1.0.0"
+  },
+  "generation": {
+    "aspect_ratio": "3:4",
+    "estimated_credits": 2,
+    "image_paths": [
+      {
+        "name": "product_source-a2dc8a3062f5401fd970c7b9.png",
+        "sha256": "5b0d4be1156ceb60100fff12d3e6b99ce278eb2893b474dfa963b218de6801c9",
+        "size": 472546
+      },
+      {
+        "name": "scene_hint-08800f9c99dd878c898f2f6d.png",
+        "sha256": "1a53514fabdbcb5508401504bc3cca1bcb8914318e98a8b1ab14acda17a91c9b",
+        "size": 282239
+      }
+    ],
+    "image_roles": [
+      "product_source",
+      "scene_hint"
+    ],
+    "job_type": "gpt_image_2",
+    "prompt": "[QUIET OBSERVATIONAL SOCIAL CAFE PHOTOGRAPH - HARD LOCK]\nCreate one new original cafe photograph that feels like a perceptive person noticed and captured a real moment. The precision must stay invisible: quiet, lived-in, lightly imperfect and socially natural, never promotional, showroom-clean or deliberately 'Instagram styled'. Inputs: Image 1=product source; Image 2=scene hint.\n\n[EXACT PRODUCT]\nBeverage=matcha latte. Container=open footed glass; clear glass; compact wide oval rim, inward waist, rounded lower bowl and short narrow glass foot; components=wide open oval glass rim; curved clear glass body; short narrow glass foot; broad low round white ceramic saucer. Preserve matcha latte; all visible liquid layers and toppings from image 1; the verified absence of every logo, label, wordmark and decorative brand-like symbol. SANITIZED_SCENE_HINT: Image 2 is a de-identified photographic scene hint, not a pixel template. Transfer its low-frequency camera distance, subject scale, round-tray silhouette, three-item spatial relationships, support contacts, light topology, dark-wood response, palette and air. Do not copy exact pixels, beverage contents, text, branding, heater, plants, furniture or exact shadow silhouettes. Regenerate the declared reference cup assembly, including every immediate support such as its saucer, coaster or pedestal, from the design contract. Preserve Image 1 beverage. Target H:W=1.34..1.62. The adopted container and every immediate support must remain completely unbranded even when Image 1 is branded. Re-render cup, liquid, reflections, transmission, contact and shadow together under the target scene light; never paste a source cutout. The final target is verified unbranded by the brand-transfer contract. Image 1 contains source branding, but it is not authorized for this selected container\n\n[PRESET, REFERENCE AND ACTIVE SCENE]\nResponse=the scene feels found rather than staged: the room and light register first; restraint=keep 0.50-0.60 meaningful release; the room and empty table dominate before the compact tray group is noticed. Projection=rectilinear normal-lens environmental projection; working-distance=190..250cm; rhythm=dominant room and empty table, then a small low-middle asymmetric triangle: left drink. Tone=weighted toe for the tray, clean midtone separation and a soft shoulder over sunlit room; material-separation=dark oiled wood, white table, white saucer, clear glass, drinks and room remain independently colored Preset=Direct architectural sunlight remains in the distant room while the foreground tray sits in open shade and broad window bounce. Dark wood absorbs light but keeps restrained grain and depth. ENVIRONMENT-FIRST SCALE LOCK: the complete tray cluster occupies at most 0.50 frame width and 0.31 frame height. The exact drink stays 0.13-0.15 frame width and 0.15-0.18 frame height. Reconstruct the exact user beverage inside the selected container design with new perspective, refraction, highlights, contact and shadow. Ref JSON: shot=tabletop; camera=slightly_above/30-36 degree downward pitch/phone_mild_tele; interaction=none; planes=right-front tray slot > complete round tray and three related > white circular table and transition > low-detail room with hard architectural; subject=deliberately small lower-middle three-item; space=0.50-0.60 meaningful release through room depth; asymmetry=unequal vessel heights and front-back stagger Slots constrain layout, not pixels: product_01->beverage_primary@(0.55,0.49,0.69,0.66); beverage_secondary=abstract-prop@(0.43,0.44,0.51,0.63); beverage_tertiary=new unbranded generic beverage@(0.33,0.54,0.44,0.70). Relations=beverage_tertiary>left_of>beverage_secondary; beverage_tertiary>left_of>beverage_primary; beverage_secondary>left_of>beverage_primary. Regenerate products, contacts, occlusion and shadows together; copy no reference product or brand. Only active slots and relations are authoritative; removed reference objects have no authority.\n\n[CAMERA AND COMPOSITION]\nCapture=environment-first cafe observation with one small related tray group; angle=slightly above at approximately thirty to thirty-six degrees downward; height=approximately one hundred forty to one hundred seventy-five centimeters with the camera stepped back; focal=50.0mm-equivalent; pitch=35.516deg; horizon=room and empty table register before the small tray group; focus=all tray items, rims and contacts resolve; distant room detail loses fine definition. Product bbox=(0.55,0.49)-(0.69,0.66); center=(0.62,0.575); negative-space=0.6. Alignment=a small off-center unequal three-point rhythm surrounded by dominant room and table breathing space. Preserve support-plane perspective and designed asymmetry.\n\n[LIGHT, COLOR AND MATERIAL]\nRef JSON controls composition, object geometry and spatial planes only. Lighting Sheet controls source type, direction, size, hardness, shadow density and white balance. Use natural social capture with finite handheld acuity and one; protect transparent highlights; shadow edge and highlights agree with the sheet's single source. Sheet=tokyo_a6_relational_scene_hint_sheet_v4 is authoritative: key=direct back-right daylight crossing; direction=back-right to front-left across the room; size=small apparent sun source on the far plane; contact=small dense attached contacts under; cast=restrained overlapping foreground; transmission=bounded beverage-colored lift inside; WB=4700-5000K warm-neutral daylight. Environment=an original quiet room with low-detail architecture and no identifiable A6 furnishing with one white circular table supporting one complete round dark oiled-wood tray. WB=4850K; palette=#60513D,#312215,#BBAB90,#9C8C73,#DECFB9; contrast=weighted lower mids, separated neutral highlights and a soft shoulder; saturation=restrained room and wood with the exact user beverage color protected; black=deep neutral chocolate-brown with visible tray grain. each vessel is regenerated with a readable rim, base, thickness, refraction, local condensation and physically attached contact under the target Product, support, reflections, transmission and shadows share one physical light system.\n\n[EDITORIAL FINISH]\nnatural quiet social photograph whose scale, spacing and light feel considered without looking arranged. one camera, one exposure and one physical daylight system connect room, table, tray and every vessel. Create depth through camera geometry, plane overlap, scale and light falloff before softness. Keep the exact product sharp without wide-angle looming, computational halos, generic bokeh or plastic retouching. Add no unverified text, logo or watermark. Reject floating contact, invented props, malformed hands and conflicting shadows.\n\n[FINAL GATE]\nReturn the image only when exact product identity, verified brand state, measured bbox, camera geometry, negative-space topology, support contact, palette, material hierarchy and single-source light all agree.",
+    "prompt_character_limit": 12000,
+    "prompt_limit_policy_id": "higgsfield_gpt_image_2_verified_12000_v1",
+    "prompt_limit_verification_state": "verified_live",
+    "provider": "higgsfield_cli",
+    "quality": "medium",
+    "resolution": "1k",
+    "submission_path": "generate_create_direct"
+  },
+  "identity_policy": {
+    "beverage": "preserve_source",
+    "branding": "omit_branding",
+    "container": "adopt_reference"
+  },
+  "lighting_sheet": {
+    "id": "tokyo_a6_relational_scene_hint_sheet_v4",
+    "sha256": "52b16030784fa07bfa59a3a6b6ee28d8f6ceacd130f45fe06bee5df2a7c5e526"
+  },
+  "lighting_sheet_contract": {
+    "authority": [
+      "source_type",
+      "direction",
+      "source_size",
+      "hardness",
+      "shadow_density",
+      "white_balance"
+    ],
+    "lighting_sheet_id": "tokyo_a6_relational_scene_hint_sheet_v4",
+    "resolved_ranges": {
+      "exposure_compensation_ev": [
+        -0.24,
+        -0.04
+      ],
+      "shadow_density": [
+        0.28,
+        0.44
+      ],
+      "subject_to_wall_distance_cm": [
+        190,
+        250
+      ]
+    },
+    "runtime_reference_pixels_submitted": false
+  },
+  "mood_package_id": "tokyo_a6_relational_scene_hint_v4",
+  "photographic_style_contract_id": "tokyo_a6_relational_scene_hint_contract_v4",
+  "postprocess": {
+    "crop_mode": "editorial_safe_crop",
+    "delivery_aspect_ratio": "4:5",
+    "safe_zone": {
+      "x_ratio": [
+        0.04,
+        0.96
+      ],
+      "y_ratio": [
+        0.04,
+        0.96
+      ]
+    },
+    "target_delivery_pixels": [
+      880,
+      1100
+    ]
+  },
+  "preset_id": "tokyo_a6_relational_scene_hint_v4",
+  "product_analysis": {
+    "adaptable": [
+      "table surface crop",
+      "background bokeh intensity"
+    ],
+    "analysis_metadata": {
+      "analyzed_at": "2026-07-20T07:02:48.129244+00:00",
+      "brand_crosscheck": "matched",
+      "confidence": 0.98,
+      "model": "gemini-3.1-flash-lite",
+      "prompt_version": "product_analysis_v3_brand_candidate_agreement",
+      "provider": "gemini_interactions"
+    },
+    "discarded_source_context": [
+      "blurry overhead lights",
+      "digital screen in background"
+    ],
+    "geometry": {
+      "beverage_bbox": {
+        "bottom": 0.88,
+        "confidence": 0.95,
+        "left": 0.22,
+        "right": 0.78,
+        "top": 0.23
+      },
+      "container_bbox": {
+        "bottom": 0.903,
+        "confidence": 0.98,
+        "left": 0.208,
+        "right": 0.792,
+        "top": 0.211
+      },
+      "interaction_bbox": null,
+      "straw": {
+        "angle_degrees": null,
+        "bbox": null,
+        "centerline": null,
+        "emergence_point": null,
+        "present": false
+      },
+      "subject_bbox": {
+        "bottom": 0.903,
+        "confidence": 0.98,
+        "left": 0.208,
+        "right": 0.792,
+        "top": 0.188
+      }
+    },
+    "identity": {
+      "beverage": "matcha latte",
+      "branding": {
+        "applications": [
+          {
+            "application_medium": "screen print",
+            "bbox": {
+              "bottom": 0.51,
+              "confidence": 1.0,
+              "left": 0.23,
+              "right": 0.77,
+              "top": 0.439
+            },
+            "carrier_component": "glass tumbler",
+            "confidence": 1.0,
+            "main_text": "ATWOSOME PLACE COFFEE & DESSERT",
+            "material_family": "ink",
+            "non_text_mark": null,
+            "primary": true,
+            "state": "verified_present",
+            "surface": "exterior",
+            "visible_text": [
+              "ATWOSOME PLACE",
+              "COFFEE & DESSERT"
+            ]
+          }
+        ],
+        "colors": [
+          "white"
+        ],
+        "confidence": 1.0,
+        "main_text": "ATWOSOME PLACE COFFEE & DESSERT",
+        "non_text_mark": null,
+        "placement": "front center of glass",
+        "state": "verified_present",
+        "visible_text": [
+          "ATWOSOME PLACE COFFEE & DESSERT",
+          "ATWOSOME PLACE",
+          "COFFEE & DESSERT"
+        ]
+      },
+      "container": {
+        "class": "tumbler",
+        "components": [
+          "glass tumbler"
+        ],
+        "geometry": "cylindrical",
+        "material": "glass"
+      },
+      "must_preserve": [
+        "branding text",
+        "matcha gradient",
+        "glass texture"
+      ],
+      "product": "iced matcha latte",
+      "serving_state": {
+        "confidence": 1.0,
+        "evidence": [
+          "ice cubes visible at top of liquid",
+          "gradient color indicates mixed beverage"
+        ],
+        "ice_presence": "present",
+        "schema_version": "1.0.0",
+        "side_visibility_requirement": "required",
+        "straw_requirement": "none",
+        "temperature": "iced",
+        "topping_requirement": "none"
+      }
+    },
+    "presentation_correction": {
+      "allowed": [
+        "natural light",
+        "slight background blur"
+      ],
+      "enabled": true,
+      "forbidden": [
+        "extreme close-up",
+        "tilted angles"
+      ],
+      "intent": "shift perspective to eye-level to improve depth perception and reduce lens distortion",
+      "preferred_capture": {
+        "camera_distance": "approx 30cm",
+        "camera_height": "aligned with center of glass",
+        "focal_length_mm": [
+          50,
+          85
+        ],
+        "rotation": "0 degrees"
+      }
+    },
+    "product_kind": "beverage",
+    "product_summary": "An iced matcha latte in a clear glass tumbler with printed branding, sitting on a wooden surface.",
+    "schema_version": "2.0.0",
+    "source_binding": {
+      "dhash": "e4963f3fb9b938bb",
+      "height_px": 827,
+      "mean_rgb": [
+        0.519596,
+        0.500152,
+        0.42256
+      ],
+      "pixel_sha256": "993055a7f048d7d04bbfdcaa61cd00eb48e10df2a8827624de9e76ec1518c29f",
+      "width_px": 620
+    },
+    "source_capture_assessment": {
+      "evidence": [
+        "top-down bias",
+        "out of focus light sources competing with subject"
+      ],
+      "issues": [
+        "slightly high angle perspective",
+        "distracting background light points"
+      ]
+    },
+    "visual_anchor": {
+      "do_not_exaggerate": [
+        "glass reflections",
+        "ice size"
+      ],
+      "emphasis_method": "natural light illumination from background",
+      "feature": "liquid gradient transition"
+    }
+  },
+  "prompt_compiler_version": "natural_compact_v4_3",
+  "quality_gate": {
+    "hard_fail": [
+      "camera geometry does not match the selected photographic style contract",
+      "support-plane perspective or negative-space topology differs materially from the contract",
+      "output reads as a casual smartphone snapshot or generic cafe stock photo",
+      "color separation or tonal curve loses the selected reference character",
+      "lighting screen map, shadow vector or highlight behavior contradicts the contract",
+      "wrong main logo spelling",
+      "changed beverage category or product material",
+      "reference product or brand leakage",
+      "exact beverage width or height leaves the target range",
+      "round tray width or silhouette leaves the target range",
+      "active three-item relationship fails",
+      "serving state changes",
+      "selected container design or its immediate support is missing",
+      "container reads as pasted",
+      "hard far-room sun and open-shade foreground are not separated",
+      "declared container design or its required immediate support was not reconstructed",
+      "scene-hint text, branding, beverage identity, exact pixels or identifiable background object leaked into the output",
+      "bound user product is missing or placed in the wrong scene slot",
+      "active beverage and dessert count differs from the resolved slot plan",
+      "one product intrudes into another protected slot or negative-space region",
+      "generic companion copies reference branding or product identity",
+      "support contact, depth order, occlusion or shadow contradicts the slot plan"
+    ],
+    "minimum_score": 0.82,
+    "weights": {
+      "brand_integrity": 0.05,
+      "camera_geometry": 0.24,
+      "color_and_tone": 0.17,
+      "composition_rhythm": 0.24,
+      "lighting_space": 0.15,
+      "product_identity": 0.15
+    }
+  },
+  "reference_control": {
+    "container_design_source": "reference",
+    "role": "sanitized_scene_hint",
+    "submitted": true
+  },
+  "repair_policy": {
+    "auto_paid_repair": false,
+    "maximum_additional_credits": 2,
+    "maximum_attempts": 1,
+    "minimum_trigger_confidence": 0.85
+  },
+  "resolved_contracts": {
+    "container_design": {
+      "path": "presets/container_designs/a6_curved_glass_white_saucer_v1.json",
+      "sha256": "dc2ee49518dc4f754adc49a58377ee6a2cb88a2950000ac8363ed7f8749e32a5"
+    },
+    "grade_profile": {
+      "path": "presets/moods/tokyo_warm_cafe_dark_tray_companions_v1/grade-profile.json",
+      "sha256": "15fed565560da46bfd25ea8237965b3693f2d771c120d4248698271482a92b88"
+    },
+    "lighting_sheet": {
+      "path": "presets/moods/tokyo_a6_relational_scene_hint_v4/lighting-sheet.json",
+      "sha256": "9a4b11f6c088bc2a7ed32b96a950546c5574dcc72ea76e8f44ffe514a19f9173"
+    },
+    "mood_package": {
+      "path": "/Users/apple/Documents/ad-creator/presets/moods/tokyo_a6_relational_scene_hint_v4/mood-package.json",
+      "sha256": "7e3e1e877d6a917528e994557a13cd0d443b301d04c4c833d8f79bd3a1704a76"
+    },
+    "photographic_style_contract": {
+      "path": "presets/editorial/tokyo_a6_relational_scene_hint_v4/photographic-style-contract.json",
+      "sha256": "33974c37e778e50169b83af697471881bc6c22a14522eb2ac63376b0650bada8"
+    },
+    "preset": {
+      "path": "presets/editorial/tokyo_a6_relational_scene_hint_v4/reference-preset.json",
+      "sha256": "39553c8160c2bb4b7feb1e4e003130670a8eb43fd5383d604dc7ba216adb8de7"
+    },
+    "reference_control_board": {
+      "path": "data/reference-library/control-boards/a6-relational-scene-hint-v4/scene-hint.png",
+      "sha256": "1a53514fabdbcb5508401504bc3cca1bcb8914318e98a8b1ab14acda17a91c9b"
+    },
+    "reference_control_board_manifest": {
+      "path": "data/reference-library/control-boards/a6-relational-scene-hint-v4/scene-hint-manifest.json",
+      "sha256": "bc006383e554142ad76ebe6b56a8fe389146dc3f09837e87c6bc2ae52d54a578"
+    },
+    "reference_control_submission": {
+      "container_design_source": "reference",
+      "role": "sanitized_scene_hint",
+      "submitted": true,
+      "submitted_pixel_sha256": "1a53514fabdbcb5508401504bc3cca1bcb8914318e98a8b1ab14acda17a91c9b"
+    },
+    "runtime_profile": {
+      "path": "presets/editorial/runtime-profile-v1.json",
+      "sha256": "da3b7c9afd22447c711a7349621b748fd7c148ebd6d5b433a9c4ff735c7c9d52"
+    },
+    "scene_recipe": {
+      "path": "presets/moods/tokyo_a6_relational_scene_hint_v4/scene-recipe.json",
+      "sha256": "81e340c4423de68ee6798d69c9044449f7f0b1fe7c49840c5ba6eb3bf972426b"
+    }
+  },
+  "runtime_contracts": {
+    "grade_profile_path": "presets/moods/tokyo_warm_cafe_dark_tray_companions_v1/grade-profile.json",
+    "lighting_sheet_path": "presets/moods/tokyo_a6_relational_scene_hint_v4/lighting-sheet.json",
+    "runtime_profile_path": "presets/editorial/runtime-profile-v1.json"
+  },
+  "sampled_parameters": {
+    "asymmetric": true,
+    "asymmetry_source": "unequal vessel heights and front-back stagger",
+    "camera_pitch_degrees": 35.516,
+    "exposure_compensation_ev": -0.203,
+    "focal_length_mm": 50.0,
+    "light_softness": 0.396,
+    "micro_moment": "noticing the drink where it naturally rests",
+    "negative_space_ratio": 0.6,
+    "pov_mode": "first-person smartphone view of the product resting in the scene",
+    "prop_count": 2,
+    "reference_interaction": "none",
+    "shadow_density": 0.438,
+    "subject_bbox": {
+      "bottom": 0.66,
+      "left": 0.55,
+      "measurement": "container body and its verified components",
+      "right": 0.69,
+      "top": 0.49
+    },
+    "subject_center_x": 0.62,
+    "subject_center_y": 0.575,
+    "subject_height_ratio": 0.17,
+    "subject_to_wall_distance_cm": 236.275,
+    "subject_width_ratio": 0.14,
+    "sun_patch_coverage": 0.166
+  },
+  "scene_graph_contract": {
+    "asset_id": "ref_381224f47976e566",
+    "relations": [
+      {
+        "confidence": 0.9,
+        "from_slot_id": "beverage_tertiary",
+        "predicate": "left_of",
+        "to_slot_id": "beverage_secondary"
+      },
+      {
+        "confidence": 0.94,
+        "from_slot_id": "beverage_tertiary",
+        "predicate": "left_of",
+        "to_slot_id": "beverage_primary"
+      },
+      {
+        "confidence": 0.9,
+        "from_slot_id": "beverage_secondary",
+        "predicate": "left_of",
+        "to_slot_id": "beverage_primary"
+      },
+      {
+        "confidence": 0.88,
+        "from_slot_id": "beverage_secondary",
+        "predicate": "behind",
+        "to_slot_id": "beverage_tertiary"
+      },
+      {
+        "confidence": 0.88,
+        "from_slot_id": "beverage_secondary",
+        "predicate": "behind",
+        "to_slot_id": "beverage_primary"
+      },
+      {
+        "confidence": 0.84,
+        "from_slot_id": "beverage_tertiary",
+        "predicate": "paired_with",
+        "to_slot_id": "beverage_primary"
+      }
+    ],
+    "runtime_capabilities": {
+      "cross_kind_slot_ids": [
+        "beverage_primary",
+        "beverage_tertiary"
+      ],
+      "default_target_slot_id": "beverage_primary",
+      "maximum_exact_products": 1,
+      "maximum_generic_companions": 1,
+      "maximum_major_subjects": 3,
+      "maximum_props": 2,
+      "policy_version": "reference_scene_runtime_v2",
+      "primary_slot_id": "beverage_primary",
+      "reason_codes": [],
+      "replaceable_slot_ids": [
+        "beverage_primary",
+        "beverage_tertiary"
+      ],
+      "requires_scene_simplification": false,
+      "safe_insertion_zone_ids": [],
+      "scene_generation_eligible": true
+    },
+    "runtime_reference_pixels_submitted": false,
+    "schema_version": "2.0.0",
+    "slot_plan": {
+      "active_relations": [
+        {
+          "confidence": 0.9,
+          "from_slot_id": "beverage_tertiary",
+          "predicate": "left_of",
+          "to_slot_id": "beverage_secondary"
+        },
+        {
+          "confidence": 0.94,
+          "from_slot_id": "beverage_tertiary",
+          "predicate": "left_of",
+          "to_slot_id": "beverage_primary"
+        },
+        {
+          "confidence": 0.9,
+          "from_slot_id": "beverage_secondary",
+          "predicate": "left_of",
+          "to_slot_id": "beverage_primary"
+        },
+        {
+          "confidence": 0.88,
+          "from_slot_id": "beverage_secondary",
+          "predicate": "behind",
+          "to_slot_id": "beverage_tertiary"
+        },
+        {
+          "confidence": 0.88,
+          "from_slot_id": "beverage_secondary",
+          "predicate": "behind",
+          "to_slot_id": "beverage_primary"
+        },
+        {
+          "confidence": 0.84,
+          "from_slot_id": "beverage_tertiary",
+          "predicate": "paired_with",
+          "to_slot_id": "beverage_primary"
+        }
+      ],
+      "active_slots": [
+        {
+          "action": "bind_product",
+          "depth_order": 2,
+          "kind": "beverage",
+          "role": "primary",
+          "slot_id": "beverage_primary",
+          "support_surface_id": "surface_tray",
+          "target_bbox": {
+            "bottom": 0.66,
+            "confidence": 0.96,
+            "left": 0.55,
+            "right": 0.69,
+            "top": 0.49
+          }
+        },
+        {
+          "action": "retain_abstractly",
+          "depth_order": 1,
+          "kind": "prop",
+          "role": "accent",
+          "slot_id": "beverage_secondary",
+          "support_surface_id": "surface_tray",
+          "target_bbox": {
+            "bottom": 0.63,
+            "confidence": 0.96,
+            "left": 0.43,
+            "right": 0.51,
+            "top": 0.44
+          }
+        },
+        {
+          "action": "genericize",
+          "depth_order": 2,
+          "kind": "beverage",
+          "role": "secondary",
+          "slot_id": "beverage_tertiary",
+          "support_surface_id": "surface_tray",
+          "target_bbox": {
+            "bottom": 0.7,
+            "confidence": 0.96,
+            "left": 0.33,
+            "right": 0.44,
+            "top": 0.54
+          }
+        }
+      ],
+      "bindings": [
+        {
+          "cross_kind_replacement": false,
+          "input_product_id": "product_01",
+          "placement_mode": "replace",
+          "product_kind": "beverage",
+          "target_bbox": {
+            "bottom": 0.66,
+            "confidence": 0.96,
+            "left": 0.55,
+            "right": 0.69,
+            "top": 0.49
+          },
+          "target_slot_id": "beverage_primary"
+        }
+      ],
+      "generic_companion_count": 1,
+      "generic_companion_limit": 1,
+      "reference_asset_id": "ref_381224f47976e566",
+      "requires_scene_simplification": false,
+      "safe_insertion_zone_ids": [],
+      "scene_mode": "pair",
+      "schema_version": "1.0.0",
+      "slots": [
+        {
+          "action": "bind_product",
+          "depth_order": 2,
+          "kind": "beverage",
+          "role": "primary",
+          "slot_id": "beverage_primary",
+          "support_surface_id": "surface_tray",
+          "target_bbox": {
+            "bottom": 0.66,
+            "confidence": 0.96,
+            "left": 0.55,
+            "right": 0.69,
+            "top": 0.49
+          }
+        },
+        {
+          "action": "retain_abstractly",
+          "depth_order": 1,
+          "kind": "prop",
+          "role": "accent",
+          "slot_id": "beverage_secondary",
+          "support_surface_id": "surface_tray",
+          "target_bbox": {
+            "bottom": 0.63,
+            "confidence": 0.96,
+            "left": 0.43,
+            "right": 0.51,
+            "top": 0.44
+          }
+        },
+        {
+          "action": "genericize",
+          "depth_order": 2,
+          "kind": "beverage",
+          "role": "secondary",
+          "slot_id": "beverage_tertiary",
+          "support_surface_id": "surface_tray",
+          "target_bbox": {
+            "bottom": 0.7,
+            "confidence": 0.96,
+            "left": 0.33,
+            "right": 0.44,
+            "top": 0.54
+          }
+        }
+      ],
+      "unbound_slot_policy": "genericize"
+    },
+    "taxonomy": {
+      "accent_color_prominence": 0.24,
+      "camera_angle": "slightly_above",
+      "capture_style": "group",
+      "confidence": 0.96,
+      "dominant_surface": "dark oiled wood tray on a white circular table",
+      "environment_family": "warm_wood",
+      "frontend_angle": "slightly_above",
+      "frontend_mood": "wood",
+      "lighting_family": "mixed",
+      "scene_complexity": "pair",
+      "wood_prominence": 0.72
+    }
+  },
+  "scene_recipe_id": "tokyo_a6_relational_scene_hint_v4",
+  "scene_reference_contract": {
+    "asset_id": "ref_381224f47976e566",
+    "composition": {
+      "asymmetry_source": "unequal vessel heights and front-back stagger",
+      "camera_height": "slightly_above",
+      "camera_pitch": "30-36 degree downward pitch",
+      "crop_character": "loose environmental crop with the complete round tray visible",
+      "lens_character": "phone_mild_tele",
+      "negative_space": "0.50-0.60 meaningful release through room depth and exposed white table",
+      "shot_type": "tabletop",
+      "subject_position": "deliberately small lower-middle three-item relation with the exact beverage at right-front"
+    },
+    "depth": {
+      "atmospheric_separation": "mild",
+      "background": "low-detail room with hard architectural daylight",
+      "far_plane_softness": "moderate",
+      "foreground": "complete round tray and three related vessels",
+      "midground": "white circular table and transition to floor",
+      "perspective_cues": [
+        "normal-lens size falloff",
+        "tray ellipse",
+        "unequal overlap",
+        "attached contacts",
+        "plane-specific shadow hardness"
+      ],
+      "plane_count": 3,
+      "product_plane": "right-front tray slot"
+    },
+    "facets": {
+      "environment_tags": [
+        "cafe",
+        "sunlit-room"
+      ],
+      "material_tags": [
+        "dark-wood",
+        "glass",
+        "ceramic"
+      ],
+      "mood_tags": [
+        "quiet",
+        "warm-neutral",
+        "observational"
+      ],
+      "shot_tags": [
+        "tabletop",
+        "relational-set",
+        "environmental"
+      ]
+    },
+    "pixel_sha256": "08b015d7d4c1e18a875b023aad6fdb5d5f2c0a487d951d20308e6e1ae136b560",
+    "runtime_capabilities": {
+      "container_adoption_eligible": true,
+      "depth_transfer": "as_analyzed",
+      "handheld_required": false,
+      "multiple_primary_products": true,
+      "placement_anchor": "container_bbox",
+      "policy_version": "reference_scene_runtime_v2",
+      "reason_codes": [],
+      "scene_generation_eligible": true
+    }
+  },
+  "schema_version": "2.0.0",
+  "seed": 713,
+  "service_features": {
+    "features": {
+      "auto_paid_repair": {
+        "default_for_request": true,
+        "enabled": true,
+        "maximum_additional_credits": 2,
+        "maximum_attempts": 1,
+        "minimum_trigger_confidence": 0.85
+      },
+      "container_choice": {
+        "enabled": true,
+        "fallback_when_disabled": "preserve_source"
+      }
+    },
+    "schema_version": "1.0.0"
+  },
+  "source_context_exclusions": [
+    "blurry overhead lights",
+    "digital screen in background"
+  ]
+}

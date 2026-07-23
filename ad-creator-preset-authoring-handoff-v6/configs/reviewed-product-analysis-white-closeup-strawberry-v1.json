@@ -1,0 +1,154 @@
+{
+  "adaptable": [
+    "source background",
+    "camera angle",
+    "container only when adopt_reference is selected"
+  ],
+  "analysis_metadata": {
+    "analyzed_at": "2026-07-21T00:00:00+09:00",
+    "binding_reuse": "verified_absent_perceptual_rebind",
+    "brand_crosscheck": "not_needed",
+    "confidence": 0.98,
+    "identity_override": "manual_pixel_review",
+    "model": "human_reviewed_visible_pixels",
+    "prompt_version": "product_analysis_v3_brand_candidate_agreement",
+    "provider": "manual_visual_review"
+  },
+  "discarded_source_context": [
+    "source tabletop",
+    "source light direction",
+    "source crop"
+  ],
+  "geometry": {
+    "beverage_bbox": {
+      "bottom": 0.88,
+      "confidence": 0.96,
+      "left": 0.27,
+      "right": 0.73,
+      "top": 0.17
+    },
+    "container_bbox": {
+      "bottom": 0.91,
+      "confidence": 0.98,
+      "left": 0.23,
+      "right": 0.77,
+      "top": 0.11
+    },
+    "interaction_bbox": null,
+    "straw": {
+      "angle_degrees": null,
+      "bbox": null,
+      "centerline": null,
+      "emergence_point": null,
+      "present": false
+    },
+    "subject_bbox": {
+      "bottom": 0.92,
+      "confidence": 0.98,
+      "left": 0.22,
+      "right": 0.78,
+      "top": 0.08
+    }
+  },
+  "identity": {
+    "beverage": "iced strawberry milk",
+    "branding": {
+      "colors": [],
+      "confidence": 0.99,
+      "main_text": null,
+      "non_text_mark": null,
+      "placement": "no branding visible on the clear glass",
+      "state": "verified_absent",
+      "visible_text": []
+    },
+    "container": {
+      "class": "tall open tumbler",
+      "components": [
+        "clear straight-sided glass body",
+        "thin open circular rim",
+        "flat clear base"
+      ],
+      "geometry": "tall straight cylindrical tumbler with a slightly thick clear base and no lid or straw",
+      "material": "clear glass"
+    },
+    "must_preserve": [
+      "iced strawberry milk identity",
+      "white milk body with irregular red strawberry layers and pieces",
+      "visible ice cubes",
+      "diced strawberry topping",
+      "single fresh mint garnish",
+      "no logo or text"
+    ],
+    "product": "unbranded iced strawberry milk with strawberry pieces and mint garnish",
+    "serving_state": {
+      "confidence": 0.99,
+      "evidence": [
+        "multiple ice cubes are visible through the clear container",
+        "diced strawberry pieces and one mint garnish are visible at the open top"
+      ],
+      "ice_presence": "present",
+      "schema_version": "1.0.0",
+      "side_visibility_requirement": "optional",
+      "straw_requirement": "none",
+      "temperature": "iced",
+      "topping_requirement": "required"
+    }
+  },
+  "presentation_correction": {
+    "allowed": [
+      "rerender the product from the approved high three-quarter close-up viewpoint",
+      "reconstruct physically plausible ice, strawberry pieces and mint under the target light",
+      "change the container only in explicit adopt-reference mode"
+    ],
+    "enabled": true,
+    "forbidden": [
+      "remove or homogenize the irregular red strawberry layers",
+      "remove ice, diced strawberry or mint",
+      "invent a straw, lid, text, logo or label"
+    ],
+    "intent": "translate the tall source product into the approved white close-up serving composition while preserving drink identity and serving details",
+    "preferred_capture": {
+      "camera_distance": "58-72 cm, close enough for the complete cup-saucer-spoon assembly to dominate the frame",
+      "camera_height": "slightly above the tabletop at a 44-47 degree pitch",
+      "focal_length_mm": [
+        54,
+        56
+      ],
+      "rotation": "upright with natural minor asymmetry"
+    }
+  },
+  "product_kind": "beverage",
+  "product_summary": "An unbranded iced strawberry milk in a tall clear glass, with white milk, irregular red strawberry layers and pieces, visible ice, diced strawberry topping and one fresh mint garnish; no straw or lid.",
+  "schema_version": "2.0.0",
+  "source_binding": {
+    "dhash": "77fcfc3030b8e070",
+    "height_px": 827,
+    "mean_rgb": [
+      0.676454,
+      0.667078,
+      0.636043
+    ],
+    "pixel_sha256": "8d1fecb9f57b15361c0c127ccf4ab3ba136950894179e1dca4572d875075ac00",
+    "width_px": 620
+  },
+  "source_capture_assessment": {
+    "evidence": [
+      "source is a slightly high frontal view rather than strict overhead",
+      "tall side geometry is more prominent than the open top"
+    ],
+    "issues": [
+      "moderate viewpoint and lighting reconstruction is required",
+      "the target high three-quarter view must retain both sidewall layers and open-top toppings"
+    ]
+  },
+  "visual_anchor": {
+    "do_not_exaggerate": [
+      "red saturation",
+      "strawberry piece size",
+      "mint size",
+      "ice clarity"
+    ],
+    "emphasis_method": "preserve natural irregular red-and-white separation, visible ice and the small top garnish under soft window light",
+    "feature": "irregular red strawberry layers and pieces against white iced milk with diced strawberry and one mint garnish"
+  }
+}

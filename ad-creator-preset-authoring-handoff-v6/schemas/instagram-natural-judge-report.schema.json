@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/instagram-natural-judge-report.schema.json",
+  "title": "Instagram Natural Editorial Judge Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "panel_id",
+    "case_id",
+    "image_path",
+    "image_sha256",
+    "hard_reject",
+    "main_judge",
+    "supporting_judge",
+    "combined_summary",
+    "overall_verdict"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "panel_id": {"const": "instagram_natural_tokyo_buyer_md_v1"},
+    "case_id": {"type": "string", "minLength": 1},
+    "image_path": {"type": "string", "minLength": 1},
+    "image_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "hard_reject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["triggered", "reasons"],
+      "properties": {
+        "triggered": {"type": "boolean"},
+        "reasons": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "main_judge": {"$ref": "#/$defs/mainJudge"},
+    "supporting_judge": {"$ref": "#/$defs/supportingJudge"},
+    "combined_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["advantages", "problems", "next_generation_fixes"],
+      "properties": {
+        "advantages": {"$ref": "#/$defs/exactThreeStrings"},
+        "problems": {"$ref": "#/$defs/exactThreeStrings"},
+        "next_generation_fixes": {"$ref": "#/$defs/exactThreeStrings"}
+      }
+    },
+    "overall_verdict": {"enum": ["adopt", "revise_and_review", "reject"]}
+  },
+  "$defs": {
+    "score": {"type": "integer", "minimum": 1, "maximum": 10},
+    "exactThreeStrings": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "commonJudge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scroll_decision", "one_line_reason", "scores", "best_point", "most_disturbing_point", "single_fix", "verdict"],
+      "properties": {
+        "scroll_decision": {"enum": ["stop", "pass"]},
+        "one_line_reason": {"type": "string", "minLength": 1},
+        "scores": {"type": "object"},
+        "best_point": {"type": "string", "minLength": 1},
+        "most_disturbing_point": {"type": "string", "minLength": 1},
+        "single_fix": {"type": "string", "minLength": 1},
+        "verdict": {"enum": ["adopt", "revise_and_review", "reject"]}
+      }
+    },
+    "mainJudge": {
+      "allOf": [
+        {"$ref": "#/$defs/commonJudge"},
+        {
+          "properties": {
+            "scores": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["naturalness", "ai_trace_removal", "negative_space_and_balance", "light_and_shadow", "density_of_taste", "scroll_stop_power"],
+              "properties": {
+                "naturalness": {"$ref": "#/$defs/score"},
+                "ai_trace_removal": {"$ref": "#/$defs/score"},
+                "negative_space_and_balance": {"$ref": "#/$defs/score"},
+                "light_and_shadow": {"$ref": "#/$defs/score"},
+                "density_of_taste": {"$ref": "#/$defs/score"},
+                "scroll_stop_power": {"$ref": "#/$defs/score"}
+              }
+            }
+          }
+        }
+      ]
+    },
+    "supportingJudge": {
+      "allOf": [
+        {"$ref": "#/$defs/commonJudge"},
+        {
+          "properties": {
+            "scores": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["product_recognition", "instagram_usability", "save_or_click_pull", "product_appeal_communication", "overall_completion"],
+              "properties": {
+                "product_recognition": {"$ref": "#/$defs/score"},
+                "instagram_usability": {"$ref": "#/$defs/score"},
+                "save_or_click_pull": {"$ref": "#/$defs/score"},
+                "product_appeal_communication": {"$ref": "#/$defs/score"},
+                "overall_completion": {"$ref": "#/$defs/score"}
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

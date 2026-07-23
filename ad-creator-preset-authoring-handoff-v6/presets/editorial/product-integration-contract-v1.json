@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "native_scene_product_integration_v1",
+  "source_interpretation": {
+    "source_role": "semantic identity and physical construction evidence only; source pixels are never a cutout, foreground plate or lighting authority",
+    "preserve": [
+      "product class, count and recognizable silhouette family",
+      "container material, construction, rim, base and real components",
+      "beverage layers, inclusions, garnish and fill relationships",
+      "verified brand state and exact authorized glyph content"
+    ],
+    "rerender": [
+      "all product pixels and antialiased boundaries",
+      "rim and base ellipses for the target camera",
+      "highlights, reflections, refraction, transmission and condensation",
+      "contact, cast shadow, caustic, grain, sharpness and white balance"
+    ],
+    "forbidden": [
+      "copy-pasted source boundary",
+      "source-camera rim ellipse retained in a new viewpoint",
+      "source highlight or shadow retained under target lighting",
+      "flat front-facing label plane pasted onto a turned vessel"
+    ]
+  },
+  "camera_reconciliation": {
+    "target_authority": "resolved photographic style camera and active scene slot override the source camera while preserving physical product construction",
+    "required_cues": [
+      "rim ellipse, inner opening and visible wall thickness agree with target pitch",
+      "base ellipse and side taper share the same vanishing logic",
+      "vertical axis and foreshortening agree with support-plane perspective",
+      "ice and liquid surface are viewed from the same camera as the vessel"
+    ],
+    "forbidden": [
+      "front-elevation product inside a high-oblique scene",
+      "parallel source edges conflicting with target convergence",
+      "inconsistent top and side visibility"
+    ]
+  },
+  "lighting_reconstruction": {
+    "target_authority": "resolved lighting sheet and scene light map apply through the entire product volume",
+    "required_cues": [
+      "key-side highlight and shadow-side falloff cross the product body",
+      "thin environment-color wrap appears on the silhouette without a bright outline",
+      "support color is reflected or refracted through transparent lower edges",
+      "contact, cast shadow and any caustic originate from the reconstructed product geometry"
+    ],
+    "forbidden": [
+      "product exposure independent from background exposure",
+      "uniform catalog illumination on a directional-light scene",
+      "detached oval shadow",
+      "white cutout fringe or glow"
+    ]
+  },
+  "material_reconstruction": {
+    "glass": "rebuild rim thickness, sidewall refraction, base mass, environment reflections and support transmission with target-camera optics",
+    "liquid": "preserve recipe identity while re-solving volume shading, translucency, internal scattering, meniscus and ice occlusion under target light",
+    "opaque": "rebuild diffuse and specular response with target light and local color spill; do not retain source shading",
+    "shared_scene_response": "product, support plane and background share one exposure, white balance, grain field, depth response and black point"
+  },
+  "support_contact": {
+    "placement": "the reconstructed base intersects the support by a physically plausible sub-pixel contact band with no gap and no sunk geometry",
+    "contact_shadow": "one compact high-density core remains attached directly under the true base footprint",
+    "cast_shadow": "the attached core opens continuously into the style lighting vector and softness",
+    "accessory_policy": "do not invent a coaster, tray, saucer, napkin or pedestal; retain one only when the source product contract or active scene graph explicitly requires it",
+    "forbidden": ["floating base", "uniform dark sticker outline", "perfect circular pedestal added for convenience", "shadow beginning away from the base"]
+  },
+  "image_frequency_match": {
+    "edge_acuity_ratio": [0.82, 1.18],
+    "local_contrast_ratio": [0.80, 1.20],
+    "grain_match": "match product-region noise power and grain scale to the adjacent support at the same depth while protecting authorized glyph legibility",
+    "color_adaptation": "adapt neutral reflections and shadow chroma to the local scene without shifting beverage identity colors",
+    "maximum_halo_px": 1.0
+  },
+  "brand_stage": {
+    "order": "reconstruct product geometry and scene lighting first; restore verified branding on the final target surface last",
+    "surface_behavior": "authorized glyphs follow target curvature, foreshortening, occlusion, highlight and material response rather than remaining a flat frontal decal",
+    "exact_asset_policy": "when exact lettering is required, use the source brand asset and target-surface mask after integration; uncertainty remains needs_review"
+  },
+  "qa_contract": {
+    "hard_fail": [
+      "sticker-like foreground or pasted-cutout reading",
+      "source and target camera perspectives conflict",
+      "product and scene lighting directions conflict",
+      "base contact or cast shadow is detached",
+      "product edge halo exceeds one pixel at delivery resolution",
+      "invented support accessory",
+      "transparent material lacks local environment reflection or refraction"
+    ],
+    "required_measurements": [
+      "product_to_adjacent_edge_acuity_ratio",
+      "product_to_adjacent_local_contrast_ratio",
+      "maximum_product_edge_halo_px",
+      "base_contact_gap_px",
+      "contact_shadow_attachment",
+      "product_scene_light_direction_error_degrees",
+      "rim_base_perspective_consistency",
+      "transparent_environment_response"
+    ]
+  }
+}

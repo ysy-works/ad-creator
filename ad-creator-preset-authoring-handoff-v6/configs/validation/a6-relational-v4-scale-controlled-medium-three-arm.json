@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "campaign_id": "a6_relational_v4_scale_controlled_medium_three_arm",
+  "description": "A6 v4 measured scale correction: the tray cluster is photographically precompensated to 0.44-0.50 frame width, the exact beverage to 0.13-0.15, and the camera is stepped back; only scene-hint and reconstructed cup-design authority differ between arms.",
+  "provider": {
+    "adapter": "higgsfield_cli",
+    "model": "gpt_image_2",
+    "quality": "medium",
+    "resolution": "1k"
+  },
+  "prompt_compiler_version": "natural_compact_v4_3",
+  "seed": 713,
+  "product": {
+    "product_id": "p01_matcha",
+    "path": ".tools/ComfyUI/input/ad_creator_original_input_01.jpg"
+  },
+  "reference": {
+    "asset_id": "ref_381224f47976e566",
+    "relative_path": "우드_저채도_차분/미디엄/d7b081a0435a26b0dd79f58771e18d94.jpg",
+    "pixel_sha256": "08b015d7d4c1e18a875b023aad6fdb5d5f2c0a487d951d20308e6e1ae136b560"
+  },
+  "cases": [
+    {
+      "case_id": "arm_a_v4_scale_structured_reference_cup",
+      "workflow": "workflows/17_a6_relational_v4_structured_reference_cup_higgsfield_api.json",
+      "reference_control_role": "structured_only",
+      "container_design_source": "reference"
+    },
+    {
+      "case_id": "arm_b_v4_scale_scene_hint_reference_cup",
+      "workflow": "workflows/18_a6_relational_v4_scene_hint_reference_cup_higgsfield_api.json",
+      "reference_control_role": "sanitized_scene_hint",
+      "container_design_source": "reference"
+    },
+    {
+      "case_id": "arm_c_v4_scale_scene_hint_source_cup",
+      "workflow": "workflows/19_a6_relational_v4_scene_hint_source_cup_higgsfield_api.json",
+      "reference_control_role": "sanitized_scene_hint",
+      "container_design_source": "source"
+    }
+  ],
+  "quality_tier": "default",
+  "credits_per_case": 2,
+  "expected_generation_count": 3,
+  "expected_total_credits": 6,
+  "auto_paid_repair": false,
+  "output_root": "outputs/a6-relational-v4-scale-controlled-medium-three-arm"
+}

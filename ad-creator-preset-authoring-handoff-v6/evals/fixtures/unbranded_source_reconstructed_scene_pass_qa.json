@@ -1,0 +1,107 @@
+{
+  "checks": {
+    "beverage_identity": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["The zero-credit fixture validates beverage-identity contract transport."],
+      "measurements": {}
+    },
+    "container_policy": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["The source-derived design is reconstructed rather than pixel-preserved."],
+      "measurements": {
+        "generated_height_to_width_ratio": 1.8,
+        "target_height_to_width_ratio": [1.65, 1.95]
+      }
+    },
+    "reference_brand_leakage": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["No scene-hint text, brand, beverage identity or exact pixel is transferred."],
+      "measurements": {"reference_brand_detected": false}
+    },
+    "logo_text": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["The final target remains explicitly unbranded."],
+      "measurements": {
+        "generated_logo_text": null,
+        "brand_detected": false,
+        "reference_brand_detected": false
+      }
+    },
+    "product_composition": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["The fixture verifies deterministic geometry-contract transport."],
+      "measurements": {}
+    },
+    "hand_contact": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["The target scene specifies no hand."],
+      "measurements": {}
+    },
+    "wrist_exposure": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["The target scene specifies no wrist."],
+      "measurements": {}
+    },
+    "contact_shadow": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["The support-contact contract is transported unchanged."],
+      "measurements": {}
+    },
+    "cast_shadow": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["The cast-shadow contract is transported unchanged."],
+      "measurements": {}
+    },
+    "transmitted_light": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["The transparent-material contract is transported unchanged."],
+      "measurements": {}
+    },
+    "lighting_physical_consistency": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["The fixture validates one coherent lighting-sheet contract."],
+      "measurements": {}
+    },
+    "smartphone_naturalness": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["The fixture validates observational social-capture instructions."],
+      "measurements": {}
+    },
+    "scene_slot_adherence": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["The resolved right-front target slot is transported."],
+      "measurements": {}
+    },
+    "scene_subject_count": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["One exact beverage, one generic beverage and one retained prop remain active."],
+      "measurements": {}
+    },
+    "scene_support_contact": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["Every active item retains the shared tray support contract."],
+      "measurements": {}
+    },
+    "scene_relational_consistency": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["The left, right, front and behind relations are transported."],
+      "measurements": {}
+    }
+  }
+}

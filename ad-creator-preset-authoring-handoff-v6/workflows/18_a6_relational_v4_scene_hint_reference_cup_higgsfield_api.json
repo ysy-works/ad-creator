@@ -1,0 +1,168 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "다운로드.jpeg"
+    }
+  },
+  "2": {
+    "class_type": "AD_GeminiProductAnalyze",
+    "inputs": {
+      "image": [
+        "1",
+        0
+      ],
+      "analyzer_config_path": "configs/analyzers.json",
+      "use_cache": true
+    }
+  },
+  "3": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "ad_creator_reference_a6.jpg"
+    }
+  },
+  "4": {
+    "class_type": "AD_ResolveReferenceSceneGraph",
+    "inputs": {
+      "reference_image": [
+        "3",
+        0
+      ],
+      "catalog_path": "data/reference-library/catalog.sqlite",
+      "scene_graph_catalog_path": "data/reference-library/scene-graphs-v2/ref_381224f47976e566_relational_v4.json",
+      "assignments_path": "data/reference-library/assignments.json",
+      "fallback_mood_package_path": "presets/moods/tokyo_warm_cafe_dark_tray_companions_v1/mood-package.json"
+    }
+  },
+  "5": {
+    "class_type": "AD_LoadMoodPackage",
+    "inputs": {
+      "mood_package_path": "presets/moods/tokyo_a6_relational_scene_hint_v4/mood-package.json"
+    }
+  },
+  "6": {
+    "class_type": "AD_BuildSceneGenerationRequest",
+    "inputs": {
+      "image": [
+        "2",
+        0
+      ],
+      "mood_json": [
+        "5",
+        0
+      ],
+      "product_analysis_json": [
+        "2",
+        1
+      ],
+      "scene_reference_json": [
+        "4",
+        1
+      ],
+      "container_mode": "adopt_reference",
+      "container_design_path": "",
+      "reference_control_role": "sanitized_scene_hint",
+      "container_design_source": "reference",
+      "auto_paid_repair": false,
+      "features_path": "configs/service-features.json",
+      "provider_profile_path": "",
+      "seed": 713,
+      "quality_tier": "default",
+      "scene_graph_json": [
+        "4",
+        2
+      ],
+      "target_slot_id": "auto",
+      "placement_mode": "replace",
+      "product_kind": "beverage",
+      "cross_kind_replacement": false,
+      "unbound_slot_policy": "genericize",
+      "container_reference": [
+        "13",
+        0
+      ]
+    }
+  },
+  "13": {
+    "class_type": "AD_LoadPresetControlBoard",
+    "inputs": {
+      "mood_json": [
+        "5",
+        0
+      ]
+    }
+  },
+  "7": {
+    "class_type": "AD_HiggsfieldGenerate",
+    "inputs": {
+      "request_json": [
+        "6",
+        2
+      ],
+      "lighting_sheet_json": [
+        "5",
+        1
+      ],
+      "output_root": "outputs/comfyui-live/runs",
+      "cli_path": ".tools/higgsfield/bin/higgsfield",
+      "evaluator_config_path": "configs/evaluator.json",
+      "timeout_seconds": 1200,
+      "poll_interval_seconds": 3,
+      "repair_execution": "manual"
+    }
+  },
+  "8": {
+    "class_type": "AD_InstagramCrop",
+    "inputs": {
+      "image": [
+        "7",
+        0
+      ],
+      "target_width": 880,
+      "target_height": 1100
+    }
+  },
+  "9": {
+    "class_type": "AD_ApplyMoodGrade",
+    "inputs": {
+      "image": [
+        "8",
+        0
+      ],
+      "mood_json": [
+        "5",
+        0
+      ],
+      "strength": "natural"
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "9",
+        0
+      ],
+      "filename_prefix": "ad_creator/adopt_reference_higgsfield_scene_v2"
+    }
+  },
+  "11": {
+    "class_type": "AD_SaveRunManifest",
+    "inputs": {
+      "request_json": [
+        "6",
+        2
+      ],
+      "job_json": [
+        "7",
+        1
+      ],
+      "metrics_json": [
+        "9",
+        1
+      ],
+      "output_label": "ad_creator/adopt_reference_higgsfield_scene_v2"
+    }
+  }
+}

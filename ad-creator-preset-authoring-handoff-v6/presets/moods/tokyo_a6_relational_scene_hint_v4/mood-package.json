@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0.0",
+  "mood_package_id": "tokyo_a6_relational_scene_hint_v4",
+  "display_name": "A6 관계 중심 다크 우드 트레이 · 스케일 제어 v4",
+  "preset_path": "presets/editorial/tokyo_a6_relational_scene_hint_v4/reference-preset.json",
+  "runtime_profile_path": "presets/editorial/runtime-profile-v1.json",
+  "scene_recipe_path": "presets/moods/tokyo_a6_relational_scene_hint_v4/scene-recipe.json",
+  "lighting_sheet_path": "presets/moods/tokyo_a6_relational_scene_hint_v4/lighting-sheet.json",
+  "grade_profile_path": "presets/moods/tokyo_warm_cafe_dark_tray_companions_v1/grade-profile.json",
+  "photographic_style_contract_path": "presets/editorial/tokyo_a6_relational_scene_hint_v4/photographic-style-contract.json",
+  "product_integration_contract_path": "presets/editorial/product-integration-contract-v1.json",
+  "reference_control_board_path": "data/reference-library/control-boards/a6-relational-scene-hint-v4/scene-hint.png",
+  "reference_control_board_manifest_path": "data/reference-library/control-boards/a6-relational-scene-hint-v4/scene-hint-manifest.json",
+  "container_design_path": "presets/container_designs/a6_curved_glass_white_saucer_v1.json",
+  "runtime_reference_policy": "offline_contract_only",
+  "compatibility": {
+    "composition_modes": [
+      "relational_single_exact_with_two_cafe_companions"
+    ],
+    "materials": [
+      "glass",
+      "plastic",
+      "paper",
+      "ceramic"
+    ]
+  }
+}

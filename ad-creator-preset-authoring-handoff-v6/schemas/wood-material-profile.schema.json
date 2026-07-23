@@ -1,0 +1,262 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/wood-material-profile.schema.json",
+  "title": "Ad Creator Wood Material Profile v3.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "family_axes",
+    "appearance",
+    "confidence",
+    "species",
+    "source_pixel_sha256",
+    "artifact"
+  ],
+  "properties": {
+    "schema_version": { "enum": ["3.0.0", "3.1.0"] },
+    "status": { "enum": ["draft", "published"] },
+    "family_axes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lightness", "color_family", "grain_pattern", "finish"],
+      "properties": {
+        "lightness": { "enum": ["pale", "light", "medium", "dark"] },
+        "color_family": { "enum": ["neutral-gray", "honey-yellow", "orange-red", "brown", "chocolate"] },
+        "grain_pattern": { "enum": ["straight", "cathedral", "quartered", "figured", "slatted", "engineered", "indistinct"] },
+        "finish": { "enum": ["raw-matte", "oiled-matte", "satin", "gloss", "painted", "whitewashed"] }
+      }
+    },
+    "appearance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lab", "chroma", "grain_direction_degrees", "grain_frequency", "grain_contrast", "surface_occupancy"],
+      "properties": {
+        "lab": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["median", "p10", "p90"],
+          "properties": {
+            "median": { "$ref": "#/$defs/lab" },
+            "p10": { "$ref": "#/$defs/lab" },
+            "p90": { "$ref": "#/$defs/lab" }
+          }
+        },
+        "chroma": { "type": "number", "minimum": 0, "maximum": 182 },
+        "grain_direction_degrees": { "type": ["number", "null"], "minimum": 0, "exclusiveMaximum": 180 },
+        "grain_frequency": { "type": "number", "minimum": 0 },
+        "grain_contrast": { "type": "number", "minimum": 0, "maximum": 1 },
+        "surface_occupancy": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Reviewed fraction of the full scene occupied by the intended wood surface. Never derived from safe-mask extraction coverage."
+        },
+        "surface_occupancy_basis": {
+          "enum": ["scene_surface_fraction", "unavailable"]
+        },
+        "observed_lab": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["median", "p10", "p90"],
+              "properties": {
+                "median": { "$ref": "#/$defs/lab" },
+                "p10": { "$ref": "#/$defs/lab" },
+                "p90": { "$ref": "#/$defs/lab" }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "species": { "const": "unknown" },
+    "source_pixel_sha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
+    "artifact": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["kind", "path", "pixel_sha256", "selection_hash", "purity", "purity_evidence"],
+          "properties": {
+            "kind": { "enum": ["derived_material_board", "masked_raw_material_crop"] },
+            "path": { "type": "string", "minLength": 1 },
+            "pixel_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            "selection_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            "purity": { "type": "number", "minimum": 0.92, "maximum": 1 },
+            "purity_evidence": { "$ref": "#/$defs/purityEvidence" }
+          }
+        }
+      ]
+    },
+    "measurement_evidence": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "extractor_version",
+            "source_pixel_sha256",
+            "material_mask_sha256",
+            "surface_bbox",
+            "mask_purity_evidence",
+            "analysis_sample_count",
+            "analysis_size_px",
+            "normalization",
+            "grain_direction_concentration",
+            "highlight_fraction",
+            "measurement_sha256"
+          ],
+          "properties": {
+            "extractor_version": { "type": "string", "minLength": 1 },
+            "source_pixel_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            "material_mask_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            "analysis_sample_count": { "type": "integer", "minimum": 16 },
+            "grain_direction_concentration": { "type": "number", "minimum": 0, "maximum": 1 },
+            "highlight_fraction": { "type": "number", "minimum": 0, "maximum": 1 },
+            "safe_mask_approved_pixel_count": { "type": "integer", "minimum": 0 },
+            "source_pixel_count": { "type": "integer", "minimum": 1 },
+            "safe_mask_coverage": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Fraction of full-frame pixels approved for safe material extraction; not a scene-composition measurement."
+            },
+            "measurement_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+          }
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "purityEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_version",
+        "source_pixel_sha256",
+        "material_mask_sha256",
+        "approval_threshold",
+        "region_bbox",
+        "approved_pixel_count",
+        "total_pixel_count",
+        "measured_purity",
+        "measurement_sha256"
+      ],
+      "properties": {
+        "policy_version": { "const": "material_mask_purity_v1" },
+        "source_pixel_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "material_mask_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "approval_threshold": { "const": 128 },
+        "region_bbox": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["left", "top", "right", "bottom"],
+          "properties": {
+            "left": { "type": "number", "minimum": 0, "maximum": 1 },
+            "top": { "type": "number", "minimum": 0, "maximum": 1 },
+            "right": { "type": "number", "minimum": 0, "maximum": 1 },
+            "bottom": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "approved_pixel_count": { "type": "integer", "minimum": 0 },
+        "total_pixel_count": { "type": "integer", "minimum": 1 },
+        "measured_purity": { "type": "number", "minimum": 0.92, "maximum": 1 },
+        "measurement_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "lab": {
+      "type": "array",
+      "prefixItems": [
+        { "type": "number", "minimum": 0, "maximum": 100 },
+        { "type": "number", "minimum": -128, "maximum": 127 },
+        { "type": "number", "minimum": -128, "maximum": 127 }
+      ],
+      "minItems": 3,
+      "maxItems": 3
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "schema_version": { "const": "3.0.0" } },
+        "required": ["schema_version"]
+      },
+      "then": {
+        "properties": {
+          "appearance": {
+            "properties": {
+              "surface_occupancy": { "type": "number", "minimum": 0, "maximum": 1 }
+            },
+            "not": { "required": ["surface_occupancy_basis"] }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "schema_version": { "const": "3.1.0" } },
+        "required": ["schema_version"]
+      },
+      "then": {
+        "properties": {
+          "appearance": {
+            "required": ["surface_occupancy_basis"],
+            "oneOf": [
+              {
+                "properties": {
+                  "surface_occupancy": { "type": "number", "minimum": 0, "maximum": 1 },
+                  "surface_occupancy_basis": { "const": "scene_surface_fraction" }
+                }
+              },
+              {
+                "properties": {
+                  "surface_occupancy": { "type": "null" },
+                  "surface_occupancy_basis": { "const": "unavailable" }
+                }
+              }
+            ]
+          },
+          "measurement_evidence": {
+            "oneOf": [
+              { "type": "null" },
+              {
+                "type": "object",
+                "required": [
+                  "safe_mask_approved_pixel_count",
+                  "source_pixel_count",
+                  "safe_mask_coverage"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "schema_version": { "const": "3.1.0" },
+          "status": { "const": "published" }
+        },
+        "required": ["schema_version", "status"]
+      },
+      "then": {
+        "properties": {
+          "appearance": {
+            "properties": {
+              "surface_occupancy": { "type": "number", "minimum": 0, "maximum": 1 },
+              "surface_occupancy_basis": { "const": "scene_surface_fraction" }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

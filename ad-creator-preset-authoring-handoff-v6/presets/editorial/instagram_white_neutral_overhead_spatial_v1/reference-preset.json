@@ -1,0 +1,146 @@
+{
+  "$schema": "../../../schemas/reference-preset.schema.json",
+  "schema_version": "2.0.0",
+  "preset_id": "instagram_white_neutral_overhead_spatial_v1",
+  "display_name": "화이트·뉴트럴·저대비 자연광 · 공간감 항공샷 v1",
+  "concept": "white_round_table_overhead_with_room_air",
+  "source": {
+    "reference_image": "comfyui-inputs/white_neutral_overhead_reference_v1.png",
+    "width_px": 1024,
+    "height_px": 1536,
+    "supporting_group": "user_approved/white_neutral_overhead_spatial"
+  },
+  "runtime_input_policy": {
+    "default_generation_mode": "user_image_plus_abstracted_preset",
+    "generation_inputs": ["user_product_identity"],
+    "reference_usage": "offline_feature_extraction_only",
+    "copyright_rule": "Rebuild a new scene; never copy the reference coffee, latte art, exact grout intersections, exact shadow silhouette or pixel layout."
+  },
+  "style_abstraction": {
+    "runtime_reference_image": false,
+    "novel_scene_required": true,
+    "allowed_style_features": [
+      "strict overhead view with slight perspective",
+      "large circular matte white table entering from the right",
+      "narrow gray tiled-floor wedge on the left with receding grout",
+      "one complete product just below center",
+      "broad environmental shadows from unseen room elements",
+      "plain white ceramic handled mug only when container adoption is selected"
+    ],
+    "forbidden_copy_features": [
+      "reference coffee color, crema or latte art",
+      "exact cup coordinates",
+      "exact table edge curve",
+      "exact grout intersections",
+      "exact environmental shadow silhouette",
+      "any reference text or brand"
+    ]
+  },
+  "sampling_ranges": {
+    "pov_modes": ["strict overhead with slight real perspective"],
+    "subject_center_x": [0.55, 0.6],
+    "subject_center_y": [0.58, 0.63],
+    "subject_width_ratio": [0.27, 0.34],
+    "subject_height_ratio": [0.17, 0.22],
+    "negative_space_ratio": [0.7, 0.8],
+    "focal_length_mm": [42, 52],
+    "camera_pitch_degrees": [82, 88],
+    "light_softness": [0.58, 0.76],
+    "prop_count": [0, 0],
+    "asymmetry_probability": 0.9,
+    "asymmetry_sources": ["right-dominant round table", "left floor wedge", "broad partial off-frame shadows"],
+    "micro_moments": ["the drink has just been set on the table", "room air and window shadows continue outside the crop"]
+  },
+  "tone_contract": {
+    "background_plane": "large matte warm-neutral white circular tabletop with a narrow cool-gray tiled-floor wedge at left",
+    "background_lightness": [0.72, 0.9],
+    "background_saturation": [0.02, 0.08],
+    "global_contrast": [0.28, 0.44],
+    "shadow_density": [0.16, 0.34],
+    "color_bias": "warm-neutral white with neutral-to-faintly-cool gray floor and shadows, never beige",
+    "highlight_behavior": "soft shoulder with visible table, rim, floor and product detail and no clipped broad white area",
+    "forbidden_surface_reading": ["fabric-covered table", "seamless studio sweep", "glossy catalog acrylic", "wood", "street surface"]
+  },
+  "output": {
+    "preferred_aspect_ratio": "4:5",
+    "compatible_aspect_ratios": ["4:5", "3:4", "2:3"]
+  },
+  "subject_layout": {
+    "main_subject": {
+      "role": "single_exact_product",
+      "center": {"x_ratio": 0.575, "y_ratio": 0.605},
+      "bbox": {"x_ratio": 0.4, "y_ratio": 0.51, "width_ratio": 0.33, "height_ratio": 0.2},
+      "area_ratio": 0.066,
+      "height_ratio": 0.2
+    },
+    "secondary_subjects": [],
+    "negative_space": {"top_ratio": 0.5, "left_ratio": 0.3, "right_ratio": 0.27, "bottom_ratio": 0.29}
+  },
+  "composition": {
+    "shot_type": "single_product_overhead_on_round_table_with_floor_wedge",
+    "camera_angle": "strict overhead with slight real-world perspective",
+    "camera_height": "high above the table with the floor visible beyond its edge",
+    "focal_length_equivalent_mm": 47,
+    "horizon_visibility": "none; depth comes from the curved raised table edge and receding floor grout",
+    "depth_of_field": "product, table edge and nearby floor remain readable with only gentle finite-distance falloff",
+    "alignment": "right-dominant circular table, narrow left floor wedge and one product just below center"
+  },
+  "lighting": {
+    "type": "one large diffused natural window partially interrupted by off-frame room elements",
+    "direction": "upper left to lower right",
+    "azimuth_degrees": 309,
+    "elevation_degrees": 58,
+    "softness": 0.68,
+    "intensity": "medium",
+    "contrast": "low-medium",
+    "shadow": "one attached product shadow plus broad irregular soft-edged environmental shadows that imply objects outside the frame",
+    "highlight_control": "retain white-table texture, floor tonal separation, rim thickness, ice and beverage color without clipping"
+  },
+  "color": {
+    "temperature": "warm-neutral",
+    "white_balance_kelvin": 5100,
+    "saturation": "low globally with source-authoritative product color",
+    "contrast": "low-medium",
+    "palette_hex": ["#D8D7D7", "#CCCACA", "#BEBAB8", "#A5A19E", "#736C66"],
+    "black_point": "open neutral gray, never crushed"
+  },
+  "scene": {
+    "surface": "plain matte warm-neutral white circular tabletop",
+    "background": "narrow gray tiled cafe floor visible along the left of the raised table edge",
+    "background_complexity": 0.12,
+    "props": [],
+    "max_prop_count": 0,
+    "texture": "subtle matte table and tile variation with no fabric weave or decorative pattern"
+  },
+  "capture": {
+    "look": "natural Instagram cafe overhead photograph with quiet but dimensional framing",
+    "realism": "one physical exposure, normal optics, attached shadows, visible floor perspective and finite social-photo acuity",
+    "grain": "faint luminance grain after ordinary social compression",
+    "imperfections": ["minor table tone variation", "slightly irregular grout", "natural beverage, ice and garnish asymmetry", "non-identical broad room shadows"]
+  },
+  "preservation_policy": {
+    "hard_lock": ["user beverage or dessert identity", "hot or cold state", "ice, layers and toppings", "resolved source brand contract"],
+    "editable": ["camera relationship", "background", "support plane", "environmental shadow", "container only when adopt_reference is selected"],
+    "reference_exclusions": ["do not copy the reference coffee or latte art", "do not copy exact grout or shadow silhouettes", "do not copy or invent text"]
+  },
+  "prompt_blocks": {
+    "input_roles": "The full user image is analyzed for beverage identity and container family. Image 1 submitted to generation is an automatic beverage-surface evidence crop; source camera pose, background and sidewall perspective are discarded. The approved reference remains offline and supplies the white round-table overhead scene and, in adopt mode, the plain handled-mug design.",
+    "composition": "Use a strict overhead view with slight perspective. Let a large circular matte white table dominate the right side; retain a narrow left wedge of gray tile floor with receding grout. Keep one complete product just below center.",
+    "look": "Use one broad upper-left window source, warm-neutral whites, neutral gray floor and soft but spatial off-frame environmental shadows across both planes.",
+    "preservation": "Preserve the user beverage's top-surface color, opacity, ice, foam, fruit and garnish while regenerating the complete product under the target overhead camera. In source-family mode keep only the broad cup family and material, not exact sidewall geometry or branding. In adopt mode use the plain opaque white handled mug and keep all beverage color strictly inside its inner rim.",
+    "negative": "No fabric, coaster, napkin, saucer, props, visible furniture, flat seamless white background, copied latte art, crisp graphic shadow, pasted edge, fake text, logo or watermark."
+  },
+  "quality_gates": {
+    "logo_text": "do not tilt the overhead camera to reveal source sidewall branding; omit branding when it is not naturally visible, and keep the adopted reference mug plain unless a separate target brand contract authorizes otherwise",
+    "product_identity": "beverage, serving temperature, ice, layers, toppings and recognizable color remain source-authoritative",
+    "preset_adherence": "overhead camera, right circular table, left receding tiled floor, product scale and broad off-frame shadows meet the numeric contract",
+    "artifact_policy": "reject pasted edges, detached shadows, clipped whites, malformed vessel geometry, copied latte art, fabric or generic AI flat-lay reading"
+  },
+  "failure_recovery": [
+    "restore the curved table edge and narrow left floor wedge",
+    "restore receding grout and table-to-floor height separation",
+    "add broad low-density off-frame environmental shadows without copying the anchor silhouette",
+    "remove all fabric, coaster, napkin, saucer and props",
+    "restore source-authoritative drink identity and serving details"
+  ]
+}

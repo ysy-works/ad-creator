@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/product-spec-v3.schema.json",
+  "title": "Ad Creator ProductSpec or ProductSet v3",
+  "oneOf": [
+    { "$ref": "#/$defs/productSpec" },
+    { "$ref": "#/$defs/productSet" }
+  ],
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "containerPolicy": {
+      "oneOf": [
+        { "enum": ["preserve_source", "adopt_reference"] },
+        {
+          "type": "object",
+          "properties": {
+            "mode": { "enum": ["preserve_source", "adopt_reference"] },
+            "container": { "enum": ["preserve_source", "adopt_reference"] }
+          },
+          "anyOf": [
+            { "required": ["mode"] },
+            { "required": ["container"] }
+          ]
+        }
+      ]
+    },
+    "brandTransferResolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action"],
+      "properties": {
+        "policy_version": { "const": "strict_auto_v1" },
+        "action": {
+          "enum": [
+            "preserve_source_exact",
+            "transfer_source_exact",
+            "omit_branding",
+            "block_uncertain"
+          ]
+        },
+        "checks": {
+          "type": "object",
+          "additionalProperties": { "type": "boolean" }
+        },
+        "reason_codes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        }
+      }
+    },
+    "sourceSurfacePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode"],
+      "properties": {
+        "mode": { "const": "source_application_only" },
+        "material_family": { "type": ["string", "null"] },
+        "application_medium": { "type": ["string", "null"] },
+        "carrier_component": { "type": ["string", "null"] },
+        "surface": { "type": ["string", "null"] }
+      }
+    },
+    "absentSurfacePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode"],
+      "properties": {
+        "mode": { "enum": ["none", "forbid_branding"] },
+        "material_family": { "type": ["string", "null"] },
+        "application_medium": { "type": ["string", "null"] },
+        "carrier_component": { "type": ["string", "null"] },
+        "surface": { "type": ["string", "null"] }
+      }
+    },
+    "targetBrandContract": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "allowed_main_text", "placement_source", "surface_policy"],
+          "properties": {
+            "state": { "const": "verified_present" },
+            "allowed_main_text": {
+              "oneOf": [
+                { "$ref": "#/$defs/nonEmptyString" },
+                { "type": "null" }
+              ]
+            },
+            "placement_source": { "const": "source_product" },
+            "surface_policy": { "$ref": "#/$defs/sourceSurfacePolicy" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "allowed_main_text", "placement_source", "surface_policy"],
+          "properties": {
+            "state": { "const": "verified_absent" },
+            "allowed_main_text": { "type": "null" },
+            "placement_source": { "const": "none" },
+            "surface_policy": { "$ref": "#/$defs/absentSurfacePolicy" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "allowed_main_text", "placement_source", "surface_policy"],
+          "properties": {
+            "state": { "const": "uncertain" },
+            "allowed_main_text": { "type": "null" },
+            "placement_source": { "const": "none" },
+            "surface_policy": { "$ref": "#/$defs/absentSurfacePolicy" }
+          }
+        }
+      ]
+    },
+    "servingCompatibilityResolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "action",
+        "product_serving_state",
+        "target_container_service_profile",
+        "reason_codes"
+      ],
+      "properties": {
+        "schema_version": { "const": "1.0.0" },
+        "action": { "enum": ["allow", "block", "review"] },
+        "product_serving_state": { "type": "object" },
+        "target_container_service_profile": {
+          "oneOf": [{ "type": "object" }, { "type": "null" }]
+        },
+        "reason_codes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        }
+      }
+    },
+    "productSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "product_id",
+        "product_kind",
+        "source_image",
+        "description",
+        "target_slot_id",
+        "placement_mode",
+        "cross_kind_replacement",
+        "container_policy",
+        "product_analysis",
+        "brand_transfer_resolution",
+        "target_brand_contract",
+        "serving_compatibility_resolution"
+      ],
+      "properties": {
+        "schema_version": { "const": "3.0.0" },
+        "product_id": { "$ref": "#/$defs/nonEmptyString" },
+        "product_kind": { "enum": ["beverage", "dessert"] },
+        "source_image": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "target_slot_id": { "$ref": "#/$defs/nonEmptyString" },
+        "placement_mode": { "enum": ["replace", "add"] },
+        "cross_kind_replacement": { "type": "boolean" },
+        "container_policy": { "$ref": "#/$defs/containerPolicy" },
+        "product_analysis": {
+          "oneOf": [
+            { "type": "object" },
+            { "type": "null" }
+          ]
+        },
+        "brand_transfer_resolution": {
+          "oneOf": [
+            { "$ref": "#/$defs/brandTransferResolution" },
+            { "type": "null" }
+          ]
+        },
+        "target_brand_contract": {
+          "oneOf": [
+            { "$ref": "#/$defs/targetBrandContract" },
+            { "type": "null" }
+          ]
+        },
+        "serving_compatibility_resolution": {
+          "oneOf": [
+            { "$ref": "#/$defs/servingCompatibilityResolution" },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "productSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "products"],
+      "properties": {
+        "schema_version": { "const": "3.0.0" },
+        "products": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": { "$ref": "#/$defs/productSpec" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/product-integration-contract.schema.json",
+  "title": "Ad Creator Product Integration Contract v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_id",
+    "source_interpretation",
+    "camera_reconciliation",
+    "lighting_reconstruction",
+    "material_reconstruction",
+    "support_contact",
+    "image_frequency_match",
+    "brand_stage",
+    "qa_contract"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "contract_id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+    "source_interpretation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_role", "preserve", "rerender", "forbidden"],
+      "properties": {
+        "source_role": { "$ref": "#/$defs/nonEmptyString" },
+        "preserve": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "rerender": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "forbidden": { "$ref": "#/$defs/nonEmptyStringArray" }
+      }
+    },
+    "camera_reconciliation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_authority", "required_cues", "forbidden"],
+      "properties": {
+        "target_authority": { "$ref": "#/$defs/nonEmptyString" },
+        "required_cues": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "forbidden": { "$ref": "#/$defs/nonEmptyStringArray" }
+      }
+    },
+    "lighting_reconstruction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_authority", "required_cues", "forbidden"],
+      "properties": {
+        "target_authority": { "$ref": "#/$defs/nonEmptyString" },
+        "required_cues": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "forbidden": { "$ref": "#/$defs/nonEmptyStringArray" }
+      }
+    },
+    "material_reconstruction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["glass", "liquid", "opaque", "shared_scene_response"],
+      "properties": {
+        "glass": { "$ref": "#/$defs/nonEmptyString" },
+        "liquid": { "$ref": "#/$defs/nonEmptyString" },
+        "opaque": { "$ref": "#/$defs/nonEmptyString" },
+        "shared_scene_response": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "support_contact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["placement", "contact_shadow", "cast_shadow", "accessory_policy", "forbidden"],
+      "properties": {
+        "placement": { "$ref": "#/$defs/nonEmptyString" },
+        "contact_shadow": { "$ref": "#/$defs/nonEmptyString" },
+        "cast_shadow": { "$ref": "#/$defs/nonEmptyString" },
+        "accessory_policy": { "$ref": "#/$defs/nonEmptyString" },
+        "forbidden": { "$ref": "#/$defs/nonEmptyStringArray" }
+      }
+    },
+    "image_frequency_match": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["edge_acuity_ratio", "local_contrast_ratio", "grain_match", "color_adaptation", "maximum_halo_px"],
+      "properties": {
+        "edge_acuity_ratio": { "$ref": "#/$defs/positiveRange" },
+        "local_contrast_ratio": { "$ref": "#/$defs/positiveRange" },
+        "grain_match": { "$ref": "#/$defs/nonEmptyString" },
+        "color_adaptation": { "$ref": "#/$defs/nonEmptyString" },
+        "maximum_halo_px": { "type": "number", "minimum": 0, "maximum": 4 }
+      }
+    },
+    "brand_stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["order", "surface_behavior", "exact_asset_policy"],
+      "properties": {
+        "order": { "$ref": "#/$defs/nonEmptyString" },
+        "surface_behavior": { "$ref": "#/$defs/nonEmptyString" },
+        "exact_asset_policy": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "qa_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hard_fail", "required_measurements"],
+      "properties": {
+        "hard_fail": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "required_measurements": { "$ref": "#/$defs/nonEmptyStringArray" }
+      }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "nonEmptyStringArray": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "positiveRange": {
+      "type": "array",
+      "prefixItems": [
+        { "type": "number", "minimum": 0 },
+        { "type": "number", "exclusiveMinimum": 0 }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    }
+  }
+}

@@ -1,0 +1,218 @@
+{
+  "analysis_metadata": {
+    "analyzed_at": "2026-07-16T10:35:01.347025+00:00",
+    "confidence": 0.95,
+    "model": "gemini-3.1-flash-lite",
+    "prompt_version": "reference_scene_graph_v2",
+    "provider": "gemini_interactions"
+  },
+  "asset": {
+    "asset_id": "ref_edbb2b01b3166422",
+    "dhash": "00000000001a6764",
+    "duplicate_of": null,
+    "file_sha256": "b779788b91b542cecc628e9a4855d1db705bcb2e24c732598969c5d6ca8f915b",
+    "format": "JPEG",
+    "height_px": 1200,
+    "pixel_sha256": "00dc0f2e7b2683eec205599b2420e259058e86fa4de9b4ac9c24bfbc34daca46",
+    "relative_path": "화이트_뉴트럴_저대비_자연광/미디엄/45d43a2ace2d8cff291eec9395be7c16.jpg",
+    "source_folder_tags": [
+      "화이트_뉴트럴_저대비_자연광",
+      "미디엄"
+    ],
+    "width_px": 675
+  },
+  "color": {
+    "black_point": "lifted",
+    "contrast": "low",
+    "edge_energy": 0.015,
+    "exposure": "balanced",
+    "luminance_stddev": 0.1618,
+    "mean_luminance": 0.6436,
+    "mean_saturation": 0.0976,
+    "palette_hex": [
+      "#A6A095",
+      "#AFABA1",
+      "#B5B1A8",
+      "#928A7D",
+      "#BBBBB7"
+    ],
+    "saturation": "natural"
+  },
+  "composition": {
+    "asymmetry_source": "off_center_cup",
+    "camera_height": "product_level",
+    "camera_pitch": "slightly_above",
+    "crop_character": "full_shot",
+    "lens_character": "phone_normal",
+    "negative_space": "top_heavy",
+    "shot_type": "other",
+    "subject_position": "bottom_center"
+  },
+  "depth": {
+    "atmospheric_separation": "none",
+    "background": "plain wall",
+    "far_plane_softness": "none",
+    "foreground": "table",
+    "midground": "none",
+    "perspective_cues": [
+      "surface_gradient"
+    ],
+    "plane_count": 2,
+    "product_plane": "cup"
+  },
+  "facets": {
+    "environment_tags": [
+      "cafe_interior"
+    ],
+    "material_tags": [
+      "glass",
+      "painted_wall"
+    ],
+    "mood_tags": [
+      "minimalist",
+      "calm"
+    ],
+    "shot_tags": [
+      "product_photography"
+    ]
+  },
+  "insertion_zones": [
+    {
+      "allowed_kinds": [
+        "beverage",
+        "dessert"
+      ],
+      "bbox": {
+        "bottom": 0.98,
+        "confidence": 0.95,
+        "left": 0.5,
+        "right": 0.95,
+        "top": 0.85
+      },
+      "confidence": 0.9,
+      "reason": "empty space on stable flat surface",
+      "scale_range": [
+        0.8,
+        1.2
+      ],
+      "support_surface_id": "surface_table_surface",
+      "zone_id": "zone_empty_table_zone"
+    }
+  ],
+  "lighting": {
+    "contrast": 0.25,
+    "direction": "top_down",
+    "hardness": 0.28,
+    "highlight": "rim_light",
+    "shadow": "diffuse_bottom",
+    "source_size": "large",
+    "source_type": "mixed",
+    "transmitted_light": "none",
+    "white_balance": "neutral"
+  },
+  "object_inventory_complete": true,
+  "objects": [
+    {
+      "allowed_kinds": [
+        "beverage",
+        "dessert"
+      ],
+      "body_bbox": {
+        "bottom": 0.894,
+        "confidence": 0.95,
+        "left": 0.31,
+        "right": 0.463,
+        "top": 0.779
+      },
+      "brand_or_watermark_state": "uncertain",
+      "container": {
+        "class": "glass",
+        "components": [
+          "body"
+        ],
+        "material": "glass",
+        "silhouette": "cylinder"
+      },
+      "crop_safe": true,
+      "depth_order": 1,
+      "description": "ribbed clear glass containing dark iced coffee",
+      "full_bbox": {
+        "bottom": 0.894,
+        "confidence": 0.95,
+        "left": 0.31,
+        "right": 0.463,
+        "top": 0.779
+      },
+      "interaction": "other",
+      "kind": "beverage",
+      "occlusion_fraction": 0.0,
+      "replaceable": true,
+      "role": "primary",
+      "slot_id": "beverage_primary",
+      "straw": {
+        "angle_degrees": null,
+        "bbox": null,
+        "centerline": null,
+        "emergence_point": null,
+        "present": false
+      },
+      "support_surface_id": "surface_table_surface",
+      "visible_text": [
+        "none"
+      ]
+    }
+  ],
+  "observed_major_subject_count": 1,
+  "protected_regions": [],
+  "quality_flags": [],
+  "relations": [],
+  "runtime_policy": {
+    "container_pixels_allowed": true,
+    "copy_exclusions": [
+      "exact reference products, beverages, desserts and branding",
+      "exact background layout, wall marks and prop arrangement",
+      "visible text, logos and watermarks",
+      "exact hand anatomy, pose and clothing",
+      "exact crop and shadow silhouette"
+    ],
+    "maximum_exact_products": 2,
+    "maximum_generic_companions": 1,
+    "maximum_major_subjects": 3,
+    "maximum_props": 2,
+    "scene_pixels_allowed": false
+  },
+  "scene_mode": "solo",
+  "schema_version": "2.0.0",
+  "support_surfaces": [
+    {
+      "bbox": {
+        "bottom": 1.0,
+        "confidence": 0.95,
+        "left": 0.0,
+        "right": 1.0,
+        "top": 0.814
+      },
+      "kind": "table",
+      "perspective_scale": [
+        1.0,
+        1.0
+      ],
+      "plane_description": "flat, white tabletop surface",
+      "supports_objects": true,
+      "surface_id": "surface_table_surface"
+    }
+  ],
+  "taxonomy": {
+    "accent_color_prominence": 0.0,
+    "camera_angle": "slightly_above",
+    "capture_style": "tabletop",
+    "confidence": 0.95,
+    "dominant_surface": "painted_surface",
+    "environment_family": "mixed_other",
+    "frontend_angle": "slightly_above",
+    "frontend_mood": "white",
+    "lighting_family": "soft_window",
+    "scene_complexity": "solo",
+    "wood_prominence": 0.0
+  }
+}

@@ -1,0 +1,356 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/product-analysis.schema.json",
+  "title": "Ad Creator Product Analysis v2/v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "analysis_metadata",
+    "source_binding",
+    "product_summary",
+    "identity",
+    "geometry",
+    "visual_anchor",
+    "adaptable",
+    "discarded_source_context",
+    "source_capture_assessment",
+    "presentation_correction"
+  ],
+  "properties": {
+    "$schema": { "type": "string", "minLength": 1 },
+    "schema_version": { "enum": ["2.0.0", "3.0.0"] },
+    "product_kind": { "enum": ["beverage", "dessert"] },
+    "analysis_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "model",
+        "prompt_version",
+        "analyzed_at",
+        "confidence",
+        "brand_crosscheck"
+      ],
+      "properties": {
+        "provider": { "$ref": "#/$defs/nonEmptyString" },
+        "model": { "$ref": "#/$defs/nonEmptyString" },
+        "prompt_version": {
+          "enum": [
+            "product_analysis_v2_brand_crosscheck",
+            "product_analysis_v3_brand_candidate_agreement",
+            "product_analysis_v3_material_brand_applications"
+          ]
+        },
+        "analyzed_at": { "type": "string", "format": "date-time" },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "brand_crosscheck": {
+          "enum": ["not_needed", "matched", "matched_candidates", "disagreed"]
+        },
+        "identity_override": {
+          "enum": [
+            "manual_pixel_review",
+            "manual_pixel_review_perceptual_rebind"
+          ]
+        },
+        "binding_reuse": {
+          "enum": ["verified_absent_perceptual_rebind"]
+        }
+      }
+    },
+    "source_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pixel_sha256", "width_px", "height_px"],
+      "properties": {
+        "pixel_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "width_px": { "type": "integer", "minimum": 1 },
+        "height_px": { "type": "integer", "minimum": 1 },
+        "dhash": { "type": "string", "pattern": "^[a-f0-9]{16}$" },
+        "mean_rgb": {
+          "type": "array",
+          "prefixItems": [
+            { "type": "number", "minimum": 0, "maximum": 1 },
+            { "type": "number", "minimum": 0, "maximum": 1 },
+            { "type": "number", "minimum": 0, "maximum": 1 }
+          ],
+          "minItems": 3,
+          "maxItems": 3
+        }
+      }
+    },
+    "product_summary": { "$ref": "#/$defs/nonEmptyString" },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["container", "branding", "must_preserve"],
+      "properties": {
+        "beverage": { "$ref": "#/$defs/nonEmptyString" },
+        "product": { "$ref": "#/$defs/nonEmptyString" },
+        "serving_state": { "$ref": "#/$defs/servingState" },
+        "container": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["class", "material", "geometry", "components"],
+          "properties": {
+            "class": { "$ref": "#/$defs/nonEmptyString" },
+            "material": { "$ref": "#/$defs/nonEmptyString" },
+            "geometry": { "$ref": "#/$defs/nonEmptyString" },
+            "components": { "$ref": "#/$defs/stringArray" }
+          }
+        },
+        "branding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "state",
+            "main_text",
+            "visible_text",
+            "non_text_mark",
+            "placement",
+            "colors",
+            "confidence"
+          ],
+          "properties": {
+            "state": {
+              "enum": ["verified_present", "verified_absent", "uncertain"]
+            },
+            "main_text": { "type": ["string", "null"] },
+            "visible_text": { "$ref": "#/$defs/stringArray" },
+            "non_text_mark": { "type": ["string", "null"] },
+            "placement": { "$ref": "#/$defs/nonEmptyString" },
+            "colors": { "$ref": "#/$defs/stringArray" },
+            "confidence": { "$ref": "#/$defs/confidence" }
+            ,
+            "applications": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "#/$defs/brandApplication" }
+            }
+          }
+        },
+        "must_preserve": { "$ref": "#/$defs/nonEmptyStringArray" }
+      }
+    },
+    "geometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "container_bbox",
+        "subject_bbox",
+        "beverage_bbox",
+        "straw",
+        "interaction_bbox"
+      ],
+      "properties": {
+        "container_bbox": { "$ref": "#/$defs/bbox" },
+        "subject_bbox": { "$ref": "#/$defs/bbox" },
+        "beverage_bbox": { "anyOf": [{ "$ref": "#/$defs/bbox" }, { "type": "null" }] },
+        "interaction_bbox": { "anyOf": [{ "$ref": "#/$defs/bbox" }, { "type": "null" }] },
+        "straw": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["present", "bbox", "centerline", "emergence_point", "angle_degrees"],
+          "properties": {
+            "present": { "type": "boolean" },
+            "bbox": { "anyOf": [{ "$ref": "#/$defs/bbox" }, { "type": "null" }] },
+            "centerline": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "prefixItems": [
+                    { "$ref": "#/$defs/point" },
+                    { "$ref": "#/$defs/point" }
+                  ],
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                { "type": "null" }
+              ]
+            },
+            "emergence_point": {
+              "anyOf": [{ "$ref": "#/$defs/point" }, { "type": "null" }]
+            },
+            "angle_degrees": { "type": ["number", "null"], "minimum": -180, "maximum": 180 }
+          }
+        }
+      }
+    },
+    "visual_anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["feature", "emphasis_method", "do_not_exaggerate"],
+      "properties": {
+        "feature": { "$ref": "#/$defs/nonEmptyString" },
+        "emphasis_method": { "$ref": "#/$defs/nonEmptyString" },
+        "do_not_exaggerate": { "$ref": "#/$defs/nonEmptyStringArray" }
+      }
+    },
+    "adaptable": { "$ref": "#/$defs/nonEmptyStringArray" },
+    "discarded_source_context": { "$ref": "#/$defs/nonEmptyStringArray" },
+    "source_capture_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["issues", "evidence"],
+      "properties": {
+        "issues": { "$ref": "#/$defs/stringArray" },
+        "evidence": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "presentation_correction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "intent", "preferred_capture", "allowed", "forbidden"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "intent": { "$ref": "#/$defs/nonEmptyString" },
+        "preferred_capture": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["focal_length_mm", "camera_distance", "camera_height", "rotation"],
+          "properties": {
+            "focal_length_mm": {
+              "type": "array",
+              "prefixItems": [
+                { "type": "number", "exclusiveMinimum": 0 },
+                { "type": "number", "exclusiveMinimum": 0 }
+              ],
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "camera_distance": { "$ref": "#/$defs/nonEmptyString" },
+            "camera_height": { "$ref": "#/$defs/nonEmptyString" },
+            "rotation": { "$ref": "#/$defs/nonEmptyString" }
+          }
+        },
+        "allowed": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "forbidden": { "$ref": "#/$defs/nonEmptyStringArray" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "schema_version": { "const": "2.0.0" } },
+        "required": ["schema_version"]
+      },
+      "then": {
+        "properties": {
+          "identity": { "required": ["beverage"] }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "schema_version": { "const": "3.0.0" } },
+        "required": ["schema_version"]
+      },
+      "then": {
+        "required": ["product_kind"],
+        "properties": {
+          "identity": {
+            "required": ["product"],
+            "properties": {
+              "branding": { "required": ["applications"] }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "stringArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "nonEmptyStringArray": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "coordinate": { "type": "number", "minimum": 0, "maximum": 1 },
+    "point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": {
+        "x": { "$ref": "#/$defs/coordinate" },
+        "y": { "$ref": "#/$defs/coordinate" }
+      }
+    },
+    "bbox": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["left", "top", "right", "bottom", "confidence"],
+      "properties": {
+        "left": { "$ref": "#/$defs/coordinate" },
+        "top": { "$ref": "#/$defs/coordinate" },
+        "right": { "$ref": "#/$defs/coordinate" },
+        "bottom": { "$ref": "#/$defs/coordinate" },
+        "confidence": { "$ref": "#/$defs/confidence" }
+      }
+    },
+    "servingState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "temperature",
+        "ice_presence",
+        "straw_requirement",
+        "topping_requirement",
+        "side_visibility_requirement",
+        "confidence",
+        "evidence"
+      ],
+      "properties": {
+        "schema_version": { "const": "1.0.0" },
+        "temperature": {
+          "enum": ["iced", "cold", "ambient", "hot", "unknown", "not_applicable"]
+        },
+        "ice_presence": {
+          "enum": ["present", "absent", "unknown", "not_applicable"]
+        },
+        "straw_requirement": {
+          "enum": ["required", "optional", "none", "unknown", "not_applicable"]
+        },
+        "topping_requirement": {
+          "enum": ["required", "optional", "none", "unknown", "not_applicable"]
+        },
+        "side_visibility_requirement": {
+          "enum": ["required", "optional", "unknown", "not_applicable"]
+        },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "evidence": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "brandApplication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "material_family",
+        "application_medium",
+        "carrier_component",
+        "surface",
+        "bbox",
+        "confidence"
+      ],
+      "properties": {
+        "state": { "enum": ["verified_present", "verified_absent", "uncertain"] },
+        "material_family": { "type": ["string", "null"] },
+        "application_medium": { "type": ["string", "null"] },
+        "carrier_component": { "type": ["string", "null"] },
+        "surface": { "type": ["string", "null"] },
+        "bbox": { "anyOf": [{ "$ref": "#/$defs/bbox" }, { "type": "null" }] },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "main_text": { "type": ["string", "null"] },
+        "visible_text": { "$ref": "#/$defs/stringArray" },
+        "non_text_mark": { "type": ["string", "null"] },
+        "primary": { "type": "boolean" }
+      }
+    }
+  }
+}

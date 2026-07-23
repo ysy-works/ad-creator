@@ -1,0 +1,148 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "white_basic_product_source.jpg"
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "ad_creator/adopt_reference_openai",
+      "images": [
+        "9",
+        0
+      ]
+    }
+  },
+  "11": {
+    "class_type": "AD_SaveRunManifest",
+    "inputs": {
+      "job_json": [
+        "7",
+        1
+      ],
+      "metrics_json": [
+        "9",
+        1
+      ],
+      "output_label": "ad_creator/adopt_reference_openai",
+      "request_json": [
+        "6",
+        2
+      ]
+    }
+  },
+  "2": {
+    "class_type": "AD_GeminiProductAnalyze",
+    "inputs": {
+      "analyzer_config_path": "configs/analyzers.json",
+      "image": [
+        "1",
+        0
+      ],
+      "use_cache": true
+    }
+  },
+  "3": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "white_basic_reference.jpg"
+    }
+  },
+  "4": {
+    "class_type": "AD_ResolveSceneReference",
+    "inputs": {
+      "analyzer_config_path": "configs/analyzers.json",
+      "assignments_path": "data/reference-library/assignments.json",
+      "catalog_path": "data/reference-library/catalog.sqlite",
+      "fallback_mood_package_path": "presets/moods/instagram_white_diffuse_wall_table_v1/mood-package.json",
+      "reference_image": [
+        "3",
+        0
+      ],
+      "reference_root": ""
+    }
+  },
+  "5": {
+    "class_type": "AD_LoadMoodPackage",
+    "inputs": {
+      "mood_package_path": "presets/moods/instagram_white_diffuse_wall_table_v1/mood-package.json"
+    }
+  },
+  "6": {
+    "class_type": "AD_BuildGenerationRequest",
+    "inputs": {
+      "auto_paid_repair": false,
+      "container_design_path": "",
+      "container_mode": "adopt_reference",
+      "container_reference": [
+        "4",
+        0
+      ],
+      "features_path": "configs/service-features.json",
+      "image": [
+        "2",
+        0
+      ],
+      "mood_json": [
+        "5",
+        0
+      ],
+      "product_analysis_json": [
+        "2",
+        1
+      ],
+      "provider_profile_path": "configs/providers/openai-gpt-image-1-mini.json",
+      "quality_tier": "default",
+      "scene_reference_json": [
+        "4",
+        1
+      ],
+      "seed": 713
+    }
+  },
+  "7": {
+    "class_type": "AD_OpenAIImageGenerate",
+    "inputs": {
+      "evaluator_config_path": "configs/evaluator.json",
+      "lighting_sheet_json": [
+        "5",
+        1
+      ],
+      "output_root": "outputs/comfyui-openai/runs",
+      "provider_config_path": "configs/providers/openai-gpt-image-1-mini.json",
+      "repair_execution": "manual",
+      "request_json": [
+        "6",
+        2
+      ],
+      "timeout_seconds": 1200
+    }
+  },
+  "8": {
+    "class_type": "AD_InstagramCrop",
+    "inputs": {
+      "image": [
+        "7",
+        0
+      ],
+      "target_height": 1100,
+      "target_width": 880
+    }
+  },
+  "9": {
+    "class_type": "AD_ApplyMoodGrade",
+    "inputs": {
+      "image": [
+        "8",
+        0
+      ],
+      "mood_json": [
+        "5",
+        0
+      ],
+      "strength": "natural"
+    }
+  }
+}

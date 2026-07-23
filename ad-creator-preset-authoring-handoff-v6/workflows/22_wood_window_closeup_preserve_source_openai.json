@@ -1,0 +1,813 @@
+{
+  "last_node_id": 13,
+  "last_link_id": 18,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "LoadImage",
+      "title": "1. 사용자 제품",
+      "pos": [
+        -1500,
+        -80
+      ],
+      "size": [
+        330,
+        380
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            1
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "wood_window_product_source.png"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "AD_GeminiProductAnalyze",
+      "title": "2. 제품·로고 분석",
+      "pos": [
+        -1080,
+        -50
+      ],
+      "size": [
+        390,
+        220
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            3
+          ]
+        },
+        {
+          "name": "product_analysis_json",
+          "type": "STRING",
+          "links": [
+            5
+          ]
+        },
+        {
+          "name": "analysis_status",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "AD_GeminiProductAnalyze"
+      },
+      "widgets_values": [
+        "configs/analyzers.json",
+        true
+      ]
+    },
+    {
+      "id": 3,
+      "type": "LoadImage",
+      "title": "3. 장면 레퍼런스",
+      "pos": [
+        -1500,
+        430
+      ],
+      "size": [
+        330,
+        380
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            2
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "ad_creator_reference_wood_window_closeup_v1.png"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "AD_ResolveReferenceSceneGraph",
+      "title": "4. 다중 피사체·슬롯 해석",
+      "pos": [
+        -1080,
+        430
+      ],
+      "size": [
+        430,
+        310
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "reference_image",
+          "type": "IMAGE",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "reference_image",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "name": "scene_reference_json",
+          "type": "STRING",
+          "links": [
+            6
+          ]
+        },
+        {
+          "name": "scene_graph_json",
+          "type": "STRING",
+          "links": [
+            7
+          ]
+        },
+        {
+          "name": "mood_package_path",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "available_slots_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "reference_status",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "AD_ResolveReferenceSceneGraph"
+      },
+      "widgets_values": [
+        "data/reference-library/catalog.sqlite",
+        "data/reference-library/scene-graphs-v2/ref_95fa7947818ce496_wood_window_closeup_v1.json",
+        "data/reference-library/assignments.json",
+        "presets/moods/instagram_wood_calm_window_closeup_v1/mood-package.json"
+      ]
+    },
+    {
+      "id": 5,
+      "type": "AD_LoadMoodPackage",
+      "title": "5. 라이팅·LUT 패키지",
+      "pos": [
+        -600,
+        470
+      ],
+      "size": [
+        390,
+        180
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mood_package_path",
+          "type": "STRING",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mood_json",
+          "type": "STRING",
+          "links": [
+            4,
+            8,
+            14
+          ]
+        },
+        {
+          "name": "lighting_sheet_json",
+          "type": "STRING",
+          "links": [
+            11
+          ]
+        },
+        {
+          "name": "grade_profile_json",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "AD_LoadMoodPackage"
+      },
+      "widgets_values": [
+        "presets/moods/instagram_wood_calm_window_closeup_v1/mood-package.json"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "AD_BuildSceneGenerationRequest",
+      "title": "6. 슬롯 바인딩·보호 계약",
+      "pos": [
+        -580,
+        -30
+      ],
+      "size": [
+        470,
+        390
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 3
+        },
+        {
+          "name": "mood_json",
+          "type": "STRING",
+          "link": 4
+        },
+        {
+          "name": "product_analysis_json",
+          "type": "STRING",
+          "link": 5
+        },
+        {
+          "name": "scene_reference_json",
+          "type": "STRING",
+          "link": 6
+        },
+        {
+          "name": "scene_graph_json",
+          "type": "STRING",
+          "link": 7
+        },
+        {
+          "name": "container_reference",
+          "type": "IMAGE",
+          "link": 9
+        },
+        {
+          "name": "brand_asset",
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "request_json",
+          "type": "STRING",
+          "links": [
+            10,
+            16
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "AD_BuildSceneGenerationRequest"
+      },
+      "widgets_values": [
+        "preserve_source",
+        "beverage_primary",
+        "replace",
+        "beverage",
+        true,
+        "genericize",
+        "",
+        false,
+        "configs/service-features.json",
+        "configs/providers/openai-gpt-image-1-mini.json",
+        721,
+        "default",
+        "sanitized_scene_hint",
+        "source"
+      ]
+    },
+    {
+      "id": 13,
+      "type": "AD_LoadPresetControlBoard",
+      "title": "5A. 프리셋 컨트롤 보드",
+      "pos": [
+        -590,
+        690
+      ],
+      "size": [
+        390,
+        170
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mood_json",
+          "type": "STRING",
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "name": "control_board",
+          "type": "IMAGE",
+          "links": [
+            9
+          ]
+        },
+        {
+          "name": "control_board_manifest_json",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "AD_LoadPresetControlBoard"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 7,
+      "type": "AD_OpenAIImageGenerate",
+      "title": "OpenAI 이미지 생성 (유료 · 승인 후 실행)",
+      "pos": [
+        -40,
+        -30
+      ],
+      "size": [
+        430,
+        270
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "request_json",
+          "type": "STRING",
+          "link": 10
+        },
+        {
+          "name": "lighting_sheet_json",
+          "type": "STRING",
+          "link": 11
+        }
+      ],
+      "outputs": [
+        {
+          "name": "generated_image",
+          "type": "IMAGE",
+          "links": [
+            12
+          ]
+        },
+        {
+          "name": "job_json",
+          "type": "STRING",
+          "links": [
+            17
+          ]
+        },
+        {
+          "name": "manifest_json",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "AD_HiggsfieldGenerate"
+      },
+      "widgets_values": [
+        "outputs/comfyui-openai/wood-window-closeup-v1",
+        "configs/providers/openai-gpt-image-1-mini.json",
+        "configs/evaluator.json",
+        1200,
+        "manual"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "AD_InstagramCrop",
+      "title": "8. 인스타그램 4:5",
+      "pos": [
+        480,
+        -30
+      ],
+      "size": [
+        310,
+        160
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 12
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image_4x5",
+          "type": "IMAGE",
+          "links": [
+            13
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "AD_InstagramCrop"
+      },
+      "widgets_values": [
+        880,
+        1100
+      ]
+    },
+    {
+      "id": 9,
+      "type": "AD_ApplyMoodGrade",
+      "title": "9. 무드 LUT",
+      "pos": [
+        850,
+        -30
+      ],
+      "size": [
+        340,
+        210
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 13
+        },
+        {
+          "name": "mood_json",
+          "type": "STRING",
+          "link": 14
+        },
+        {
+          "name": "protection_mask",
+          "type": "MASK",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "graded_image",
+          "type": "IMAGE",
+          "links": [
+            15
+          ]
+        },
+        {
+          "name": "metrics_json",
+          "type": "STRING",
+          "links": [
+            18
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "AD_ApplyMoodGrade"
+      },
+      "widgets_values": [
+        "natural"
+      ]
+    },
+    {
+      "id": 10,
+      "type": "SaveImage",
+      "title": "10. 결과 저장",
+      "pos": [
+        1260,
+        -50
+      ],
+      "size": [
+        380,
+        340
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 15
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ad_creator/wood_window_closeup_v1"
+      ]
+    },
+    {
+      "id": 11,
+      "type": "AD_SaveRunManifest",
+      "title": "11. 실행 기록",
+      "pos": [
+        1230,
+        430
+      ],
+      "size": [
+        420,
+        220
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "request_json",
+          "type": "STRING",
+          "link": 16
+        },
+        {
+          "name": "job_json",
+          "type": "STRING",
+          "link": 17
+        },
+        {
+          "name": "metrics_json",
+          "type": "STRING",
+          "link": 18
+        }
+      ],
+      "outputs": [
+        {
+          "name": "manifest_path",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "manifest_json",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "AD_SaveRunManifest"
+      },
+      "widgets_values": [
+        "ad_creator/wood_window_closeup_v1"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      3,
+      0,
+      4,
+      0,
+      "IMAGE"
+    ],
+    [
+      3,
+      2,
+      0,
+      6,
+      0,
+      "IMAGE"
+    ],
+    [
+      4,
+      5,
+      0,
+      6,
+      1,
+      "STRING"
+    ],
+    [
+      5,
+      2,
+      1,
+      6,
+      2,
+      "STRING"
+    ],
+    [
+      6,
+      4,
+      1,
+      6,
+      3,
+      "STRING"
+    ],
+    [
+      7,
+      4,
+      2,
+      6,
+      4,
+      "STRING"
+    ],
+    [
+      8,
+      5,
+      0,
+      13,
+      0,
+      "STRING"
+    ],
+    [
+      9,
+      13,
+      0,
+      6,
+      5,
+      "IMAGE"
+    ],
+    [
+      10,
+      6,
+      2,
+      7,
+      0,
+      "STRING"
+    ],
+    [
+      11,
+      5,
+      1,
+      7,
+      1,
+      "STRING"
+    ],
+    [
+      12,
+      7,
+      0,
+      8,
+      0,
+      "IMAGE"
+    ],
+    [
+      13,
+      8,
+      0,
+      9,
+      0,
+      "IMAGE"
+    ],
+    [
+      14,
+      5,
+      0,
+      9,
+      1,
+      "STRING"
+    ],
+    [
+      15,
+      9,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ],
+    [
+      16,
+      6,
+      2,
+      11,
+      0,
+      "STRING"
+    ],
+    [
+      17,
+      7,
+      1,
+      11,
+      1,
+      "STRING"
+    ],
+    [
+      18,
+      9,
+      1,
+      11,
+      2,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "title": "1. 입력·자동 분석",
+      "bounding": [
+        -1540,
+        -150,
+        940,
+        1030
+      ],
+      "color": "#6b8e7d",
+      "font_size": 24
+    },
+    {
+      "title": "2. 계약·생성·QA",
+      "bounding": [
+        -620,
+        -150,
+        1050,
+        850
+      ],
+      "color": "#8a7357",
+      "font_size": 24
+    },
+    {
+      "title": "3. 크롭·LUT·저장",
+      "bounding": [
+        440,
+        -150,
+        1250,
+        850
+      ],
+      "color": "#65758a",
+      "font_size": 24
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.42,
+      "offset": [
+        690,
+        150
+      ]
+    },
+    "frontendVersion": "1.45.20",
+    "preset_id": "instagram_wood_calm_window_closeup_v1",
+    "paid_execution_authorized": false
+  },
+  "version": 0.4
+}

@@ -1,0 +1,269 @@
+{
+  "$schema": "../../../schemas/reference-preset.schema.json",
+  "schema_version": "2.0.0",
+  "preset_id": "instagram_wood_calm_window_closeup_v1",
+  "display_name": "우드 클로즈업 샷",
+  "concept": "reference_faithful_close_pair_on_round_pale_wood_under_one_diffuse_window",
+  "source": {
+    "reference_image": "comfyui-inputs/ad_creator_reference_wood_window_closeup_v1.png",
+    "width_px": 1254,
+    "height_px": 1254,
+    "supporting_group": "user_approved/wood/soft_window_closeup/v1"
+  },
+  "runtime_input_policy": {
+    "default_generation_mode": "user_image_plus_abstracted_preset",
+    "generation_inputs": [
+      "user_product_identity",
+      "sanitized_scene_hint"
+    ],
+    "reference_usage": "offline_feature_extraction_only",
+    "copyright_rule": "Image 1 supplies exact product identity. Image 2 is the 4:5 scene-condition authority for camera, measured pair geometry, cup assembly when selected, round wood support, diffuse light topology, plant support and local color separation. Transfer only the exact companion phrase CAFE AMERICANO; never transfer the foreground cafe-latte drink or label."
+  },
+  "style_abstraction": {
+    "runtime_reference_image": false,
+    "novel_scene_required": true,
+    "allowed_style_features": [
+      "one exact user beverage in the measured front-left primary slot",
+      "one smaller generic double-nested white paper cup behind-right",
+      "one round pale matte live-edge wood table matching material and grain scale but using a new edge contour, grain phase and crack topology",
+      "one broad diffuse upper-left rear window source with lower-right broad penumbrae",
+      "neutral-gray exterior and warm-local wood separation",
+      "one small distant low-detail potted plant supported by the broad white interior sill and clearly separated in depth",
+      "the exact understated companion-cup text CAFE AMERICANO following paper-cup curvature"
+    ],
+    "forbidden_copy_features": [
+      "neutral placeholder beverage contents",
+      "reference latte or Americano recipe and exact ice layout",
+      "the words cafe latte or any primary-label heading other than exact lowercase cafe",
+      "any text outside the adopt-reference cafe label and the companion phrase CAFE AMERICANO",
+      "specific plant identity"
+    ]
+  },
+  "sampling_ranges": {
+    "pov_modes": [
+      "slightly-above close cafe tabletop observation"
+    ],
+    "subject_center_x": [
+      0.425,
+      0.485
+    ],
+    "subject_center_y": [
+      0.585,
+      0.65
+    ],
+    "subject_width_ratio": [
+      0.318,
+      0.375
+    ],
+    "subject_height_ratio": [
+      0.38,
+      0.45
+    ],
+    "negative_space_ratio": [
+      0.26,
+      0.4
+    ],
+    "focal_length_mm": [
+      52,
+      58
+    ],
+    "camera_pitch_degrees": [
+      20,
+      25
+    ],
+    "light_softness": [
+      0.86,
+      0.94
+    ],
+    "prop_count": [
+      2,
+      2
+    ],
+    "asymmetry_probability": 1.0,
+    "asymmetry_sources": [
+      "front-left exact product and smaller behind-right companion",
+      "partial window context and irregular live-edge table crop"
+    ],
+    "micro_moments": [
+      "a quiet cafe order resting naturally beside a softly lit window"
+    ]
+  },
+  "tone_contract": {
+    "background_plane": "soft gray exterior and pale sill separated from the warmer wood foreground",
+    "background_lightness": [
+      0.56,
+      0.76
+    ],
+    "background_saturation": [
+      0.04,
+      0.14
+    ],
+    "global_contrast": [
+      0.34,
+      0.5
+    ],
+    "shadow_density": [
+      0.16,
+      0.3
+    ],
+    "color_bias": "local beige-brown wood warmth with neutral white cups and cool gray window context",
+    "highlight_behavior": "broad rolled highlights on cup rims, ice and condensation with no clipped plastic or paper",
+    "forbidden_surface_reading": [
+      "orange or yellow filter",
+      "glossy synthetic wood",
+      "gray lifeless beverage",
+      "plastic AI ice",
+      "milky airbrushed gradients",
+      "flat shadowless tabletop"
+    ]
+  },
+  "output": {
+    "preferred_aspect_ratio": "3:4",
+    "compatible_aspect_ratios": [
+      "3:4",
+      "4:5"
+    ]
+  },
+  "subject_layout": {
+    "main_subject": {
+      "role": "one exact user beverage in the measured raw-3:4 front-left slot",
+      "center": {
+        "x_ratio": 0.454,
+        "y_ratio": 0.618
+      },
+      "bbox": {
+        "x_ratio": 0.281,
+        "y_ratio": 0.412,
+        "width_ratio": 0.346,
+        "height_ratio": 0.412
+      },
+      "area_ratio": 0.1426,
+      "height_ratio": 0.412
+    },
+    "secondary_subjects": [
+      {
+        "role": "one generic double-nested white paper cup Americano with rich natural crema and exact small CAFE AMERICANO text",
+        "center": {
+          "x_ratio": 0.72,
+          "y_ratio": 0.4905
+        },
+        "bbox": {
+          "x_ratio": 0.58,
+          "y_ratio": 0.307,
+          "width_ratio": 0.28,
+          "height_ratio": 0.367
+        },
+        "area_ratio": 0.1028,
+        "height_ratio": 0.367
+      }
+    ],
+    "negative_space": {
+      "top_ratio": 0.24,
+      "left_ratio": 0.12,
+      "right_ratio": 0.08,
+      "bottom_ratio": 0.06
+    }
+  },
+  "composition": {
+    "shot_type": "close environmental tabletop pair matching the sanitized scene-condition scale",
+    "camera_angle": "slightly above both rims at a controlled twenty-to-twenty-five degree downward pitch",
+    "camera_height": "approximately one hundred five to one hundred twenty-five centimeters",
+    "focal_length_equivalent_mm": 55,
+    "horizon_visibility": "a diagonal bright sill and restrained cool-gray exterior band remain readable",
+    "depth_of_field": "both cup bodies, rims, ice and contacts resolve; only plant and exterior microdetail recede",
+    "alignment": "measured front-left primary and smaller behind-right companion on the same round wood plane"
+  },
+  "lighting": {
+    "type": "one very large diffuse window source with neutral sill and room bounce",
+    "direction": "upper-left and slightly behind toward lower-right",
+    "azimuth_degrees": 315,
+    "elevation_degrees": 38,
+    "softness": 0.9,
+    "intensity": "subdued protected daylight at minus 0.20 to minus 0.04 EV",
+    "contrast": "low one-source contrast matched to Image 2 with broad transitions, open brown-gray shadows and no direct sun",
+    "shadow": "small attached base contacts followed by broad soft lower-right penumbrae at 118-150 degrees",
+    "highlight_control": "neutral paper and window whites roll below clipping; transparent highlights remain broad and interrupted"
+  },
+  "color": {
+    "temperature": "4850-5100K subdued warm-neutral daylight matched to Image 2; warmth remains local to wood",
+    "white_balance_kelvin": 4975,
+    "saturation": "low-saturation reference screen color with source-authoritative product color protected",
+    "contrast": "soft separated midtones, open toe and broad gentle highlight shoulder matching Image 2",
+    "palette_hex": [
+      "#BBAB9A",
+      "#8B7761",
+      "#504131",
+      "#F1EFEE",
+      "#E3DCD5"
+    ],
+    "black_point": "neutral brown-gray black with wood pore, paper fiber and beverage separation"
+  },
+  "scene": {
+    "surface": "one round pale matte live-edge wood table retaining only material class and grain scale; generate a new edge contour, grain phase, ring flow and crack topology rather than tracing the scene hint",
+    "background": "diagonal bright window sill, cool-gray exterior and one small low-detail plant in a matte pot visibly supported by the interior sill",
+    "background_complexity": 0.2,
+    "props": [
+      "one double-nested paper-cup Americano carrying exact small CAFE AMERICANO text",
+      "one small sill-supported potted plant"
+    ],
+    "max_prop_count": 2,
+    "texture": "matte pale wood pores with the dark mark at the table's 10 o'clock area reduced to 30% of the reference contrast so it reads as faint grain, never mold; paper fibers, physically irregular ice, natural crema and nonuniform condensation"
+  },
+  "capture": {
+    "look": "quiet natural cafe phone photograph with soft spatial depth",
+    "realism": "one camera, one exposure and one diffused daylight system physically join both drinks and the table",
+    "grain": "faint low-contrast luminance texture with finite social-photo acuity",
+    "imperfections": [
+      "irregular real ice geometry",
+      "nonuniform condensation droplets",
+      "small crema bubbles on the companion Americano",
+      "subtle wood grain and edge variation"
+    ]
+  },
+  "preservation_policy": {
+    "hard_lock": [
+      "exactly one user product",
+      "primary remains front-left with 0.015-0.025 center drift and 2-4% scale variation while its cup geometry remains locked",
+      "companion remains smaller behind-right with 0.02-0.035 center drift and 3-5% scale variation while its double-cup geometry remains locked",
+      "one smaller behind-right generic companion made from two visibly nested paper cups",
+      "one round pale matte live-edge wood table",
+      "one broad diffuse upper-left rear window source with no direct sun or gobo",
+      "4850-5100K reference-matched separation with wood-only local warmth",
+      "exact small text CAFE AMERICANO on the companion only, optically wrapped to the paper-cylinder curvature",
+      "adopt-reference mode preserves one off-white rectangular paper label with exact lowercase cafe heading and tiny English body copy; preserve-source mode never adds it",
+      "small plant pot visibly supported by the interior sill; never emerging from a frame seam or gap"
+    ],
+    "editable": [
+      "placeholder drink is always replaced by the exact user beverage",
+      "minor generic ice and crema arrangement",
+      "minor non-identifying leaf micro-shape while pot support and origin remain fixed",
+      "non-identifying exterior microtexture"
+    ],
+    "reference_exclusions": [
+      "neutral scene-hint drink contents",
+      "the words cafe latte and all source beverage identity",
+      "all text except the conditional adopt-reference cafe label and exact companion phrase CAFE AMERICANO",
+      "specific plant identity"
+    ]
+  },
+  "prompt_blocks": {
+    "input_roles": "Image 1 is exact product identity. Image 2 is mandatory scene-condition authority for measured composition, selected reference-cup assembly, table geometry, diffuse light field, shadow topology and local color separation.",
+    "composition": "Treat the measured bboxes as soft scale anchors: independently vary primary and rear companion position/scale within the approved corridors while retaining front-left/behind-right hierarchy, diagonal-sill depth, a distant sill-supported plant and round-table support through the 4:5 crop.",
+    "look": "Match Image 2 screen color and exposure: one broad upper-left rear diffuse window, low saturation, gentle shoulder, open brown-gray shadows, warm-local matte wood, neutral-gray exterior and no direct sun.",
+    "preservation": "Fully rerender Image 1 beverage, cup, ice, refraction, condensation, transmission, contact and cast shadow as one target-scene exposure. Always preserve exact companion text CAFE AMERICANO. In adopt-reference mode preserve the rectangular cafe paper label and tiny English body copy; in preserve-source mode omit that label.",
+    "negative": "No oversized product, tiny companion, single paper cup, flat crema, unsupported plant, frame-gap growth, hard sunlight, spotlight, amber wash, glossy wood, portrait bokeh, floating base, sticker-like product, geometric ice or airbrushed liquid."
+  },
+  "quality_gates": {
+    "logo_text": "only source-authoritative user-product text plus the required exact companion phrase CAFE AMERICANO may remain; no other scene text or logo is allowed",
+    "product_identity": "exactly one user beverage preserves recipe color and serving state; preserve-source keeps the source container, while adopt-reference discards it and reconstructs the declared clear PET cup",
+    "preset_adherence": "approved scale and position corridors, front-left/behind-right hierarchy, double nested companion, supported distant sill plant, authorized curved text, diagonal-sill depth, round-table support, broad one-source diffuse light and 4850-5100K reference screen color pass together",
+    "artifact_policy": "reject wrong relational scale, single companion cup, unsupported plant, incorrect CAFE AMERICANO text, direct sun, mismatched contacts, flat crema, synthetic ice, glossy wood, global amber grade, sticker-like product, copied foreground content or a scene clone retaining the same wood cracks, plant, exterior and pair coordinates"
+  },
+  "failure_recovery": [
+    "restore both measured raw-3:4 bboxes before changing aesthetics",
+    "restore the second visible paper rim and natural crema",
+    "restore one broad diffuse window source and 118-150 degree soft shadow flow",
+    "restore neutral-gray exterior and wood-only local warmth",
+    "restore source product identity and remove placeholder content or unauthorized text"
+  ]
+}

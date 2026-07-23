@@ -1,0 +1,137 @@
+{
+  "schema_version": "3.0.0",
+  "fixture_id": "legacy_scene_v2_cases_3_6_9_10_v3_brand_ground_truth",
+  "authority": {
+    "policy_version": "strict_auto_v1",
+    "review_basis": "Authoritative source-brand contracts plus full-resolution human review; Vision OCR is independent supporting evidence and cannot by itself approve stylized exact glyphs.",
+    "legacy_results_unchanged": true
+  },
+  "cases": [
+    {
+      "legacy_case_id": "03_soft_diffuse_input03_preserve",
+      "generated_image": "outputs/higgsfield/validation-scene-v2-10-v2/03_soft_diffuse_input03_preserve/2da51bd33dbd8e3f83c90bf6a9b4c11a706f4be0b18843a4c6c9f64f551656c2/02_grade_natural.png",
+      "generated_pixel_sha256": "bc5399689ea119a4bd1b4052340d543e66e24dd90cfc4c8b5180c36c895edf1a",
+      "container_policy": "preserve_source",
+      "reference_brand_state": "verified_absent",
+      "target_brand_contract": {
+        "state": "verified_present",
+        "allowed_main_text": "n.u.m.",
+        "placement_source": "source_product",
+        "surface_policy": { "mode": "source_application_only" }
+      },
+      "brand_transfer_resolution": {
+        "policy_version": "strict_auto_v1",
+        "action": "preserve_source_exact",
+        "checks": {},
+        "reason_codes": []
+      },
+      "observed_brand_evidence": {
+        "brand_detected": true,
+        "generated_logo_text": "m.u.m.",
+        "evidence_authority": ["manual_visual_review", "source_brand_contract"],
+        "vision_ocr_support": "m.u.m.",
+        "ocr_limitation": "The source stylized n can also be read as m; OCR alone cannot approve or reject exact preservation."
+      },
+      "expected": {
+        "status": "fail",
+        "decision": "reject",
+        "reason_code": "preserved_source_logo_glyph_mismatch",
+        "repairable": false
+      }
+    },
+    {
+      "legacy_case_id": "06_warm_wood_pair_input03_adopt",
+      "generated_image": "outputs/higgsfield/validation-scene-v2-10-v2/06_warm_wood_pair_input03_adopt/9b024ec2ca140325d5950c1de5ba5cbd387a85a0468722e3863e38f0dd6d05c2/02_grade_natural.png",
+      "generated_pixel_sha256": "d521612dcb85cccdf1db6342967bfddd318ebb3efffcd9be880344e38e29d56b",
+      "container_policy": "adopt_reference",
+      "reference_brand_state": "verified_absent",
+      "target_brand_contract": {
+        "state": "verified_absent",
+        "allowed_main_text": null,
+        "placement_source": "none",
+        "surface_policy": { "mode": "forbid_branding" }
+      },
+      "brand_transfer_resolution": {
+        "policy_version": "strict_auto_v1",
+        "action": "omit_branding",
+        "checks": {},
+        "reason_codes": ["reference_unbranded_forbids_transfer"]
+      },
+      "observed_brand_evidence": {
+        "brand_detected": true,
+        "generated_logo_text": "n.u.m.",
+        "evidence_authority": ["vision_ocr", "manual_visual_review"],
+        "vision_ocr_support": "n.u.m."
+      },
+      "expected": {
+        "status": "fail",
+        "decision": "reject",
+        "reason_code": "forbidden_brand_detected",
+        "repairable": false
+      }
+    },
+    {
+      "legacy_case_id": "09_modern_mineral_set_input03_preserve",
+      "generated_image": "outputs/higgsfield/validation-scene-v2-10-v2/09_modern_mineral_set_input03_preserve/4aedd77e02102065a201e96134a41334553b759ef54aba45ee0f620f05c5917f/02_grade_natural.png",
+      "generated_pixel_sha256": "729cc902c3868429fdb9f997718f91bc8aca2d0d184355a0a682b0944280635e",
+      "container_policy": "preserve_source",
+      "reference_brand_state": "verified_absent",
+      "target_brand_contract": {
+        "state": "verified_present",
+        "allowed_main_text": "n.u.m.",
+        "placement_source": "source_product",
+        "surface_policy": { "mode": "source_application_only" }
+      },
+      "brand_transfer_resolution": {
+        "policy_version": "strict_auto_v1",
+        "action": "preserve_source_exact",
+        "checks": {},
+        "reason_codes": []
+      },
+      "observed_brand_evidence": {
+        "brand_detected": true,
+        "generated_logo_text": "m.u.m.",
+        "evidence_authority": ["manual_visual_review", "source_brand_contract"],
+        "vision_ocr_support": "m.u.m.",
+        "ocr_limitation": "The source stylized n can also be read as m; OCR alone cannot approve or reject exact preservation."
+      },
+      "expected": {
+        "status": "fail",
+        "decision": "reject",
+        "reason_code": "preserved_source_logo_glyph_mismatch",
+        "repairable": false
+      }
+    },
+    {
+      "legacy_case_id": "10_vintage_pair_input01_adopt",
+      "generated_image": "outputs/higgsfield/validation-scene-v2-10-v2/10_vintage_pair_input01_adopt/e606585969c26d4c8559a5384b9cc4c05f7fe9bda6074030f98957cdc44c9e8f/02_grade_natural.png",
+      "generated_pixel_sha256": "35aa3b78886e299d80d0e2d5c88cb516d25c8eb4e9f53742dd4a7f97ae12f93d",
+      "container_policy": "adopt_reference",
+      "reference_brand_state": "verified_absent",
+      "target_brand_contract": {
+        "state": "verified_absent",
+        "allowed_main_text": null,
+        "placement_source": "none",
+        "surface_policy": { "mode": "forbid_branding" }
+      },
+      "brand_transfer_resolution": {
+        "policy_version": "strict_auto_v1",
+        "action": "omit_branding",
+        "checks": {},
+        "reason_codes": ["reference_unbranded_forbids_transfer"]
+      },
+      "observed_brand_evidence": {
+        "brand_detected": true,
+        "generated_logo_text": "ATWOSOME PLACE COFFEE & DESSERT",
+        "evidence_authority": ["vision_ocr", "manual_visual_review"],
+        "vision_ocr_support": "ATWOSOME PLACE COFFEE & DESSERT"
+      },
+      "expected": {
+        "status": "fail",
+        "decision": "reject",
+        "reason_code": "forbidden_brand_detected",
+        "repairable": false
+      }
+    }
+  ]
+}

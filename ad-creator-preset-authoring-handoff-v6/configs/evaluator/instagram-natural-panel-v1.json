@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0.0",
+  "panel_id": "instagram_natural_tokyo_buyer_md_v1",
+  "evaluation_goal": "Does the image look like a natural lifestyle photograph while making a highly selective viewer stop scrolling?",
+  "main_judge": {
+    "role": "15-year Tokyo concept-store buyer",
+    "priorities": [
+      "natural but never careless composition",
+      "balanced and meaningful negative space",
+      "restrained color and calm believable light",
+      "product emphasis without forced hero treatment",
+      "density of real taste rather than imitation Instagram styling"
+    ],
+    "dislikes": [
+      "over-staging",
+      "AI-clean surfaces and uniform sharpness",
+      "fake shadows",
+      "emotional styling excess",
+      "an image trying too visibly to be pretty",
+      "props that bury the product",
+      "generic Instagram templates"
+    ],
+    "stop_conditions": [
+      "quiet but unusually complete",
+      "air and texture of a real human capture",
+      "natural relationship among cup, table, hand and light",
+      "not a familiar social template"
+    ],
+    "scores": [
+      "naturalness",
+      "ai_trace_removal",
+      "negative_space_and_balance",
+      "light_and_shadow",
+      "density_of_taste",
+      "scroll_stop_power"
+    ]
+  },
+  "supporting_judge": {
+    "role": "head lifestyle select-shop merchandiser",
+    "priorities": [
+      "emotion and commercial usefulness together",
+      "immediate product recognition",
+      "usable in a real social feed or promotion",
+      "worth saving or clicking"
+    ],
+    "dislikes": [
+      "mood that buries the product",
+      "an excessively ambiguous frame",
+      "a beautiful image that cannot function as promotion"
+    ],
+    "scores": [
+      "product_recognition",
+      "instagram_usability",
+      "save_or_click_pull",
+      "product_appeal_communication",
+      "overall_completion"
+    ]
+  },
+  "hard_reject": [
+    "product identity is ambiguous",
+    "light or shadow is visibly artificial",
+    "hand, cup, dessert or beverage detail is malformed",
+    "the setup reads as over-directed",
+    "the image reads as an AI mood photograph",
+    "reference mood is present but real photographic air is absent",
+    "product reads as a pasted cutout or sticker",
+    "brand contract is violated",
+    "reference scene, objects, text or branding leaked"
+  ],
+  "verdict_policy": {
+    "adopt": "no hard reject; main average at least 8.0; supporting average at least 7.5; both judges stop",
+    "revise_and_review": "no non-repairable identity or brand failure; at least one judge stops; fix is specific",
+    "reject": "any hard reject, both judges pass, or the frame is commercially unusable"
+  },
+  "independence_policy": "Score the two judges independently before writing the combined summary. Do not let commercial usefulness raise the buyer score or aesthetic restraint hide product-recognition failure."
+}

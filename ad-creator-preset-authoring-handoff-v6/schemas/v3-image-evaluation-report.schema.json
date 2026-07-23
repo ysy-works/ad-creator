@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/v3-image-evaluation-report.schema.json",
+  "title": "V3 Pixel-Bound Image Evaluation Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "evaluator", "evaluated_image", "evaluated_image_binding",
+    "generation_request_sha256",
+    "overall_status", "product_measurements", "generic_results", "wood_measurements",
+    "leakage_evidence", "qa", "hard_failures", "missing_measurements",
+    "evidence_versions", "report_sha256"
+  ],
+  "properties": {
+    "schema_version": { "const": "3.0.0" },
+    "evaluator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "mode"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "version": { "$ref": "#/$defs/nonEmptyString" },
+        "mode": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "evaluated_image": { "$ref": "#/$defs/nonEmptyString" },
+    "evaluated_image_binding": {
+      "type": "object",
+      "required": ["pixel_sha256", "width_px", "height_px", "dhash", "mean_rgb"]
+    },
+    "generation_request_sha256": { "$ref": "#/$defs/sha256" },
+    "overall_status": { "enum": ["passed", "passed_with_warnings", "needs_review", "rejected"] },
+    "product_measurements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "brand_surface_mask_pixel_sha256": { "$ref": "#/$defs/sha256" },
+          "brand_surface_bbox": { "$ref": "#/$defs/bbox" },
+          "non_text_visual_identity": { "$ref": "#/$defs/visualIdentityMatch" }
+        }
+      }
+    },
+    "generic_results": { "type": "array", "items": { "type": "object" } },
+    "wood_measurements": { "type": ["object", "null"] },
+    "leakage_evidence": {
+      "type": "object",
+      "required": ["status", "measurements", "missing_measurements", "hard_failures"],
+      "properties": {
+        "status": { "enum": ["not_applicable", "passed", "needs_review", "rejected"] },
+        "detector": { "type": "object" },
+        "checks": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "text_detected": { "$ref": "#/$defs/leakageCheck" },
+            "object_detected": { "$ref": "#/$defs/leakageCheck" },
+            "layout_copied": { "$ref": "#/$defs/leakageCheck" },
+            "swatch_boundary_detected": { "$ref": "#/$defs/leakageCheck" }
+          }
+        },
+        "measurements": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "text_detected": { "type": "boolean" },
+            "object_detected": { "type": "boolean" },
+            "layout_copied": { "type": "boolean" },
+            "swatch_boundary_detected": { "type": "boolean" }
+          }
+        },
+        "missing_measurements": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["text_detected", "object_detected", "layout_copied", "swatch_boundary_detected"]
+          }
+        },
+        "hard_failures": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "const": "material_board_leakage" }
+        },
+        "detected": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["text_detected", "object_detected", "layout_copied", "swatch_boundary_detected"]
+          }
+        }
+      }
+    },
+    "qa": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["multi_product", "wood"],
+      "properties": {
+        "multi_product": { "type": "object" },
+        "wood": { "type": ["object", "null"] }
+      }
+    },
+    "hard_failures": {
+      "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "missing_measurements": {
+      "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "evidence_versions": { "type": "object" },
+    "report_sha256": { "$ref": "#/$defs/sha256" }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "detector": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "version": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "bbox": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["left", "top", "right", "bottom"],
+      "properties": {
+        "left": { "type": "number", "minimum": 0, "maximum": 1 },
+        "top": { "type": "number", "minimum": 0, "maximum": 1 },
+        "right": { "type": "number", "minimum": 0, "maximum": 1 },
+        "bottom": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "leakageCheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["input_pixel_sha256", "detector", "detected", "confidence", "bboxes"],
+      "properties": {
+        "input_pixel_sha256": { "$ref": "#/$defs/sha256" },
+        "detector": { "$ref": "#/$defs/detector" },
+        "detected": { "type": "boolean" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "bboxes": { "type": "array", "items": { "$ref": "#/$defs/bbox" } }
+      }
+    },
+    "visualIdentityMatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_non_text_mark", "matched", "confidence", "detector", "bboxes"],
+      "properties": {
+        "target_non_text_mark": { "$ref": "#/$defs/nonEmptyString" },
+        "matched": { "type": "boolean" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "detector": { "$ref": "#/$defs/detector" },
+        "bboxes": { "type": "array", "items": { "$ref": "#/$defs/bbox" } }
+      }
+    }
+  }
+}

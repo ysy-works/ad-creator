@@ -1,0 +1,80 @@
+{
+  "checks": {
+    "beverage_identity": {
+      "status": "pass",
+      "confidence": 0.96,
+      "evidence": ["The strawberry-milk marbling, pale base and red fruit streaks match the source drink."],
+      "measurements": {}
+    },
+    "container_policy": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["The generated result uses the requested tall, clear, lidless reference-derived glass."],
+      "measurements": {
+        "container_mode": "adopt_reference",
+        "generated_height_to_width_ratio": 2.3,
+        "target_height_to_width_ratio": [2.15, 2.55]
+      }
+    },
+    "reference_brand_leakage": {
+      "status": "pass",
+      "confidence": 0.98,
+      "evidence": ["No reference beverage, cookies, plate, brand or tabletop arrangement is visible."],
+      "measurements": {}
+    },
+    "logo_text": {
+      "status": "fail",
+      "confidence": 0.99,
+      "evidence": ["The visible sleeve text reads m.u.m. instead of the required n.u.m."],
+      "measurements": {"expected": "n.u.m.", "observed": "m.u.m."}
+    },
+    "product_composition": {
+      "status": "pass",
+      "confidence": 0.91,
+      "evidence": ["The cup remains near the intended center with usable white-wall negative space."],
+      "measurements": {"cup_center_x": 0.49, "cup_center_y": 0.6}
+    },
+    "hand_contact": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["The fingers visibly wrap the cup and the grip is connected."],
+      "measurements": {}
+    },
+    "wrist_exposure": {
+      "status": "warning",
+      "confidence": 0.9,
+      "evidence": ["The wrist extends somewhat farther into frame than the compact target but remains plausible."],
+      "measurements": {"wrist_length_to_cup_height": 0.38}
+    },
+    "contact_shadow": {
+      "status": "pass",
+      "confidence": 0.88,
+      "evidence": ["A connected denser shadow remains near the hand and cup edge."],
+      "measurements": {}
+    },
+    "cast_shadow": {
+      "status": "warning",
+      "confidence": 0.91,
+      "evidence": ["The cast shadow is coherent but larger than the compact direct-sun target."],
+      "measurements": {"cast_area_to_cup_bbox": 1.72}
+    },
+    "transmitted_light": {
+      "status": "pass",
+      "confidence": 0.86,
+      "evidence": ["The transparent glass shadow retains lighter beverage-colored regions."],
+      "measurements": {"transparent_lift_inside_shadow": 0.22}
+    },
+    "lighting_physical_consistency": {
+      "status": "pass",
+      "confidence": 0.9,
+      "evidence": ["Highlights and the right-side cast shadow describe a consistent directional source."],
+      "measurements": {}
+    },
+    "smartphone_naturalness": {
+      "status": "pass",
+      "confidence": 0.92,
+      "evidence": ["The frame reads as a casual first-person smartphone photograph rather than a studio render."],
+      "measurements": {}
+    }
+  }
+}

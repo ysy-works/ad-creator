@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "instagram_white_diffuse_wall_table_contract_v1",
+  "preset_id": "instagram_white_diffuse_wall_table_v1",
+  "creative_direction": {
+    "audience": "a Tokyo concept-store buyer and a senior lifestyle merchandiser",
+    "desired_response": "a quiet, natural frame that earns attention through proportion, air and believable light",
+    "art_direction": "an incidental-looking Instagram cafe photograph with precisely controlled scale and negative space",
+    "restraint": "one product, one table, one wall and one light idea",
+    "forbidden_impression": ["generic AI minimalist template", "hero product advertisement", "sterile ecommerce catalog", "over-styled cafe campaign"]
+  },
+  "reference_binding": {
+    "asset_id": "ref_edbb2b01b3166422",
+    "pixel_sha256": "00dc0f2e7b2683eec205599b2420e259058e86fa4de9b4ac9c24bfbc34daca46",
+    "relative_path": "화이트_뉴트럴_저대비_자연광/미디엄/45d43a2ace2d8cff291eec9395be7c16.jpg",
+    "width_px": 675,
+    "height_px": 1200,
+    "runtime_role": "camera, composition, light, support surface and optional declared container design",
+    "provider_submission": "allowed only as an explicitly declared reference input with copy exclusions"
+  },
+  "camera_geometry": {
+    "projection": "rectilinear normal tabletop projection",
+    "focal_length_equivalent_mm": [50, 60],
+    "working_distance_cm": [80, 125],
+    "camera_height_cm": [28, 48],
+    "pitch_degrees": [2, 10],
+    "yaw_degrees": [-5, 5],
+    "roll_degrees": [-1, 1],
+    "distortion": "no close-phone looming or edge stretch",
+    "depth_of_field": "product sharp with gentle physically caused plane falloff, never portrait masking"
+  },
+  "composition_geometry": {
+    "primary_subject_bbox": {"left": 0.34, "top": 0.69, "right": 0.52, "bottom": 0.93},
+    "bbox_semantics": "single-product slot envelope; adapt width to product aspect ratio without exceeding 0.18",
+    "primary_subject_area_ratio": [0.025, 0.043],
+    "negative_space": "at least 68 percent meaningful warm-neutral white wall and table",
+    "support_plane": {
+      "kind": "matte white tabletop",
+      "occupancy_ratio": [0.16, 0.2],
+      "dominant_edge_angles_degrees": [0],
+      "perspective": "near-horizontal wall-table boundary at y=0.80-0.84"
+    },
+    "frame_rhythm": "small lower-field focal point beneath a large quiet wall field",
+    "crop_policy": "retain the complete product, its soft shadow and breathing space",
+    "forbidden": ["centered hero enlargement", "low wide-angle looming", "high overhead flat lay", "multiple products", "decorative props"]
+  },
+  "composition_variation": {
+    "selection": "choose a deterministic small x-offset and tonal falloff from the request seed",
+    "invariants": ["one complete small product", "top-heavy negative space", "low wall-table boundary", "no props"],
+    "allowed_variations": ["product x-position inside 0.38-0.55", "subtle wall tonal falloff", "minor table texture", "small shadow length variation"],
+    "repeat_guard": "adjacent outputs may not share both the same product x-position and the same wall-light falloff",
+    "scene_similarity_limit": 0.78,
+    "reference_scene_copy_forbidden": true
+  },
+  "lighting_geometry": {
+    "source_topology": "one very large diffused left window plus weak neutral room bounce",
+    "azimuth_degrees": [294, 310],
+    "elevation_degrees": [32, 44],
+    "angular_size_degrees": [28, 48],
+    "key_to_fill_ratio": [1.6, 2.6],
+    "lit_area_ratio": [0.58, 0.78],
+    "shadow_area_ratio": [0.08, 0.2],
+    "shadow_vector_degrees": [82, 105],
+    "penumbra_ratio": [0.18, 0.42],
+    "highlight_behavior": "broad protected white and glass highlights with no clipped patch",
+    "optical_effects": "transparent containers retain rim thickness, refraction and a faint physically connected transmitted lift",
+    "forbidden": ["direct sunbeam", "graphic hard shadow", "multiple shadow directions", "shadowless softbox wrap", "HDR halo"]
+  },
+  "tone_signature": {
+    "working_color_space": "sRGB display-referred natural social finish",
+    "white_balance_kelvin": [5000, 5400],
+    "luma_percentiles": {"p05": [0.12, 0.22], "p25": [0.52, 0.66], "p50": [0.68, 0.78], "p75": [0.78, 0.88], "p95": [0.9, 0.97]},
+    "black_point": "open neutral gray-brown",
+    "white_point": "warm-neutral textured white, never broad pure white",
+    "contrast_curve": "gentle toe, quiet midtone separation and soft highlight shoulder",
+    "saturation": "low globally while preserving product-local fruit or beverage color",
+    "shadow_color": "quiet neutral to faintly cool gray",
+    "highlight_color": "warm-neutral white",
+    "palette_hex": ["#D8D4CA", "#C7C3BA", "#A9A59D", "#77736C"],
+    "material_separation": "glass, liquid, wall and table remain distinct without local-contrast exaggeration",
+    "local_contrast": "moderate only at product rim, liquid boundary and support contact",
+    "forbidden": ["beige veil", "blue cast", "crushed black", "neon product color", "flat auto-HDR"]
+  },
+  "finish_signature": {
+    "acuity": "finite social-photo acuity with identity details readable and no uniform tack sharpness",
+    "microcontrast": "restrained outside the product",
+    "grain": "faint luminance grain after ordinary social compression",
+    "depth_rendering": "geometry and light falloff before softness",
+    "retouching": "materially honest, retaining slight wall, table and drink irregularity",
+    "forbidden": ["oversharpening", "noise-free CGI gradients", "portrait cutout", "premium catalog retouch", "cinematic grade"]
+  },
+  "qa_contract": {
+    "hard_fail": ["product height above 0.24", "product width above 0.18", "negative space below 0.68", "wall-table boundary outside 0.80-0.84", "direct light patch", "detached shadow", "invented branding", "AI minimalist template reading"],
+    "weights": {"camera_geometry": 0.18, "composition_rhythm": 0.24, "color_and_tone": 0.18, "lighting_space": 0.2, "product_identity": 0.13, "brand_integrity": 0.07}
+  }
+}

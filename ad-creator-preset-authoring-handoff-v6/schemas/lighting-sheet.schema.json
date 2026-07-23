@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/lighting-sheet.schema.json",
+  "title": "Ad Creator Lighting Sheet v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "lighting_sheet_id",
+    "mood",
+    "reference_cluster",
+    "key_light",
+    "ambient_fill",
+    "shadow_contract",
+    "capture_contract",
+    "grade_strengths",
+    "forbidden"
+  ],
+  "properties": {
+    "schema_version": { "enum": ["1.0.0", "2.0.0"] },
+    "lighting_sheet_id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+    "mood": { "$ref": "#/$defs/nonEmptyString" },
+    "reference_cluster": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["anchor_preset_id", "minimum_cluster_size", "runtime_pixels_allowed", "selection_rule", "source_images"],
+      "properties": {
+        "anchor_preset_id": { "$ref": "#/$defs/nonEmptyString" },
+        "minimum_cluster_size": { "type": "integer", "minimum": 1, "maximum": 8 },
+        "runtime_pixels_allowed": { "const": false },
+        "selection_rule": { "$ref": "#/$defs/nonEmptyString" },
+        "source_images": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        }
+      }
+    },
+    "key_light": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "direction", "relative_size", "subject_to_wall_distance_cm"],
+      "properties": {
+        "source": { "$ref": "#/$defs/nonEmptyString" },
+        "direction": { "$ref": "#/$defs/nonEmptyString" },
+        "relative_size": { "$ref": "#/$defs/nonEmptyString" },
+        "subject_to_wall_distance_cm": { "$ref": "#/$defs/positiveRange" },
+        "azimuth_degrees": { "$ref": "#/$defs/numberRange" },
+        "elevation_degrees": { "$ref": "#/$defs/numberRange" },
+        "angular_size_degrees": { "$ref": "#/$defs/positiveRange" },
+        "distance_class": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "ambient_fill": { "$ref": "#/$defs/nonEmptyString" },
+    "reference_anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["asset_id", "pixel_sha256", "role"],
+      "properties": {
+        "asset_id": { "$ref": "#/$defs/nonEmptyString" },
+        "pixel_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "role": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "fill_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key_to_fill_ratio", "source", "color_bias"],
+      "properties": {
+        "key_to_fill_ratio": { "$ref": "#/$defs/positiveRange" },
+        "source": { "$ref": "#/$defs/nonEmptyString" },
+        "color_bias": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "screen_light_map": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lit_area_ratio", "shadow_area_ratio", "dominant_shadow_vector_degrees", "falloff"],
+      "properties": {
+        "lit_area_ratio": { "$ref": "#/$defs/ratioRange" },
+        "shadow_area_ratio": { "$ref": "#/$defs/ratioRange" },
+        "dominant_shadow_vector_degrees": { "$ref": "#/$defs/numberRange" },
+        "falloff": { "$ref": "#/$defs/nonEmptyString" },
+        "gobo_geometry": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "specular_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["highlight_shape", "highlight_width_ratio", "rim_continuity", "transparent_caustic"],
+      "properties": {
+        "highlight_shape": { "$ref": "#/$defs/nonEmptyString" },
+        "highlight_width_ratio": { "$ref": "#/$defs/ratioRange" },
+        "rim_continuity": { "$ref": "#/$defs/nonEmptyString" },
+        "transparent_caustic": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "camera_coupling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["support_plane", "shadow_projection", "depth_response"],
+      "properties": {
+        "support_plane": { "$ref": "#/$defs/nonEmptyString" },
+        "shadow_projection": { "$ref": "#/$defs/nonEmptyString" },
+        "depth_response": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "color_separation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lit_neutral", "shadow_neutral", "material_locality"],
+      "properties": {
+        "lit_neutral": { "$ref": "#/$defs/nonEmptyString" },
+        "shadow_neutral": { "$ref": "#/$defs/nonEmptyString" },
+        "material_locality": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "qa_geometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shadow_vector_tolerance_degrees", "lit_area_tolerance", "penumbra_ratio_tolerance"],
+      "properties": {
+        "shadow_vector_tolerance_degrees": { "type": "number", "minimum": 0, "maximum": 90 },
+        "lit_area_tolerance": { "type": "number", "minimum": 0, "maximum": 1 },
+        "penumbra_ratio_tolerance": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "shadow_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "density",
+        "edge",
+        "attachment",
+        "transparent_material",
+        "contact_shadow",
+        "cast_shadow",
+        "transmitted_light",
+        "qa_ratios"
+      ],
+      "properties": {
+        "density": { "$ref": "#/$defs/ratioRange" },
+        "edge": { "$ref": "#/$defs/nonEmptyString" },
+        "attachment": { "$ref": "#/$defs/nonEmptyString" },
+        "transparent_material": { "$ref": "#/$defs/nonEmptyString" },
+        "contact_shadow": { "$ref": "#/$defs/shadowLayer" },
+        "cast_shadow": { "$ref": "#/$defs/shadowLayer" },
+        "transmitted_light": { "$ref": "#/$defs/shadowLayer" },
+        "qa_ratios": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["cast_area_to_cup_bbox", "wrist_length_to_cup_height", "transparent_lift_inside_shadow"],
+          "properties": {
+            "cast_area_to_cup_bbox": { "$ref": "#/$defs/positiveRange" },
+            "wrist_length_to_cup_height": { "$ref": "#/$defs/ratioRange" },
+            "transparent_lift_inside_shadow": { "$ref": "#/$defs/ratioRange" }
+          }
+        }
+      }
+    },
+    "capture_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exposure_compensation_ev", "hdr", "white_balance", "texture"],
+      "properties": {
+        "exposure_compensation_ev": { "$ref": "#/$defs/numberRange" },
+        "hdr": { "$ref": "#/$defs/nonEmptyString" },
+        "white_balance": { "$ref": "#/$defs/nonEmptyString" },
+        "texture": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "grade_strengths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["natural", "balanced", "expressive"],
+      "properties": {
+        "natural": { "type": "number", "minimum": 0, "maximum": 1 },
+        "balanced": { "type": "number", "minimum": 0, "maximum": 1 },
+        "expressive": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "forbidden": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "numberRange": {
+      "type": "array",
+      "prefixItems": [{ "type": "number" }, { "type": "number" }],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "positiveRange": {
+      "type": "array",
+      "prefixItems": [{ "type": "number", "minimum": 0 }, { "type": "number", "exclusiveMinimum": 0 }],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "ratioRange": {
+      "type": "array",
+      "prefixItems": [
+        { "type": "number", "minimum": 0, "maximum": 1 },
+        { "type": "number", "minimum": 0, "maximum": 1 }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "shadowLayer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["opacity", "footprint", "behavior"],
+      "properties": {
+        "opacity": { "$ref": "#/$defs/ratioRange" },
+        "footprint": { "$ref": "#/$defs/positiveRange" },
+        "behavior": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    }
+  }
+}

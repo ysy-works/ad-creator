@@ -1,0 +1,372 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/reference-preset.schema.json",
+  "title": "Ad Creator Reference Preset v2",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "preset_id",
+    "display_name",
+    "concept",
+    "source",
+    "runtime_input_policy",
+    "style_abstraction",
+    "sampling_ranges",
+    "tone_contract",
+    "output",
+    "subject_layout",
+    "composition",
+    "lighting",
+    "color",
+    "scene",
+    "capture",
+    "preservation_policy",
+    "prompt_blocks",
+    "quality_gates",
+    "failure_recovery"
+  ],
+  "properties": {
+    "$schema": { "type": "string", "minLength": 1 },
+    "schema_version": { "const": "2.0.0" },
+    "preset_id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+    "display_name": { "type": "string", "minLength": 1 },
+    "concept": { "type": "string", "minLength": 1 },
+    "source": {
+      "type": "object",
+      "required": ["reference_image", "width_px", "height_px", "supporting_group"],
+      "properties": {
+        "reference_image": { "type": "string" },
+        "width_px": { "type": "integer", "minimum": 1 },
+        "height_px": { "type": "integer", "minimum": 1 },
+        "supporting_group": { "type": "string" }
+      }
+    },
+    "runtime_input_policy": {
+      "type": "object",
+      "required": ["default_generation_mode", "generation_inputs", "reference_usage", "copyright_rule"],
+      "properties": {
+        "default_generation_mode": { "const": "user_image_plus_abstracted_preset" },
+        "generation_inputs": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "user_product_identity" },
+            { "const": "sanitized_scene_hint" }
+          ],
+          "minItems": 1,
+          "maxItems": 2
+        },
+        "reference_usage": { "const": "offline_feature_extraction_only" },
+        "copyright_rule": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "style_abstraction": {
+      "type": "object",
+      "required": [
+        "runtime_reference_image",
+        "novel_scene_required",
+        "allowed_style_features",
+        "forbidden_copy_features"
+      ],
+      "properties": {
+        "runtime_reference_image": { "const": false },
+        "novel_scene_required": { "const": true },
+        "allowed_style_features": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "forbidden_copy_features": { "$ref": "#/$defs/nonEmptyStringArray" }
+      }
+    },
+    "sampling_ranges": {
+      "type": "object",
+      "required": [
+        "pov_modes",
+        "subject_center_x",
+        "subject_center_y",
+        "subject_width_ratio",
+        "subject_height_ratio",
+        "negative_space_ratio",
+        "focal_length_mm",
+        "camera_pitch_degrees",
+        "light_softness",
+        "prop_count",
+        "asymmetry_probability",
+        "micro_moments"
+      ],
+      "properties": {
+        "pov_modes": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "subject_center_x": { "$ref": "#/$defs/ratioRange" },
+        "subject_center_y": { "$ref": "#/$defs/ratioRange" },
+        "subject_width_ratio": { "$ref": "#/$defs/ratioRange" },
+        "subject_height_ratio": { "$ref": "#/$defs/ratioRange" },
+        "negative_space_ratio": { "$ref": "#/$defs/ratioRange" },
+        "focal_length_mm": { "$ref": "#/$defs/positiveNumberRange" },
+        "camera_pitch_degrees": { "$ref": "#/$defs/numberRange" },
+        "light_softness": { "$ref": "#/$defs/ratioRange" },
+        "prop_count": { "$ref": "#/$defs/nonNegativeIntegerRange" },
+        "asymmetry_probability": { "$ref": "#/$defs/ratio" },
+        "asymmetry_sources": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "micro_moments": { "$ref": "#/$defs/nonEmptyStringArray" }
+      }
+    },
+    "tone_contract": {
+      "type": "object",
+      "required": [
+        "background_plane",
+        "background_lightness",
+        "background_saturation",
+        "global_contrast",
+        "shadow_density",
+        "color_bias",
+        "highlight_behavior",
+        "forbidden_surface_reading"
+      ],
+      "properties": {
+        "background_plane": { "$ref": "#/$defs/nonEmptyString" },
+        "background_lightness": { "$ref": "#/$defs/ratioRange" },
+        "background_saturation": { "$ref": "#/$defs/ratioRange" },
+        "global_contrast": { "$ref": "#/$defs/ratioRange" },
+        "shadow_density": { "$ref": "#/$defs/ratioRange" },
+        "color_bias": { "$ref": "#/$defs/nonEmptyString" },
+        "highlight_behavior": { "$ref": "#/$defs/nonEmptyString" },
+        "forbidden_surface_reading": { "$ref": "#/$defs/nonEmptyStringArray" }
+      }
+    },
+    "human_presence": {
+      "type": "object",
+      "required": ["required", "hand_style", "grip", "wrist_and_clothing", "nails", "forbidden"],
+      "properties": {
+        "required": { "type": "boolean" },
+        "hand_style": { "$ref": "#/$defs/nonEmptyString" },
+        "grip": { "$ref": "#/$defs/nonEmptyString" },
+        "wrist_and_clothing": { "$ref": "#/$defs/nonEmptyString" },
+        "nails": { "$ref": "#/$defs/nonEmptyString" },
+        "forbidden": { "$ref": "#/$defs/nonEmptyStringArray" }
+      }
+    },
+    "output": {
+      "type": "object",
+      "required": ["preferred_aspect_ratio", "compatible_aspect_ratios"],
+      "properties": {
+        "preferred_aspect_ratio": { "$ref": "#/$defs/aspectRatio" },
+        "compatible_aspect_ratios": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/aspectRatio" }
+        }
+      }
+    },
+    "subject_layout": {
+      "type": "object",
+      "required": ["main_subject", "negative_space"],
+      "properties": {
+        "main_subject": { "$ref": "#/$defs/subject" },
+        "secondary_subjects": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/subject" }
+        },
+        "negative_space": {
+          "type": "object",
+          "required": ["top_ratio", "left_ratio", "right_ratio", "bottom_ratio"],
+          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "composition": {
+      "type": "object",
+      "required": [
+        "shot_type",
+        "camera_angle",
+        "camera_height",
+        "focal_length_equivalent_mm",
+        "horizon_visibility",
+        "depth_of_field",
+        "alignment"
+      ],
+      "properties": {
+        "shot_type": { "$ref": "#/$defs/nonEmptyString" },
+        "camera_angle": { "$ref": "#/$defs/nonEmptyString" },
+        "camera_height": { "$ref": "#/$defs/nonEmptyString" },
+        "focal_length_equivalent_mm": { "type": "number", "exclusiveMinimum": 0 },
+        "horizon_visibility": { "$ref": "#/$defs/nonEmptyString" },
+        "depth_of_field": { "$ref": "#/$defs/nonEmptyString" },
+        "alignment": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "lighting": {
+      "type": "object",
+      "required": [
+        "type",
+        "direction",
+        "azimuth_degrees",
+        "elevation_degrees",
+        "softness",
+        "intensity",
+        "contrast",
+        "shadow",
+        "highlight_control"
+      ],
+      "properties": {
+        "type": { "$ref": "#/$defs/nonEmptyString" },
+        "direction": { "$ref": "#/$defs/nonEmptyString" },
+        "azimuth_degrees": { "type": "number", "minimum": 0, "maximum": 360 },
+        "elevation_degrees": { "type": "number", "minimum": -90, "maximum": 90 },
+        "softness": { "$ref": "#/$defs/ratio" },
+        "intensity": { "$ref": "#/$defs/nonEmptyString" },
+        "contrast": { "$ref": "#/$defs/nonEmptyString" },
+        "shadow": { "$ref": "#/$defs/nonEmptyString" },
+        "highlight_control": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "color": {
+      "type": "object",
+      "required": [
+        "temperature",
+        "white_balance_kelvin",
+        "saturation",
+        "contrast",
+        "palette_hex",
+        "black_point"
+      ],
+      "properties": {
+        "temperature": { "$ref": "#/$defs/nonEmptyString" },
+        "white_balance_kelvin": { "type": "integer", "minimum": 1000, "maximum": 20000 },
+        "saturation": { "$ref": "#/$defs/nonEmptyString" },
+        "contrast": { "$ref": "#/$defs/nonEmptyString" },
+        "palette_hex": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" }
+        },
+        "black_point": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "scene": {
+      "type": "object",
+      "required": ["surface", "background", "background_complexity", "props", "max_prop_count", "texture"],
+      "properties": {
+        "surface": { "$ref": "#/$defs/nonEmptyString" },
+        "background": { "$ref": "#/$defs/nonEmptyString" },
+        "background_complexity": { "$ref": "#/$defs/ratio" },
+        "props": { "$ref": "#/$defs/stringArray" },
+        "max_prop_count": { "type": "integer", "minimum": 0 },
+        "texture": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "capture": {
+      "type": "object",
+      "required": ["look", "realism", "grain", "imperfections"],
+      "properties": {
+        "look": { "$ref": "#/$defs/nonEmptyString" },
+        "realism": { "$ref": "#/$defs/nonEmptyString" },
+        "grain": { "$ref": "#/$defs/nonEmptyString" },
+        "imperfections": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "preservation_policy": {
+      "type": "object",
+      "required": ["hard_lock", "editable", "reference_exclusions"],
+      "properties": {
+        "hard_lock": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "editable": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "reference_exclusions": { "$ref": "#/$defs/nonEmptyStringArray" }
+      }
+    },
+    "prompt_blocks": {
+      "type": "object",
+      "required": ["input_roles", "composition", "look", "preservation", "negative"],
+      "properties": {
+        "input_roles": { "$ref": "#/$defs/nonEmptyString" },
+        "composition": { "$ref": "#/$defs/nonEmptyString" },
+        "look": { "$ref": "#/$defs/nonEmptyString" },
+        "preservation": { "$ref": "#/$defs/nonEmptyString" },
+        "negative": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "quality_gates": {
+      "type": "object",
+      "required": ["logo_text", "product_identity", "preset_adherence", "artifact_policy"],
+      "properties": {
+        "logo_text": { "type": "string" },
+        "product_identity": { "type": "string" },
+        "preset_adherence": { "type": "string" },
+        "artifact_policy": { "type": "string" }
+      }
+    },
+    "failure_recovery": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    }
+  },
+  "$defs": {
+    "aspectRatio": { "type": "string", "pattern": "^[1-9][0-9]*:[1-9][0-9]*$" },
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "stringArray": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "nonEmptyStringArray": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "numberRange": {
+      "type": "array",
+      "prefixItems": [{ "type": "number" }, { "type": "number" }],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "positiveNumberRange": {
+      "type": "array",
+      "prefixItems": [
+        { "type": "number", "exclusiveMinimum": 0 },
+        { "type": "number", "exclusiveMinimum": 0 }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "nonNegativeIntegerRange": {
+      "type": "array",
+      "prefixItems": [
+        { "type": "integer", "minimum": 0 },
+        { "type": "integer", "minimum": 0 }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "ratioRange": {
+      "type": "array",
+      "prefixItems": [{ "$ref": "#/$defs/ratio" }, { "$ref": "#/$defs/ratio" }],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "ratio": { "type": "number", "minimum": 0, "maximum": 1 },
+    "subject": {
+      "type": "object",
+      "required": ["role", "center", "bbox", "area_ratio", "height_ratio"],
+      "properties": {
+        "role": { "type": "string" },
+        "center": {
+          "type": "object",
+          "required": ["x_ratio", "y_ratio"],
+          "properties": {
+            "x_ratio": { "$ref": "#/$defs/ratio" },
+            "y_ratio": { "$ref": "#/$defs/ratio" }
+          }
+        },
+        "bbox": {
+          "type": "object",
+          "required": ["x_ratio", "y_ratio", "width_ratio", "height_ratio"],
+          "properties": {
+            "x_ratio": { "$ref": "#/$defs/ratio" },
+            "y_ratio": { "$ref": "#/$defs/ratio" },
+            "width_ratio": { "$ref": "#/$defs/ratio" },
+            "height_ratio": { "$ref": "#/$defs/ratio" }
+          }
+        },
+        "area_ratio": { "$ref": "#/$defs/ratio" },
+        "height_ratio": { "$ref": "#/$defs/ratio" }
+      }
+    }
+  }
+}

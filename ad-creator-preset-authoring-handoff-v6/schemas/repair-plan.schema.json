@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/repair-plan.schema.json",
+  "title": "Ad Creator Repair Plan v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "decision",
+    "reason",
+    "auto_paid_repair_enabled",
+    "minimum_trigger_confidence",
+    "container_mode",
+    "issues",
+    "protected_invariants",
+    "estimated_credits",
+    "maximum_attempts"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "decision": { "enum": ["no_repair", "repair", "needs_review", "reject"] },
+    "reason": { "type": "string", "minLength": 1 },
+    "auto_paid_repair_enabled": { "type": "boolean" },
+    "minimum_trigger_confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "container_mode": { "enum": ["preserve_source", "adopt_reference"] },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["check", "confidence", "instruction"],
+        "properties": {
+          "check": { "type": "string", "minLength": 1 },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "instruction": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "protected_invariants": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "estimated_credits": { "type": "number", "minimum": 0, "maximum": 2 },
+    "maximum_attempts": { "type": "integer", "minimum": 0, "maximum": 1 }
+  }
+}

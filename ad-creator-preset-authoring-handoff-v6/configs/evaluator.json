@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0.0",
+  "provider": "gemini_interactions",
+  "model": "gemini-3.1-flash-lite",
+  "fallback_models": [
+    "gemini-2.5-flash-lite"
+  ],
+  "api_key_environment_variable": "GEMINI_API_KEY",
+  "timeout_seconds": 120,
+  "maximum_image_edge": 1024,
+  "missing_credentials_policy": "needs_review_without_paid_repair"
+}

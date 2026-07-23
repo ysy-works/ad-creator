@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "instagram_white_neutral_overhead_spatial_contract_v1",
+  "preset_id": "instagram_white_neutral_overhead_spatial_v1",
+  "creative_direction": {
+    "audience": "a senior cafe brand art director and a lifestyle content editor",
+    "desired_response": "a quiet white frame that still feels located inside a real room",
+    "art_direction": "an overhead Instagram cafe photograph whose depth comes from the raised round table, receding tile and partial off-frame shadows",
+    "restraint": "one product, one round table, one floor wedge and one window-light idea",
+    "forbidden_impression": ["generic AI flat lay", "sterile ecommerce catalog", "fabric styling setup", "over-propped cafe campaign"]
+  },
+  "reference_binding": {
+    "asset_id": "ref_499763da87e8bf0e",
+    "pixel_sha256": "c8c0ab483a488577a3789eeaf5ed6301778a475d5c4f12b1b6cc2f6898ebb739",
+    "relative_path": "comfyui-inputs/white_neutral_overhead_reference_v1.png",
+    "width_px": 1024,
+    "height_px": 1536,
+    "runtime_role": "offline camera, composition, support-surface, lighting and optional declared cup-design contract",
+    "provider_submission": "never"
+  },
+  "camera_geometry": {
+    "projection": "rectilinear overhead projection with slight real perspective",
+    "focal_length_equivalent_mm": [42, 52],
+    "working_distance_cm": [105, 165],
+    "camera_height_cm": [105, 165],
+    "pitch_degrees": [82, 88],
+    "yaw_degrees": [-5, 5],
+    "roll_degrees": [-1, 1],
+    "distortion": "no ultra-wide edge stretch or perfectly orthographic diagram",
+    "depth_of_field": "product, curved table edge and nearby floor cues remain readable without portrait masking"
+  },
+  "composition_geometry": {
+    "primary_subject_bbox": {"left": 0.4, "top": 0.51, "right": 0.73, "bottom": 0.71},
+    "bbox_semantics": "single overhead product slot envelope including a visible handle only in adopt-reference mode",
+    "primary_subject_area_ratio": [0.046, 0.075],
+    "negative_space": "70-80 percent meaningful table-and-floor environment around one complete product",
+    "support_plane": {
+      "kind": "large matte white circular tabletop above a gray tiled floor",
+      "occupancy_ratio": [0.66, 0.82],
+      "dominant_edge_angles_degrees": [72, 108],
+      "perspective": "curved raised table edge on the left and receding tile grout visible beyond it"
+    },
+    "frame_rhythm": "large quiet white field counterweighted by a narrow gray floor wedge and one just-below-center product",
+    "crop_policy": "retain the complete product, full adopted handle when applicable, attached shadow, curved table edge and at least two receding floor-grout segments",
+    "forbidden": ["flat seamless background", "centered catalog hero", "cropped product", "missing floor wedge", "multiple products", "decorative props"]
+  },
+  "composition_variation": {
+    "selection": "choose a deterministic small product offset and new broad environmental-shadow arrangement from the request seed",
+    "invariants": ["one complete product", "right-dominant round table", "left tiled-floor wedge", "strict overhead angle", "no props"],
+    "allowed_variations": ["product x-position inside 0.55-0.60", "small table-edge curve shift", "minor grout spacing", "new broad off-frame shadow arrangement"],
+    "repeat_guard": "adjacent outputs may not share both identical product position and identical broad environmental-shadow arrangement",
+    "scene_similarity_limit": 0.78,
+    "reference_scene_copy_forbidden": true
+  },
+  "lighting_geometry": {
+    "source_topology": "one large upper-left window plus weak neutral room bounce and partial off-frame occlusion",
+    "azimuth_degrees": [300, 318],
+    "elevation_degrees": [48, 66],
+    "angular_size_degrees": [24, 42],
+    "key_to_fill_ratio": [1.8, 3.2],
+    "lit_area_ratio": [0.56, 0.76],
+    "shadow_area_ratio": [0.18, 0.38],
+    "shadow_vector_degrees": [112, 138],
+    "penumbra_ratio": [0.16, 0.36],
+    "highlight_behavior": "broad protected white and container highlights with no clipped patch",
+    "optical_effects": "transparent source containers retain rim thickness, refraction and a faint physically connected transmitted lift",
+    "forbidden": ["shadowless softbox wrap", "crisp copied shadow silhouette", "multiple contradictory shadow directions", "HDR halo", "broad pure-white clipping"]
+  },
+  "tone_signature": {
+    "working_color_space": "sRGB display-referred natural social finish",
+    "white_balance_kelvin": [4950, 5250],
+    "luma_percentiles": {"p05": [0.14, 0.24], "p25": [0.48, 0.62], "p50": [0.64, 0.74], "p75": [0.76, 0.88], "p95": [0.9, 0.97]},
+    "black_point": "open neutral gray",
+    "white_point": "warm-neutral textured white, never broad pure white",
+    "contrast_curve": "gentle toe, readable plane separation and soft highlight shoulder",
+    "saturation": "low globally while preserving source product color",
+    "shadow_color": "quiet neutral to faintly cool gray",
+    "highlight_color": "warm-neutral white",
+    "palette_hex": ["#D8D7D7", "#CCCACA", "#BEBAB8", "#A5A19E", "#736C66"],
+    "material_separation": "product, table and floor remain distinct without local-contrast exaggeration",
+    "local_contrast": "moderate only at product rim, beverage details, table edge and floor grout",
+    "forbidden": ["beige veil", "blue cast", "crushed black", "neon product color", "flat auto-HDR"]
+  },
+  "finish_signature": {
+    "acuity": "finite social-photo acuity with identity details readable and no uniform tack sharpness",
+    "microcontrast": "restrained outside product rim, table edge and floor grout",
+    "grain": "faint luminance grain after ordinary social compression",
+    "depth_rendering": "geometry, edge height, grout convergence and light falloff before softness",
+    "retouching": "materially honest, retaining slight table, floor and drink irregularity",
+    "forbidden": ["oversharpening", "noise-free CGI gradients", "portrait cutout", "premium catalog retouch", "cinematic grade"]
+  },
+  "qa_contract": {
+    "hard_fail": [
+      "round table edge absent",
+      "left gray floor wedge or receding grout absent",
+      "broad off-frame environmental shadow atmosphere absent",
+      "fabric, coaster, napkin, saucer or prop present",
+      "cropped or floating product",
+      "reference coffee or latte art copied",
+      "invented branding",
+      "product inherits an oblique source camera or exposes excessive cup sidewall",
+      "beverage color or syrup appears on an opaque cup exterior or base"
+    ],
+    "weights": {"camera_geometry": 0.2, "composition_rhythm": 0.22, "color_and_tone": 0.14, "lighting_space": 0.2, "product_identity": 0.17, "brand_integrity": 0.07}
+  }
+}

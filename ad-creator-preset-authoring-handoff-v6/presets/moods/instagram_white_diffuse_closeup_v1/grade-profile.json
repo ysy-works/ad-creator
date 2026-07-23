@@ -1,0 +1,44 @@
+{
+  "schema_version": "2.0.0",
+  "grade_profile_id": "instagram_white_diffuse_closeup_grade_v2",
+  "input_color_space": "sRGB",
+  "output_color_space": "sRGB",
+  "transform": {
+    "exposure_ev": 0.03,
+    "contrast": 1.03,
+    "saturation": 0.95,
+    "warmth": 0.04,
+    "shadow_lift": 0.018,
+    "highlight_rolloff": 0.4
+  },
+  "strength": {
+    "default": 0.32,
+    "min": 0.0,
+    "max": 0.58
+  },
+  "protection": {
+    "regions": ["product", "logo", "skin"],
+    "mask_strength": 0.9
+  },
+  "targeted_relight": {
+    "policy_id": "bright_low_chroma_product_relight_v1",
+    "scope": "protection_mask",
+    "luma_range": [0.78, 0.99],
+    "max_saturation": 0.16,
+    "luma_feather": 0.12,
+    "saturation_feather": 0.06,
+    "exposure_ev": -0.18,
+    "saturation": 0.92,
+    "warmth": 0.05,
+    "blend_strength": 0.58,
+    "spatial_focus": {
+      "center": [0.5, 0.45],
+      "radius": [0.42, 0.54],
+      "feather": 0.18
+    }
+  },
+  "qa_limits": {
+    "max_dark_clip_ratio": 0.01,
+    "max_bright_clip_ratio": 0.015
+  }
+}

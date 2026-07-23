@@ -1,0 +1,141 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "sanitized_photographic_scene_hint",
+  "policy_version": "wood_window_closeup_scene_hint_v1",
+  "role": "scene_hint",
+  "path": "C:\\Users\\yoosy\\Documents\\ad-creator\\ad-creator-preset-authoring-handoff-v6\\data\\reference-library\\control-boards\\wood-window-closeup-v1\\scene-hint.png",
+  "relative_path": "data/reference-library/control-boards/wood-window-closeup-v1/scene-hint.png",
+  "manifest_path": "C:\\Users\\yoosy\\Documents\\ad-creator\\ad-creator-preset-authoring-handoff-v6\\data\\reference-library\\control-boards\\wood-window-closeup-v1\\scene-hint-manifest.json",
+  "manifest_relative_path": "data/reference-library/control-boards/wood-window-closeup-v1/scene-hint-manifest.json",
+  "width_px": 768,
+  "height_px": 1024,
+  "aspect_ratio": "3:4",
+  "sha256": "6a5f5fada0fc16ea647713a702859efb5a6fffbffa18b113d31763bf78211f41",
+  "pixel_sha256": "b103ec890adc1fffe979a93e553fbce2770187544cd85fecef973f62eceebca7",
+  "source_binding": {
+    "asset_id": "ref_95fa7947818ce496",
+    "path": "C:\\Users\\yoosy\\Documents\\ad-creator\\assets\\references\\wood\\wood_closeup_cafe_latte_reference-v2.png",
+    "sha256": "4e17067c6696a71699e989bfc0fcb47d096a9626441698bec4b773904efd73c7",
+    "pixel_sha256": "fdcf3f83e673d7ed06cecb376eb7b94386bb2c1657f942136017aeeadc919523",
+    "width_px": 1254,
+    "height_px": 1254
+  },
+  "construction": {
+    "canvas_px": [
+      768,
+      1024
+    ],
+    "source_square_placement_px": {
+      "left": 0,
+      "top": 128,
+      "right": 768,
+      "bottom": 896
+    },
+    "background_low_pass": {
+      "intermediate_px": [
+        192,
+        192
+      ],
+      "gaussian_blur_px": 5.5
+    },
+    "identity_masks": [
+      {
+        "mask_id": "primary_beverage_and_label",
+        "bbox": [
+          0.28,
+          0.07,
+          0.65,
+          0.92
+        ],
+        "operation": "neutral low-frequency placeholder"
+      },
+      {
+        "mask_id": "secondary_cup_and_text",
+        "bbox": [
+          0.57,
+          0.29,
+          0.85,
+          0.79
+        ],
+        "operation": "unmarked paper low-frequency placeholder"
+      },
+      {
+        "mask_id": "plant_identity",
+        "bbox": [
+          0.43,
+          0.18,
+          0.76,
+          0.53
+        ],
+        "operation": "strong low-pass only"
+      }
+    ],
+    "final_information_ceiling_px": [
+      384,
+      512
+    ],
+    "canvas_extension": "stretched low-frequency top and bottom fields with feathered seams and no panels or labels"
+  },
+  "retained_relationships": [
+    "large front-left product slot and smaller behind-right companion",
+    "both subjects supported by one round pale live-edge wood table",
+    "soft upper-left window field and cool-gray exterior separation",
+    "low-frequency plant mass behind the pair",
+    "restrained warm-neutral palette and close camera scale"
+  ],
+  "forbidden_transfer": [
+    "reference latte identity, recipe, milk diffusion, ice or straw",
+    "reference Americano recipe or exact crema pattern",
+    "cafe latte, CAFE AMERICANO or any reference label or body copy",
+    "exact plant, window, exterior or table grain",
+    "exact crop, reflections, highlights, shadows or source pixels"
+  ],
+  "sanitation": {
+    "visible_labels": false,
+    "technical_panels": false,
+    "panel_boundaries": false,
+    "borderless_photo_like_plate": true,
+    "beverage_interiors_neutralized": true,
+    "unique_background_objects_strongly_low_passed": true,
+    "raw_reference_provider_submission_allowed": false
+  },
+  "checks": [
+    {
+      "check_id": "dimensions_3_by_4",
+      "status": "pass",
+      "evidence": {
+        "observed_px": [
+          768,
+          1024
+        ]
+      }
+    },
+    {
+      "check_id": "no_technical_panels_or_labels_drawn",
+      "status": "pass",
+      "evidence": {
+        "drawing_operations": "low-pass photo plate and identity masks only"
+      }
+    },
+    {
+      "check_id": "source_product_and_copy_masks_applied",
+      "status": "pass",
+      "evidence": {
+        "mask_ids": [
+          "primary_beverage_and_label",
+          "secondary_cup_and_text",
+          "plant_identity"
+        ]
+      }
+    },
+    {
+      "check_id": "output_differs_from_raw_source",
+      "status": "pass",
+      "evidence": {
+        "output_pixel_sha256": "b103ec890adc1fffe979a93e553fbce2770187544cd85fecef973f62eceebca7",
+        "source_pixel_sha256": "fdcf3f83e673d7ed06cecb376eb7b94386bb2c1657f942136017aeeadc919523"
+      }
+    }
+  ],
+  "manifest_content_sha256": "7a25c5a8a06d6a5edbe5101511dd346044f6ecab28f36dcad1d544c03ef5fe75"
+}

@@ -1,0 +1,155 @@
+{
+  "schema_version": "1.0.0",
+  "lighting_sheet_id": "instagram_white_diffuse_closeup_sheet_v1",
+  "mood": "warm-white close cafe tabletop under one broad diffuse window",
+  "reference_cluster": {
+    "anchor_preset_id": "instagram_white_diffuse_closeup_v1",
+    "minimum_cluster_size": 4,
+    "runtime_pixels_allowed": false,
+    "selection_rule": "large central serving assembly, edge-cropped waffle and magazine, diffuse white-room space",
+    "source_images": [
+      "ad_creator_reference_white_closeup_cylindrical_v2.png"
+    ]
+  },
+  "key_light": {
+    "source": "one very large upper-left diffuse window",
+    "direction": "upper-left/left-front toward lower-right",
+    "relative_size": "very large, producing broad highlights and long feathered penumbrae",
+    "subject_to_wall_distance_cm": [
+      70,
+      140
+    ]
+  },
+  "ambient_fill": "neutral room bounce below the key; retain floor grout, table texture and contact depth",
+  "fill_contract": {
+    "key_to_fill_ratio": [
+      1.5,
+      2.5
+    ],
+    "source": "weak neutral white-room bounce",
+    "color_bias": "neutral"
+  },
+  "screen_light_map": {
+    "lit_area_ratio": [
+      0.62,
+      0.78
+    ],
+    "shadow_area_ratio": [
+      0.14,
+      0.28
+    ],
+    "dominant_shadow_vector_degrees": [
+      118,
+      142
+    ],
+    "falloff": "broad directional upper-left to lower-right falloff across one continuous matte tabletop",
+    "gobo_geometry": "two or three amorphous 3-8 percent opacity off-frame occupancy modulations only; no readable silhouette"
+  },
+  "specular_contract": {
+    "highlight_shape": "broad upper-left arcs on glass or ceramic with protected white detail",
+    "highlight_width_ratio": [
+      0.04,
+      0.16
+    ],
+    "rim_continuity": "continuous readable upper rim with no melted or broken vessel edge",
+    "transparent_caustic": "subtle and physically connected only when the preserved source container is transparent"
+  },
+  "shadow_contract": {
+    "density": [
+      0.14,
+      0.28
+    ],
+    "edge": "compact attached core opening into a long feathered penumbra",
+    "attachment": "each present cup, saucer and source spoon owns a separate but directionally coherent contact",
+    "transparent_material": "curved-wall refraction, Fresnel edge response and a restrained beverage-colored transmitted lift stay connected to the cast-shadow footprint",
+    "contact_shadow": {
+      "opacity": [
+        0.24,
+        0.36
+      ],
+      "footprint": [
+        0.04,
+        0.13
+      ],
+      "behavior": "compact neutral-gray attachment directly beneath each present support contact"
+    },
+    "cast_shadow": {
+      "opacity": [
+        0.08,
+        0.18
+      ],
+      "footprint": [
+        0.38,
+        1.1
+      ],
+      "behavior": "one lower-right shadow per object with a penumbra 0.28-0.52 of local caster width"
+    },
+    "transmitted_light": {
+      "opacity": [
+        0.05,
+        0.18
+      ],
+      "footprint": [
+        0.1,
+        0.32
+      ],
+      "behavior": "restrained source-beverage-colored lift only inside the physically connected transparent shadow"
+    },
+    "qa_ratios": {
+      "cast_area_to_cup_bbox": [
+        0.35,
+        1.5
+      ],
+      "wrist_length_to_cup_height": [
+        0,
+        0
+      ],
+      "transparent_lift_inside_shadow": [
+        0.04,
+        0.28
+      ]
+    }
+  },
+  "capture_contract": {
+    "exposure_compensation_ev": [
+      -0.15,
+      0.0
+    ],
+    "hdr": "restrained social-photo HDR with protected white detail and no halo",
+    "white_balance": "5000-5300K warm-neutral white",
+    "texture": "matte table, protected glass and cream, paper fiber and faint grain"
+  },
+  "grade_strengths": {
+    "natural": 0.16,
+    "balanced": 0.28,
+    "expressive": 0.4
+  },
+  "forbidden": [
+    "shadowless studio sweep",
+    "hard sunlight",
+    "clipped white",
+    "beige veil",
+    "blue cast",
+    "portrait cutout blur"
+  ],
+  "reference_anchor": {
+    "asset_id": "ref_3da1c1c83c416adb",
+    "pixel_sha256": "be10105f0c6c302b731a682f1d34d5c865e1d4ed80ba679e20b6f859fa3dc095",
+    "role": "user-approved scene-condition anchor with novelty requirement"
+  },
+  "camera_coupling": {
+    "support_plane": "light preserves the raised circular table edge against the lower gray floor",
+    "shadow_projection": "product and environmental shadows project consistently from upper left toward lower right across both planes",
+    "depth_response": "falloff, edge height and receding floor grout remain readable under an 82-88 degree camera pitch"
+  },
+  "color_separation": {
+    "lit_neutral": "warm-neutral textured white",
+    "shadow_neutral": "quiet neutral to faintly cool gray",
+    "material_locality": "source-authoritative beverage color, ice and garnish remain inside the reconstructed drink; sidewall branding is not forced at the overhead camera, and opaque adopted-cup exteriors remain clean"
+  },
+  "qa_geometry": {
+    "shadow_vector_tolerance_degrees": 18,
+    "lit_area_tolerance": 0.12,
+    "penumbra_ratio_tolerance": 0.14
+  }
+}

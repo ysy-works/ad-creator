@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/reference-analysis-v3.schema.json",
+  "title": "Ad Creator Unified Reference Analysis v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "publication_evidence",
+    "analysis_metadata",
+    "asset_id",
+    "scene_graph",
+    "lighting_contract",
+    "surface_profiles",
+    "brand_surface_observations",
+    "contract_sha256"
+  ],
+  "properties": {
+    "schema_version": { "const": "3.0.0" },
+    "status": { "enum": ["draft", "published"] },
+    "publication_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_validated", "hash_validated", "contact_sheet_reviewed"],
+      "properties": {
+        "schema_validated": { "type": "boolean" },
+        "hash_validated": { "type": "boolean" },
+        "contact_sheet_reviewed": { "type": "boolean" }
+      }
+    },
+    "analysis_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "analyzer_version", "analyzed_at", "input_pixel_sha256"],
+      "properties": {
+        "provider": { "type": "string", "minLength": 1 },
+        "analyzer_version": { "type": "string", "minLength": 1 },
+        "analyzed_at": { "type": "string", "format": "date-time" },
+        "input_pixel_sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "asset_id": { "type": "string", "pattern": "^ref_[a-f0-9]{16}$" },
+    "scene_graph": { "type": "object" },
+    "lighting_contract": { "type": ["object", "null"] },
+    "surface_profiles": { "type": "array", "items": { "type": "object" } },
+    "brand_surface_observations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["slot_id", "state", "material_family", "application_medium", "carrier_component", "surface_allowed", "confidence"],
+        "properties": {
+          "slot_id": { "type": "string", "minLength": 1 },
+          "state": { "enum": ["verified_present", "verified_absent", "uncertain"] },
+          "material_family": { "type": ["string", "null"] },
+          "application_medium": { "type": ["string", "null"] },
+          "carrier_component": { "type": ["string", "null"] },
+          "surface_allowed": {
+            "oneOf": [
+              { "type": "boolean" },
+              { "type": "string" },
+              { "type": "array", "items": { "type": "string" } },
+              { "type": "object", "additionalProperties": { "type": "boolean" } }
+            ]
+          },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "contract_sha256": { "$ref": "#/$defs/sha256" }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}

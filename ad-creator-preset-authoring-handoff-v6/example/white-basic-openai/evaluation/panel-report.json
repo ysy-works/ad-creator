@@ -1,0 +1,60 @@
+{
+  "case_id": "p02_strawberry_milk_unbranded__ref_white_diffuse_wall_table__adopt_reference__gpt_image_2",
+  "combined_summary": {
+    "advantages": [
+      "product scale, negative space and scene integration are the most controlled",
+      "the selected reference family is recognizable without copying its exact scene",
+      "the beverage remains the single visual focus"
+    ],
+    "next_generation_fixes": [
+      "hold the product inside the 16–24% height slot while preserving only diffuse tonal falloff",
+      "measure product bbox and lighting hardness before accepting the result",
+      "retain the current restrained social finish without adding sharpening or HDR contrast"
+    ],
+    "problems": [
+      "the frame is so cautious that it loses some spontaneous social energy",
+      "model adherence varies more in product scale than in beverage identity",
+      "the frame still needs a stronger distinction from repeatable AI lifestyle templates"
+    ]
+  },
+  "hard_reject": {
+    "reasons": [],
+    "triggered": false
+  },
+  "image_path": "/Users/apple/Documents/ad-creator/outputs/higgsfield/instagram-natural-model-comparison-v4/instagram-4x5/p02_strawberry_milk_unbranded__ref_white_diffuse_wall_table__adopt_reference__gpt_image_2.jpg",
+  "image_sha256": "f658a476a6e61919298da64e720567c424d66ef5c49ba580f9bcf2345444fd6d",
+  "main_judge": {
+    "best_point": "product scale, negative space and scene integration are the most controlled",
+    "most_disturbing_point": "the frame is so cautious that it loses some spontaneous social energy",
+    "one_line_reason": "quiet photographic control is strong enough to merit a closer look",
+    "scores": {
+      "ai_trace_removal": 8,
+      "density_of_taste": 7,
+      "light_and_shadow": 8,
+      "naturalness": 8,
+      "negative_space_and_balance": 8,
+      "scroll_stop_power": 8
+    },
+    "scroll_decision": "stop",
+    "single_fix": "hold the product inside the 16–24% height slot while preserving only diffuse tonal falloff",
+    "verdict": "revise_and_review"
+  },
+  "overall_verdict": "revise_and_review",
+  "panel_id": "instagram_natural_tokyo_buyer_md_v1",
+  "schema_version": "1.0.0",
+  "supporting_judge": {
+    "best_point": "product scale, negative space and scene integration are the most controlled",
+    "most_disturbing_point": "the frame is so cautious that it loses some spontaneous social energy",
+    "one_line_reason": "quiet photographic control is strong enough to merit a closer look",
+    "scores": {
+      "instagram_usability": 8,
+      "overall_completion": 8,
+      "product_appeal_communication": 9,
+      "product_recognition": 8,
+      "save_or_click_pull": 8
+    },
+    "scroll_decision": "stop",
+    "single_fix": "hold the product inside the 16–24% height slot while preserving only diffuse tonal falloff",
+    "verdict": "adopt"
+  }
+}

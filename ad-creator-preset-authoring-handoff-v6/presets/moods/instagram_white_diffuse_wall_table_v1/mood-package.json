@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "mood_package_id": "instagram_white_diffuse_wall_table_v1",
+  "display_name": "인스타 내추럴 · 화이트 확산광 기본",
+  "preset_path": "presets/editorial/instagram_white_diffuse_wall_table_v1/reference-preset.json",
+  "runtime_profile_path": "presets/editorial/runtime-profile-v1.json",
+  "scene_recipe_path": "presets/moods/instagram_white_diffuse_wall_table_v1/scene-recipe.json",
+  "lighting_sheet_path": "presets/moods/instagram_white_diffuse_wall_table_v1/lighting-sheet.json",
+  "grade_profile_path": "presets/moods/soft_diffuse_window_neutral_v1/grade-profile.json",
+  "photographic_style_contract_path": "presets/editorial/instagram_white_diffuse_wall_table_v1/photographic-style-contract.json",
+  "product_integration_contract_path": "presets/editorial/product-integration-contract-v1.json",
+  "runtime_reference_policy": "declared_reference_input_with_copy_exclusions",
+  "compatibility": {
+    "composition_modes": ["single_product_tabletop"],
+    "materials": ["glass", "plastic", "paper", "ceramic"]
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/scene-recipe.schema.json",
+  "title": "Ad Creator Scene Recipe v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "recipe_id",
+    "display_name",
+    "compatible_presets",
+    "generation_policy",
+    "composition",
+    "environment",
+    "lighting",
+    "capture",
+    "human_rendering",
+    "material_rules",
+    "coupling_rules",
+    "forbidden",
+    "quality_gate"
+  ],
+  "properties": {
+    "$schema": { "type": "string", "minLength": 1 },
+    "schema_version": { "const": "1.0.0" },
+    "recipe_id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+    "display_name": { "$ref": "#/$defs/nonEmptyString" },
+    "compatible_presets": { "$ref": "#/$defs/nonEmptyStringArray" },
+    "generation_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["normal_paid_generations", "runtime_reference_image", "traditional_compositing"],
+      "properties": {
+        "normal_paid_generations": { "const": 1 },
+        "runtime_reference_image": { "const": false },
+        "traditional_compositing": { "const": false }
+      }
+    },
+    "composition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inherit_preset_bbox", "subject_anchor_priority", "asymmetry_sources"],
+      "properties": {
+        "inherit_preset_bbox": { "const": true },
+        "subject_anchor_priority": { "$ref": "#/$defs/nonEmptyString" },
+        "asymmetry_sources": { "$ref": "#/$defs/nonEmptyStringArray" }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["background_plane", "surface_character", "sun_patch_shape"],
+      "properties": {
+        "background_plane": { "$ref": "#/$defs/nonEmptyString" },
+        "surface_character": { "$ref": "#/$defs/nonEmptyString" },
+        "sun_patch_shape": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "lighting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "direction",
+        "shadow_description",
+        "light_softness",
+        "subject_to_wall_distance_cm",
+        "shadow_density",
+        "global_contrast",
+        "background_lightness",
+        "ambient_fill",
+        "exposure_compensation_ev",
+        "sun_patch_coverage",
+        "highlight_behavior",
+        "shadow_temperature"
+      ],
+      "properties": {
+        "source": { "$ref": "#/$defs/nonEmptyString" },
+        "direction": { "$ref": "#/$defs/nonEmptyString" },
+        "shadow_description": { "$ref": "#/$defs/nonEmptyString" },
+        "light_softness": { "$ref": "#/$defs/ratioRange" },
+        "subject_to_wall_distance_cm": { "$ref": "#/$defs/positiveNumberRange" },
+        "shadow_density": { "$ref": "#/$defs/ratioRange" },
+        "global_contrast": { "$ref": "#/$defs/ratioRange" },
+        "background_lightness": { "$ref": "#/$defs/ratioRange" },
+        "ambient_fill": { "$ref": "#/$defs/nonEmptyString" },
+        "exposure_compensation_ev": { "$ref": "#/$defs/numberRange" },
+        "sun_patch_coverage": { "$ref": "#/$defs/ratioRange" },
+        "highlight_behavior": { "$ref": "#/$defs/nonEmptyString" },
+        "shadow_temperature": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "capture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shadow_processing", "local_texture", "forbidden_processing"],
+      "anyOf": [
+        { "required": ["phone_hdr"] },
+        { "required": ["rendering_pipeline"] }
+      ],
+      "properties": {
+        "phone_hdr": { "$ref": "#/$defs/nonEmptyString" },
+        "rendering_pipeline": { "$ref": "#/$defs/nonEmptyString" },
+        "shadow_processing": { "$ref": "#/$defs/nonEmptyString" },
+        "local_texture": { "$ref": "#/$defs/nonEmptyString" },
+        "forbidden_processing": { "$ref": "#/$defs/nonEmptyStringArray" }
+      }
+    },
+    "human_rendering": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["skin_texture", "light_response", "forbidden"],
+      "properties": {
+        "skin_texture": { "$ref": "#/$defs/nonEmptyString" },
+        "light_response": { "$ref": "#/$defs/nonEmptyString" },
+        "forbidden": { "$ref": "#/$defs/nonEmptyStringArray" }
+      }
+    },
+    "material_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["glass", "plastic"],
+      "properties": {
+        "glass": { "$ref": "#/$defs/nonEmptyString" },
+        "plastic": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "coupling_rules": { "$ref": "#/$defs/nonEmptyStringArray" },
+    "forbidden": { "$ref": "#/$defs/nonEmptyStringArray" },
+    "quality_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hard_fail", "weights"],
+      "properties": {
+        "hard_fail": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "weights": {
+          "type": "object",
+          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "nonEmptyStringArray": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "numberRange": {
+      "type": "array",
+      "prefixItems": [{ "type": "number" }, { "type": "number" }],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "positiveNumberRange": {
+      "type": "array",
+      "prefixItems": [
+        { "type": "number", "exclusiveMinimum": 0 },
+        { "type": "number", "exclusiveMinimum": 0 }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "ratioRange": {
+      "type": "array",
+      "prefixItems": [
+        { "type": "number", "minimum": 0, "maximum": 1 },
+        { "type": "number", "minimum": 0, "maximum": 1 }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    }
+  }
+}

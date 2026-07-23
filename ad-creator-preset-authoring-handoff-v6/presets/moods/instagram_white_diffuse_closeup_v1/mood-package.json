@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "mood_package_id": "instagram_white_diffuse_closeup_v1",
+  "display_name": "화이트계열 클로즈업",
+  "preset_path": "presets/editorial/instagram_white_diffuse_closeup_v1/reference-preset.json",
+  "runtime_profile_path": "presets/editorial/runtime-profile-v1.json",
+  "scene_recipe_path": "presets/moods/instagram_white_diffuse_closeup_v1/scene-recipe.json",
+  "lighting_sheet_path": "presets/moods/instagram_white_diffuse_closeup_v1/lighting-sheet.json",
+  "grade_profile_path": "presets/moods/instagram_white_diffuse_closeup_v1/grade-profile.json",
+  "photographic_style_contract_path": "presets/editorial/instagram_white_diffuse_closeup_v1/photographic-style-contract.json",
+  "product_integration_contract_path": "presets/editorial/product-integration-contract-v1.json",
+  "container_design_path": "presets/container_designs/white_closeup_short_glass_saucer_v1.json",
+  "runtime_reference_policy": "offline_contract_only",
+  "compatibility": {
+    "composition_modes": [
+      "single_product_white_closeup"
+    ],
+    "materials": [
+      "glass",
+      "plastic",
+      "paper",
+      "ceramic"
+    ]
+  }
+}

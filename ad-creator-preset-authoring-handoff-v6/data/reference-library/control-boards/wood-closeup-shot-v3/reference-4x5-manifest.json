@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "controlled_photographic_scene_reference",
+  "policy_version": "wood_closeup_shot_scene_hint_v3_4x5",
+  "role": "scene_hint",
+  "path": "C:\\Users\\yoosy\\Documents\\ad-creator\\ad-creator-preset-authoring-handoff-v6\\data\\reference-library\\control-boards\\wood-closeup-shot-v3\\reference-4x5-close.png",
+  "relative_path": "data/reference-library/control-boards/wood-closeup-shot-v3/reference-4x5-close.png",
+  "manifest_path": "C:\\Users\\yoosy\\Documents\\ad-creator\\ad-creator-preset-authoring-handoff-v6\\data\\reference-library\\control-boards\\wood-closeup-shot-v3\\reference-4x5-manifest.json",
+  "manifest_relative_path": "data/reference-library/control-boards/wood-closeup-shot-v3/reference-4x5-manifest.json",
+  "width_px": 1003,
+  "height_px": 1254,
+  "aspect_ratio": "4:5",
+  "sha256": "af1857a1c87ca3f16b31e43d5a825e32f7877146de31e725f17130618733ee09",
+  "pixel_sha256": "7d6cbadfa5c2e9ef9da9d83bc832454522caf7315dd8f6eec6d62c85756fd0bf",
+  "source_binding": {
+    "asset_id": "ref_95fa7947818ce496",
+    "path": "C:\\Users\\yoosy\\Documents\\ad-creator\\assets\\references\\wood\\wood_closeup_cafe_latte_reference-v2.png",
+    "sha256": "4e17067c6696a71699e989bfc0fcb47d096a9626441698bec4b773904efd73c7",
+    "pixel_sha256": "fdcf3f83e673d7ed06cecb376eb7b94386bb2c1657f942136017aeeadc919523",
+    "width_px": 1254,
+    "height_px": 1254
+  },
+  "construction": {
+    "method": "imagegen vertical 4:5 outpaint with original scene geometry, exposure and color held as invariants",
+    "identity_edits": [
+      "canvas extended vertically without changing the two cup assemblies",
+      "small plant support clarified as a low matte pot resting on the interior window sill",
+      "rear paper cup CAFE AMERICANO text retained as an authorized scene element"
+    ],
+    "preserved_evidence": [
+      "cup bounding boxes, centers, relative scale and overlap",
+      "round live-edge table boundary, matte color, grain and cracks",
+      "window-sill diagonals and gray exterior field",
+      "diffuse light gradient, white balance, exposure, highlights and shadow topology"
+    ]
+  },
+  "retained_relationships": [
+    "large front-left product slot and smaller behind-right double-paper-cup companion",
+    "both subjects supported by one round pale live-edge wood table",
+    "broad upper-left rear window field and lower-right soft shadow flow",
+    "small distant potted plant physically supported by the broad white interior sill and clearly separated in depth",
+    "restrained warm-local wood and neutral-gray exterior separation"
+  ],
+  "forbidden_transfer": [
+    "foreground reference latte identity and recipe; the paper label transfers only in adopt-reference mode and its heading must be exact lowercase cafe",
+    "rear reference Americano ice arrangement and exact liquid pixels",
+    "any text except the exact companion-cup phrase CAFE AMERICANO",
+    "specific plant species identity"
+  ],
+  "sanitation": {
+    "visible_labels": true,
+    "technical_panels": false,
+    "panel_boundaries": false,
+    "borderless_photo_like_plate": true,
+    "beverage_interiors_neutralized": false,
+    "unique_background_objects_strongly_low_passed": false,
+    "raw_reference_provider_submission_allowed": true
+  },
+  "checks": [
+    {
+      "check_id": "portrait_4x5_control_plate",
+      "status": "pass",
+      "evidence": {
+        "observed_px": [
+          1003,
+          1254
+        ]
+      }
+    },
+    {
+      "check_id": "authorized_companion_text_only",
+      "status": "pass",
+      "evidence": {
+        "exact_text": "CAFE AMERICANO"
+      }
+    },
+    {
+      "check_id": "both_container_assemblies_retained",
+      "status": "pass",
+      "evidence": {
+        "primary": "clear PET open-rim cup",
+        "secondary": "double nested white paper cup"
+      }
+    },
+    {
+      "check_id": "light_and_support_geometry_retained",
+      "status": "pass",
+      "evidence": {
+        "window": true,
+        "round_wood_table": true,
+        "plant_pot_on_sill": true,
+        "soft_shadows": true
+      }
+    }
+  ],
+  "manifest_content_sha256": "0401be35c559f9f568d7c144968d708074b9e422c1c98c1135e6918dfd8bb15d"
+}

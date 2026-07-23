@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/brand-asset.schema.json",
+  "title": "Exact Source Brand Asset",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "asset_id", "product_id", "status", "rgba_path", "mask_path",
+    "rgba_pixel_sha256", "mask_pixel_sha256", "source_product_pixel_sha256",
+    "source_bbox", "identity", "application", "warp_policy", "confidence",
+    "contract_sha256"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "asset_id": { "$ref": "#/$defs/nonEmptyString" },
+    "product_id": { "$ref": "#/$defs/nonEmptyString" },
+    "status": { "enum": ["draft", "published"] },
+    "rgba_path": { "$ref": "#/$defs/nonEmptyString" },
+    "mask_path": { "$ref": "#/$defs/nonEmptyString" },
+    "rgba_pixel_sha256": { "$ref": "#/$defs/sha256" },
+    "mask_pixel_sha256": { "$ref": "#/$defs/sha256" },
+    "source_product_pixel_sha256": { "$ref": "#/$defs/sha256" },
+    "source_bbox": { "$ref": "#/$defs/bbox" },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_main_text", "non_text_mark"],
+      "properties": {
+        "allowed_main_text": { "type": ["string", "null"], "minLength": 1 },
+        "non_text_mark": { "type": ["string", "null"], "minLength": 1 }
+      },
+      "anyOf": [
+        { "properties": { "allowed_main_text": { "type": "string", "minLength": 1 } } },
+        { "properties": { "non_text_mark": { "type": "string", "minLength": 1 } } }
+      ]
+    },
+    "application": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["material_family", "application_medium", "carrier_component", "surface"],
+      "properties": {
+        "material_family": { "$ref": "#/$defs/nonEmptyString" },
+        "application_medium": { "$ref": "#/$defs/nonEmptyString" },
+        "carrier_component": { "$ref": "#/$defs/nonEmptyString" },
+        "surface": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "warp_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "curved_surface", "maximum_attempts", "outside_mask_change_allowed"],
+      "properties": {
+        "mode": { "const": "perspective_quad" },
+        "curved_surface": { "const": "target_mask_only" },
+        "maximum_attempts": { "const": 1 },
+        "outside_mask_change_allowed": { "const": false }
+      }
+    },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "contract_sha256": { "$ref": "#/$defs/sha256" }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "bbox": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["left", "top", "right", "bottom"],
+      "properties": {
+        "left": { "type": "number", "minimum": 0, "maximum": 1 },
+        "top": { "type": "number", "minimum": 0, "maximum": 1 },
+        "right": { "type": "number", "minimum": 0, "maximum": 1 },
+        "bottom": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  }
+}

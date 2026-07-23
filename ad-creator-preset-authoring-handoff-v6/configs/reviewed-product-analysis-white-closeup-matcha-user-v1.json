@@ -1,0 +1,87 @@
+{
+  "schema_version": "2.0.0",
+  "product_kind": "beverage",
+  "analysis_metadata": {
+    "provider": "manual_visual_review",
+    "model": "human_reviewed_visible_pixels",
+    "prompt_version": "product_analysis_v2_brand_crosscheck",
+    "analyzed_at": "2026-07-23T00:00:00+09:00",
+    "confidence": 0.96,
+    "brand_crosscheck": "not_needed",
+    "identity_override": "manual_pixel_review"
+  },
+  "source_binding": {
+    "pixel_sha256": "24c120872ceb6aa093f3b441fcd6a57575c9aed4abb4f1f2a70bfd6ed6e80712",
+    "width_px": 960,
+    "height_px": 1280,
+    "dhash": "347714397998383a",
+    "mean_rgb": [0.673585, 0.595922, 0.496234]
+  },
+  "product_summary": "An iced matcha milk latte in a tall clear tumbler: saturated but natural green matcha concentrated in the upper half, a pale milky lower layer with soft green diffusion, many irregular clear ice cubes and a thin foamy/bubbly surface; no topping, straw or readable branding is required.",
+  "identity": {
+    "beverage": "iced matcha milk latte",
+    "container": {
+      "class": "tall clear tumbler in the source image; replaced by the approved reference cup in adopt-reference mode",
+      "material": "clear transparent glass or plastic in source; reference mode uses the short straight cylindrical clear glass",
+      "geometry": "source vessel is tall and gently tapered, but source vessel geometry is not preserved when adopt-reference is selected",
+      "components": ["iced matcha milk beverage", "irregular transparent ice cubes", "thin natural surface foam"]
+    },
+    "branding": {
+      "state": "verified_absent",
+      "main_text": null,
+      "visible_text": [],
+      "non_text_mark": null,
+      "placement": "no intentional branding or readable text should be added",
+      "colors": [],
+      "confidence": 0.98
+    },
+    "must_preserve": [
+      "iced matcha milk latte identity",
+      "deep natural matcha green concentrated toward the upper layer",
+      "pale milky lower layer with soft irregular green diffusion",
+      "multiple irregular clear ice cubes and small surface bubbles",
+      "natural low-to-moderate green saturation without neon color",
+      "beverage color relationships while re-lighting all layers under the target scene light",
+      "no invented logo, text, fruit, cream scoop or garnish"
+    ],
+    "serving_state": {
+      "schema_version": "1.0.0",
+      "temperature": "iced",
+      "ice_presence": "present",
+      "straw_requirement": "none",
+      "topping_requirement": "none",
+      "side_visibility_requirement": "optional",
+      "confidence": 0.97,
+      "evidence": [
+        "clear ice is visible across the upper beverage",
+        "green matcha and pale milk form a soft vertical color relationship",
+        "small bubbles and translucent highlights are visible around the ice"
+      ]
+    }
+  },
+  "geometry": {
+    "container_bbox": {"left": 0.248, "top": 0.297, "right": 0.737, "bottom": 0.845, "confidence": 0.96},
+    "subject_bbox": {"left": 0.245, "top": 0.292, "right": 0.741, "bottom": 0.849, "confidence": 0.95},
+    "beverage_bbox": {"left": 0.263, "top": 0.322, "right": 0.722, "bottom": 0.817, "confidence": 0.95},
+    "straw": {"present": false, "bbox": null, "centerline": null, "emergence_point": null, "angle_degrees": null},
+    "interaction_bbox": null
+  },
+  "visual_anchor": {
+    "feature": "natural matcha-green upper layer, pale milky lower layer, irregular clear ice and fine bubbles under warm cafe light",
+    "emphasis_method": "preserve the relative green-to-milk gradient, ice translucency and small bubbles while matching the reference scene exposure, diffuse light and contact shadow",
+    "do_not_exaggerate": ["green saturation", "ice clarity", "foam thickness", "contrast between milk and matcha", "condensation"]
+  },
+  "adaptable": ["source background", "camera angle", "source vessel geometry in explicit adopt-reference mode", "source tabletop and shadow"],
+  "discarded_source_context": ["source cafe wall and table", "source furniture", "source camera crop", "source vessel proportions when reference cup mode is selected"],
+  "source_capture_assessment": {
+    "issues": ["source is a vertical close crop with a tall vessel and a large neutral tabletop field", "source light is warmer and more frontal than the approved white close-up scene"],
+    "evidence": ["ice, milk and matcha layers remain readable", "the glass wall and lower contact area are visible"]
+  },
+  "presentation_correction": {
+    "enabled": true,
+    "intent": "translate the exact attached iced matcha milk beverage into the approved white diffuse close-up scene and reference-cup serving assembly",
+    "preferred_capture": {"focal_length_mm": [52, 58], "camera_distance": "close environmental tabletop distance", "camera_height": "slightly above the rim while preserving the side layers", "rotation": "small natural rotation only"},
+    "allowed": ["reconstruct beverage optics under the target light", "replace the source vessel with the reference cup in adopt-reference mode", "add the reference saucer and spoon only as part of the approved reference serving assembly", "adjust beverage scale to the close-up composition"],
+    "forbidden": ["homogenize the green and white layers", "remove the ice or bubbles", "invent cream, fruit, garnish, straw, logo or readable text", "retain the source cafe background or source shadow", "turn the beverage neon green or opaque flat white"]
+  }
+}

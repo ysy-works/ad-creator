@@ -1,0 +1,200 @@
+{
+  "checks": {
+    "beverage_identity": {
+      "confidence": 1.0,
+      "evidence": [
+        "The beverage is clearly a matcha latte, consistent with the source identity and intended product class."
+      ],
+      "measurements": {
+        "detected_beverage": "matcha latte"
+      },
+      "repairable": false,
+      "status": "pass"
+    },
+    "cast_shadow": {
+      "confidence": 0.95,
+      "evidence": [
+        "Cast shadow from the primary beverage aligns with the back-right lighting topology."
+      ],
+      "measurements": {
+        "cast_area_to_cup_bbox": 0.45,
+        "target_range": [
+          0.24,
+          0.84
+        ]
+      },
+      "repairable": true,
+      "status": "pass"
+    },
+    "contact_shadow": {
+      "confidence": 0.95,
+      "evidence": [
+        "The contact point between the glass base and the white saucer is physically grounded."
+      ],
+      "measurements": {},
+      "repairable": true,
+      "status": "pass"
+    },
+    "container_policy": {
+      "confidence": 1.0,
+      "evidence": [
+        "The container successfully adopts the A6 curved footed glass design with the specified white ceramic saucer."
+      ],
+      "measurements": {
+        "generated_height_to_width_ratio": 1.58,
+        "target_height_to_width_ratio": [
+          1.34,
+          1.62
+        ]
+      },
+      "repairable": false,
+      "status": "pass"
+    },
+    "hand_contact": {
+      "confidence": 1.0,
+      "evidence": [
+        "No hand contact present in the scene."
+      ],
+      "measurements": {},
+      "repairable": false,
+      "status": "pass"
+    },
+    "lighting_physical_consistency": {
+      "confidence": 0.98,
+      "evidence": [
+        "Highlights and shadows across all three items on the tray are consistent with the singular daylight source."
+      ],
+      "measurements": {},
+      "repairable": true,
+      "status": "pass"
+    },
+    "logo_text": {
+      "confidence": 0.7,
+      "evidence": [
+        "The container is correctly unbranded per the contract.",
+        "Target brand guard: brand_presence_measurement_missing."
+      ],
+      "measurements": {
+        "brand_qa_decision": "manual_review",
+        "contract_logo_text": null,
+        "deterministic_guard": "brand_presence_measurement_missing",
+        "generated_logo_text": null,
+        "target_brand_contract_state": "verified_absent"
+      },
+      "repairable": false,
+      "status": "fail"
+    },
+    "product_composition": {
+      "confidence": 0.98,
+      "evidence": [
+        "The product is correctly positioned within the designated bounding box area."
+      ],
+      "measurements": {
+        "observed_bbox": [
+          0.49,
+          0.55,
+          0.66,
+          0.69
+        ]
+      },
+      "repairable": false,
+      "status": "pass"
+    },
+    "reference_brand_leakage": {
+      "confidence": 1.0,
+      "evidence": [
+        "The container is cleanly unbranded, with no text or logos transferred from the source image."
+      ],
+      "measurements": {},
+      "repairable": false,
+      "status": "pass"
+    },
+    "scene_relational_consistency": {
+      "confidence": 0.95,
+      "evidence": [
+        "Spatial relationships and depth order reflect the contract logic."
+      ],
+      "measurements": {},
+      "repairable": false,
+      "status": "pass"
+    },
+    "scene_slot_adherence": {
+      "confidence": 0.98,
+      "evidence": [
+        "The beverage is bound correctly to the primary slot."
+      ],
+      "measurements": {
+        "violated_slot_ids": []
+      },
+      "repairable": false,
+      "status": "pass"
+    },
+    "scene_subject_count": {
+      "confidence": 1.0,
+      "evidence": [
+        "Three distinct subjects are present on the tray, matching the slot plan requirements."
+      ],
+      "measurements": {
+        "active_subject_count": 3
+      },
+      "repairable": false,
+      "status": "pass"
+    },
+    "scene_support_contact": {
+      "confidence": 0.95,
+      "evidence": [
+        "All items demonstrate correct contact with the wooden tray surface."
+      ],
+      "measurements": {},
+      "repairable": false,
+      "status": "pass"
+    },
+    "smartphone_naturalness": {
+      "confidence": 0.95,
+      "evidence": [
+        "The image maintains a natural photographic quality without artificial post-processing or blur effects."
+      ],
+      "measurements": {},
+      "repairable": false,
+      "status": "pass"
+    },
+    "transmitted_light": {
+      "confidence": 0.95,
+      "evidence": [
+        "Light transmits appropriately through the clear glass vessel."
+      ],
+      "measurements": {
+        "target_range": [
+          0.05,
+          0.24
+        ],
+        "transparent_lift_inside_shadow": 0.15
+      },
+      "repairable": true,
+      "status": "pass"
+    },
+    "wrist_exposure": {
+      "confidence": 1.0,
+      "evidence": [
+        "Not applicable as no hands are present."
+      ],
+      "measurements": {},
+      "repairable": true,
+      "status": "pass"
+    }
+  },
+  "container_mode": "adopt_reference",
+  "evaluated_image": "/Users/apple/Documents/ad-creator/outputs/comfyui-live/runs/_higgsfield_provider/images/87c85793-399e-44dd-b05a-fad5ed19e835.png",
+  "evaluator": {
+    "mode": "live",
+    "model": "gemini-3.1-flash-lite",
+    "provider": "gemini_interactions"
+  },
+  "hard_failures": [
+    "logo_text"
+  ],
+  "lighting_sheet_id": "tokyo_a6_relational_scene_hint_sheet_v4",
+  "overall_status": "needs_review",
+  "schema_version": "1.0.0",
+  "warnings": []
+}

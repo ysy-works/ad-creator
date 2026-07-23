@@ -1,0 +1,917 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/generation-request-v3.schema.json",
+  "title": "Ad Creator GenerationRequest v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "prompt_compiler_version",
+    "preset_id",
+    "scene_recipe_id",
+    "seed",
+    "product_set",
+    "products",
+    "scene_graph_contract",
+    "wood_material_profile",
+    "resolved_lighting_contract",
+    "reference_control_board_manifest",
+    "generation",
+    "postprocess",
+    "quality_gate"
+  ],
+  "properties": {
+    "$schema": { "type": "string", "minLength": 1 },
+    "schema_version": { "const": "3.0.0" },
+    "prompt_compiler_version": { "const": "natural_compact_v5_multi" },
+    "preset_id": { "$ref": "#/$defs/nonEmptyString" },
+    "scene_recipe_id": {
+      "oneOf": [
+        { "$ref": "#/$defs/nonEmptyString" },
+        { "type": "null" }
+      ]
+    },
+    "seed": { "type": "integer" },
+    "product_set": { "$ref": "#/$defs/generationProductSet" },
+    "products": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": { "$ref": "#/$defs/generationProduct" }
+    },
+    "scene_graph_contract": { "$ref": "#/$defs/sceneGraphContract" },
+    "wood_material_profile": {
+      "oneOf": [
+        { "type": "object" },
+        { "type": "null" }
+      ]
+    },
+    "resolved_lighting_contract": {
+      "oneOf": [
+        { "$ref": "#/$defs/resolvedLightingContract" },
+        { "type": "null" }
+      ]
+    },
+    "photographic_style_contract": {
+      "oneOf": [
+        { "type": "object" },
+        { "type": "null" }
+      ]
+    },
+    "product_integration_contract": {
+      "oneOf": [
+        { "type": "object" },
+        { "type": "null" }
+      ]
+    },
+    "reference_control_board_manifest": {
+      "oneOf": [
+        { "$ref": "#/$defs/controlBoardManifest" },
+        { "type": "null" }
+      ]
+    },
+    "generation": { "$ref": "#/$defs/generation" },
+    "postprocess": { "$ref": "#/$defs/postprocess" },
+    "quality_gate": { "$ref": "#/$defs/qualityGate" },
+    "mood_package_id": { "$ref": "#/$defs/nonEmptyString" },
+    "lighting_sheet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "sha256"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "resolved_visual_contract": { "type": "object" },
+    "reference_analysis_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["asset_id", "status", "sha256"],
+      "properties": {
+        "asset_id": { "$ref": "#/$defs/nonEmptyString" },
+        "status": { "enum": ["draft", "published"] },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "diagnostic_pilot_authorization": {
+      "type": "object",
+      "description": "Short-lived, self-hashed diagnostic-only authorization. Runtime validation is fail-closed in ad_creator.diagnostic_pilot; presence never establishes production readiness."
+    },
+    "diagnostic_matrix_authorization": {
+      "type": "object",
+      "description": "Short-lived, self-hashed 4-product x 5-reference diagnostic authorization. Runtime validation is fail-closed in ad_creator.diagnostic_matrix; presence never establishes production readiness."
+    },
+    "runtime_contracts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runtime_profile_path", "lighting_sheet_path", "grade_profile_path"],
+      "properties": {
+        "runtime_profile_path": { "$ref": "#/$defs/nonEmptyString" },
+        "lighting_sheet_path": { "$ref": "#/$defs/nonEmptyString" },
+        "grade_profile_path": { "$ref": "#/$defs/nonEmptyString" },
+        "photographic_style_contract_path": { "$ref": "#/$defs/nonEmptyString" },
+        "product_integration_contract_path": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "repair_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "auto_paid_repair",
+        "minimum_trigger_confidence",
+        "maximum_attempts",
+        "maximum_additional_credits"
+      ],
+      "properties": {
+        "auto_paid_repair": { "const": false },
+        "minimum_trigger_confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "maximum_attempts": { "const": 0 },
+        "maximum_additional_credits": { "const": 0 }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "products": { "minItems": 1, "maxItems": 1 },
+            "product_set": {
+              "properties": {
+                "products": { "minItems": 1, "maxItems": 1 }
+              }
+            },
+            "generation": {
+              "properties": {
+                "image_inputs": { "$ref": "#/$defs/imageInputsForOneProduct" }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "products": { "minItems": 2, "maxItems": 2 },
+            "product_set": {
+              "properties": {
+                "products": { "minItems": 2, "maxItems": 2 }
+              }
+            },
+            "generation": {
+              "properties": {
+                "image_inputs": { "$ref": "#/$defs/imageInputsForTwoProducts" }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "products": { "minItems": 3, "maxItems": 3 },
+            "product_set": {
+              "properties": {
+                "products": { "minItems": 3, "maxItems": 3 }
+              }
+            },
+            "generation": {
+              "properties": {
+                "image_inputs": { "$ref": "#/$defs/imageInputsForThreeProducts" }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "if": {
+        "required": ["generation"],
+        "properties": {
+          "generation": {
+            "required": ["image_inputs"],
+            "properties": {
+              "image_inputs": {
+                "contains": {
+                  "type": "object",
+                  "required": ["role"],
+                  "properties": {
+                    "role": { "const": "reference_control_board" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "reference_control_board_manifest": { "$ref": "#/$defs/controlBoardManifest" }
+        }
+      },
+      "else": {
+        "properties": {
+          "reference_control_board_manifest": { "type": "null" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "containerPolicy": {
+      "oneOf": [
+        { "enum": ["preserve_source", "adopt_reference"] },
+        {
+          "type": "object",
+          "properties": {
+            "mode": { "enum": ["preserve_source", "adopt_reference"] },
+            "container": { "enum": ["preserve_source", "adopt_reference"] }
+          },
+          "anyOf": [
+            { "required": ["mode"] },
+            { "required": ["container"] }
+          ]
+        }
+      ]
+    },
+    "brandTransferResolution": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["action"],
+          "properties": {
+            "policy_version": { "const": "strict_auto_v1" },
+            "action": {
+              "enum": [
+                "preserve_source_exact",
+                "transfer_source_exact",
+                "omit_branding"
+              ]
+            },
+            "checks": {
+              "type": "object",
+              "additionalProperties": { "type": "boolean" }
+            },
+            "reason_codes": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "$ref": "#/$defs/nonEmptyString" }
+            }
+          }
+        }
+      ]
+    },
+    "sourceSurfacePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode"],
+      "properties": {
+        "mode": { "const": "source_application_only" },
+        "material_family": { "type": ["string", "null"] },
+        "application_medium": { "type": ["string", "null"] },
+        "carrier_component": { "type": ["string", "null"] },
+        "surface": { "type": ["string", "null"] }
+      }
+    },
+    "absentSurfacePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode"],
+      "properties": {
+        "mode": { "enum": ["none", "forbid_branding"] },
+        "material_family": { "type": ["string", "null"] },
+        "application_medium": { "type": ["string", "null"] },
+        "carrier_component": { "type": ["string", "null"] },
+        "surface": { "type": ["string", "null"] }
+      }
+    },
+    "generationTargetBrandContract": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "allowed_main_text", "placement_source", "surface_policy"],
+          "properties": {
+            "state": { "const": "verified_present" },
+            "allowed_main_text": {
+              "oneOf": [
+                { "$ref": "#/$defs/nonEmptyString" },
+                { "type": "null" }
+              ]
+            },
+            "placement_source": { "const": "source_product" },
+            "surface_policy": { "$ref": "#/$defs/sourceSurfacePolicy" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state", "allowed_main_text", "placement_source", "surface_policy"],
+          "properties": {
+            "state": { "const": "verified_absent" },
+            "allowed_main_text": { "type": "null" },
+            "placement_source": { "const": "none" },
+            "surface_policy": { "$ref": "#/$defs/absentSurfacePolicy" }
+          }
+        }
+      ]
+    },
+    "servingCompatibilityResolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "action",
+        "product_serving_state",
+        "target_container_service_profile",
+        "reason_codes"
+      ],
+      "properties": {
+        "schema_version": { "const": "1.0.0" },
+        "action": { "const": "allow" },
+        "product_serving_state": { "type": "object" },
+        "target_container_service_profile": {
+          "oneOf": [{ "type": "object" }, { "type": "null" }]
+        },
+        "reason_codes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        }
+      }
+    },
+    "generationProduct": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "product_id",
+        "product_kind",
+        "source_image",
+        "description",
+        "target_slot_id",
+        "placement_mode",
+        "cross_kind_replacement",
+        "container_policy",
+        "product_analysis",
+        "brand_transfer_resolution",
+        "target_brand_contract",
+        "serving_compatibility_resolution"
+      ],
+      "properties": {
+        "schema_version": { "const": "3.0.0" },
+        "product_id": { "$ref": "#/$defs/nonEmptyString" },
+        "product_kind": { "enum": ["beverage", "dessert"] },
+        "source_image": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "target_slot_id": { "$ref": "#/$defs/nonEmptyString" },
+        "placement_mode": { "enum": ["replace", "add"] },
+        "cross_kind_replacement": { "type": "boolean" },
+        "container_policy": { "$ref": "#/$defs/containerPolicy" },
+        "product_analysis": {
+          "oneOf": [
+            { "type": "object" },
+            { "type": "null" }
+          ]
+        },
+        "brand_transfer_resolution": { "$ref": "#/$defs/brandTransferResolution" },
+        "target_brand_contract": { "$ref": "#/$defs/generationTargetBrandContract" },
+        "serving_compatibility_resolution": {
+          "$ref": "#/$defs/servingCompatibilityResolution"
+        }
+      }
+    },
+    "generationProductSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "products"],
+      "properties": {
+        "schema_version": { "const": "3.0.0" },
+        "products": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": { "$ref": "#/$defs/generationProduct" }
+        }
+      }
+    },
+    "productSourceInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "product_id", "path"],
+      "properties": {
+        "role": { "const": "product_source" },
+        "product_id": { "$ref": "#/$defs/nonEmptyString" },
+        "path": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "controlBoardInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "path"],
+      "properties": {
+        "role": { "const": "reference_control_board" },
+        "path": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "imageInputsForOneProduct": {
+      "oneOf": [
+        {
+          "type": "array",
+          "prefixItems": [
+            { "$ref": "#/$defs/productSourceInput" }
+          ],
+          "items": false,
+          "minItems": 1,
+          "maxItems": 1
+        },
+        {
+          "type": "array",
+          "prefixItems": [
+            { "$ref": "#/$defs/productSourceInput" },
+            { "$ref": "#/$defs/controlBoardInput" }
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        }
+      ]
+    },
+    "imageInputsForTwoProducts": {
+      "oneOf": [
+        {
+          "type": "array",
+          "prefixItems": [
+            { "$ref": "#/$defs/productSourceInput" },
+            { "$ref": "#/$defs/productSourceInput" }
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        {
+          "type": "array",
+          "prefixItems": [
+            { "$ref": "#/$defs/productSourceInput" },
+            { "$ref": "#/$defs/productSourceInput" },
+            { "$ref": "#/$defs/controlBoardInput" }
+          ],
+          "items": false,
+          "minItems": 3,
+          "maxItems": 3
+        }
+      ]
+    },
+    "imageInputsForThreeProducts": {
+      "oneOf": [
+        {
+          "type": "array",
+          "prefixItems": [
+            { "$ref": "#/$defs/productSourceInput" },
+            { "$ref": "#/$defs/productSourceInput" },
+            { "$ref": "#/$defs/productSourceInput" }
+          ],
+          "items": false,
+          "minItems": 3,
+          "maxItems": 3
+        },
+        {
+          "type": "array",
+          "prefixItems": [
+            { "$ref": "#/$defs/productSourceInput" },
+            { "$ref": "#/$defs/productSourceInput" },
+            { "$ref": "#/$defs/productSourceInput" },
+            { "$ref": "#/$defs/controlBoardInput" }
+          ],
+          "items": false,
+          "minItems": 4,
+          "maxItems": 4
+        }
+      ]
+    },
+    "normalizedBBox": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["left", "top", "right", "bottom"],
+      "properties": {
+        "left": { "type": "number", "minimum": 0, "maximum": 1 },
+        "top": { "type": "number", "minimum": 0, "maximum": 1 },
+        "right": { "type": "number", "minimum": 0, "maximum": 1 },
+        "bottom": { "type": "number", "minimum": 0, "maximum": 1 },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "slotBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "input_product_id",
+        "target_slot_id",
+        "placement_mode",
+        "product_kind",
+        "cross_kind_replacement",
+        "target_bbox"
+      ],
+      "properties": {
+        "input_product_id": { "$ref": "#/$defs/nonEmptyString" },
+        "target_slot_id": { "$ref": "#/$defs/nonEmptyString" },
+        "placement_mode": { "enum": ["replace", "add"] },
+        "product_kind": { "enum": ["beverage", "dessert"] },
+        "cross_kind_replacement": { "type": "boolean" },
+        "target_bbox": { "$ref": "#/$defs/normalizedBBox" }
+      }
+    },
+    "resolvedSlot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slot_id",
+        "kind",
+        "role",
+        "action",
+        "target_bbox",
+        "support_surface_id",
+        "depth_order"
+      ],
+      "properties": {
+        "slot_id": { "$ref": "#/$defs/nonEmptyString" },
+        "kind": { "$ref": "#/$defs/nonEmptyString" },
+        "role": { "$ref": "#/$defs/nonEmptyString" },
+        "action": {
+          "enum": ["bind_product", "genericize", "remove", "retain_abstractly"]
+        },
+        "target_bbox": { "$ref": "#/$defs/normalizedBBox" },
+        "support_surface_id": {
+          "oneOf": [
+            { "$ref": "#/$defs/nonEmptyString" },
+            { "type": "null" }
+          ]
+        },
+        "depth_order": { "type": "integer" }
+      }
+    },
+    "activeRelation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from_slot_id", "predicate", "to_slot_id", "confidence"],
+      "properties": {
+        "from_slot_id": { "$ref": "#/$defs/nonEmptyString" },
+        "predicate": { "$ref": "#/$defs/nonEmptyString" },
+        "to_slot_id": { "$ref": "#/$defs/nonEmptyString" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "slotPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "reference_asset_id",
+        "scene_mode",
+        "bindings",
+        "slots",
+        "active_slots",
+        "unbound_slot_policy",
+        "generic_companion_count",
+        "generic_companion_limit",
+        "safe_insertion_zone_ids",
+        "requires_scene_simplification",
+        "active_relations"
+      ],
+      "properties": {
+        "schema_version": { "const": "1.0.0" },
+        "reference_asset_id": { "$ref": "#/$defs/nonEmptyString" },
+        "scene_mode": { "enum": ["solo", "pair", "set"] },
+        "bindings": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": { "$ref": "#/$defs/slotBinding" }
+        },
+        "slots": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/resolvedSlot" }
+        },
+        "active_slots": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/resolvedSlot" }
+        },
+        "unbound_slot_policy": { "enum": ["genericize", "remove"] },
+        "generic_companion_count": { "type": "integer", "minimum": 0, "maximum": 1 },
+        "generic_companion_limit": { "type": "integer", "minimum": 0, "maximum": 1 },
+        "safe_insertion_zone_ids": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "requires_scene_simplification": { "type": "boolean" },
+        "active_relations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/activeRelation" }
+        }
+      }
+    },
+    "sceneGraphContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset_id",
+        "schema_version",
+        "taxonomy",
+        "slot_plan",
+        "active_slots",
+        "relations",
+        "runtime_capabilities",
+        "runtime_reference_pixels_submitted"
+      ],
+      "properties": {
+        "asset_id": { "$ref": "#/$defs/nonEmptyString" },
+        "schema_version": { "$ref": "#/$defs/nonEmptyString" },
+        "taxonomy": { "type": "object" },
+        "slot_plan": { "$ref": "#/$defs/slotPlan" },
+        "active_slots": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/resolvedSlot" }
+        },
+        "relations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/activeRelation" }
+        },
+        "runtime_capabilities": {
+          "type": "object",
+          "required": ["scene_generation_eligible", "maximum_exact_products"],
+          "properties": {
+            "scene_generation_eligible": { "const": true },
+            "maximum_exact_products": { "const": 3 }
+          }
+        },
+        "runtime_reference_pixels_submitted": { "const": false }
+      }
+    },
+    "lightingSignature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "direction_degrees",
+        "elevation_degrees",
+        "hardness",
+        "shadow_density",
+        "exposure_ev",
+        "white_balance_mired"
+      ],
+      "properties": {
+        "direction_degrees": { "type": "number", "minimum": 0, "exclusiveMaximum": 360 },
+        "elevation_degrees": { "type": "number", "minimum": 0, "maximum": 90 },
+        "hardness": { "type": "number", "minimum": 0, "maximum": 1 },
+        "shadow_density": { "type": "number", "minimum": 0, "maximum": 1 },
+        "exposure_ev": { "type": "number", "minimum": -3, "maximum": 3 },
+        "white_balance_mired": { "type": "number", "minimum": 100, "maximum": 500 }
+      }
+    },
+    "resolvedLightingContract": {
+      "type": "object",
+      "required": ["signature"],
+      "properties": {
+        "schema_version": { "const": "3.0.0" },
+        "effective_lighting_id": { "$ref": "#/$defs/nonEmptyString" },
+        "effective_lighting_hash": { "$ref": "#/$defs/sha256" },
+        "base_id": { "$ref": "#/$defs/nonEmptyString" },
+        "base_hash": { "$ref": "#/$defs/sha256" },
+        "reference_id": { "$ref": "#/$defs/nonEmptyString" },
+        "source_pixel_sha256": {
+          "oneOf": [
+            { "$ref": "#/$defs/sha256" },
+            { "type": "null" }
+          ]
+        },
+        "family": { "enum": ["direct", "diffuse"] },
+        "signature": { "$ref": "#/$defs/lightingSignature" },
+        "applied_delta": { "type": "object" },
+        "clamped_fields": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        }
+      }
+    },
+    "controlBoardPanel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "sanitation_evidence"],
+      "properties": {
+        "index": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "role": { "enum": ["container_surface", "wood_material"] },
+        "product_id": {
+          "oneOf": [
+            { "$ref": "#/$defs/nonEmptyString" },
+            { "type": "null" }
+          ]
+        },
+        "source_policy": {
+          "enum": ["deidentified_container", "derived_material", "masked_raw_experimental"]
+        },
+        "source_sha256": { "$ref": "#/$defs/sha256" },
+        "sanitation_evidence": {
+          "$ref": "#/$defs/controlBoardSanitationEvidence"
+        },
+        "bbox_px": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["left", "top", "right", "bottom"],
+          "properties": {
+            "left": { "type": "integer", "minimum": 0 },
+            "top": { "type": "integer", "minimum": 0 },
+            "right": { "type": "integer", "minimum": 1 },
+            "bottom": { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
+    },
+    "controlBoardSanitationEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "artifact_type",
+        "source_path",
+        "source_sha256",
+        "source_pixel_sha256",
+        "independent_detector_outputs",
+        "status",
+        "checks",
+        "evidence_sha256"
+      ],
+      "properties": {
+        "schema_version": { "const": "1.0.0" },
+        "artifact_type": { "const": "control_board_sanitation_evidence" },
+        "source_path": { "$ref": "#/$defs/nonEmptyString" },
+        "source_sha256": { "$ref": "#/$defs/sha256" },
+        "source_pixel_sha256": { "$ref": "#/$defs/sha256" },
+        "independent_detector_outputs": { "const": true },
+        "status": { "const": "pass" },
+        "checks": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["check_id", "detector", "status", "findings"],
+            "properties": {
+              "check_id": {
+                "enum": ["visible_text", "brand_mark", "forbidden_object", "scene_layout"]
+              },
+              "detector": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name", "version"],
+                "properties": {
+                  "name": { "$ref": "#/$defs/nonEmptyString" },
+                  "version": { "$ref": "#/$defs/nonEmptyString" }
+                }
+              },
+              "status": { "const": "pass" },
+              "findings": { "type": "array", "maxItems": 0 }
+            }
+          }
+        },
+        "evidence_sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "controlBoardManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["panels"],
+      "properties": {
+        "schema_version": { "const": "1.0.0" },
+        "artifact_type": { "const": "reference_control_board" },
+        "path": { "$ref": "#/$defs/nonEmptyString" },
+        "width_px": { "type": "integer", "minimum": 512 },
+        "height_px": { "type": "integer", "minimum": 512 },
+        "pixel_sha256": { "$ref": "#/$defs/sha256" },
+        "visible_labels": { "const": false },
+        "panels": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": { "$ref": "#/$defs/controlBoardPanel" }
+        },
+        "manifest_sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "job_type",
+        "submission_path",
+        "image_inputs",
+        "prompt",
+        "aspect_ratio",
+        "resolution",
+        "quality",
+        "estimated_credits"
+      ],
+      "properties": {
+        "provider": { "$ref": "#/$defs/nonEmptyString" },
+        "job_type": { "$ref": "#/$defs/nonEmptyString" },
+        "submission_path": { "$ref": "#/$defs/nonEmptyString" },
+        "image_inputs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4
+        },
+        "prompt": { "type": "string", "minLength": 1, "maxLength": 12000 },
+        "prompt_character_limit": {
+          "type": "integer",
+          "enum": [6000, 12000]
+        },
+        "prompt_limit_policy_id": { "$ref": "#/$defs/nonEmptyString" },
+        "prompt_limit_verification_state": {
+          "enum": ["verified_live", "unverified_conservative"]
+        },
+        "aspect_ratio": { "$ref": "#/$defs/nonEmptyString" },
+        "resolution": { "$ref": "#/$defs/nonEmptyString" },
+        "quality": { "$ref": "#/$defs/nonEmptyString" },
+        "estimated_credits": { "type": "number", "minimum": 0 }
+      },
+      "allOf": [
+        {
+          "not": {
+            "anyOf": [
+              { "required": ["image_paths"] },
+              { "required": ["image_roles"] }
+            ]
+          }
+        }
+      ]
+    },
+    "postprocess": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "delivery_aspect_ratio",
+        "crop_mode",
+        "safe_zone",
+        "target_delivery_pixels"
+      ],
+      "properties": {
+        "delivery_aspect_ratio": { "$ref": "#/$defs/nonEmptyString" },
+        "crop_mode": { "$ref": "#/$defs/nonEmptyString" },
+        "safe_zone": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["x_ratio", "y_ratio"],
+          "properties": {
+            "x_ratio": { "$ref": "#/$defs/numericPair" },
+            "y_ratio": { "$ref": "#/$defs/numericPair" }
+          }
+        },
+        "target_delivery_pixels": {
+          "type": "array",
+          "prefixItems": [
+            { "type": "integer", "minimum": 1 },
+            { "type": "integer", "minimum": 1 }
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        }
+      }
+    },
+    "numericPair": {
+      "type": "array",
+      "prefixItems": [
+        { "type": "number" },
+        { "type": "number" }
+      ],
+      "items": false,
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "qualityGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum_score", "hard_fail", "weights"],
+      "properties": {
+        "minimum_score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "hard_fail": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "weights": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    }
+  }
+}

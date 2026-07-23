@@ -1,0 +1,126 @@
+{
+  "$schema": "../../../schemas/reference-preset.schema.json",
+  "schema_version": "2.0.0",
+  "preset_id": "instagram_white_diffuse_wall_table_v1",
+  "display_name": "인스타 내추럴 · 화이트 확산광 기본",
+  "concept": "quiet_white_diffuse_tabletop",
+  "source": {
+    "reference_image": "/Users/apple/Desktop/ad-creator/reference/화이트_뉴트럴_저대비_자연광/미디엄/45d43a2ace2d8cff291eec9395be7c16.jpg",
+    "width_px": 675,
+    "height_px": 1200,
+    "supporting_group": "instagram_natural/white_diffuse_wall_table"
+  },
+  "runtime_input_policy": {
+    "default_generation_mode": "user_product_plus_selected_reference",
+    "generation_inputs": ["user_product_identity", "selected_reference_style_and_optional_container"],
+    "reference_usage": "camera, composition, light, support surface and declared container design only",
+    "copyright_rule": "Rebuild a new scene; never copy the reference beverage, exact wall marks, exact shadow silhouette or pixel layout."
+  },
+  "style_abstraction": {
+    "runtime_reference_image": true,
+    "novel_scene_required": true,
+    "allowed_style_features": ["top-heavy white negative space", "low wall-table boundary", "small single product", "large left diffused window", "warm-neutral white palette", "fine vertical fluted glass when container adoption is selected"],
+    "forbidden_copy_features": ["reference beverage", "exact glass coordinates", "exact wall marks", "exact table edge", "exact cast-shadow silhouette", "any text or brand"]
+  },
+  "sampling_ranges": {
+    "pov_modes": ["quiet tabletop observation"],
+    "subject_center_x": [0.38, 0.55],
+    "subject_center_y": [0.76, 0.84],
+    "subject_width_ratio": [0.12, 0.18],
+    "subject_height_ratio": [0.16, 0.24],
+    "negative_space_ratio": [0.68, 0.78],
+    "focal_length_mm": [50, 60],
+    "camera_pitch_degrees": [2, 10],
+    "light_softness": [0.72, 0.9],
+    "prop_count": [0, 0],
+    "asymmetry_probability": 0.82,
+    "asymmetry_sources": ["slightly off-center product", "subtle wall tonal falloff", "quiet diagonal table-light falloff"],
+    "micro_moments": ["the drink has just been set down", "window light settles softly across the table"]
+  },
+  "tone_contract": {
+    "background_plane": "one warm-neutral matte white wall meeting one matte white tabletop",
+    "background_lightness": [0.72, 0.9],
+    "background_saturation": [0.02, 0.08],
+    "global_contrast": [0.22, 0.38],
+    "shadow_density": [0.1, 0.22],
+    "color_bias": "warm-neutral white with quiet cooler gray shadows, never beige",
+    "highlight_behavior": "soft shoulder with visible wall, table and glass detail and no clipped broad white area",
+    "forbidden_surface_reading": ["seamless studio sweep", "glossy catalog acrylic", "gray concrete", "wood", "street or floor"]
+  },
+  "output": {
+    "preferred_aspect_ratio": "4:5",
+    "compatible_aspect_ratios": ["4:5", "3:4"]
+  },
+  "subject_layout": {
+    "main_subject": {
+      "role": "single_exact_product",
+      "center": {"x_ratio": 0.43, "y_ratio": 0.81},
+      "bbox": {"x_ratio": 0.34, "y_ratio": 0.69, "width_ratio": 0.18, "height_ratio": 0.24},
+      "area_ratio": 0.043,
+      "height_ratio": 0.24
+    },
+    "secondary_subjects": [],
+    "negative_space": {"top_ratio": 0.68, "left_ratio": 0.30, "right_ratio": 0.42, "bottom_ratio": 0.06}
+  },
+  "composition": {
+    "shot_type": "single_product_tabletop_with_high_negative_space",
+    "camera_angle": "product-level to very slightly elevated frontal view",
+    "camera_height": "near the upper third of the product",
+    "focal_length_equivalent_mm": 55,
+    "horizon_visibility": "wall-table boundary at y=0.80 to 0.84",
+    "depth_of_field": "product fully legible; real wall and table planes retain gentle texture without portrait blur",
+    "alignment": "small product in the lower field with broad top-heavy quiet space"
+  },
+  "lighting": {
+    "type": "one very large diffused natural window source",
+    "direction": "left to right",
+    "azimuth_degrees": 300,
+    "elevation_degrees": 38,
+    "softness": 0.82,
+    "intensity": "medium",
+    "contrast": "low",
+    "shadow": "soft, attached and low-density with gentle rightward falloff",
+    "highlight_control": "retain white surface texture, glass rim thickness and beverage color without clipping"
+  },
+  "color": {
+    "temperature": "warm-neutral",
+    "white_balance_kelvin": 5200,
+    "saturation": "low",
+    "contrast": "low-medium",
+    "palette_hex": ["#D8D4CA", "#C7C3BA", "#A9A59D", "#77736C"],
+    "black_point": "open neutral gray-brown, never crushed"
+  },
+  "scene": {
+    "surface": "matte white tabletop",
+    "background": "large warm-neutral matte white wall",
+    "background_complexity": 0.04,
+    "props": [],
+    "max_prop_count": 0,
+    "texture": "subtle real wall and tabletop irregularity with no decorative pattern"
+  },
+  "capture": {
+    "look": "natural Instagram cafe photograph with quiet deliberate framing",
+    "realism": "one physical exposure, natural glass optics, attached shadow and finite social-photo acuity",
+    "grain": "faint luminance grain after ordinary social compression",
+    "imperfections": ["minor wall variation", "slight table tone variation", "natural liquid and garnish asymmetry"]
+  },
+  "preservation_policy": {
+    "hard_lock": ["user beverage identity", "hot or cold state", "visible layers and toppings", "resolved brand contract"],
+    "editable": ["camera relationship", "background", "support plane", "shadow", "container only when adopt_reference is selected"],
+    "reference_exclusions": ["do not copy the reference coffee", "do not copy exact wall marks or shadow", "do not copy or invent text"]
+  },
+  "prompt_blocks": {
+    "input_roles": "Image 1 supplies the exact user product identity. Image 2 supplies only the declared white scene grammar and, in adopt mode, the unbranded fluted-glass design.",
+    "composition": "Keep one complete product at 16-24 percent frame height and no more than 18 percent width, with at least 68 percent meaningful white wall-and-table space and the wall-table boundary near y=0.80-0.84.",
+    "look": "Use one very large diffused window source from the left, subdued warm-neutral white color, gentle tonal falloff and finite Instagram capture acuity.",
+    "preservation": "Rerender the product under the target camera and light; preserve beverage identity, serving state and final brand contract without pasted source pixels.",
+    "negative": "No direct sunbeam, hard graphic shadow, hero close-up, studio sweep, uniform blur, cutout edge, copied reference beverage, fake text, logo or watermark."
+  },
+  "quality_gates": {
+    "logo_text": "only the resolved target brand contract is allowed; unbranded means no text or mark",
+    "product_identity": "beverage, serving state, layers and toppings remain recognizable",
+    "preset_adherence": "product scale, negative space, boundary height, normal perspective and one diffuse left light meet the numeric contract",
+    "artifact_policy": "reject pasted edges, detached shadows, clipped whites, malformed glass, copied wall marks and generic AI minimalist template reading"
+  },
+  "failure_recovery": ["reduce product to the contracted bbox", "restore at least 68 percent meaningful space", "remove hard light patches", "restore attached soft shadow", "add only subtle physical wall and table variation"]
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0.0",
+  "grade_profile_id": "soft_diffuse_window_neutral_grade_v1",
+  "input_color_space": "sRGB",
+  "output_color_space": "sRGB",
+  "transform": {
+    "exposure_ev": 0.03,
+    "contrast": 1.03,
+    "saturation": 0.95,
+    "warmth": 0.04,
+    "shadow_lift": 0.018,
+    "highlight_rolloff": 0.4
+  },
+  "strength": {
+    "default": 0.32,
+    "min": 0.0,
+    "max": 0.58
+  },
+  "protection": {
+    "regions": ["product", "logo", "skin"],
+    "mask_strength": 0.9
+  },
+  "qa_limits": {
+    "max_dark_clip_ratio": 0.01,
+    "max_bright_clip_ratio": 0.015
+  }
+}

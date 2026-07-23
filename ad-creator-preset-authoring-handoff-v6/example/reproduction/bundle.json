@@ -1,0 +1,155 @@
+{
+  "campaign_id": "a6_relational_v4_scale_controlled_medium_three_arm",
+  "case_id": "arm_b_v4_scale_scene_hint_reference_cup",
+  "comparison_invariant": {
+    "model": "gpt_image_2",
+    "product_id": "p01_matcha",
+    "quality": "medium",
+    "reference_asset_id": "ref_381224f47976e566",
+    "resolution": "1k",
+    "seed": 713
+  },
+  "deliverable": {
+    "dhash": "695b03111ac1e173",
+    "height_px": 1100,
+    "mean_rgb": [
+      0.4809,
+      0.428339,
+      0.356314
+    ],
+    "path": "outputs/a6-relational-v4-scale-controlled-medium-three-arm/images/arm_b_v4_scale_scene_hint_reference_cup.png",
+    "pixel_sha256": "f6ff551b18204e61219fe3e55399c3bcdf1282e182eb576fd247fe3b902b73f8",
+    "width_px": 880
+  },
+  "experimental_variable": {
+    "container_design_source": "reference",
+    "role": "sanitized_scene_hint",
+    "submitted": true
+  },
+  "image_inputs": [
+    {
+      "dhash": "e4963f3fb9b938bb",
+      "height_px": 827,
+      "mean_rgb": [
+        0.519596,
+        0.500152,
+        0.42256
+      ],
+      "path": "outputs/a6-relational-v4-scale-controlled-medium-three-arm/repro-bundles/arm_b_v4_scale_scene_hint_reference_cup/inputs/01-product_source.png",
+      "pixel_sha256": "993055a7f048d7d04bbfdcaa61cd00eb48e10df2a8827624de9e76ec1518c29f",
+      "role": "product_source",
+      "transport_artifact": {
+        "name": "product_source-a2dc8a3062f5401fd970c7b9.png",
+        "sha256": "5b0d4be1156ceb60100fff12d3e6b99ce278eb2893b474dfa963b218de6801c9",
+        "size": 472546
+      },
+      "width_px": 620
+    },
+    {
+      "dhash": "2f3fd91231791e6c",
+      "height_px": 1024,
+      "mean_rgb": [
+        0.54712,
+        0.490397,
+        0.408203
+      ],
+      "path": "outputs/a6-relational-v4-scale-controlled-medium-three-arm/repro-bundles/arm_b_v4_scale_scene_hint_reference_cup/inputs/02-scene_hint.png",
+      "pixel_sha256": "eb696b3295ee8eef99a89b2eeb8e51769645622121700c3d7f3b4f6c45b2fec2",
+      "role": "scene_hint",
+      "transport_artifact": {
+        "name": "scene_hint-08800f9c99dd878c898f2f6d.png",
+        "sha256": "1a53514fabdbcb5508401504bc3cca1bcb8914318e98a8b1ab14acda17a91c9b",
+        "size": 282239
+      },
+      "width_px": 768
+    }
+  ],
+  "prompt": {
+    "characters": 6948,
+    "compiler_version": "natural_compact_v4_3",
+    "path": "outputs/a6-relational-v4-scale-controlled-medium-three-arm/repro-bundles/arm_b_v4_scale_scene_hint_reference_cup/prompt.txt",
+    "sha256": "7cbca758b08183d9d8c76bd344117be73debe8b9200bf2fa4a3a3a6bd8270af7"
+  },
+  "provider": {
+    "adapter": "higgsfield_cli",
+    "credits": 2.0,
+    "job_id": "87c85793-399e-44dd-b05a-fad5ed19e835",
+    "model": "gpt_image_2"
+  },
+  "qa_report": "outputs/comfyui-live/runs/d78bd8a4bf7ea753caa596fc9fde7b09b55867a566d625dd3428fcd3bb79f1f5/qa-initial.json",
+  "reference": {
+    "asset_id": "ref_381224f47976e566",
+    "pixel_sha256": "08b015d7d4c1e18a875b023aad6fdb5d5f2c0a487d951d20308e6e1ae136b560",
+    "relative_path": "우드_저채도_차분/미디엄/d7b081a0435a26b0dd79f58771e18d94.jpg"
+  },
+  "request": {
+    "hash": "d78bd8a4bf7ea753caa596fc9fde7b09b55867a566d625dd3428fcd3bb79f1f5",
+    "path": "outputs/a6-relational-v4-scale-controlled-medium-three-arm/repro-bundles/arm_b_v4_scale_scene_hint_reference_cup/request.json"
+  },
+  "resolved_contracts": {
+    "container_design": {
+      "path": "presets/container_designs/a6_curved_glass_white_saucer_v1.json",
+      "sha256": "dc2ee49518dc4f754adc49a58377ee6a2cb88a2950000ac8363ed7f8749e32a5"
+    },
+    "grade_profile": {
+      "path": "presets/moods/tokyo_warm_cafe_dark_tray_companions_v1/grade-profile.json",
+      "sha256": "15fed565560da46bfd25ea8237965b3693f2d771c120d4248698271482a92b88"
+    },
+    "lighting_sheet": {
+      "path": "presets/moods/tokyo_a6_relational_scene_hint_v4/lighting-sheet.json",
+      "sha256": "9a4b11f6c088bc2a7ed32b96a950546c5574dcc72ea76e8f44ffe514a19f9173"
+    },
+    "mood_package": {
+      "path": "/Users/apple/Documents/ad-creator/presets/moods/tokyo_a6_relational_scene_hint_v4/mood-package.json",
+      "sha256": "7e3e1e877d6a917528e994557a13cd0d443b301d04c4c833d8f79bd3a1704a76"
+    },
+    "photographic_style_contract": {
+      "path": "presets/editorial/tokyo_a6_relational_scene_hint_v4/photographic-style-contract.json",
+      "sha256": "33974c37e778e50169b83af697471881bc6c22a14522eb2ac63376b0650bada8"
+    },
+    "preset": {
+      "path": "presets/editorial/tokyo_a6_relational_scene_hint_v4/reference-preset.json",
+      "sha256": "39553c8160c2bb4b7feb1e4e003130670a8eb43fd5383d604dc7ba216adb8de7"
+    },
+    "reference_control_board": {
+      "path": "data/reference-library/control-boards/a6-relational-scene-hint-v4/scene-hint.png",
+      "sha256": "1a53514fabdbcb5508401504bc3cca1bcb8914318e98a8b1ab14acda17a91c9b"
+    },
+    "reference_control_board_manifest": {
+      "path": "data/reference-library/control-boards/a6-relational-scene-hint-v4/scene-hint-manifest.json",
+      "sha256": "bc006383e554142ad76ebe6b56a8fe389146dc3f09837e87c6bc2ae52d54a578"
+    },
+    "reference_control_submission": {
+      "container_design_source": "reference",
+      "role": "sanitized_scene_hint",
+      "submitted": true,
+      "submitted_pixel_sha256": "1a53514fabdbcb5508401504bc3cca1bcb8914318e98a8b1ab14acda17a91c9b"
+    },
+    "runtime_profile": {
+      "path": "presets/editorial/runtime-profile-v1.json",
+      "sha256": "da3b7c9afd22447c711a7349621b748fd7c148ebd6d5b433a9c4ff735c7c9d52"
+    },
+    "scene_recipe": {
+      "path": "presets/moods/tokyo_a6_relational_scene_hint_v4/scene-recipe.json",
+      "sha256": "81e340c4423de68ee6798d69c9044449f7f0b1fe7c49840c5ba6eb3bf972426b"
+    }
+  },
+  "run_manifest": "outputs/comfyui-live/runs/d78bd8a4bf7ea753caa596fc9fde7b09b55867a566d625dd3428fcd3bb79f1f5/manifest.json",
+  "schema_version": "1.0.0",
+  "source_product": {
+    "dhash": "e4963f3fb9b938bb",
+    "height_px": 827,
+    "mean_rgb": [
+      0.51994,
+      0.497808,
+      0.421806
+    ],
+    "path": ".tools/ComfyUI/input/ad_creator_original_input_01.jpg",
+    "pixel_sha256": "b1b860a1fe30aa6313676ef1ccf30ea241046023a2aee38e9cb2d9a75fe6ef43",
+    "width_px": 620
+  },
+  "workflow": {
+    "path": "workflows/18_a6_relational_v4_scene_hint_reference_cup_higgsfield_api.json",
+    "sha256": "de2f489b758070279d3bd6807c2a0ba11fe629487bf1d6909fc22cde3c99ec96"
+  }
+}

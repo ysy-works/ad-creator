@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/grade-profile.schema.json",
+  "title": "Ad Creator Grade Profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "grade_profile_id", "input_color_space", "output_color_space", "transform", "strength", "protection", "qa_limits"],
+  "properties": {
+    "schema_version": { "enum": ["1.0.0", "2.0.0"] },
+    "grade_profile_id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+    "input_color_space": { "const": "sRGB" },
+    "output_color_space": { "const": "sRGB" },
+    "transform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exposure_ev", "contrast", "saturation", "warmth", "shadow_lift", "highlight_rolloff"],
+      "properties": {
+        "exposure_ev": { "type": "number", "minimum": -1, "maximum": 1 },
+        "contrast": { "type": "number", "minimum": 0.5, "maximum": 1.5 },
+        "saturation": { "type": "number", "minimum": 0.5, "maximum": 1.5 },
+        "warmth": { "type": "number", "minimum": -1, "maximum": 1 },
+        "shadow_lift": { "type": "number", "minimum": -0.2, "maximum": 0.2 },
+        "highlight_rolloff": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "tone_curve": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "array",
+        "prefixItems": [
+          { "type": "number", "minimum": 0, "maximum": 1 },
+          { "type": "number", "minimum": 0, "maximum": 1 }
+        ],
+        "minItems": 2,
+        "maxItems": 2
+      }
+    },
+    "split_tone": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shadow_rgb", "highlight_rgb", "balance", "strength"],
+      "properties": {
+        "shadow_rgb": { "$ref": "#/$defs/rgbTriplet" },
+        "highlight_rgb": { "$ref": "#/$defs/rgbTriplet" },
+        "balance": { "type": "number", "minimum": 0, "maximum": 1 },
+        "strength": { "type": "number", "minimum": 0, "maximum": 0.25 }
+      }
+    },
+    "selective_saturation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "red": { "type": "number", "minimum": 0.5, "maximum": 1.5 },
+        "yellow": { "type": "number", "minimum": 0.5, "maximum": 1.5 },
+        "green": { "type": "number", "minimum": 0.5, "maximum": 1.5 },
+        "cyan": { "type": "number", "minimum": 0.5, "maximum": 1.5 },
+        "blue": { "type": "number", "minimum": 0.5, "maximum": 1.5 },
+        "magenta": { "type": "number", "minimum": 0.5, "maximum": 1.5 }
+      }
+    },
+    "local_contrast": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["radius", "amount", "threshold"],
+      "properties": {
+        "radius": { "type": "number", "minimum": 0, "maximum": 12 },
+        "amount": { "type": "number", "minimum": 0, "maximum": 1 },
+        "threshold": { "type": "integer", "minimum": 0, "maximum": 32 }
+      }
+    },
+    "targeted_relight": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy_id", "scope", "luma_range", "max_saturation", "luma_feather", "saturation_feather", "exposure_ev", "saturation", "warmth", "blend_strength"],
+      "properties": {
+        "policy_id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+        "scope": { "const": "protection_mask" },
+        "luma_range": {
+          "type": "array",
+          "prefixItems": [
+            { "type": "number", "minimum": 0, "maximum": 1 },
+            { "type": "number", "minimum": 0, "maximum": 1 }
+          ],
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "max_saturation": { "type": "number", "minimum": 0, "maximum": 1 },
+        "luma_feather": { "type": "number", "exclusiveMinimum": 0, "maximum": 0.5 },
+        "saturation_feather": { "type": "number", "exclusiveMinimum": 0, "maximum": 0.5 },
+        "exposure_ev": { "type": "number", "minimum": -0.5, "maximum": 0.5 },
+        "saturation": { "type": "number", "minimum": 0.5, "maximum": 1.5 },
+        "warmth": { "type": "number", "minimum": -1, "maximum": 1 },
+        "blend_strength": { "type": "number", "minimum": 0, "maximum": 1 }
+        ,
+        "spatial_focus": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["center", "radius", "feather"],
+          "properties": {
+            "center": { "$ref": "#/$defs/unitPair" },
+            "radius": { "$ref": "#/$defs/unitPair" },
+            "feather": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
+          }
+        }
+      }
+    },
+    "strength": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["default", "min", "max"],
+      "properties": {
+        "default": { "type": "number", "minimum": 0, "maximum": 1 },
+        "min": { "type": "number", "minimum": 0, "maximum": 1 },
+        "max": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "protection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["regions", "mask_strength"],
+      "properties": {
+        "regions": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "enum": ["product", "logo", "skin"] }
+        },
+        "mask_strength": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "qa_limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_dark_clip_ratio", "max_bright_clip_ratio"],
+      "properties": {
+        "max_dark_clip_ratio": { "type": "number", "minimum": 0, "maximum": 1 },
+        "max_bright_clip_ratio": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  },
+  "$defs": {
+    "unitPair": {
+      "type": "array",
+      "prefixItems": [
+        { "type": "number", "minimum": 0, "maximum": 1 },
+        { "type": "number", "minimum": 0, "maximum": 1 }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "rgbTriplet": {
+      "type": "array",
+      "prefixItems": [
+        { "type": "number", "minimum": 0, "maximum": 1 },
+        { "type": "number", "minimum": 0, "maximum": 1 },
+        { "type": "number", "minimum": 0, "maximum": 1 }
+      ],
+      "minItems": 3,
+      "maxItems": 3
+    }
+  }
+}

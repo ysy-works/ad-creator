@@ -1,0 +1,24 @@
+[INSTAGRAM-NATIVE NATURAL EDITORIAL PHOTO]
+
+Create a new Instagram-native cafe photograph that looks light, natural and incidental at first glance, but is precisely art-directed in composition, negative space, light and eye flow. It should feel as if a person with exceptional taste really photographed it, never like an AI mood image or a product render.
+
+[INPUT ROLES]
+Image 1 is the exact user product identity, but its close-up source framing and source pixel scale are invalid and must never control output size. Image 2 is the selected reference and may control only the declared mood, camera, light, support material and, in adopt_reference mode only, the declared cup design. The product source is physical evidence, never a pasted cutout: rerender every product pixel for the target camera and scene light. Reconcile rim and base ellipse, perspective, highlights, refraction, condensation, contact shadow, reflected color, white balance, focus and grain so product and scene read as one exposure.
+
+[EXACT PRODUCT]
+unbranded iced strawberry milk with white milk, irregular red strawberry layers, diced strawberry and one mint leaf on top.
+
+[REFERENCE GRAMMAR]
+Style=quiet warm-neutral white wall meeting a matte white tabletop under one very large diffused window source from the left, low contrast, subdued saturation, gentle tonal falloff and a soft attached contact shadow; absolutely no direct sunbeam, bright light patch or graphic hard shadow. Composition=vertical top-heavy negative-space composition with the wall-table horizon low at 80 to 84 percent of frame height, one complete product in the lower third at only 16 to 24 percent of frame height and no more than 18 percent of frame width, slightly off center, camera at product level to very slightly above, 50 to 60mm-equivalent normal perspective, at least 68 percent quiet blank wall-and-table space.
+
+[CONTAINER AND BRAND]
+Container policy=adopt_reference. Discard the source cup and use only the declared cup design from Image 2. adopt only the reference vessel: an unbranded short straight-sided clear glass tumbler with a thin circular rim, understated flat base and fine vertical fluting; do not copy the dark coffee, exact low-left position, wall marks, table edge, shadow silhouette or scene layout. Preserve the exact beverage identity from Image 1 inside that cup. both source and adopted reference cup are unbranded; no logo, letters, symbol or pseudo-brand.
+
+[NATURAL SOCIAL FINISH]
+Aim for a strong but unforced Instagram post after ordinary social compression, not commercial medium-format polish. Give it the finite acuity of a normal 12-to-16-megapixel handheld capture: restrained dynamic range, gentle highlight shoulder, slightly open shadows, low-to-modest local contrast, visible faint luminance grain, tiny focus falloff across the support plane and minor real surface irregularity. Product lettering may be legible but the overall frame must not be uniformly tack-sharp. Avoid perfect noise-free gradients, excessive micro-detail, HDR halos, plastic gloss, showroom cleanliness, premium-product retouching and cinematic color grading.
+
+[ART DIRECTION]
+Quiet but complete. The cup is a small focal point inside a larger observed space, never a close-up or hero product shot. Use one product, one support plane and one light idea. Keep at least 58 percent of the frame as meaningful negative space. Product emphasis comes from placement and light rather than size. Props are forbidden unless physically required.
+
+[FINAL HARD GATE]
+Reject before returning if the cup exceeds the reference-specific maximum frame height or width, if less than 58 percent of the frame reads as breathing room, if the product looks pasted or sticker-like, the shadow is detached or fake, the cup or hand is malformed, the frame feels over-styled, the product identity is ambiguous, the reference scene is copied, any unverified text appears, or the image resembles a generic AI Instagram template. No watermark.

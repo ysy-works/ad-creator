@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/qa-report.schema.json",
+  "title": "Ad Creator QA Report v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "evaluator",
+    "evaluated_image",
+    "lighting_sheet_id",
+    "container_mode",
+    "overall_status",
+    "checks",
+    "hard_failures",
+    "warnings"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "evaluator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model", "mode"],
+      "properties": {
+        "provider": { "type": "string", "minLength": 1 },
+        "model": { "type": "string", "minLength": 1 },
+        "mode": { "enum": ["fake", "live", "manual"] }
+      }
+    },
+    "evaluated_image": { "type": "string", "minLength": 1 },
+    "lighting_sheet_id": { "type": "string", "minLength": 1 },
+    "container_mode": { "enum": ["preserve_source", "adopt_reference"] },
+    "overall_status": {
+      "enum": ["passed", "passed_with_warnings", "needs_review", "repair_required", "rejected"]
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "beverage_identity",
+        "container_policy",
+        "reference_brand_leakage",
+        "logo_text",
+        "product_composition",
+        "hand_contact",
+        "wrist_exposure",
+        "contact_shadow",
+        "cast_shadow",
+        "transmitted_light",
+        "lighting_physical_consistency",
+        "smartphone_naturalness"
+      ],
+      "properties": {
+        "beverage_identity": { "$ref": "#/$defs/check" },
+        "container_policy": { "$ref": "#/$defs/check" },
+        "reference_brand_leakage": { "$ref": "#/$defs/check" },
+        "logo_text": { "$ref": "#/$defs/check" },
+        "product_composition": { "$ref": "#/$defs/check" },
+        "hand_contact": { "$ref": "#/$defs/check" },
+        "wrist_exposure": { "$ref": "#/$defs/check" },
+        "contact_shadow": { "$ref": "#/$defs/check" },
+        "cast_shadow": { "$ref": "#/$defs/check" },
+        "transmitted_light": { "$ref": "#/$defs/check" },
+        "lighting_physical_consistency": { "$ref": "#/$defs/check" },
+        "smartphone_naturalness": { "$ref": "#/$defs/check" },
+        "scene_slot_adherence": { "$ref": "#/$defs/check" },
+        "scene_subject_count": { "$ref": "#/$defs/check" },
+        "scene_support_contact": { "$ref": "#/$defs/check" },
+        "scene_relational_consistency": { "$ref": "#/$defs/check" }
+      }
+    },
+    "hard_failures": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "warnings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "$defs": {
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "confidence", "evidence", "measurements", "repairable"],
+      "properties": {
+        "status": { "enum": ["pass", "warning", "fail"] },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "measurements": { "type": "object" },
+        "repairable": { "type": "boolean" }
+      }
+    }
+  }
+}

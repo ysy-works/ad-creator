@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/v3-brand-regression-fixture.schema.json",
+  "title": "V3 Brand Regression Ground Truth",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "fixture_id", "authority", "cases"],
+  "properties": {
+    "schema_version": { "const": "3.0.0" },
+    "fixture_id": { "$ref": "#/$defs/nonEmptyString" },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy_version", "review_basis", "legacy_results_unchanged"],
+      "properties": {
+        "policy_version": { "const": "strict_auto_v1" },
+        "review_basis": { "$ref": "#/$defs/nonEmptyString" },
+        "legacy_results_unchanged": { "const": true }
+      }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "legacy_case_id", "generated_image", "generated_pixel_sha256",
+          "container_policy", "reference_brand_state", "target_brand_contract",
+          "brand_transfer_resolution", "observed_brand_evidence", "expected"
+        ],
+        "properties": {
+          "legacy_case_id": { "$ref": "#/$defs/nonEmptyString" },
+          "generated_image": { "$ref": "#/$defs/nonEmptyString" },
+          "generated_pixel_sha256": { "$ref": "#/$defs/sha256" },
+          "container_policy": { "enum": ["preserve_source", "adopt_reference"] },
+          "reference_brand_state": { "enum": ["verified_present", "verified_absent", "uncertain"] },
+          "target_brand_contract": { "type": "object" },
+          "brand_transfer_resolution": { "type": "object" },
+          "observed_brand_evidence": { "type": "object" },
+          "expected": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["status", "decision", "reason_code", "repairable"],
+            "properties": {
+              "status": { "const": "fail" },
+              "decision": { "const": "reject" },
+              "reason_code": {
+                "enum": ["preserved_source_logo_glyph_mismatch", "forbidden_brand_detected"]
+              },
+              "repairable": { "const": false }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+  }
+}

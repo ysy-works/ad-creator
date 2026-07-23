@@ -1,0 +1,243 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "instagram_white_diffuse_closeup_contract_v1",
+  "preset_id": "instagram_white_diffuse_closeup_v1",
+  "creative_direction": {
+    "audience": "a senior cafe brand art director and a lifestyle content editor",
+    "desired_response": "a quiet white close-up that still feels located inside a real cafe room",
+    "art_direction": "large close serving assembly with a narrow off-frame waffle sliver and small off-frame magazine corner under one diffuse window",
+    "restraint": "one product assembly, two peripheral crop cues and one light idea",
+    "forbidden_impression": [
+      "generic AI product insert",
+      "sterile ecommerce sweep",
+      "miniature food props",
+      "over-propped cafe campaign"
+    ]
+  },
+  "reference_binding": {
+    "asset_id": "ref_3da1c1c83c416adb",
+    "pixel_sha256": "be10105f0c6c302b731a682f1d34d5c865e1d4ed80ba679e20b6f859fa3dc095",
+    "relative_path": "comfyui-inputs/ad_creator_reference_white_closeup_cylindrical_v2.png",
+    "width_px": 1164,
+    "height_px": 1351,
+    "runtime_role": "offline source for the approved white-closeup scene, photometric and cup-saucer-spoon hint",
+    "provider_submission": "never"
+  },
+  "camera_geometry": {
+    "projection": "rectilinear high three-quarter close-up",
+    "focal_length_equivalent_mm": [
+      52,
+      58
+    ],
+    "working_distance_cm": [
+      55,
+      80
+    ],
+    "camera_height_cm": [
+      65,
+      95
+    ],
+    "pitch_degrees": [
+      42,
+      49
+    ],
+    "yaw_degrees": [
+      -4,
+      4
+    ],
+    "roll_degrees": [
+      -1,
+      1
+    ],
+    "distortion": "no wide-angle enlargement",
+    "depth_of_field": "product and spoon readable; edge props mildly defocused by real distance"
+  },
+  "composition_geometry": {
+    "primary_subject_bbox": {
+      "left": 0.2,
+      "top": 0.21,
+      "right": 0.82,
+      "bottom": 0.93
+    },
+    "bbox_semantics": "complete cup, saucer and wood-handled teaspoon assembly",
+    "primary_subject_area_ratio": [
+      0.36,
+      0.44
+    ],
+    "negative_space": "32-40 percent meaningful warm-white room field around the 110-percent serving assembly",
+    "support_plane": {
+      "kind": "warm ivory-white matte cafe tabletop",
+      "occupancy_ratio": [
+        0.88,
+        1.0
+      ],
+      "dominant_edge_angles_degrees": [
+        0,
+        5
+      ],
+      "perspective": "one continuous tabletop with light and shadow falloff"
+    },
+    "frame_rhythm": "large central-lower serving assembly with extremely restrained peripheral edge traces",
+    "crop_policy": "complete cup, saucer and spoon; keep waffle and magazine normal-size but mostly outside the frame, showing only narrow peripheral portions",
+    "forbidden": [
+      "flat studio sweep",
+      "tiny product",
+      "complete waffle plate",
+      "centered magazine",
+      "cropped saucer",
+      "cropped spoon"
+    ]
+  },
+  "composition_variation": {
+    "selection": "choose a deterministic small product offset and new broad environmental-shadow arrangement from the request seed",
+    "invariants": [
+      "one complete product",
+      "one large complete central-lower cup-saucer-spoon assembly",
+      "continuous warm ivory-white tabletop without a visible edge or floor",
+      "high three-quarter camera angle",
+      "one narrow off-frame waffle sliver at upper-left and one small off-frame magazine corner at upper-right"
+    ],
+    "allowed_variations": [
+      "product x-position inside 0.49-0.53",
+      "minor incomplete small-prop edge-crop variation",
+      "subtle matte-table microtexture variation",
+      "new broad off-frame shadow arrangement"
+    ],
+    "repeat_guard": "adjacent outputs may not share both identical product position and identical broad environmental-shadow arrangement",
+    "scene_similarity_limit": 0.78,
+    "reference_scene_copy_forbidden": true
+  },
+  "lighting_geometry": {
+    "source_topology": "one very large upper-left diffuse window plus weak neutral room bounce",
+    "azimuth_degrees": [
+      305,
+      325
+    ],
+    "elevation_degrees": [
+      42,
+      56
+    ],
+    "angular_size_degrees": [
+      35,
+      60
+    ],
+    "key_to_fill_ratio": [
+      1.5,
+      2.5
+    ],
+    "lit_area_ratio": [
+      0.62,
+      0.82
+    ],
+    "shadow_area_ratio": [
+      0.14,
+      0.3
+    ],
+    "shadow_vector_degrees": [
+      112,
+      142
+    ],
+    "penumbra_ratio": [
+      0.28,
+      0.55
+    ],
+    "highlight_behavior": "broad protected highlights retaining white and transparent texture",
+    "optical_effects": "connected refraction, transmitted color and contact darkening",
+    "forbidden": [
+      "shadowless wrap",
+      "hard sun",
+      "multiple directions",
+      "HDR halo",
+      "clipped white"
+    ]
+  },
+  "tone_signature": {
+    "working_color_space": "sRGB display-referred natural social finish",
+    "white_balance_kelvin": [
+      5000,
+      5300
+    ],
+    "luma_percentiles": {
+      "p05": [
+        0.14,
+        0.24
+      ],
+      "p25": [
+        0.48,
+        0.62
+      ],
+      "p50": [
+        0.64,
+        0.74
+      ],
+      "p75": [
+        0.76,
+        0.88
+      ],
+      "p95": [
+        0.9,
+        0.97
+      ]
+    },
+    "black_point": "open neutral gray-brown",
+    "white_point": "warm ivory-white with visible texture",
+    "contrast_curve": "gentle toe, soft midtone separation and protected shoulder",
+    "saturation": "low globally; preserve beverage-internal color relationships while re-illuminating bright low-chroma milk or cream into the target warm-neutral exposure",
+    "shadow_color": "neutral gray",
+    "highlight_color": "warm-neutral ivory",
+    "palette_hex": [
+      "#E4E0D8",
+      "#D7D2C8",
+      "#C4BEB4",
+      "#AAA39A",
+      "#716B66"
+    ],
+    "material_separation": "glass, liquid, ceramic, metal, wood handle, waffle and paper remain distinct",
+    "local_contrast": "moderate only on product identity",
+    "forbidden": [
+      "beige veil",
+      "blue cast",
+      "crushed black",
+      "neon color",
+      "flat auto-HDR",
+      "isolated source-white milk"
+    ]
+  },
+  "finish_signature": {
+    "acuity": "finite social-photo acuity with identity details readable and no uniform tack sharpness",
+    "microcontrast": "restrained outside product rim, table edge and floor grout",
+    "grain": "faint luminance grain after ordinary social compression",
+    "depth_rendering": "geometry, edge height, grout convergence and light falloff before softness",
+    "retouching": "materially honest, retaining slight table, floor and drink irregularity",
+    "forbidden": [
+      "oversharpening",
+      "noise-free CGI gradients",
+      "portrait cutout",
+      "premium catalog retouch",
+      "cinematic grade"
+    ]
+  },
+  "qa_contract": {
+    "hard_fail": [
+      "complete saucer or wood-handled teaspoon absent",
+      "cup-saucer-spoon scale or overlap differs materially from the approved core composition",
+      "reference cup rendered as a tall highball, shoulder, waist, decorative band, crack, seam, sleeve or stacked vessel instead of the approved low straight cylinder",
+      "product too small",
+      "waffle or magazine not peripheral",
+      "white space flat or shadowless",
+      "hard sunlight",
+      "clipped whites",
+      "pasted product",
+      "isolated pure-white milk that does not share the ceramic and table exposure",
+      "reference pixels traced"
+    ],
+    "weights": {
+      "camera_geometry": 0.15,
+      "composition_rhythm": 0.2,
+      "color_and_tone": 0.13,
+      "lighting_space": 0.24,
+      "product_identity": 0.2,
+      "brand_integrity": 0.08
+    }
+  }
+}

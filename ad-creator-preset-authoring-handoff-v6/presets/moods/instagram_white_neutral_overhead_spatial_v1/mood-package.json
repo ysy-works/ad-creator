@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0.0",
+  "mood_package_id": "instagram_white_neutral_overhead_spatial_v1",
+  "display_name": "화이트·뉴트럴·저대비 자연광 · 공간감 항공샷 v1",
+  "preset_path": "presets/editorial/instagram_white_neutral_overhead_spatial_v1/reference-preset.json",
+  "runtime_profile_path": "presets/editorial/runtime-profile-v1.json",
+  "scene_recipe_path": "presets/moods/instagram_white_neutral_overhead_spatial_v1/scene-recipe.json",
+  "lighting_sheet_path": "presets/moods/instagram_white_neutral_overhead_spatial_v1/lighting-sheet.json",
+  "grade_profile_path": "presets/moods/soft_diffuse_window_neutral_v1/grade-profile.json",
+  "photographic_style_contract_path": "presets/editorial/instagram_white_neutral_overhead_spatial_v1/photographic-style-contract.json",
+  "product_integration_contract_path": "presets/editorial/product-integration-contract-v1.json",
+  "container_design_path": "presets/container_designs/white_ceramic_mug_visible_handle_overhead_v1.json",
+  "runtime_reference_policy": "offline_contract_only",
+  "compatibility": {
+    "composition_modes": ["single_product_overhead_round_table"],
+    "materials": ["glass", "plastic", "paper", "ceramic"]
+  }
+}

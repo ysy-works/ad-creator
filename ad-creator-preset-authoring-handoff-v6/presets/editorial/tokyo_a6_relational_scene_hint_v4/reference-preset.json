@@ -1,0 +1,284 @@
+{
+  "$schema": "../../../schemas/reference-preset.schema.json",
+  "schema_version": "2.0.0",
+  "preset_id": "tokyo_a6_relational_scene_hint_v4",
+  "display_name": "A6 관계 중심 다크 우드 트레이 · 스케일 제어 v4",
+  "concept": "quiet_relational_cafe_moment_on_round_dark_wood_tray",
+  "generation_voice": "observational_social",
+  "source": {
+    "reference_image": "/Users/apple/Desktop/ad-creator/reference/우드_저채도_차분/미디엄/d7b081a0435a26b0dd79f58771e18d94.jpg",
+    "width_px": 746,
+    "height_px": 746,
+    "supporting_group": "a6/relational_scene_hint/v4"
+  },
+  "runtime_input_policy": {
+    "default_generation_mode": "user_image_plus_abstracted_preset",
+    "generation_inputs": [
+      "user_product_identity"
+    ],
+    "reference_usage": "offline_feature_extraction_only",
+    "copyright_rule": "Use only the measured scale, camera, round-tray relationships, light distribution and restrained palette. Regenerate every scene pixel and never reproduce identifiable background objects, beverage recipes, text, logos or exact shadow shapes."
+  },
+  "style_abstraction": {
+    "runtime_reference_image": false,
+    "novel_scene_required": true,
+    "allowed_style_features": [
+      "one exact right-front beverage at modest scale",
+      "one left-front drink and one rear-center carafe as quiet companions",
+      "one complete round dark-wood tray on a white circular table",
+      "hard architectural daylight in the far room",
+      "open shade and broad window bounce over the tray",
+      "restrained warm-neutral A6 palette"
+    ],
+    "forbidden_copy_features": [
+      "reference beverage contents or recipes",
+      "reference text, logos or marks",
+      "identifiable heater, plants, lamp or furniture",
+      "exact room geometry",
+      "exact sunlight or shadow silhouette"
+    ]
+  },
+  "sampling_ranges": {
+    "pov_modes": [
+      "slightly-above observational cafe still life with room context"
+    ],
+    "subject_center_x": [
+      0.61,
+      0.63
+    ],
+    "subject_center_y": [
+      0.565,
+      0.59
+    ],
+    "subject_width_ratio": [
+      0.13,
+      0.15
+    ],
+    "subject_height_ratio": [
+      0.15,
+      0.18
+    ],
+    "negative_space_ratio": [
+      0.5,
+      0.6
+    ],
+    "focal_length_mm": [
+      45,
+      50
+    ],
+    "camera_pitch_degrees": [
+      30,
+      36
+    ],
+    "light_softness": [
+      0.38,
+      0.56
+    ],
+    "prop_count": [
+      2,
+      2
+    ],
+    "asymmetry_probability": 1.0,
+    "asymmetry_sources": [
+      "unequal vessel heights and an off-center triangular grouping"
+    ],
+    "micro_moments": [
+      "a small shared cafe order encountered before anyone reaches for a drink"
+    ]
+  },
+  "tone_contract": {
+    "background_plane": "a lived-in warm-neutral room with hard linear sunlight kept behind the foreground table",
+    "background_lightness": [
+      0.46,
+      0.7
+    ],
+    "background_saturation": [
+      0.08,
+      0.2
+    ],
+    "global_contrast": [
+      0.46,
+      0.6
+    ],
+    "shadow_density": [
+      0.28,
+      0.44
+    ],
+    "color_bias": "wood warmth remains local to the tray while table whites, glass, ceramic and matcha keep independent color",
+    "highlight_behavior": "small broken glass-edge responses and rolled daylight with no clipped white saucer",
+    "forbidden_surface_reading": [
+      "orange-brown veil",
+      "pale blond tray",
+      "featureless black tray",
+      "glossy synthetic grain",
+      "uniformly bright foreground",
+      "over-clean staged set"
+    ]
+  },
+  "output": {
+    "preferred_aspect_ratio": "3:4",
+    "compatible_aspect_ratios": [
+      "3:4",
+      "4:5"
+    ]
+  },
+  "subject_layout": {
+    "main_subject": {
+      "role": "one_exact_user_beverage_reconstructed_in_the_selected_right_front_container",
+      "center": {
+        "x_ratio": 0.62,
+        "y_ratio": 0.575
+      },
+      "bbox": {
+        "x_ratio": 0.55,
+        "y_ratio": 0.49,
+        "width_ratio": 0.14,
+        "height_ratio": 0.17
+      },
+      "area_ratio": 0.0238,
+      "height_ratio": 0.17
+    },
+    "secondary_subjects": [
+      {
+        "role": "one_generic_unbranded_left_front_dark_iced_drink",
+        "center": {
+          "x_ratio": 0.385,
+          "y_ratio": 0.62
+        },
+        "bbox": {
+          "x_ratio": 0.33,
+          "y_ratio": 0.54,
+          "width_ratio": 0.11,
+          "height_ratio": 0.16
+        },
+        "area_ratio": 0.0176,
+        "height_ratio": 0.16
+      },
+      {
+        "role": "one_plain_unbranded_rear_center_carafe",
+        "center": {
+          "x_ratio": 0.47,
+          "y_ratio": 0.535
+        },
+        "bbox": {
+          "x_ratio": 0.43,
+          "y_ratio": 0.44,
+          "width_ratio": 0.08,
+          "height_ratio": 0.19
+        },
+        "area_ratio": 0.0152,
+        "height_ratio": 0.19
+      }
+    ],
+    "negative_space": {
+      "top_ratio": 0.38,
+      "left_ratio": 0.18,
+      "right_ratio": 0.18,
+      "bottom_ratio": 0.1
+    }
+  },
+  "composition": {
+    "shot_type": "environment-first cafe observation with one small related tray group",
+    "camera_angle": "slightly above at approximately thirty to thirty-six degrees downward",
+    "camera_height": "approximately one hundred forty to one hundred seventy-five centimeters with the camera stepped back",
+    "focal_length_equivalent_mm": 48,
+    "horizon_visibility": "room and empty table register before the small tray group",
+    "depth_of_field": "all tray items, rims and contacts resolve; distant room detail loses fine definition",
+    "alignment": "a small off-center unequal three-point rhythm surrounded by dominant room and table breathing space"
+  },
+  "lighting": {
+    "type": "direct architectural sun in the far room plus open shade and broad window bounce over the tray",
+    "direction": "back-right daylight crosses the far floor while soft neutral bounce reaches the foreground from the same side",
+    "azimuth_degrees": 48,
+    "elevation_degrees": 33,
+    "softness": 0.48,
+    "intensity": "bright far-room field with a quieter foreground exposure",
+    "contrast": "visible separation between sunlit room, white table and light-absorbing dark tray",
+    "shadow": "hard architectural bands stay in the far plane; vessel contacts remain dense and attached with broader soft falloff",
+    "highlight_control": "glass rims and white ceramic roll below clipping; the tray shows only narrow broken responses"
+  },
+  "color": {
+    "temperature": "warm-neutral daylight without an amber filter",
+    "white_balance_kelvin": 4850,
+    "saturation": "restrained room and wood with the exact user beverage color protected",
+    "contrast": "weighted lower mids, separated neutral highlights and a soft shoulder",
+    "palette_hex": [
+      "#60513D",
+      "#312215",
+      "#BBAB90",
+      "#9C8C73",
+      "#DECFB9"
+    ],
+    "black_point": "deep neutral chocolate-brown with visible tray grain"
+  },
+  "scene": {
+    "surface": "one white circular table supporting one complete round dark oiled-wood tray spanning only 0.44-0.50 of frame width",
+    "background": "an original quiet room with low-detail architecture and no identifiable A6 furnishing",
+    "background_complexity": 0.34,
+    "props": [
+      "one complete round dark oiled-wood serving tray",
+      "one small plain rear-center carafe"
+    ],
+    "max_prop_count": 2,
+    "texture": "matte dark wood grain, finite glass thickness, soft condensation, ceramic glaze and modest social-photo acuity"
+  },
+  "capture": {
+    "look": "natural quiet social photograph whose scale, spacing and light feel considered without looking arranged",
+    "realism": "one camera, one exposure and one physical daylight system connect room, table, tray and every vessel",
+    "grain": "faint low-contrast luminance texture with finite twelve-to-sixteen-megapixel acuity",
+    "imperfections": [
+      "small condensation variation",
+      "subtle wood-pore variation",
+      "gentle far-room microcontrast loss",
+      "slightly unequal casual spacing"
+    ]
+  },
+  "preservation_policy": {
+    "hard_lock": [
+      "exact user beverage count one",
+      "user beverage identity, recipe, color and cold serving state",
+      "selected container design reconstructed rather than pasted",
+      "target body width 0.13-0.15 and height 0.15-0.18",
+      "one generic left drink",
+      "one rear carafe",
+      "one complete round tray 0.44-0.50 of frame width and no more than 0.31 frame height",
+      "target brand contract"
+    ],
+    "editable": [
+      "new room architecture",
+      "generic companion details",
+      "tray grain phase",
+      "minor slot offsets",
+      "far-room sunlight spacing"
+    ],
+    "reference_exclusions": [
+      "reference drink contents",
+      "reference text or marks",
+      "heater",
+      "plants",
+      "lamp",
+      "furniture",
+      "exact shadow silhouette"
+    ]
+  },
+  "prompt_blocks": {
+    "input_roles": "Image one supplies exact beverage identity and serving evidence. When present, the sanitized A6 scene hint supplies only low-frequency camera, scale, tray relationships, light distribution and palette.",
+    "composition": "ENVIRONMENT-FIRST SCALE LOCK: the complete tray cluster occupies at most 0.50 frame width and 0.31 frame height. The exact drink stays 0.13-0.15 frame width and 0.15-0.18 frame height. Keep 0.50-0.60 room-and-table release; when uncertain, step back and render every foreground object smaller.",
+    "look": "Direct architectural sunlight remains in the distant room while the foreground tray sits in open shade and broad window bounce. Dark wood absorbs light but keeps restrained grain and depth.",
+    "preservation": "Reconstruct the exact user beverage inside the selected container design with new perspective, refraction, highlights, contact and shadow. Follow only the final target brand contract and invent no text or mark.",
+    "negative": "No oversized drink, close-up tray, rectangular tray, cropped tray, duplicated exact beverage, fourth vessel, isolated subject, identifiable copied room object, amber wash, pasted boundary, cutout halo, false text or uniform sharpness."
+  },
+  "quality_gates": {
+    "logo_text": "no visible logo or text unless an explicit target brand contract separately authorizes it",
+    "product_identity": "exactly one user beverage remains recognizable by recipe, color, ice and serving state after physical reconstruction",
+    "preset_adherence": "exact body width 0.13-0.15, height 0.15-0.18, complete tray width 0.44-0.50 and height at most 0.31, three-item relationship and 0.50-0.60 meaningful release",
+    "artifact_policy": "reject oversized subject, rectangular or cropped tray, pasted cup edge, detached contact, repeated source pixels, wrong serving state, invented text, amber veil or copied background object"
+  },
+  "failure_recovery": [
+    "return the exact drink to 0.13-0.15 frame width and 0.15-0.18 frame height",
+    "restore one complete round tray at 0.44-0.50 frame width and at most 0.31 frame height",
+    "restore the left drink and rear carafe as quiet related companions",
+    "rebuild the selected container under the target light instead of preserving its source boundary",
+    "restore a darker open-shade foreground and hard daylight only in the far room"
+  ]
+}

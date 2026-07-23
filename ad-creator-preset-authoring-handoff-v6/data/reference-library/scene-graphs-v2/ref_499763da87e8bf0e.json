@@ -1,0 +1,172 @@
+{
+  "schema_version": "2.0.0",
+  "analysis_metadata": {
+    "provider": "manual_visual_review",
+    "model": "human_approved_reference_contract",
+    "prompt_version": "reference_scene_graph_v2",
+    "analyzed_at": "2026-07-21T00:00:00+09:00",
+    "confidence": 0.98
+  },
+  "asset": {
+    "asset_id": "ref_499763da87e8bf0e",
+    "relative_path": "comfyui-inputs/white_neutral_overhead_reference_v1.png",
+    "file_sha256": "499763da87e8bf0ee63b60998329eaa5272632616cd0e01621ead27a02a566d9",
+    "pixel_sha256": "c8c0ab483a488577a3789eeaf5ed6301778a475d5c4f12b1b6cc2f6898ebb739",
+    "width_px": 1024,
+    "height_px": 1536,
+    "format": "PNG",
+    "source_folder_tags": ["user_approved", "white_neutral", "overhead", "spatial"],
+    "dhash": "e7cd9e9b999c8ccf",
+    "duplicate_of": null
+  },
+  "scene_mode": "solo",
+  "observed_major_subject_count": 1,
+  "object_inventory_complete": true,
+  "objects": [
+    {
+      "slot_id": "beverage_primary",
+      "kind": "beverage",
+      "role": "primary",
+      "description": "latte in a compact plain white handled ceramic mug; beverage contents are excluded from transfer",
+      "body_bbox": {"left": 0.45, "top": 0.515, "right": 0.73, "bottom": 0.69, "confidence": 0.98},
+      "full_bbox": {"left": 0.4, "top": 0.505, "right": 0.735, "bottom": 0.705, "confidence": 0.98},
+      "straw": {"present": false, "bbox": null, "centerline": null, "emergence_point": null, "angle_degrees": null},
+      "container": {
+        "class": "open handled mug",
+        "material": "white glazed ceramic",
+        "silhouette": "compact circular body with one complete lower-left handle",
+        "components": ["thin circular rim", "round body", "single lower-left handle", "plain unbranded exterior"]
+      },
+      "interaction": "resting",
+      "support_surface_id": "surface_round_white_table",
+      "depth_order": 1,
+      "occlusion_fraction": 0,
+      "replaceable": true,
+      "allowed_kinds": ["beverage", "dessert"],
+      "visible_text": [],
+      "brand_or_watermark_state": "absent",
+      "crop_safe": true
+    }
+  ],
+  "relations": [],
+  "support_surfaces": [
+    {
+      "surface_id": "surface_round_white_table",
+      "kind": "table",
+      "bbox": {"left": 0.14, "top": 0, "right": 1, "bottom": 1, "confidence": 0.98},
+      "plane_description": "large raised matte warm-neutral white circular tabletop entering from the right",
+      "supports_objects": true,
+      "perspective_scale": [0.93, 1.07]
+    },
+    {
+      "surface_id": "surface_gray_tile_floor",
+      "kind": "ground",
+      "bbox": {"left": 0, "top": 0, "right": 0.34, "bottom": 1, "confidence": 0.96},
+      "plane_description": "narrow gray tiled cafe floor wedge with grout lines receding past the curved table edge",
+      "supports_objects": false,
+      "perspective_scale": [0.82, 1.18]
+    }
+  ],
+  "protected_regions": [
+    {
+      "region_id": "region_left_floor_depth",
+      "kind": "negative_space",
+      "bbox": {"left": 0, "top": 0, "right": 0.34, "bottom": 1, "confidence": 0.96},
+      "reason": "preserve the narrow floor wedge, receding grout and table-to-floor height cue"
+    },
+    {
+      "region_id": "region_room_shadows",
+      "kind": "shadow",
+      "bbox": {"left": 0, "top": 0, "right": 0.75, "bottom": 1, "confidence": 0.92},
+      "reason": "retain broad environmental shadow atmosphere while changing the exact silhouette"
+    }
+  ],
+  "insertion_zones": [
+    {
+      "zone_id": "zone_product_on_round_table",
+      "bbox": {"left": 0.4, "top": 0.5, "right": 0.75, "bottom": 0.72, "confidence": 0.98},
+      "support_surface_id": "surface_round_white_table",
+      "allowed_kinds": ["beverage", "dessert"],
+      "scale_range": [0.9, 1.1],
+      "confidence": 0.98,
+      "reason": "reviewed single-product slot with complete support contact and surrounding negative space"
+    }
+  ],
+  "composition": {
+    "shot_type": "overhead",
+    "camera_height": "overhead",
+    "camera_pitch": "strict overhead with slight real perspective, approximately 82-88 degrees",
+    "lens_character": "phone_normal",
+    "subject_position": "just below center on the right-dominant round table",
+    "negative_space": "large warm-neutral white tabletop with narrow gray floor wedge",
+    "asymmetry_source": "right-dominant circular table, left floor wedge and partial off-frame shadows",
+    "crop_character": "portrait social crop retaining the full product, curved table edge and receding floor grout"
+  },
+  "depth": {
+    "plane_count": 3,
+    "foreground": "raised curved edge of the circular white tabletop",
+    "product_plane": "single beverage resting on the tabletop",
+    "midground": "matte white tabletop with broad soft shadow falloff",
+    "background": "gray tiled floor visibly below the table",
+    "perspective_cues": ["curved raised table edge", "receding floor grout", "product contact shadow", "broad environmental shadows crossing different planes"],
+    "far_plane_softness": "subtle",
+    "atmospheric_separation": "mild"
+  },
+  "lighting": {
+    "source_type": "soft_window",
+    "direction": "upper left toward lower right",
+    "source_size": "large",
+    "hardness": 0.34,
+    "contrast": 0.38,
+    "shadow": "short attached product shadow plus broad irregular soft-edged partial shadows from unseen room elements",
+    "highlight": "protected warm-neutral table and ceramic highlights",
+    "transmitted_light": "subtle and physically connected when the inserted source container is transparent",
+    "white_balance": "neutral"
+  },
+  "color": {
+    "exposure": "bright",
+    "saturation": "restrained",
+    "contrast": "soft",
+    "black_point": "natural",
+    "palette_hex": ["#BEBAB8", "#736C66", "#A5A19E", "#CCCACA", "#D8D7D7"],
+    "mean_luminance": 0.6574,
+    "luminance_stddev": 0.3079,
+    "mean_saturation": 0.0511,
+    "edge_energy": 0.0192
+  },
+  "facets": {
+    "mood_tags": ["white neutral", "low contrast", "quiet spatial", "natural cafe"],
+    "environment_tags": ["round white table", "gray tiled floor", "off-frame room shadows"],
+    "material_tags": ["matte white table", "gray tile", "white glazed ceramic"],
+    "shot_tags": ["overhead", "single product", "portrait social crop"]
+  },
+  "taxonomy": {
+    "environment_family": "white_neutral",
+    "lighting_family": "soft_window",
+    "camera_angle": "overhead",
+    "capture_style": "tabletop",
+    "scene_complexity": "solo",
+    "dominant_surface": "matte white circular tabletop",
+    "wood_prominence": 0,
+    "accent_color_prominence": 0.08,
+    "frontend_mood": "white",
+    "frontend_angle": "overhead",
+    "confidence": 0.98
+  },
+  "runtime_policy": {
+    "scene_pixels_allowed": false,
+    "container_pixels_allowed": true,
+    "copy_exclusions": [
+      "reference coffee, crema, latte art, bubbles and recipe",
+      "exact table-edge curve, grout intersections and pixel layout",
+      "exact environmental shadow silhouette",
+      "visible text, logos and watermarks",
+      "fabric, coaster, napkin, saucer and props"
+    ],
+    "maximum_exact_products": 1,
+    "maximum_generic_companions": 1,
+    "maximum_major_subjects": 3,
+    "maximum_props": 2
+  },
+  "quality_flags": []
+}

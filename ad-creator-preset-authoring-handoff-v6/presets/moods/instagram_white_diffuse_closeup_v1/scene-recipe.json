@@ -1,0 +1,130 @@
+{
+  "$schema": "../../../schemas/scene-recipe.schema.json",
+  "schema_version": "1.0.0",
+  "recipe_id": "instagram_white_diffuse_closeup_recipe_v1",
+  "display_name": "화이트계열 클로즈업",
+  "compatible_presets": [
+    "instagram_white_diffuse_closeup_v1"
+  ],
+  "generation_policy": {
+    "normal_paid_generations": 1,
+    "runtime_reference_image": false,
+    "traditional_compositing": false
+  },
+  "composition": {
+    "inherit_preset_bbox": true,
+    "subject_anchor_priority": "one large complete cup-saucer-spoon assembly; narrow off-frame waffle sliver upper-left and small off-frame magazine corner upper-right",
+    "asymmetry_sources": [
+      "unequal peripheral edge crops",
+      "soft off-frame occupancy shadows"
+    ]
+  },
+  "environment": {
+    "background_plane": "warm ivory-white matte cafe tabletop inside a minimal white room",
+    "surface_character": "subtle real matte texture, never seamless",
+    "sun_patch_shape": "no sun patch; only broad diffuse tonal modulation"
+  },
+  "lighting": {
+    "source": "one very large upper-left diffuse window",
+    "direction": "upper-left/left-front toward lower-right",
+    "shadow_description": "compact attached contacts plus broad feathered environmental shadows",
+    "light_softness": [
+      0.86,
+      0.95
+    ],
+    "subject_to_wall_distance_cm": [
+      70,
+      140
+    ],
+    "shadow_density": [
+      0.14,
+      0.29
+    ],
+    "global_contrast": [
+      0.3,
+      0.44
+    ],
+    "background_lightness": [
+      0.72,
+      0.9
+    ],
+    "ambient_fill": "weak neutral white-room bounce",
+    "exposure_compensation_ev": [
+      -0.15,
+      0.0
+    ],
+    "sun_patch_coverage": [
+      0.0,
+      0.0
+    ],
+    "highlight_behavior": "protected whites and transparent detail",
+    "shadow_temperature": "neutral"
+  },
+  "capture": {
+    "phone_hdr": "restrained natural social-photo HDR",
+    "shadow_processing": "retain the spatial separation between elevated tabletop, receding floor and off-frame room volume",
+    "local_texture": "retain ceramic or source-container construction, beverage identity, ice and toppings without artificial microcontrast",
+    "forbidden_processing": [
+      "uniform Gaussian blur",
+      "portrait-mode cutout",
+      "oversharpening",
+      "milky lifted blacks",
+      "seamless studio sweep",
+      "cinematic grade"
+    ]
+  },
+  "human_rendering": {
+    "skin_texture": "not applicable because no hand is active",
+    "light_response": "not applicable because no hand is active",
+    "forbidden": [
+      "hand",
+      "finger",
+      "wrist",
+      "arm",
+      "sleeve"
+    ]
+  },
+  "material_rules": {
+    "glass": "preserve beverage optics; adopt mode transfers the one-piece low straight cylindrical reference glass, while the approved saucer and spoon remain scene-authoritative. Re-illuminate bright low-chroma milk or cream into the warm-neutral ceramic and table exposure while preserving beverage-internal color relationships; never preserve an isolated source-white point",
+    "plastic": "preserve exact user-cup family in source mode while integrating it with the approved saucer and spoon"
+  },
+  "coupling_rules": [
+    "Cup, beverage, saucer, spoon, support and props share one diffuse exposure.",
+    "Bright low-chroma milk or cream shares the tabletop and ceramic white balance, reflection, contact shadow and highlight shoulder while its beverage-relative color contrast remains intact.",
+    "The approved saucer and wood-handled teaspoon remain present in both modes.",
+    "Adopt mode uses the low straight cylindrical reference glass; preserve mode uses the exact user cup.",
+    "Peripheral props communicate depth and never become miniature subjects."
+  ],
+  "forbidden": [
+    "flat seamless white",
+    "hard sun",
+    "miniature waffle",
+    "centered magazine",
+    "missing saucer",
+    "missing or malformed spoon",
+    "watermark",
+    "pasted product"
+  ],
+  "quality_gate": {
+    "hard_fail": [
+      "flat seamless white",
+      "hard sun",
+      "miniature waffle",
+      "centered magazine",
+      "missing saucer",
+      "missing or malformed spoon",
+      "watermark",
+      "pasted product",
+      "product too small",
+      "light and shadows do not communicate room volume"
+    ],
+    "weights": {
+      "natural_smartphone_capture": 0.15,
+      "instagram_composition": 0.24,
+      "product_identity": 0.2,
+      "lighting_physical_coherence": 0.2,
+      "color_and_tone": 0.13,
+      "novel_scene_distance": 0.08
+    }
+  }
+}

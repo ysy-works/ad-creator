@@ -1,0 +1,131 @@
+{
+  "$schema": "../../../schemas/scene-recipe.schema.json",
+  "schema_version": "1.0.0",
+  "recipe_id": "tokyo_a6_relational_scene_hint_v4",
+  "display_name": "A6 다크 우드 트레이 · 스케일 제어 장면 v4",
+  "compatible_presets": [
+    "tokyo_a6_relational_scene_hint_v4"
+  ],
+  "generation_policy": {
+    "normal_paid_generations": 1,
+    "runtime_reference_image": false,
+    "traditional_compositing": false
+  },
+  "composition": {
+    "inherit_preset_bbox": true,
+    "subject_anchor_priority": "environment-first scale lock: the complete tray cluster remains inside a 0.50-wide by 0.31-high envelope; the exact right-front beverage stays 0.13-0.15 frame width and 0.15-0.18 frame height",
+    "asymmetry_sources": [
+      "unequal vessel heights",
+      "left-front, rear-center and right-front depth stagger",
+      "0.50-0.60 room-and-table release around the deliberately small complete tray"
+    ]
+  },
+  "environment": {
+    "background_plane": "a new low-detail lived-in room that carries broad architectural daylight without reproducing identifiable reference furnishings",
+    "surface_character": "one white circular table and one complete round dark oiled-wood tray spanning only 0.44-0.50 of frame width and no more than 0.31 frame height",
+    "sun_patch_shape": "hard linear architectural bands remain in the far room only and use new spacing, edges and silhouettes"
+  },
+  "lighting": {
+    "source": "direct back-right daylight in the far room plus open shade and broad window bounce over the foreground tray",
+    "direction": "azimuth 38-56 degrees and elevation 27-38 degrees across the whole scene",
+    "shadow_description": "hard far-plane architectural bands transition to dense attached contacts and broader soft falloff beneath the tray items",
+    "light_softness": [
+      0.38,
+      0.56
+    ],
+    "subject_to_wall_distance_cm": [
+      190,
+      250
+    ],
+    "shadow_density": [
+      0.28,
+      0.44
+    ],
+    "global_contrast": [
+      0.46,
+      0.6
+    ],
+    "background_lightness": [
+      0.46,
+      0.7
+    ],
+    "ambient_fill": "neutral white-table and room bounce keeps glass, ceramic and tray grain readable while the foreground stays quieter than the sunlit room",
+    "exposure_compensation_ev": [
+      -0.24,
+      -0.04
+    ],
+    "sun_patch_coverage": [
+      0.16,
+      0.34
+    ],
+    "highlight_behavior": "broken restrained glass edges, rolled ceramic white and narrow low-intensity tray-rim response",
+    "shadow_temperature": "neutral brown-gray with a faint cool counterbalance"
+  },
+  "capture": {
+    "rendering_pipeline": "natural social capture with finite handheld acuity and one coherent exposure",
+    "shadow_processing": "retain the darker tray and attached contacts without HDR lifting, black crush or selective subject spotlighting",
+    "local_texture": "the exact beverage stays identifiable while container optics, condensation and reflections are newly integrated into the target light",
+    "forbidden_processing": [
+      "phone HDR",
+      "uniform hyper-sharpness",
+      "amber filter",
+      "AI-clean smoothing",
+      "synthetic portrait blur",
+      "cutout edge enhancement"
+    ]
+  },
+  "human_rendering": {
+    "skin_texture": "no hand unless a separate user contract explicitly requires one",
+    "light_response": "any separately authorized skin must share the same back-right daylight and foreground bounce",
+    "forbidden": [
+      "invented hand",
+      "extra fingers",
+      "decorative sleeve",
+      "warm skin cast unrelated to the scene"
+    ]
+  },
+  "material_rules": {
+    "glass": "each vessel is regenerated with a readable rim, base, thickness, refraction, local condensation and physically attached contact under the target camera and light",
+    "plastic": "thin realistic highlights and plausible condensation remain distinct from glass thickness and ceramic glaze"
+  },
+  "coupling_rules": [
+    "Exactly one user beverage occupies the right-front target and stays 0.13-0.15 of frame width and 0.15-0.18 of frame height; if uncertain, render it smaller.",
+    "One generic unbranded left-front drink and one plain unbranded rear-center carafe complete the unequal triangular relation.",
+    "All three items rest physically on one complete round dark tray spanning 0.44-0.50 of frame width and at most 0.31 frame height.",
+    "The selected container design is reconstructed under the target camera and light rather than preserving source pixels or boundary.",
+    "The tray remains darker than the white table while preserving subdued grain and local base reflections.",
+    "Hard architectural daylight remains behind the table; the tray stays in open shade with broad window bounce."
+  ],
+  "forbidden": [
+    "oversized exact beverage",
+    "rectangular tray",
+    "cropped tray",
+    "isolated exact beverage",
+    "duplicated user beverage",
+    "fourth vessel",
+    "missing companion",
+    "invented logo or text",
+    "copied room furnishing",
+    "amber veil",
+    "pasted container boundary"
+  ],
+  "quality_gate": {
+    "hard_fail": [
+      "exact beverage width or height leaves the target range",
+      "round tray width or silhouette leaves the target range",
+      "active three-item relationship fails",
+      "serving state changes",
+      "selected container design or its immediate support is missing",
+      "container reads as pasted",
+      "hard far-room sun and open-shade foreground are not separated"
+    ],
+    "weights": {
+      "camera_geometry": 0.24,
+      "composition_rhythm": 0.24,
+      "color_and_tone": 0.17,
+      "lighting_space": 0.15,
+      "product_identity": 0.15,
+      "brand_integrity": 0.05
+    }
+  }
+}

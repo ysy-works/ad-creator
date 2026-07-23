@@ -1,0 +1,732 @@
+{
+  "config": {},
+  "extra": {
+    "ds": {
+      "offset": [
+        690,
+        150
+      ],
+      "scale": 0.42
+    },
+    "frontendVersion": "1.45.20"
+  },
+  "groups": [
+    {
+      "bounding": [
+        -1540,
+        -150,
+        940,
+        1030
+      ],
+      "color": "#6b8e7d",
+      "font_size": 24,
+      "title": "1. 입력·자동 분석"
+    },
+    {
+      "bounding": [
+        -620,
+        -150,
+        1050,
+        850
+      ],
+      "color": "#8a7357",
+      "font_size": 24,
+      "title": "2. 계약·생성·QA"
+    },
+    {
+      "bounding": [
+        440,
+        -150,
+        1250,
+        850
+      ],
+      "color": "#65758a",
+      "font_size": 24,
+      "title": "3. 크롭·LUT·저장"
+    }
+  ],
+  "last_link_id": 17,
+  "last_node_id": 11,
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      3,
+      0,
+      4,
+      0,
+      "IMAGE"
+    ],
+    [
+      4,
+      2,
+      0,
+      6,
+      0,
+      "IMAGE"
+    ],
+    [
+      5,
+      5,
+      0,
+      6,
+      1,
+      "STRING"
+    ],
+    [
+      6,
+      2,
+      1,
+      6,
+      2,
+      "STRING"
+    ],
+    [
+      7,
+      4,
+      1,
+      6,
+      3,
+      "STRING"
+    ],
+    [
+      8,
+      4,
+      0,
+      6,
+      4,
+      "IMAGE"
+    ],
+    [
+      9,
+      6,
+      2,
+      7,
+      0,
+      "STRING"
+    ],
+    [
+      10,
+      5,
+      1,
+      7,
+      1,
+      "STRING"
+    ],
+    [
+      11,
+      7,
+      0,
+      8,
+      0,
+      "IMAGE"
+    ],
+    [
+      12,
+      8,
+      0,
+      9,
+      0,
+      "IMAGE"
+    ],
+    [
+      13,
+      5,
+      0,
+      9,
+      1,
+      "STRING"
+    ],
+    [
+      14,
+      9,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ],
+    [
+      15,
+      6,
+      2,
+      11,
+      0,
+      "STRING"
+    ],
+    [
+      16,
+      7,
+      1,
+      11,
+      1,
+      "STRING"
+    ],
+    [
+      17,
+      9,
+      1,
+      11,
+      2,
+      "STRING"
+    ]
+  ],
+  "nodes": [
+    {
+      "flags": {},
+      "id": 1,
+      "inputs": [],
+      "mode": 0,
+      "order": 0,
+      "outputs": [
+        {
+          "links": [
+            1
+          ],
+          "name": "IMAGE",
+          "type": "IMAGE"
+        },
+        {
+          "links": null,
+          "name": "MASK",
+          "type": "MASK"
+        }
+      ],
+      "pos": [
+        -1500,
+        -80
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "size": [
+        330,
+        380
+      ],
+      "title": "1. 사용자 제품",
+      "type": "LoadImage",
+      "widgets_values": [
+        "white_basic_product_source.jpg"
+      ]
+    },
+    {
+      "flags": {},
+      "id": 2,
+      "inputs": [
+        {
+          "link": 1,
+          "name": "image",
+          "type": "IMAGE"
+        }
+      ],
+      "mode": 0,
+      "order": 1,
+      "outputs": [
+        {
+          "links": [
+            4
+          ],
+          "name": "image",
+          "type": "IMAGE"
+        },
+        {
+          "links": [
+            6
+          ],
+          "name": "product_analysis_json",
+          "type": "STRING"
+        },
+        {
+          "links": null,
+          "name": "analysis_status",
+          "type": "STRING"
+        }
+      ],
+      "pos": [
+        -1080,
+        -50
+      ],
+      "properties": {
+        "Node name for S&R": "AD_GeminiProductAnalyze"
+      },
+      "size": [
+        390,
+        220
+      ],
+      "title": "2. 제품·로고 분석",
+      "type": "AD_GeminiProductAnalyze",
+      "widgets_values": [
+        "configs/analyzers.json",
+        true
+      ]
+    },
+    {
+      "flags": {},
+      "id": 3,
+      "inputs": [],
+      "mode": 0,
+      "order": 2,
+      "outputs": [
+        {
+          "links": [
+            2
+          ],
+          "name": "IMAGE",
+          "type": "IMAGE"
+        },
+        {
+          "links": null,
+          "name": "MASK",
+          "type": "MASK"
+        }
+      ],
+      "pos": [
+        -1500,
+        430
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "size": [
+        330,
+        380
+      ],
+      "title": "3. 장면 레퍼런스",
+      "type": "LoadImage",
+      "widgets_values": [
+        "white_basic_reference.jpg"
+      ]
+    },
+    {
+      "flags": {},
+      "id": 4,
+      "inputs": [
+        {
+          "link": 2,
+          "name": "reference_image",
+          "type": "IMAGE"
+        }
+      ],
+      "mode": 0,
+      "order": 3,
+      "outputs": [
+        {
+          "links": [
+            8
+          ],
+          "name": "reference_image",
+          "type": "IMAGE"
+        },
+        {
+          "links": [
+            7
+          ],
+          "name": "scene_reference_json",
+          "type": "STRING"
+        },
+        {
+          "links": null,
+          "name": "mood_package_path",
+          "type": "STRING"
+        },
+        {
+          "links": null,
+          "name": "reference_status",
+          "type": "STRING"
+        }
+      ],
+      "pos": [
+        -1080,
+        430
+      ],
+      "properties": {
+        "Node name for S&R": "AD_ResolveSceneReference"
+      },
+      "size": [
+        410,
+        270
+      ],
+      "title": "4. 카탈로그·프리셋 해석",
+      "type": "AD_ResolveSceneReference",
+      "widgets_values": [
+        "data/reference-library/catalog.sqlite",
+        "data/reference-library/assignments.json",
+        "",
+        "configs/analyzers.json",
+        "presets/moods/instagram_white_diffuse_wall_table_v1/mood-package.json"
+      ]
+    },
+    {
+      "flags": {},
+      "id": 5,
+      "inputs": [
+        {
+          "link": null,
+          "name": "mood_package_path",
+          "type": "STRING"
+        }
+      ],
+      "mode": 0,
+      "order": 4,
+      "outputs": [
+        {
+          "links": [
+            5,
+            13
+          ],
+          "name": "mood_json",
+          "type": "STRING"
+        },
+        {
+          "links": [
+            10
+          ],
+          "name": "lighting_sheet_json",
+          "type": "STRING"
+        },
+        {
+          "links": null,
+          "name": "grade_profile_json",
+          "type": "STRING"
+        }
+      ],
+      "pos": [
+        -600,
+        470
+      ],
+      "properties": {
+        "Node name for S&R": "AD_LoadMoodPackage"
+      },
+      "size": [
+        390,
+        180
+      ],
+      "title": "5. 라이팅·LUT 패키지",
+      "type": "AD_LoadMoodPackage",
+      "widgets_values": [
+        "presets/moods/instagram_white_diffuse_wall_table_v1/mood-package.json"
+      ]
+    },
+    {
+      "flags": {},
+      "id": 6,
+      "inputs": [
+        {
+          "link": 4,
+          "name": "image",
+          "type": "IMAGE"
+        },
+        {
+          "link": 5,
+          "name": "mood_json",
+          "type": "STRING"
+        },
+        {
+          "link": 6,
+          "name": "product_analysis_json",
+          "type": "STRING"
+        },
+        {
+          "link": 7,
+          "name": "scene_reference_json",
+          "type": "STRING"
+        },
+        {
+          "link": 8,
+          "name": "container_reference",
+          "type": "IMAGE"
+        },
+        {
+          "link": null,
+          "name": "brand_asset",
+          "type": "IMAGE"
+        }
+      ],
+      "mode": 0,
+      "order": 5,
+      "outputs": [
+        {
+          "links": null,
+          "name": "image",
+          "type": "IMAGE"
+        },
+        {
+          "links": null,
+          "name": "prompt",
+          "type": "STRING"
+        },
+        {
+          "links": [
+            9,
+            15
+          ],
+          "name": "request_json",
+          "type": "STRING"
+        }
+      ],
+      "pos": [
+        -580,
+        -30
+      ],
+      "properties": {
+        "Node name for S&R": "AD_BuildGenerationRequest"
+      },
+      "size": [
+        450,
+        310
+      ],
+      "title": "6. 보호 계약·프롬프트",
+      "type": "AD_BuildGenerationRequest",
+      "widgets_values": [
+        "adopt_reference",
+        "",
+        false,
+        "configs/service-features.json",
+        "configs/providers/openai-gpt-image-1-mini.json",
+        713,
+        "default"
+      ]
+    },
+    {
+      "flags": {},
+      "id": 7,
+      "inputs": [
+        {
+          "link": 9,
+          "name": "request_json",
+          "type": "STRING"
+        },
+        {
+          "link": 10,
+          "name": "lighting_sheet_json",
+          "type": "STRING"
+        }
+      ],
+      "mode": 0,
+      "order": 6,
+      "outputs": [
+        {
+          "links": [
+            11
+          ],
+          "name": "generated_image",
+          "type": "IMAGE"
+        },
+        {
+          "links": [
+            16
+          ],
+          "name": "job_json",
+          "type": "STRING"
+        },
+        {
+          "links": null,
+          "name": "manifest_json",
+          "type": "STRING"
+        }
+      ],
+      "pos": [
+        -40,
+        -30
+      ],
+      "properties": {
+        "Node name for S&R": "AD_OpenAIImageGenerate"
+      },
+      "size": [
+        450,
+        270
+      ],
+      "title": "7. OpenAI Image 1 Mini 생성·Gemini QA",
+      "type": "AD_OpenAIImageGenerate",
+      "widgets_values": [
+        "outputs/comfyui-openai/runs",
+        "configs/providers/openai-gpt-image-1-mini.json",
+        "configs/evaluator.json",
+        1200,
+        "manual"
+      ]
+    },
+    {
+      "flags": {},
+      "id": 8,
+      "inputs": [
+        {
+          "link": 11,
+          "name": "image",
+          "type": "IMAGE"
+        }
+      ],
+      "mode": 0,
+      "order": 7,
+      "outputs": [
+        {
+          "links": [
+            12
+          ],
+          "name": "image_4x5",
+          "type": "IMAGE"
+        }
+      ],
+      "pos": [
+        480,
+        -30
+      ],
+      "properties": {
+        "Node name for S&R": "AD_InstagramCrop"
+      },
+      "size": [
+        310,
+        160
+      ],
+      "title": "8. 인스타그램 4:5",
+      "type": "AD_InstagramCrop",
+      "widgets_values": [
+        880,
+        1100
+      ]
+    },
+    {
+      "flags": {},
+      "id": 9,
+      "inputs": [
+        {
+          "link": 12,
+          "name": "image",
+          "type": "IMAGE"
+        },
+        {
+          "link": 13,
+          "name": "mood_json",
+          "type": "STRING"
+        },
+        {
+          "link": null,
+          "name": "protection_mask",
+          "type": "MASK"
+        }
+      ],
+      "mode": 0,
+      "order": 8,
+      "outputs": [
+        {
+          "links": [
+            14
+          ],
+          "name": "graded_image",
+          "type": "IMAGE"
+        },
+        {
+          "links": [
+            17
+          ],
+          "name": "metrics_json",
+          "type": "STRING"
+        }
+      ],
+      "pos": [
+        850,
+        -30
+      ],
+      "properties": {
+        "Node name for S&R": "AD_ApplyMoodGrade"
+      },
+      "size": [
+        340,
+        210
+      ],
+      "title": "9. 무드 LUT",
+      "type": "AD_ApplyMoodGrade",
+      "widgets_values": [
+        "natural"
+      ]
+    },
+    {
+      "flags": {},
+      "id": 10,
+      "inputs": [
+        {
+          "link": 14,
+          "name": "images",
+          "type": "IMAGE"
+        }
+      ],
+      "mode": 0,
+      "order": 9,
+      "outputs": [],
+      "pos": [
+        1260,
+        -50
+      ],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "size": [
+        380,
+        340
+      ],
+      "title": "10. 결과 저장",
+      "type": "SaveImage",
+      "widgets_values": [
+        "ad_creator/adopt_reference_openai"
+      ]
+    },
+    {
+      "flags": {},
+      "id": 11,
+      "inputs": [
+        {
+          "link": 15,
+          "name": "request_json",
+          "type": "STRING"
+        },
+        {
+          "link": 16,
+          "name": "job_json",
+          "type": "STRING"
+        },
+        {
+          "link": 17,
+          "name": "metrics_json",
+          "type": "STRING"
+        }
+      ],
+      "mode": 0,
+      "order": 10,
+      "outputs": [
+        {
+          "links": null,
+          "name": "manifest_path",
+          "type": "STRING"
+        },
+        {
+          "links": null,
+          "name": "manifest_json",
+          "type": "STRING"
+        }
+      ],
+      "pos": [
+        1230,
+        430
+      ],
+      "properties": {
+        "Node name for S&R": "AD_SaveRunManifest"
+      },
+      "size": [
+        420,
+        220
+      ],
+      "title": "11. 실행 기록",
+      "type": "AD_SaveRunManifest",
+      "widgets_values": [
+        "ad_creator/adopt_reference_openai"
+      ]
+    }
+  ],
+  "version": 0.4
+}

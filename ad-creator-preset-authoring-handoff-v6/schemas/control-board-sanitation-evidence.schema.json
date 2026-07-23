@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/control-board-sanitation-evidence.schema.json",
+  "title": "Control Board Independent Sanitation Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "artifact_type",
+    "source_path",
+    "source_sha256",
+    "source_pixel_sha256",
+    "independent_detector_outputs",
+    "status",
+    "checks",
+    "evidence_sha256"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "artifact_type": { "const": "control_board_sanitation_evidence" },
+    "source_path": { "type": "string", "minLength": 1 },
+    "source_sha256": { "$ref": "#/$defs/sha256" },
+    "source_pixel_sha256": { "$ref": "#/$defs/sha256" },
+    "independent_detector_outputs": { "const": true },
+    "status": { "enum": ["pass", "fail", "needs_review"] },
+    "checks": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": { "$ref": "#/$defs/check" }
+    },
+    "evidence_sha256": { "$ref": "#/$defs/sha256" }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["check_id", "detector", "status", "findings"],
+      "properties": {
+        "check_id": {
+          "enum": ["visible_text", "brand_mark", "forbidden_object", "scene_layout"]
+        },
+        "detector": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "version"],
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "version": { "type": "string", "minLength": 1 }
+          }
+        },
+        "status": { "enum": ["pass", "fail", "needs_review"] },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["label", "confidence", "bbox"],
+            "properties": {
+              "label": { "type": "string", "minLength": 1 },
+              "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+              "bbox": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["left", "top", "right", "bottom"],
+                "properties": {
+                  "left": { "type": "number", "minimum": 0, "maximum": 1 },
+                  "top": { "type": "number", "minimum": 0, "maximum": 1 },
+                  "right": { "type": "number", "minimum": 0, "maximum": 1 },
+                  "bottom": { "type": "number", "minimum": 0, "maximum": 1 }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

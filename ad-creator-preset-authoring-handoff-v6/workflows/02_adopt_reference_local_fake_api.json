@@ -1,0 +1,161 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "다운로드.jpeg"
+    }
+  },
+  "2": {
+    "class_type": "AD_GeminiProductAnalyze",
+    "inputs": {
+      "image": [
+        "1",
+        0
+      ],
+      "analyzer_config_path": "configs/analyzers.json",
+      "use_cache": true
+    }
+  },
+  "3": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "ad_creator_reference_soft_glass.jpg"
+    }
+  },
+  "4": {
+    "class_type": "AD_ResolveSceneReference",
+    "inputs": {
+      "reference_image": [
+        "3",
+        0
+      ],
+      "catalog_path": "data/reference-library/catalog.sqlite",
+      "assignments_path": "data/reference-library/assignments.json",
+      "reference_root": "",
+      "analyzer_config_path": "configs/analyzers.json",
+      "fallback_mood_package_path": "presets/moods/soft_diffuse_window_neutral_v2/mood-package.json"
+    }
+  },
+  "5": {
+    "class_type": "AD_LoadMoodPackage",
+    "inputs": {
+      "mood_package_path": [
+        "4",
+        2
+      ]
+    }
+  },
+  "6": {
+    "class_type": "AD_BuildGenerationRequest",
+    "inputs": {
+      "image": [
+        "2",
+        0
+      ],
+      "mood_json": [
+        "5",
+        0
+      ],
+      "product_analysis_json": [
+        "2",
+        1
+      ],
+      "scene_reference_json": [
+        "4",
+        1
+      ],
+      "container_mode": "adopt_reference",
+      "container_design_path": "",
+      "auto_paid_repair": true,
+      "features_path": "configs/service-features.json",
+      "provider_profile_path": "",
+      "seed": 713,
+      "quality_tier": "default",
+      "container_reference": [
+        "4",
+        0
+      ]
+    }
+  },
+  "7": {
+    "class_type": "AD_FakeGenerate",
+    "inputs": {
+      "image": [
+        "6",
+        0
+      ],
+      "request_json": [
+        "6",
+        2
+      ],
+      "fixture_image_path": ""
+    }
+  },
+  "8": {
+    "class_type": "AD_InstagramCrop",
+    "inputs": {
+      "image": [
+        "7",
+        0
+      ],
+      "target_width": 880,
+      "target_height": 1100
+    }
+  },
+  "9": {
+    "class_type": "AD_ApplyMoodGrade",
+    "inputs": {
+      "image": [
+        "8",
+        0
+      ],
+      "mood_json": [
+        "5",
+        0
+      ],
+      "strength": "natural"
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "9",
+        0
+      ],
+      "filename_prefix": "ad_creator/adopt_reference_local"
+    }
+  },
+  "11": {
+    "class_type": "AD_SaveRunManifest",
+    "inputs": {
+      "request_json": [
+        "6",
+        2
+      ],
+      "job_json": [
+        "7",
+        1
+      ],
+      "metrics_json": [
+        "9",
+        1
+      ],
+      "output_label": "ad_creator/adopt_reference_local"
+    }
+  },
+  "12": {
+    "class_type": "AD_FakeQualityRoute",
+    "inputs": {
+      "request_json": [
+        "6",
+        2
+      ],
+      "lighting_sheet_json": [
+        "5",
+        1
+      ],
+      "qa_fixture_path": "evals/fixtures/unbranded_pass_qa.json"
+    }
+  }
+}

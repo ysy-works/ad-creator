@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0.0",
+  "overrides": {
+    "24c120872ceb6aa093f3b441fcd6a57575c9aed4abb4f1f2a70bfd6ed6e80712": {
+      "verification_method": "manual_pixel_review",
+      "allow_perceptual_rebind": false,
+      "source_binding": {
+        "dhash": "347714397998383a",
+        "height_px": 1280,
+        "mean_rgb": [
+          0.673585,
+          0.595922,
+          0.496234
+        ],
+        "pixel_sha256": "24c120872ceb6aa093f3b441fcd6a57575c9aed4abb4f1f2a70bfd6ed6e80712",
+        "width_px": 960
+      },
+      "branding": {
+        "state": "verified_present",
+        "main_text": null,
+        "visible_text": [
+          "M",
+          "R",
+          "L"
+        ],
+        "non_text_mark": null,
+        "placement": "upper-left exterior of the clear cup",
+        "colors": [
+          "white"
+        ],
+        "confidence": 1.0
+      }
+    }
+  }
+}

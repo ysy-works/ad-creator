@@ -1,0 +1,79 @@
+{
+  "checks": {
+    "beverage_identity": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["The zero-credit fixture passes the exact uploaded product pixels through unchanged."],
+      "measurements": {}
+    },
+    "container_policy": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["The fixture validates orchestration only and introduces no conflicting container instruction."],
+      "measurements": {
+        "generated_height_to_width_ratio": 1.333,
+        "target_height_to_width_ratio": [1.227, 1.44]
+      }
+    },
+    "reference_brand_leakage": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["No reference pixels or reference branding are composited into the pass-through fixture."],
+      "measurements": {}
+    },
+    "logo_text": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["The verified-absent source branding contract remains unbranded."],
+      "measurements": {}
+    },
+    "product_composition": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["The fixture is used only to verify graph boundaries and deterministic post-processing."],
+      "measurements": {}
+    },
+    "hand_contact": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["No hand-contact mutation is introduced by the local fake provider."],
+      "measurements": {}
+    },
+    "wrist_exposure": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["No wrist is introduced by the local fake provider."],
+      "measurements": {}
+    },
+    "contact_shadow": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["No shadow mutation is introduced by the local fake provider."],
+      "measurements": {}
+    },
+    "cast_shadow": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["No shadow mutation is introduced by the local fake provider."],
+      "measurements": {}
+    },
+    "transmitted_light": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["No transparent-material mutation is introduced by the local fake provider."],
+      "measurements": {}
+    },
+    "lighting_physical_consistency": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["The fixture exercises contract transport rather than generation-quality scoring."],
+      "measurements": {}
+    },
+    "smartphone_naturalness": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["The uploaded smartphone source is passed through without synthetic rendering."],
+      "measurements": {}
+    }
+  }
+}

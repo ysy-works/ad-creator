@@ -1,0 +1,87 @@
+{
+  "$schema": "../../../schemas/scene-recipe.schema.json",
+  "schema_version": "1.0.0",
+  "recipe_id": "instagram_white_diffuse_wall_table_recipe_v1",
+  "display_name": "화이트 벽·화이트 테이블 확산광 단일 제품",
+  "compatible_presets": ["instagram_white_diffuse_wall_table_v1"],
+  "generation_policy": {
+    "normal_paid_generations": 1,
+    "runtime_reference_image": true,
+    "traditional_compositing": false
+  },
+  "composition": {
+    "inherit_preset_bbox": true,
+    "subject_anchor_priority": "one complete product remains within 16-24 percent height and 18 percent width while at least 68 percent of the frame remains meaningful space",
+    "asymmetry_sources": ["small horizontal product offset", "subtle wall tonal falloff", "soft rightward table shadow"]
+  },
+  "environment": {
+    "background_plane": "one real warm-neutral white wall meeting one matte white tabletop near y=0.80-0.84",
+    "surface_character": "quiet physical wall and table variation without decorative props or repeated AI texture",
+    "sun_patch_shape": "none; use only broad diffused tonal falloff"
+  },
+  "lighting": {
+    "source": "one very large left window diffused by overcast sky or a thin curtain",
+    "direction": "left toward right",
+    "shadow_description": "one soft attached base shadow and a broad low-density rightward falloff",
+    "light_softness": [0.72, 0.9],
+    "subject_to_wall_distance_cm": [35, 80],
+    "shadow_density": [0.1, 0.22],
+    "global_contrast": [0.22, 0.38],
+    "background_lightness": [0.72, 0.9],
+    "ambient_fill": "weak neutral room bounce that preserves product and support contact",
+    "exposure_compensation_ev": [-0.16, 0.04],
+    "sun_patch_coverage": [0.0, 0.0],
+    "highlight_behavior": "broad protected highlights with visible wall, table and glass detail",
+    "shadow_temperature": "neutral to faintly cool relative to the warm-neutral wall"
+  },
+  "capture": {
+    "phone_hdr": "restrained natural social-photo HDR",
+    "shadow_processing": "keep gentle depth and do not flatten the product into the white planes",
+    "local_texture": "retain beverage layers, glass fluting, rim thickness, wall variation and faint grain",
+    "forbidden_processing": ["uniform Gaussian blur", "portrait-mode cutout", "oversharpening", "milky lifted blacks", "studio sweep", "cinematic grade"]
+  },
+  "human_rendering": {
+    "skin_texture": "not applicable because no hand is active",
+    "light_response": "not applicable because no hand is active",
+    "forbidden": ["hand", "finger", "wrist", "arm", "sleeve"]
+  },
+  "material_rules": {
+    "glass": "retain thin circular rim, fine vertical fluting, flat base, refraction and physically connected highlights and shadows",
+    "plastic": "retain thin edge reflections without glass weight; never redesign the source container unless adopt_reference is selected",
+    "paper": "remain opaque with soft fiber response; never reveal beverage layers through the wall",
+    "ceramic": "retain matte or glazed ceramic response and never invent a logo on an unbranded surface"
+  },
+  "coupling_rules": [
+    "Product, table and wall share one left diffused source.",
+    "The product scale and wall-table boundary jointly preserve the large top-heavy negative space.",
+    "Container highlights, beverage transmission and the table shadow belong to one exposure.",
+    "Reference pixels may guide only declared scene grammar and optional container design; exact beverage and wall marks are excluded."
+  ],
+  "forbidden": [
+    "direct sunbeam",
+    "graphic hard shadow",
+    "hero close-up",
+    "extra product or prop",
+    "shadowless floating product",
+    "generic AI minimalist template",
+    "invented text or branding"
+  ],
+  "quality_gate": {
+    "hard_fail": [
+      "product height exceeds 0.24 or width exceeds 0.18",
+      "meaningful negative space is below 0.68",
+      "wall-table boundary is outside y=0.80-0.84",
+      "direct light patch or hard shadow appears",
+      "product looks pasted or floats",
+      "reference beverage, wall mark, text or logo leaks"
+    ],
+    "weights": {
+      "natural_smartphone_capture": 0.2,
+      "instagram_composition": 0.28,
+      "product_identity": 0.16,
+      "lighting_physical_coherence": 0.18,
+      "color_and_tone": 0.12,
+      "novel_scene_distance": 0.06
+    }
+  }
+}

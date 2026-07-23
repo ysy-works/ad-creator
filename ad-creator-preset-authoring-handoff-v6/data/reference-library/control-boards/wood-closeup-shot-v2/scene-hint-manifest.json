@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "sanitized_photographic_scene_hint",
+  "policy_version": "wood_closeup_shot_scene_hint_v2",
+  "role": "scene_hint",
+  "path": "C:\\Users\\yoosy\\Documents\\ad-creator\\ad-creator-preset-authoring-handoff-v6\\data\\reference-library\\control-boards\\wood-closeup-shot-v2\\scene-hint.png",
+  "relative_path": "data/reference-library/control-boards/wood-closeup-shot-v2/scene-hint.png",
+  "manifest_path": "C:\\Users\\yoosy\\Documents\\ad-creator\\ad-creator-preset-authoring-handoff-v6\\data\\reference-library\\control-boards\\wood-closeup-shot-v2\\scene-hint-manifest.json",
+  "manifest_relative_path": "data/reference-library/control-boards/wood-closeup-shot-v2/scene-hint-manifest.json",
+  "width_px": 1254,
+  "height_px": 1254,
+  "aspect_ratio": "1:1",
+  "sha256": "b322c228cd07341f9dc775aff48f86588b82404dc12ab60de4c07aa4dbda9f08",
+  "pixel_sha256": "5dbe27a8b25b7e7efc2a05b8ad6ce14d8c0e45bfb8260842372fc2e1e4488aec",
+  "source_binding": {
+    "asset_id": "ref_95fa7947818ce496",
+    "path": "C:\\Users\\yoosy\\Documents\\ad-creator\\assets\\references\\wood\\wood_closeup_cafe_latte_reference-v2.png",
+    "sha256": "4e17067c6696a71699e989bfc0fcb47d096a9626441698bec4b773904efd73c7",
+    "pixel_sha256": "fdcf3f83e673d7ed06cecb376eb7b94386bb2c1657f942136017aeeadc919523",
+    "width_px": 1254,
+    "height_px": 1254
+  },
+  "construction": {
+    "method": "identity-localized generative edit with full-frame geometric and photometric preservation",
+    "identity_edits": [
+      "foreground drink replaced by neutral translucent placeholder while preserving clear PET cup assembly",
+      "rear drink replaced by neutral dark placeholder while preserving double nested paper-cup assembly",
+      "all labels and lettering removed",
+      "plant species and leaf identity reduced to one defocused tonal mass"
+    ],
+    "preserved_evidence": [
+      "cup bounding boxes, centers, relative scale and overlap",
+      "round live-edge table boundary, matte color, grain and cracks",
+      "window-sill diagonals and gray exterior field",
+      "diffuse light gradient, white balance, exposure, highlights and shadow topology"
+    ]
+  },
+  "retained_relationships": [
+    "large front-left product slot and smaller behind-right double-paper-cup companion",
+    "both subjects supported by one round pale live-edge wood table",
+    "broad upper-left rear window field and lower-right soft shadow flow",
+    "indistinct plant tonal mass behind the pair",
+    "restrained warm-local wood and neutral-cool exterior separation"
+  ],
+  "forbidden_transfer": [
+    "neutral placeholder drink contents",
+    "reference latte or Americano identity and recipe",
+    "any reference label, lettering, logo or body copy",
+    "specific plant identity"
+  ],
+  "sanitation": {
+    "visible_labels": false,
+    "technical_panels": false,
+    "panel_boundaries": false,
+    "borderless_photo_like_plate": true,
+    "beverage_interiors_neutralized": true,
+    "unique_background_objects_strongly_low_passed": true,
+    "raw_reference_provider_submission_allowed": false
+  },
+  "checks": [
+    {
+      "check_id": "square_control_plate",
+      "status": "pass",
+      "evidence": {
+        "observed_px": [
+          1254,
+          1254
+        ]
+      }
+    },
+    {
+      "check_id": "no_visible_text_or_brand",
+      "status": "pass",
+      "evidence": {
+        "manual_visual_review": true
+      }
+    },
+    {
+      "check_id": "both_container_assemblies_retained",
+      "status": "pass",
+      "evidence": {
+        "primary": "clear PET open-rim cup",
+        "secondary": "double nested white paper cup"
+      }
+    },
+    {
+      "check_id": "light_and_support_geometry_retained",
+      "status": "pass",
+      "evidence": {
+        "window": true,
+        "round_wood_table": true,
+        "soft_shadows": true
+      }
+    }
+  ],
+  "manifest_content_sha256": "ad9af71494498c97b168e71bc1826e4692d46fdb11a2e1d193ffa5011dde812d"
+}

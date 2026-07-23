@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/reference-asset.schema.json",
+  "title": "Ad Creator Reference Asset v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "analysis_metadata",
+    "asset",
+    "subject",
+    "geometry",
+    "composition",
+    "depth",
+    "lighting",
+    "color",
+    "facets",
+    "runtime_policy",
+    "quality_flags"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "analysis_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model", "prompt_version", "analyzed_at", "confidence"],
+      "properties": {
+        "provider": { "$ref": "#/$defs/nonEmptyString" },
+        "model": { "$ref": "#/$defs/nonEmptyString" },
+        "prompt_version": { "const": "reference_analysis_v1" },
+        "analyzed_at": { "type": "string", "format": "date-time" },
+        "confidence": { "$ref": "#/$defs/confidence" }
+      }
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset_id",
+        "relative_path",
+        "file_sha256",
+        "pixel_sha256",
+        "width_px",
+        "height_px",
+        "format",
+        "source_folder_tags",
+        "dhash",
+        "duplicate_of"
+      ],
+      "properties": {
+        "asset_id": { "type": "string", "pattern": "^ref_[a-f0-9]{16}$" },
+        "relative_path": { "$ref": "#/$defs/nonEmptyString" },
+        "file_sha256": { "$ref": "#/$defs/sha256" },
+        "pixel_sha256": { "$ref": "#/$defs/sha256" },
+        "width_px": { "type": "integer", "minimum": 1 },
+        "height_px": { "type": "integer", "minimum": 1 },
+        "format": { "$ref": "#/$defs/nonEmptyString" },
+        "source_folder_tags": { "$ref": "#/$defs/stringArray" },
+        "dhash": { "type": "string", "pattern": "^[a-f0-9]{16}$" },
+        "duplicate_of": { "type": ["string", "null"] }
+      }
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary_subject",
+        "beverage",
+        "container",
+        "interaction",
+        "visible_text",
+        "brand_or_watermark_state"
+      ],
+      "properties": {
+        "primary_subject": { "$ref": "#/$defs/nonEmptyString" },
+        "beverage": { "$ref": "#/$defs/nonEmptyString" },
+        "container": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["class", "material", "silhouette", "components"],
+          "properties": {
+            "class": { "$ref": "#/$defs/nonEmptyString" },
+            "material": { "$ref": "#/$defs/nonEmptyString" },
+            "silhouette": { "$ref": "#/$defs/nonEmptyString" },
+            "components": { "$ref": "#/$defs/stringArray" }
+          }
+        },
+        "interaction": { "enum": ["none", "held", "touching", "pouring", "group", "other"] },
+        "visible_text": { "$ref": "#/$defs/stringArray" },
+        "brand_or_watermark_state": { "enum": ["present", "absent", "uncertain"] }
+      }
+    },
+    "geometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["container_bbox", "subject_bbox", "straw", "hand_bbox"],
+      "properties": {
+        "container_bbox": { "$ref": "#/$defs/bbox" },
+        "subject_bbox": { "$ref": "#/$defs/bbox" },
+        "hand_bbox": { "anyOf": [{ "$ref": "#/$defs/bbox" }, { "type": "null" }] },
+        "straw": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["present", "bbox", "centerline", "emergence_point", "angle_degrees"],
+          "properties": {
+            "present": { "type": "boolean" },
+            "bbox": { "anyOf": [{ "$ref": "#/$defs/bbox" }, { "type": "null" }] },
+            "centerline": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "prefixItems": [{ "$ref": "#/$defs/point" }, { "$ref": "#/$defs/point" }],
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                { "type": "null" }
+              ]
+            },
+            "emergence_point": { "anyOf": [{ "$ref": "#/$defs/point" }, { "type": "null" }] },
+            "angle_degrees": { "type": ["number", "null"], "minimum": -180, "maximum": 180 }
+          }
+        }
+      }
+    },
+    "composition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "shot_type",
+        "camera_height",
+        "camera_pitch",
+        "lens_character",
+        "subject_position",
+        "negative_space",
+        "asymmetry_source",
+        "crop_character"
+      ],
+      "properties": {
+        "shot_type": { "enum": ["handheld", "tabletop", "overhead", "closeup", "group", "overflow", "other"] },
+        "camera_height": { "enum": ["low", "product_level", "slightly_above", "high", "overhead"] },
+        "camera_pitch": { "$ref": "#/$defs/nonEmptyString" },
+        "lens_character": { "enum": ["phone_wide", "phone_normal", "phone_mild_tele", "unknown"] },
+        "subject_position": { "$ref": "#/$defs/nonEmptyString" },
+        "negative_space": { "$ref": "#/$defs/nonEmptyString" },
+        "asymmetry_source": { "$ref": "#/$defs/nonEmptyString" },
+        "crop_character": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "depth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "plane_count",
+        "foreground",
+        "product_plane",
+        "midground",
+        "background",
+        "perspective_cues",
+        "far_plane_softness",
+        "atmospheric_separation"
+      ],
+      "properties": {
+        "plane_count": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "foreground": { "$ref": "#/$defs/nonEmptyString" },
+        "product_plane": { "$ref": "#/$defs/nonEmptyString" },
+        "midground": { "$ref": "#/$defs/nonEmptyString" },
+        "background": { "$ref": "#/$defs/nonEmptyString" },
+        "perspective_cues": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "far_plane_softness": { "enum": ["none", "subtle", "moderate", "strong"] },
+        "atmospheric_separation": { "enum": ["none", "trace", "mild", "strong"] }
+      }
+    },
+    "lighting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_type",
+        "direction",
+        "source_size",
+        "hardness",
+        "contrast",
+        "shadow",
+        "highlight",
+        "transmitted_light",
+        "white_balance"
+      ],
+      "properties": {
+        "source_type": { "enum": ["direct_sun", "soft_window", "overcast", "artificial_warm", "mixed", "unknown"] },
+        "direction": { "$ref": "#/$defs/nonEmptyString" },
+        "source_size": { "enum": ["small", "medium", "large", "unknown"] },
+        "hardness": { "$ref": "#/$defs/confidence" },
+        "contrast": { "$ref": "#/$defs/confidence" },
+        "shadow": { "$ref": "#/$defs/nonEmptyString" },
+        "highlight": { "$ref": "#/$defs/nonEmptyString" },
+        "transmitted_light": { "$ref": "#/$defs/nonEmptyString" },
+        "white_balance": { "enum": ["cool", "neutral", "slightly_warm", "warm", "mixed"] }
+      }
+    },
+    "color": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exposure",
+        "saturation",
+        "contrast",
+        "black_point",
+        "palette_hex",
+        "mean_luminance",
+        "luminance_stddev",
+        "mean_saturation",
+        "edge_energy"
+      ],
+      "properties": {
+        "exposure": { "enum": ["dark", "low", "balanced", "bright", "high_key"] },
+        "saturation": { "enum": ["muted", "restrained", "natural", "vivid"] },
+        "contrast": { "enum": ["low", "soft", "medium", "strong"] },
+        "black_point": { "enum": ["lifted", "natural", "deep"] },
+        "palette_hex": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 6,
+          "items": { "type": "string", "pattern": "^#[A-F0-9]{6}$" }
+        },
+        "mean_luminance": { "$ref": "#/$defs/confidence" },
+        "luminance_stddev": { "$ref": "#/$defs/confidence" },
+        "mean_saturation": { "$ref": "#/$defs/confidence" },
+        "edge_energy": { "$ref": "#/$defs/confidence" }
+      }
+    },
+    "facets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mood_tags", "environment_tags", "material_tags", "shot_tags"],
+      "properties": {
+        "mood_tags": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "environment_tags": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "material_tags": { "$ref": "#/$defs/nonEmptyStringArray" },
+        "shot_tags": { "$ref": "#/$defs/nonEmptyStringArray" }
+      }
+    },
+    "runtime_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scene_pixels_allowed", "container_pixels_allowed", "copy_exclusions"],
+      "properties": {
+        "scene_pixels_allowed": { "const": false },
+        "container_pixels_allowed": { "const": true },
+        "copy_exclusions": { "$ref": "#/$defs/nonEmptyStringArray" }
+      }
+    },
+    "quality_flags": { "$ref": "#/$defs/stringArray" }
+  },
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "stringArray": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } },
+    "nonEmptyStringArray": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "coordinate": { "type": "number", "minimum": 0, "maximum": 1 },
+    "point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": {
+        "x": { "$ref": "#/$defs/coordinate" },
+        "y": { "$ref": "#/$defs/coordinate" }
+      }
+    },
+    "bbox": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["left", "top", "right", "bottom", "confidence"],
+      "properties": {
+        "left": { "$ref": "#/$defs/coordinate" },
+        "top": { "$ref": "#/$defs/coordinate" },
+        "right": { "$ref": "#/$defs/coordinate" },
+        "bottom": { "$ref": "#/$defs/coordinate" },
+        "confidence": { "$ref": "#/$defs/confidence" }
+      }
+    }
+  }
+}

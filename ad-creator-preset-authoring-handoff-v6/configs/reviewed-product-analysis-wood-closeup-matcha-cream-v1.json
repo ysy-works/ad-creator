@@ -1,0 +1,74 @@
+{
+  "schema_version": "2.0.0",
+  "analysis_metadata": {
+    "provider": "manual_visual_review",
+    "model": "human_reviewed_visible_pixels",
+    "prompt_version": "product_analysis_v2_brand_crosscheck",
+    "analyzed_at": "2026-07-22T15:00:00+09:00",
+    "confidence": 0.97,
+    "brand_crosscheck": "not_needed",
+    "identity_override": "manual_pixel_review"
+  },
+  "source_binding": {
+    "pixel_sha256": "3e460edeb6b4937455656434ea441d97d59b8a0305ff7747ecae56f430c0917f",
+    "width_px": 644,
+    "height_px": 750,
+    "dhash": "0600b130f0e0a103",
+    "mean_rgb": [0.614695, 0.602076, 0.569952]
+  },
+  "product_summary": "An unbranded iced matcha cream latte in a short clear cylindrical glass, with a deep green matcha base and side streaks, a pale milky center, visible ice, a generous soft cream topping and fine matcha powder; served on a plain white saucer with a small spoon.",
+  "identity": {
+    "beverage": "iced matcha cream latte",
+    "container": {
+      "class": "short open tumbler on a saucer",
+      "material": "clear glass with a white ceramic saucer",
+      "geometry": "short straight cylindrical glass with a thick transparent base, open circular rim and a slightly wider plain white round saucer",
+      "components": ["short clear cylindrical glass", "thick transparent glass base", "plain white round ceramic saucer", "small metal spoon with a dark wood handle resting on the saucer"]
+    },
+    "branding": {
+      "state": "verified_absent",
+      "main_text": null,
+      "visible_text": [],
+      "non_text_mark": null,
+      "placement": "no branding or readable text is visible on the glass, saucer or spoon",
+      "colors": [],
+      "confidence": 0.99
+    },
+    "must_preserve": ["iced matcha cream latte identity", "deep green matcha layer at the bottom", "irregular dark green matcha streaks rising along the inner glass", "pale milky middle layer", "visible ice beneath the topping", "generous irregular soft cream topping", "fine matcha powder dusting on the cream", "no logo or text"],
+    "serving_state": {
+      "schema_version": "1.0.0",
+      "temperature": "iced",
+      "ice_presence": "present",
+      "straw_requirement": "none",
+      "topping_requirement": "required",
+      "side_visibility_requirement": "required",
+      "confidence": 0.98,
+      "evidence": ["ice is visible through the clear glass below the cream", "soft cream and matcha powder are clearly visible at the open top", "green matcha layers and streaks are visible through the sidewall"]
+    }
+  },
+  "geometry": {
+    "container_bbox": {"left": 0.413, "top": 0.235, "right": 0.773, "bottom": 0.647, "confidence": 0.97},
+    "subject_bbox": {"left": 0.273, "top": 0.229, "right": 0.908, "bottom": 0.792, "confidence": 0.96},
+    "beverage_bbox": {"left": 0.435, "top": 0.247, "right": 0.758, "bottom": 0.623, "confidence": 0.97},
+    "straw": {"present": false, "bbox": null, "centerline": null, "emergence_point": null, "angle_degrees": null},
+    "interaction_bbox": null
+  },
+  "visual_anchor": {
+    "feature": "dark green matcha base and irregular inner-wall streaks beneath a pale iced milk layer and soft cream cap dusted with matcha powder",
+    "emphasis_method": "preserve natural translucent layering, irregular green flow, visible ice and softly folded cream under one diffuse window light",
+    "do_not_exaggerate": ["green saturation", "matcha streak thickness", "cream height", "powder quantity", "ice clarity"]
+  },
+  "adaptable": ["source background", "camera angle", "container only when adopt_reference is selected"],
+  "discarded_source_context": ["source tabletop", "source light direction", "source crop"],
+  "source_capture_assessment": {
+    "issues": ["source has a high diagonal view and a large blank tabletop field", "the serving assembly is compact relative to the full frame"],
+    "evidence": ["the glass, saucer and spoon are all fully visible", "the beverage side layers and top cream remain readable"]
+  },
+  "presentation_correction": {
+    "enabled": true,
+    "intent": "translate the exact matcha cream beverage into the approved close window-side scene while preserving its layers, ice, cream and powder",
+    "preferred_capture": {"focal_length_mm": [52, 58], "camera_distance": "close environmental tabletop distance", "camera_height": "slightly above the rim while preserving side layers", "rotation": "small natural rotation only"},
+    "allowed": ["reconstruct beverage optics under the target light", "change the container only in explicit adopt-reference mode", "adjust saucer and spoon perspective with the source cup"],
+    "forbidden": ["homogenize the green and white layers", "remove the cream or matcha powder", "invent branding or text", "retain the source tabletop or shadow"]
+  }
+}

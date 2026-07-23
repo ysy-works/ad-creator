@@ -1,0 +1,26 @@
+{
+  "schema_version": "2.0.0",
+  "grade_profile_id": "tokyo_warm_cafe_dark_tray_companions_grade_v1",
+  "input_color_space": "sRGB",
+  "output_color_space": "sRGB",
+  "transform": {
+    "exposure_ev": -0.04,
+    "contrast": 1.035,
+    "saturation": 0.90,
+    "warmth": 0.012,
+    "shadow_lift": 0.002,
+    "highlight_rolloff": 0.54
+  },
+  "tone_curve": [[0.0, 0.012], [0.06, 0.052], [0.20, 0.178], [0.50, 0.49], [0.76, 0.765], [0.93, 0.91], [1.0, 0.963]],
+  "split_tone": {
+    "shadow_rgb": [0.24, 0.23, 0.22],
+    "highlight_rgb": [0.82, 0.79, 0.72],
+    "balance": 0.56,
+    "strength": 0.018
+  },
+  "selective_saturation": {"red": 0.95, "yellow": 0.86, "green": 0.97, "cyan": 0.96, "blue": 0.94, "magenta": 0.95},
+  "local_contrast": {"radius": 2.4, "amount": 0.10, "threshold": 7},
+  "strength": {"default": 0.34, "min": 0.0, "max": 0.52},
+  "protection": {"regions": ["product", "logo", "skin"], "mask_strength": 0.94},
+  "qa_limits": {"max_dark_clip_ratio": 0.006, "max_bright_clip_ratio": 0.008}
+}

@@ -1,0 +1,265 @@
+{
+  "schema_version": "1.0.0",
+  "criteria_id": "preset_authoring_validation_v1",
+  "status_order": [
+    "pass",
+    "warning",
+    "needs_review",
+    "fail"
+  ],
+  "authority": {
+    "rule": "A generated image passes only when every required measurement exists, no hard-fail rule fires, and both aesthetic judges meet the adoption threshold.",
+    "missing_measurement": "needs_review",
+    "conflict_resolution": "identity, serving-state, brand, leakage and layout hard-fail rules override aesthetic scores"
+  },
+  "provider_boundary": {
+    "maximum_image_inputs": 4,
+    "prompt_character_limit": 12000,
+    "overflow_policy": "block the full request; never silently remove an input",
+    "required_manifest_fields": [
+      "model",
+      "quality",
+      "resolution",
+      "seed",
+      "prompt_sha256",
+      "request_hash",
+      "input roles and hashes",
+      "resolved contract hashes",
+      "provider job id",
+      "actual credits"
+    ]
+  },
+  "product_and_layout": {
+    "exact_product_count": "must match the request",
+    "center_position_error_max": 0.03,
+    "size_ratio_allowed": [
+      0.8,
+      1.2
+    ],
+    "target_bbox_iou_min": 0.55,
+    "frame_margin_min": 0.06,
+    "required_relations": [
+      "support contact",
+      "declared occlusion",
+      "active slot relations"
+    ],
+    "hard_fail": [
+      "wrong exact-product count",
+      "wrong product identity",
+      "wrong hot or cold serving state",
+      "floating or detached support contact",
+      "undeclared duplicate exact product",
+      "removed reference slot or relation reappears as authority"
+    ]
+  },
+  "representative_a6_scale_contract": {
+    "scope": "tokyo_a6_relational_scene_hint_v4",
+    "exact_beverage_width_ratio": {
+      "target": [
+        0.13,
+        0.15
+      ],
+      "warning": [
+        0.15,
+        0.2
+      ],
+      "fail_above": 0.2
+    },
+    "exact_beverage_height_ratio": {
+      "target": [
+        0.15,
+        0.18
+      ],
+      "warning": [
+        0.18,
+        0.23
+      ],
+      "fail_above": 0.23
+    },
+    "complete_round_tray_width_ratio": {
+      "target": [
+        0.44,
+        0.5
+      ],
+      "warning": [
+        0.5,
+        0.6
+      ],
+      "fail_above": 0.6
+    },
+    "complete_round_tray_height_max": 0.31,
+    "meaningful_negative_space_ratio": {
+      "target": [
+        0.5,
+        0.6
+      ],
+      "warning": [
+        0.38,
+        0.5
+      ],
+      "fail_below": 0.38
+    },
+    "required_active_items": [
+      "one exact right-front cold matcha beverage",
+      "one generic unbranded left-front drink",
+      "one plain unbranded rear-center carafe",
+      "one complete round dark oiled-wood tray"
+    ],
+    "default_runtime_arm": "sanitized_scene_hint + reference container design",
+    "structured_only_policy": "experimental fallback only because the provider enlarges the tray group without spatial image evidence"
+  },
+  "representative_white_basic_contract": {
+    "scope": "instagram_white_diffuse_wall_table_v1 / ref_edbb2b01b3166422",
+    "handoff_provider": "OpenAI Images API through the ComfyUI OpenAI workflow",
+    "scene": "one complete product on a matte white table beneath a large warm-neutral white wall",
+    "product_height_ratio": {
+      "target": [
+        0.16,
+        0.24
+      ],
+      "fail_above": 0.24
+    },
+    "product_width_ratio_max": 0.18,
+    "meaningful_negative_space_ratio_min": 0.68,
+    "wall_table_boundary_y_ratio": [
+      0.8,
+      0.84
+    ],
+    "camera": {
+      "height": "product-level to very slightly above",
+      "focal_length_equivalent_mm": [
+        50,
+        60
+      ],
+      "perspective": "normal, without close-phone enlargement"
+    },
+    "lighting": {
+      "source": "one very large diffused window source from the left",
+      "contrast": "low",
+      "saturation": "subdued",
+      "shadow": "soft, spatially attached contact and cast shadow"
+    },
+    "adopted_container": "unbranded short straight-sided clear glass with fine vertical fluting, a thin circular rim and an understated flat base",
+    "hard_fail": [
+      "direct sunbeam, bright light patch or graphic hard shadow",
+      "product exceeds the contracted height or width",
+      "meaningful negative space is below 0.68",
+      "hero-product or advertising close-up composition",
+      "shadowless studio sweep",
+      "portrait-mode cutout or uniform background blur",
+      "invented logo, lettering or pseudo-brand",
+      "the result reads as a repeatable AI minimalist product template"
+    ],
+    "evidence_status": "selected GPT result is a revise-and-review visual baseline, not a published preset",
+    "provider_portability": "preserve input roles, final prompt, quality, output size, postprocess and hashes; record a new request hash and job id when moving from Higgsfield to the OpenAI API"
+  },
+  "brand": {
+    "uncertain_source_brand": "block before paid submission",
+    "unbranded_source": "always remain unbranded",
+    "unbranded_reference": "brand transfer forbidden",
+    "generic_subject": "always unbranded",
+    "transfer_requirements": [
+      "source and target are both verified branded",
+      "material family matches",
+      "application medium matches",
+      "carrier component matches",
+      "surface matches",
+      "confidence is at least 0.90"
+    ],
+    "hard_fail": [
+      "invented text or logo",
+      "reference branding copied",
+      "logo appears on an unbranded target",
+      "incorrect glyph on an exact-brand target"
+    ]
+  },
+  "wood_material": {
+    "delta_e_00": {
+      "pass_max": 8,
+      "warning_max": 12
+    },
+    "lightness_difference": {
+      "pass_max": 8,
+      "warning_max": 12
+    },
+    "chroma_difference": {
+      "pass_max": 6,
+      "warning_max": 10
+    },
+    "grain_direction_difference_degrees": {
+      "pass_max": 15,
+      "warning_max": 25
+    },
+    "grain_frequency_ratio": {
+      "pass": [
+        0.65,
+        1.55
+      ],
+      "warning": [
+        0.5,
+        2.0
+      ]
+    },
+    "surface_occupancy_error": {
+      "pass_max": 0.12,
+      "warning_max": 0.2
+    },
+    "hard_fail": [
+      "material-board boundary visible",
+      "source object, text or layout copied from material input",
+      "wood color or grain treated as lighting authority"
+    ]
+  },
+  "lighting": {
+    "authority": "lighting sheet controls source type, direction, size, hardness, shadow density and white balance",
+    "material_separation": "wood color, grain and finish remain material-profile authority",
+    "hard_fail": [
+      "conflicting light directions",
+      "fake or detached shadows",
+      "hardness is identical across near and far planes when the contract separates them",
+      "clipped ceramic whites",
+      "full-frame amber or brown veil"
+    ]
+  },
+  "integration_and_leakage": {
+    "hard_fail": [
+      "product reads as a pasted cutout or sticker",
+      "source boundary, source reflection or source perspective is preserved",
+      "scene-hint panel edge or swatch boundary leaks into the result",
+      "identifiable reference object, furniture, text, logo or exact shadow silhouette is copied"
+    ]
+  },
+  "aesthetic_panel": {
+    "config_path": "configs/evaluator/instagram-natural-panel-v1.json",
+    "main_judge": "15-year Tokyo concept-store buyer",
+    "supporting_judge": "head lifestyle select-shop merchandiser",
+    "adopt_threshold": {
+      "main_average_min": 8.0,
+      "supporting_average_min": 7.5,
+      "both_must_stop": true,
+      "hard_reject_count": 0
+    },
+    "hard_reject": [
+      "product identity is ambiguous",
+      "light or shadow is visibly artificial",
+      "cup, drink, dessert or hand detail is malformed",
+      "the setup reads as over-directed",
+      "the result reads as an AI mood photograph",
+      "the product is buried or commercially unusable"
+    ]
+  },
+  "iteration_policy": {
+    "rule": "Change one diagnosed variable family per iteration and keep model, quality, resolution, seed, product and reference invariant.",
+    "variable_families": [
+      "composition scale",
+      "camera geometry",
+      "lighting",
+      "color grade",
+      "container design",
+      "brand contract",
+      "material control"
+    ],
+    "paid_repair": "disabled unless explicitly approved",
+    "publication": "A preset remains draft until schema, hash, zero-credit workflow and visual review all pass"
+  }
+}

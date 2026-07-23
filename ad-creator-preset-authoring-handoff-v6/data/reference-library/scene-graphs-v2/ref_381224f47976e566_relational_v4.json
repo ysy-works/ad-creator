@@ -1,0 +1,381 @@
+{
+  "schema_version": "2.0.0",
+  "analysis_metadata": {
+    "provider": "derived_static_contract",
+    "model": "a6_relational_geometry_scale_control_v4",
+    "prompt_version": "reference_scene_graph_v2",
+    "analyzed_at": "2026-07-20T00:00:00+00:00",
+    "confidence": 0.96
+  },
+  "asset": {
+    "asset_id": "ref_381224f47976e566",
+    "relative_path": "우드_저채도_차분/미디엄/d7b081a0435a26b0dd79f58771e18d94.jpg",
+    "file_sha256": "8d7ef6fb5733f3d6e738e57d23b789c43b139413b6451471b3a0d3f4d0c782f4",
+    "pixel_sha256": "08b015d7d4c1e18a875b023aad6fdb5d5f2c0a487d951d20308e6e1ae136b560",
+    "width_px": 746,
+    "height_px": 746,
+    "format": "JPEG",
+    "source_folder_tags": [
+      "우드_저채도_차분",
+      "미디엄"
+    ],
+    "dhash": "3fcd999239606879",
+    "duplicate_of": null
+  },
+  "scene_mode": "pair",
+  "observed_major_subject_count": 2,
+  "object_inventory_complete": true,
+  "objects": [
+    {
+      "slot_id": "beverage_primary",
+      "kind": "beverage",
+      "role": "primary",
+      "description": "Right-front curved footed glass centered on its complete broad white ceramic saucer",
+      "body_bbox": {
+        "left": 0.55,
+        "top": 0.49,
+        "right": 0.69,
+        "bottom": 0.66,
+        "confidence": 0.96
+      },
+      "full_bbox": {
+        "left": 0.535,
+        "top": 0.49,
+        "right": 0.705,
+        "bottom": 0.685,
+        "confidence": 0.96
+      },
+      "straw": {
+        "present": false,
+        "bbox": null,
+        "centerline": null,
+        "emergence_point": null,
+        "angle_degrees": null
+      },
+      "container": {
+        "class": "open footed glass",
+        "material": "clear glass",
+        "silhouette": "curved",
+        "components": [
+          "wide open oval glass rim",
+          "curved clear glass body",
+          "short narrow glass foot",
+          "broad low round white ceramic saucer"
+        ]
+      },
+      "interaction": "resting",
+      "support_surface_id": "surface_tray",
+      "depth_order": 2,
+      "occlusion_fraction": 0.0,
+      "replaceable": true,
+      "allowed_kinds": [
+        "beverage",
+        "dessert"
+      ],
+      "visible_text": [],
+      "brand_or_watermark_state": "absent",
+      "crop_safe": true
+    },
+    {
+      "slot_id": "beverage_secondary",
+      "kind": "prop",
+      "role": "accent",
+      "description": "Plain unbranded rear-center carafe connecting the two front vessels",
+      "body_bbox": {
+        "left": 0.43,
+        "top": 0.44,
+        "right": 0.51,
+        "bottom": 0.63,
+        "confidence": 0.96
+      },
+      "full_bbox": {
+        "left": 0.43,
+        "top": 0.44,
+        "right": 0.51,
+        "bottom": 0.63,
+        "confidence": 0.96
+      },
+      "straw": {
+        "present": false,
+        "bbox": null,
+        "centerline": null,
+        "emergence_point": null,
+        "angle_degrees": null
+      },
+      "container": {
+        "class": "small carafe",
+        "material": "clear glass",
+        "silhouette": "narrow-necked",
+        "components": [
+          "small open neck",
+          "plain clear body",
+          "unmarked neutral contents"
+        ]
+      },
+      "interaction": "resting",
+      "support_surface_id": "surface_tray",
+      "depth_order": 1,
+      "occlusion_fraction": 0.0,
+      "replaceable": false,
+      "allowed_kinds": [
+        "prop"
+      ],
+      "visible_text": [],
+      "brand_or_watermark_state": "absent",
+      "crop_safe": true
+    },
+    {
+      "slot_id": "beverage_tertiary",
+      "kind": "beverage",
+      "role": "secondary",
+      "description": "Generic short unbranded left-front dark iced drink with a slim stir stick",
+      "body_bbox": {
+        "left": 0.33,
+        "top": 0.54,
+        "right": 0.44,
+        "bottom": 0.7,
+        "confidence": 0.96
+      },
+      "full_bbox": {
+        "left": 0.27,
+        "top": 0.42,
+        "right": 0.44,
+        "bottom": 0.7,
+        "confidence": 0.96
+      },
+      "straw": {
+        "present": true,
+        "bbox": {
+          "left": 0.27,
+          "top": 0.42,
+          "right": 0.385,
+          "bottom": 0.56,
+          "confidence": 0.96
+        },
+        "centerline": [
+          {
+            "x": 0.27,
+            "y": 0.42
+          },
+          {
+            "x": 0.385,
+            "y": 0.56
+          }
+        ],
+        "emergence_point": {
+          "x": 0.385,
+          "y": 0.56
+        },
+        "angle_degrees": -20.0
+      },
+      "container": {
+        "class": "short open tumbler",
+        "material": "clear glass",
+        "silhouette": "slightly tapered cylinder",
+        "components": [
+          "open glass rim",
+          "short clear wall",
+          "small ice pieces",
+          "slim stir stick"
+        ]
+      },
+      "interaction": "resting",
+      "support_surface_id": "surface_tray",
+      "depth_order": 2,
+      "occlusion_fraction": 0.0,
+      "replaceable": true,
+      "allowed_kinds": [
+        "beverage",
+        "dessert"
+      ],
+      "visible_text": [],
+      "brand_or_watermark_state": "absent",
+      "crop_safe": true
+    }
+  ],
+  "relations": [
+    {
+      "from_slot_id": "beverage_tertiary",
+      "predicate": "left_of",
+      "to_slot_id": "beverage_secondary",
+      "confidence": 0.9
+    },
+    {
+      "from_slot_id": "beverage_tertiary",
+      "predicate": "left_of",
+      "to_slot_id": "beverage_primary",
+      "confidence": 0.94
+    },
+    {
+      "from_slot_id": "beverage_secondary",
+      "predicate": "left_of",
+      "to_slot_id": "beverage_primary",
+      "confidence": 0.9
+    },
+    {
+      "from_slot_id": "beverage_secondary",
+      "predicate": "behind",
+      "to_slot_id": "beverage_tertiary",
+      "confidence": 0.88
+    },
+    {
+      "from_slot_id": "beverage_secondary",
+      "predicate": "behind",
+      "to_slot_id": "beverage_primary",
+      "confidence": 0.88
+    },
+    {
+      "from_slot_id": "beverage_tertiary",
+      "predicate": "paired_with",
+      "to_slot_id": "beverage_primary",
+      "confidence": 0.84
+    }
+  ],
+  "support_surfaces": [
+    {
+      "surface_id": "surface_tray",
+      "kind": "tray",
+      "bbox": {
+        "left": 0.25,
+        "top": 0.52,
+        "right": 0.75,
+        "bottom": 0.78,
+        "confidence": 0.97
+      },
+      "plane_description": "Complete round dark oiled-wood tray spanning only 0.50 of frame width and 0.28 frame height on a white circular table",
+      "supports_objects": true,
+      "perspective_scale": [
+        1.0,
+        1.0
+      ]
+    }
+  ],
+  "protected_regions": [],
+  "insertion_zones": [
+    {
+      "zone_id": "zone_beverage_primary",
+      "bbox": {
+        "left": 0.55,
+        "top": 0.49,
+        "right": 0.69,
+        "bottom": 0.66,
+        "confidence": 0.96
+      },
+      "support_surface_id": "surface_tray",
+      "allowed_kinds": [
+        "beverage",
+        "dessert"
+      ],
+      "scale_range": [
+        0.9,
+        1.1
+      ],
+      "confidence": 0.96,
+      "reason": "right-front target preserves A6 relation while precompensating provider enlargement at 0.13-0.15 width and 0.15-0.18 height"
+    }
+  ],
+  "composition": {
+    "shot_type": "tabletop",
+    "camera_height": "slightly_above",
+    "camera_pitch": "30-36 degree downward pitch",
+    "lens_character": "phone_mild_tele",
+    "subject_position": "deliberately small lower-middle three-item relation with the exact beverage at right-front",
+    "negative_space": "0.50-0.60 meaningful release through room depth and exposed white table",
+    "asymmetry_source": "unequal vessel heights and front-back stagger",
+    "crop_character": "loose environmental crop with the complete round tray visible"
+  },
+  "depth": {
+    "plane_count": 3,
+    "foreground": "complete round tray and three related vessels",
+    "product_plane": "right-front tray slot",
+    "midground": "white circular table and transition to floor",
+    "background": "low-detail room with hard architectural daylight",
+    "perspective_cues": [
+      "normal-lens size falloff",
+      "tray ellipse",
+      "unequal overlap",
+      "attached contacts",
+      "plane-specific shadow hardness"
+    ],
+    "far_plane_softness": "moderate",
+    "atmospheric_separation": "mild"
+  },
+  "lighting": {
+    "source_type": "mixed",
+    "direction": "direct back-right daylight on the far room plus broad back-right window bounce over the foreground",
+    "source_size": "large",
+    "hardness": 0.58,
+    "contrast": 0.72,
+    "shadow": "hard architectural bands remain distant; foreground contacts are attached with broader soft falloff",
+    "highlight": "bright but rolled far-room patches and restrained foreground glass and ceramic edges",
+    "transmitted_light": "subtle local transmission through clear vessels only",
+    "white_balance": "slightly_warm"
+  },
+  "color": {
+    "exposure": "balanced",
+    "saturation": "restrained",
+    "contrast": "medium",
+    "black_point": "deep",
+    "palette_hex": [
+      "#60513D",
+      "#312215",
+      "#BBAB90",
+      "#9C8C73",
+      "#DECFB9"
+    ],
+    "mean_luminance": 0.4461,
+    "luminance_stddev": 0.4814,
+    "mean_saturation": 0.3487,
+    "edge_energy": 0.0608
+  },
+  "facets": {
+    "mood_tags": [
+      "quiet",
+      "warm-neutral",
+      "observational"
+    ],
+    "environment_tags": [
+      "cafe",
+      "sunlit-room"
+    ],
+    "material_tags": [
+      "dark-wood",
+      "glass",
+      "ceramic"
+    ],
+    "shot_tags": [
+      "tabletop",
+      "relational-set",
+      "environmental"
+    ]
+  },
+  "taxonomy": {
+    "environment_family": "warm_wood",
+    "lighting_family": "mixed",
+    "camera_angle": "slightly_above",
+    "capture_style": "group",
+    "scene_complexity": "pair",
+    "dominant_surface": "dark oiled wood tray on a white circular table",
+    "wood_prominence": 0.72,
+    "accent_color_prominence": 0.24,
+    "frontend_mood": "wood",
+    "frontend_angle": "slightly_above",
+    "confidence": 0.96
+  },
+  "runtime_policy": {
+    "scene_pixels_allowed": false,
+    "container_pixels_allowed": true,
+    "copy_exclusions": [
+      "reference beverage contents, recipes, text and marks",
+      "identifiable heater, plants, lamp and furniture",
+      "exact room geometry",
+      "exact sunlight and shadow silhouette",
+      "exact crop"
+    ],
+    "maximum_exact_products": 1,
+    "maximum_generic_companions": 1,
+    "maximum_major_subjects": 3,
+    "maximum_props": 2
+  },
+  "quality_flags": []
+}

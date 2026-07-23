@@ -1,0 +1,64 @@
+{
+  "campaign_id": "a6_relational_v4_scale_controlled_medium_three_arm",
+  "cases": [
+    {
+      "case_id": "arm_a_v4_scale_structured_reference_cup",
+      "core_status": "needs_review",
+      "deliverable_image": "/Users/apple/Documents/ad-creator/outputs/a6-relational-v4-scale-controlled-medium-three-arm/images/arm_a_v4_scale_structured_reference_cup.png",
+      "image_roles": [
+        "product_source"
+      ],
+      "prompt_sha256": "0a9484a9d79ee1cff814e43981d6d92e579c3cd4bcc05c1f34c91df951968d76",
+      "provider_job_id": "fdec2871-01aa-4ea6-869f-5969cea7d55f",
+      "reference_control": {
+        "container_design_source": "reference",
+        "role": "structured_only",
+        "submitted": false
+      },
+      "repro_bundle": "/Users/apple/Documents/ad-creator/outputs/a6-relational-v4-scale-controlled-medium-three-arm/repro-bundles/arm_a_v4_scale_structured_reference_cup/bundle.json",
+      "request_hash": "8565032452f652daad496d22b746c441c61a54c510aa04115019103537db6ce4"
+    },
+    {
+      "case_id": "arm_b_v4_scale_scene_hint_reference_cup",
+      "core_status": "needs_review",
+      "deliverable_image": "/Users/apple/Documents/ad-creator/outputs/a6-relational-v4-scale-controlled-medium-three-arm/images/arm_b_v4_scale_scene_hint_reference_cup.png",
+      "image_roles": [
+        "product_source",
+        "scene_hint"
+      ],
+      "prompt_sha256": "7cbca758b08183d9d8c76bd344117be73debe8b9200bf2fa4a3a3a6bd8270af7",
+      "provider_job_id": "87c85793-399e-44dd-b05a-fad5ed19e835",
+      "reference_control": {
+        "container_design_source": "reference",
+        "role": "sanitized_scene_hint",
+        "submitted": true
+      },
+      "repro_bundle": "/Users/apple/Documents/ad-creator/outputs/a6-relational-v4-scale-controlled-medium-three-arm/repro-bundles/arm_b_v4_scale_scene_hint_reference_cup/bundle.json",
+      "request_hash": "d78bd8a4bf7ea753caa596fc9fde7b09b55867a566d625dd3428fcd3bb79f1f5"
+    },
+    {
+      "case_id": "arm_c_v4_scale_scene_hint_source_cup",
+      "core_status": "needs_review",
+      "deliverable_image": "/Users/apple/Documents/ad-creator/outputs/a6-relational-v4-scale-controlled-medium-three-arm/images/arm_c_v4_scale_scene_hint_source_cup.png",
+      "image_roles": [
+        "product_source",
+        "scene_hint"
+      ],
+      "prompt_sha256": "497f182a7718b45ce754dd9cfba4bfdacb59818d474e024b82ee9c6147f6a708",
+      "provider_job_id": "cace90e7-613f-4642-8364-94575e7b0c25",
+      "reference_control": {
+        "container_design_source": "source",
+        "role": "sanitized_scene_hint",
+        "submitted": true
+      },
+      "repro_bundle": "/Users/apple/Documents/ad-creator/outputs/a6-relational-v4-scale-controlled-medium-three-arm/repro-bundles/arm_c_v4_scale_scene_hint_source_cup/bundle.json",
+      "request_hash": "1c8c0280c43a238d3a5d85d674118b752566028a49d81e40bb190c0cc4ef214a"
+    }
+  ],
+  "generation_count": 3,
+  "invocation_reported_credits": 6.0,
+  "matrix_credits": 6.0,
+  "prompt_compiler_version": "natural_compact_v4_3",
+  "schema_version": "1.0.0",
+  "status": "completed"
+}

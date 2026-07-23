@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0.0",
+  "lighting_sheet_id": "instagram_white_diffuse_wall_table_sheet_v1",
+  "mood": "quiet warm-neutral white wall and table under one large left diffused window",
+  "reference_cluster": {
+    "anchor_preset_id": "instagram_white_diffuse_wall_table_v1",
+    "minimum_cluster_size": 1,
+    "runtime_pixels_allowed": true,
+    "selection_rule": "single product, top-heavy white negative space, low wall-table boundary and no direct sun patch",
+    "source_images": ["45d43a2ace2d8cff291eec9395be7c16.jpg"]
+  },
+  "key_light": {
+    "source": "one very large side window diffused by an overcast sky or thin curtain",
+    "direction": "left to right with a low-density rightward shadow",
+    "relative_size": "very large, producing broad highlights and soft attached shadows",
+    "subject_to_wall_distance_cm": [35, 80]
+  },
+  "ambient_fill": "weak neutral room bounce below the key; preserve local contact and glass edge modeling",
+  "shadow_contract": {
+    "density": [0.1, 0.22],
+    "edge": "soft, attached and gradually fading",
+    "attachment": "small contact occlusion at the base plus one broad low-density rightward cast shadow",
+    "transparent_material": "glass retains a faint connected transmitted lift and background-dependent refraction",
+    "contact_shadow": {
+      "opacity": [0.16, 0.3],
+      "footprint": [0.04, 0.14],
+      "behavior": "small denser attachment directly beneath the product base"
+    },
+    "cast_shadow": {
+      "opacity": [0.05, 0.14],
+      "footprint": [0.28, 0.72],
+      "behavior": "broad soft rightward falloff without a graphic silhouette"
+    },
+    "transmitted_light": {
+      "opacity": [0.08, 0.28],
+      "footprint": [0.16, 0.5],
+      "behavior": "faint beverage-colored lift only inside a physically connected transparent shadow"
+    },
+    "qa_ratios": {
+      "cast_area_to_cup_bbox": [0.25, 1.1],
+      "wrist_length_to_cup_height": [0.0, 0.0],
+      "transparent_lift_inside_shadow": [0.06, 0.34]
+    }
+  },
+  "capture_contract": {
+    "exposure_compensation_ev": [-0.16, 0.04],
+    "hdr": "restrained social-photo HDR with protected white detail and no halo",
+    "white_balance": "warm-neutral white with quiet neutral-to-cool shadows",
+    "texture": "subtle wall and table irregularity, readable product detail and faint luminance grain"
+  },
+  "grade_strengths": {
+    "natural": 0.16,
+    "balanced": 0.28,
+    "expressive": 0.4
+  },
+  "forbidden": [
+    "direct sunbeam or bright graphic light patch",
+    "hard-edged shadow",
+    "shadowless studio sweep",
+    "clipped broad white area",
+    "heavy beige cast",
+    "portrait-mode cutout blur"
+  ],
+  "reference_anchor": {
+    "asset_id": "ref_edbb2b01b3166422",
+    "source_pixel_sha256": "00dc0f2e7b2683eec205599b2420e259058e86fa4de9b4ac9c24bfbc34daca46"
+  },
+  "camera_coupling": {
+    "direction_rule": "the product highlights, base contact and table shadow must agree with the same left window",
+    "projection_rule": "light falloff must preserve the low wall-table boundary and 50-60mm normal perspective"
+  },
+  "color_separation": {
+    "highlight": "warm-neutral white",
+    "shadow": "quiet neutral to faintly cool gray",
+    "product": "source-authoritative local color"
+  },
+  "qa_geometry": {
+    "source_azimuth_degrees": [294, 310],
+    "source_elevation_degrees": [32, 44],
+    "hardness": [0.1, 0.28],
+    "shadow_density": [0.1, 0.22]
+  }
+}

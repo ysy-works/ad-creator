@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "container_design_id": "white_closeup_short_cylindrical_glass_saucer_v2",
+  "display_name": "White close-up low cylindrical clear glass, saucer and teaspoon assembly",
+  "design": {
+    "class": "low straight cylindrical open tumbler on saucer with teaspoon",
+    "material": "clear glass",
+    "geometry": "one-piece low clear-glass tumbler with one continuous straight cylindrical exterior from its thin circular rim to a subtly thick weighted base. Its exterior height-to-outside-diameter ratio is 0.95-1.05: compact, broad and low, never a tall highball. The outside diameter remains visually constant through the sidewall; there is no shoulder, waist, band, seam, crack, sleeve, faceting or stacked vessel. Center it on a separate moderately wider low round warm-white ceramic saucer with one wood-handled teaspoon resting along the saucer's left side",
+    "components": [
+      "low straight clear-glass cylindrical body",
+      "thin open circular rim",
+      "constant outside diameter through the clear sidewall",
+      "subtly thick clear weighted base",
+      "separate moderately wider low round warm-white ceramic saucer",
+      "single metal teaspoon with a dark natural-wood handle on the saucer's left side"
+    ],
+    "height_to_width_ratio": [
+      0.95,
+      1.05
+    ]
+  },
+  "allowed_transfer": [
+    "one-piece low straight cylindrical glass silhouette",
+    "thin rim, constant sidewall diameter and weighted base",
+    "complete warm-white saucer",
+    "single wood-handled teaspoon and its left-side support relationship"
+  ],
+  "forbidden_transfer": [
+    "reference beverage",
+    "waffle",
+    "magazine",
+    "table",
+    "exact shadow pixels",
+    "text",
+    "logo",
+    "watermark"
+  ],
+  "compatibility": {
+    "beverage_temperatures": [
+      "cold",
+      "ambient"
+    ],
+    "supports_toppings": true,
+    "supports_straw": false,
+    "brand_surface": "plain unbranded glass; saucer remains plain"
+  }
+}

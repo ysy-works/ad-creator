@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0.0",
+  "profile_id": "higgsfield_gpt_image_2_editorial_reference_v1",
+  "provider": "higgsfield_cli",
+  "model": "gpt_image_2",
+  "submission_path": "generate_create_direct",
+  "prompt_enhancer": "disabled_by_default",
+  "runtime_inputs": ["user_product_identity", "optional_sanitized_style_control_board"],
+  "reference_policy": {
+    "send_reference_image": false,
+    "use": "offline precision contract or sanitized non-identifying control board only",
+    "novel_scene_required": true
+  },
+  "cost_profiles": {
+    "draft": {"resolution": "1k", "quality": "low", "credits_per_image": 0.5},
+    "default": {"resolution": "1k", "quality": "medium", "credits_per_image": 2},
+    "final": {"resolution": "1k", "quality": "high", "credits_per_image": 4}
+  },
+  "format": {
+    "generation_aspect_ratio": "3:4",
+    "delivery_aspect_ratio": "4:5",
+    "crop_mode": "editorial_safe_crop",
+    "safe_zone": {"x_ratio": [0.04, 0.96], "y_ratio": [0.04, 0.96]},
+    "target_delivery_pixels": [880, 1100]
+  },
+  "composition_control": {
+    "measurement_subject": "container body and its verified components",
+    "center_tolerance": 0.025,
+    "size_tolerance": 0.03,
+    "negative_space_tolerance": 0.035,
+    "repeat_contract_in_final_check": true
+  },
+  "capture_signature": {
+    "lens": "reference-specific 38-68mm-equivalent rectilinear optics at a disciplined working distance",
+    "depth": "whole product resolved with optical depth created by plane geometry, scale and light falloff",
+    "exposure": "manual-style exposure placement using the selected highlight, midtone and black-point contract",
+    "rendering": "professional art-directed editorial lifestyle photography with restrained naturalism",
+    "framing": "reference-specific subject scale, negative-space topology and support-plane perspective",
+    "optics": "reference-specific rectilinear lens geometry with controlled edge distortion and disciplined working distance",
+    "finish": "quiet premium material rendering, deliberate tonal separation and no generic stock-photo polish",
+    "spatial_depth": {
+      "scene_geometry": "Establish depth through support-plane convergence, overlap, diminishing scale and light falloff.",
+      "focus_behavior": "Keep the exact product resolved; reduce only far-plane microcontrast when physically distant.",
+      "subject_sharpness": "complete product, rim, contents and verified branding",
+      "forbidden": ["portrait cutout blur", "uniform Gaussian blur", "large decorative bokeh", "tilt-shift miniature effect"]
+    }
+  },
+  "language_policy": {
+    "required": ["art-directed editorial cafe photograph", "reference-faithful camera geometry", "new original scene"],
+    "forbidden": ["ordinary smartphone", "casual snapshot", "phone HDR", "first-person point of view", "owner-shot"]
+  },
+  "identity_policy": {
+    "preserve": ["beverage type", "container type", "logo spelling", "liquid layers", "toppings", "material construction"],
+    "allow_natural_variation": ["new background", "new support context", "minor condensation", "reference-compatible viewpoint"],
+    "never_infer_small_text": true,
+    "no_new_brand_text": true
+  },
+  "quality_gate": {
+    "minimum_score": 0.82,
+    "hard_fail": [
+      "camera geometry does not match the selected photographic style contract",
+      "support-plane perspective or negative-space topology differs materially from the contract",
+      "output reads as a casual smartphone snapshot or generic cafe stock photo",
+      "color separation or tonal curve loses the selected reference character",
+      "lighting screen map, shadow vector or highlight behavior contradicts the contract",
+      "wrong main logo spelling",
+      "changed beverage category or product material",
+      "reference product or brand leakage"
+    ],
+    "weights": {
+      "camera_geometry": 0.22,
+      "composition_rhythm": 0.20,
+      "color_and_tone": 0.20,
+      "lighting_space": 0.18,
+      "product_identity": 0.15,
+      "brand_integrity": 0.05
+    }
+  },
+  "retry_policy": {
+    "maximum_paid_attempts": 1,
+    "first_attempt": "1k_medium",
+    "composition_failure": "recompile the exact camera and support-plane geometry before any retry",
+    "style_failure": "do not add aesthetic adjectives; restore the photographic style contract and sanitized control board",
+    "identity_failure": "route to the separate identity or brand restoration workflow",
+    "identity_repair": {
+      "trigger": "protected identity fails while photographic style passes",
+      "inputs": ["generated_scene", "original_user_product"],
+      "instruction": "preserve the approved editorial scene and correct only failed product identity details",
+      "resolution": "1k",
+      "quality": "medium",
+      "credits": 2,
+      "maximum_attempts": 1
+    }
+  }
+}

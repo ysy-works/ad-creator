@@ -1,0 +1,261 @@
+{
+  "schema_version": "2.0.0",
+  "analysis_metadata": {
+    "provider": "manual_visual_review",
+    "model": "human_approved_reference_contract",
+    "prompt_version": "reference_scene_graph_v2",
+    "analyzed_at": "2026-07-21T00:00:00+09:00",
+    "confidence": 0.98
+  },
+  "asset": {
+    "asset_id": "ref_3da1c1c83c416adb",
+    "relative_path": "comfyui-inputs/ad_creator_reference_white_closeup_cylindrical_v2.png",
+    "file_sha256": "3da1c1c83c416adb1842c524c097ec66e778ec22ac11f449dbcb484ba7aa647e",
+    "pixel_sha256": "be10105f0c6c302b731a682f1d34d5c865e1d4ed80ba679e20b6f859fa3dc095",
+    "width_px": 1164,
+    "height_px": 1351,
+    "format": "PNG",
+    "source_folder_tags": [
+      "user_approved",
+      "white_neutral",
+      "closeup",
+      "soft_diffuse"
+    ],
+    "dhash": "8323239870f0e091",
+    "duplicate_of": null
+  },
+  "scene_mode": "solo",
+  "observed_major_subject_count": 1,
+  "object_inventory_complete": true,
+  "objects": [
+    {
+      "slot_id": "beverage_primary",
+      "kind": "beverage",
+      "role": "primary",
+      "description": "large central replaceable low cylindrical-glass beverage assembly with mandatory saucer and wood-handled teaspoon",
+      "body_bbox": {
+        "left": 0.3,
+        "top": 0.25,
+        "right": 0.72,
+        "bottom": 0.74,
+        "confidence": 0.96
+      },
+      "full_bbox": {
+        "left": 0.2,
+        "top": 0.21,
+        "right": 0.82,
+        "bottom": 0.93,
+        "confidence": 0.96
+      },
+      "straw": {
+        "present": false,
+        "bbox": null,
+        "centerline": null,
+        "emergence_point": null,
+        "angle_degrees": null
+      },
+      "container": {
+        "class": "low straight cylindrical open tumbler on saucer with teaspoon",
+        "material": "clear glass",
+        "silhouette": "one-piece compact low clear-glass cylinder with a constant sidewall diameter from thin rim to subtly thick weighted base, on a separate moderately wider low round saucer with one wood-handled teaspoon at left",
+        "components": [
+          "low straight clear-glass cylindrical body",
+          "thin open circular rim",
+          "constant outside diameter through the clear sidewall",
+          "subtly thick clear weighted base",
+          "separate moderately wider low round warm-white ceramic saucer",
+          "single metal teaspoon with a dark natural-wood handle on the saucer's left side"
+        ]
+      },
+      "interaction": "resting",
+      "support_surface_id": "surface_white_table",
+      "depth_order": 1,
+      "occlusion_fraction": 0,
+      "replaceable": true,
+      "allowed_kinds": [
+        "beverage",
+        "dessert"
+      ],
+      "visible_text": [],
+      "brand_or_watermark_state": "absent",
+      "crop_safe": true
+    }
+  ],
+  "relations": [],
+  "support_surfaces": [
+    {
+      "surface_id": "surface_white_table",
+      "kind": "table",
+      "bbox": {
+        "left": 0,
+        "top": 0,
+        "right": 1,
+        "bottom": 1,
+        "confidence": 0.99
+      },
+      "plane_description": "warm ivory-white matte cafe tabletop",
+      "supports_objects": true,
+      "perspective_scale": [
+        0.9,
+        1.1
+      ]
+    }
+  ],
+  "protected_regions": [
+    {
+      "region_id": "region_upper_center_air",
+      "kind": "negative_space",
+      "bbox": {
+        "left": 0.18,
+        "top": 0.0,
+        "right": 0.8,
+        "bottom": 0.27,
+        "confidence": 0.94
+      },
+      "reason": "retain quiet white-room air between the two peripheral edge crops"
+    },
+    {
+      "region_id": "region_room_shadow_air",
+      "kind": "shadow",
+      "bbox": {
+        "left": 0.0,
+        "top": 0.18,
+        "right": 1.0,
+        "bottom": 1.0,
+        "confidence": 0.9
+      },
+      "reason": "retain broad low-density directional occupancy modulation while inventing its exact silhouette"
+    }
+  ],
+  "insertion_zones": [
+    {
+      "zone_id": "zone_product_on_white_table",
+      "bbox": {
+        "left": 0.2,
+        "top": 0.21,
+        "right": 0.82,
+        "bottom": 0.93,
+        "confidence": 0.98
+      },
+      "support_surface_id": "surface_white_table",
+      "allowed_kinds": [
+        "beverage",
+        "dessert"
+      ],
+      "scale_range": [
+        1.08,
+        1.12
+      ],
+      "confidence": 0.98,
+      "reason": "reviewed signature cup-saucer-spoon assembly with complete support contact"
+    }
+  ],
+  "composition": {
+    "shot_type": "closeup",
+    "camera_height": "slightly_above",
+    "camera_pitch": "42-49 degrees",
+    "lens_character": "phone_mild_tele",
+    "subject_position": "large near center",
+    "negative_space": "quiet continuous warm-white tabletop with distant peripheral depth cues",
+    "asymmetry_source": "narrow off-frame waffle sliver upper-left and small off-frame magazine corner upper-right",
+    "crop_character": "4:5 close social crop with no table edge or floor"
+  },
+  "depth": {
+    "plane_count": 3,
+    "foreground": "large complete cup-saucer-spoon assembly with physically attached contacts and coherent shadow",
+    "product_plane": "cup, complete saucer and wood-handled teaspoon on one continuous tabletop",
+    "midground": "warm ivory-white matte tabletop with broad directional light falloff",
+    "background": "distant narrow off-frame waffle sliver upper-left and small off-frame magazine corner upper-right on the same continuous tabletop",
+    "perspective_cues": [
+      "large foreground serving-assembly scale",
+      "peripheral objects cropped by opposite frame edges",
+      "distance-dependent microcontrast reduction",
+      "overlapping attached shadows and broad light falloff"
+    ],
+    "far_plane_softness": "subtle",
+    "atmospheric_separation": "mild"
+  },
+  "lighting": {
+    "source_type": "soft_window",
+    "direction": "upper left toward lower right",
+    "source_size": "large",
+    "hardness": 0.34,
+    "contrast": 0.38,
+    "shadow": "short attached product shadow plus broad irregular soft-edged partial shadows from unseen room elements",
+    "highlight": "protected warm-neutral table and ceramic highlights",
+    "transmitted_light": "subtle and physically connected when the inserted source container is transparent",
+    "white_balance": "neutral"
+  },
+  "color": {
+    "exposure": "bright",
+    "saturation": "restrained",
+    "contrast": "soft",
+    "black_point": "natural",
+    "palette_hex": [
+      "#BEBAB8",
+      "#736C66",
+      "#A5A19E",
+      "#CCCACA",
+      "#D8D7D7"
+    ],
+    "mean_luminance": 0.6574,
+    "luminance_stddev": 0.3079,
+    "mean_saturation": 0.0511,
+    "edge_energy": 0.0192
+  },
+  "facets": {
+    "mood_tags": [
+      "white neutral",
+      "diffuse daylight",
+      "quiet spatial",
+      "natural cafe close-up"
+    ],
+    "environment_tags": [
+      "continuous ivory-white tabletop",
+      "narrow off-frame waffle sliver",
+      "small off-frame magazine corner",
+      "off-frame room shadows"
+    ],
+    "material_tags": [
+      "matte ivory-white table",
+      "clear glass",
+      "food texture",
+      "paper",
+      "source-authoritative accessory"
+    ],
+    "shot_tags": [
+      "high three-quarter close-up",
+      "single large product",
+      "portrait social crop"
+    ]
+  },
+  "taxonomy": {
+    "environment_family": "white_neutral",
+    "lighting_family": "soft_window",
+    "camera_angle": "slightly_above",
+    "capture_style": "closeup",
+    "scene_complexity": "solo",
+    "dominant_surface": "continuous warm ivory-white matte tabletop",
+    "wood_prominence": 0.0,
+    "accent_color_prominence": 0.05,
+    "frontend_mood": "white",
+    "frontend_angle": "slightly_above",
+    "confidence": 0.99
+  },
+  "runtime_policy": {
+    "scene_pixels_allowed": false,
+    "container_pixels_allowed": true,
+    "copy_exclusions": [
+      "reference beverage identity and recipe",
+      "exact serving-assembly pixels",
+      "exact table texture and shadow silhouette",
+      "exact waffle pixels and magazine alignment",
+      "watermark"
+    ],
+    "maximum_exact_products": 1,
+    "maximum_generic_companions": 1,
+    "maximum_major_subjects": 3,
+    "maximum_props": 2
+  },
+  "quality_flags": []
+}

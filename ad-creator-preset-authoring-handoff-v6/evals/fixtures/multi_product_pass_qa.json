@@ -1,0 +1,52 @@
+{
+  "observed_exact_product_count": 3,
+  "observed_exact_product_ids": [
+    "product_01",
+    "product_02",
+    "product_03"
+  ],
+  "product_measurements": [
+    {
+      "product_id": "product_01",
+      "observed_product_id": "product_01",
+      "center_position_error": 0.02,
+      "width_ratio": 1.0,
+      "height_ratio": 1.0,
+      "target_bbox_iou": 0.7,
+      "frame_margin": 0.08,
+      "support_relation_match": true,
+      "occlusion_relation_match": true,
+      "active_relation_match": true,
+      "brand_detected": false,
+      "reference_brand_detected": false
+    },
+    {
+      "product_id": "product_02",
+      "observed_product_id": "product_02",
+      "center_position_error": 0.02,
+      "width_ratio": 1.0,
+      "height_ratio": 1.0,
+      "target_bbox_iou": 0.7,
+      "frame_margin": 0.08,
+      "support_relation_match": true,
+      "occlusion_relation_match": true,
+      "active_relation_match": true,
+      "brand_detected": false,
+      "reference_brand_detected": false
+    },
+    {
+      "product_id": "product_03",
+      "observed_product_id": "product_03",
+      "center_position_error": 0.02,
+      "width_ratio": 1.0,
+      "height_ratio": 1.0,
+      "target_bbox_iou": 0.7,
+      "frame_margin": 0.08,
+      "support_relation_match": true,
+      "occlusion_relation_match": true,
+      "active_relation_match": true,
+      "brand_detected": false,
+      "reference_brand_detected": false
+    }
+  ]
+}

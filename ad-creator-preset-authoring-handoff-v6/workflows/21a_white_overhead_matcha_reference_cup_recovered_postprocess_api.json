@@ -1,0 +1,49 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "white_overhead_21a_recovered_raw.png"
+    }
+  },
+  "5": {
+    "class_type": "AD_LoadMoodPackage",
+    "inputs": {
+      "mood_package_path": "presets/moods/instagram_white_neutral_overhead_spatial_v1/mood-package.json"
+    }
+  },
+  "8": {
+    "class_type": "AD_InstagramCrop",
+    "inputs": {
+      "image": [
+        "1",
+        0
+      ],
+      "target_width": 880,
+      "target_height": 1100
+    }
+  },
+  "9": {
+    "class_type": "AD_ApplyMoodGrade",
+    "inputs": {
+      "image": [
+        "8",
+        0
+      ],
+      "mood_json": [
+        "5",
+        0
+      ],
+      "strength": "natural"
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "9",
+        0
+      ],
+      "filename_prefix": "ad_creator/white_overhead_spatial_v1/matcha_reference_cup_gpt_image_2_medium"
+    }
+  }
+}

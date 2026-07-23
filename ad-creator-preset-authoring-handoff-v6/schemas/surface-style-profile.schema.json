@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ad-creator.local/schemas/surface-style-profile.schema.json",
+  "title": "Reference SurfaceStyleProfile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "profile_type", "profile_id", "material_family",
+    "transfer_policy", "appearance", "text_brand_state", "transfer_permissions",
+    "transfer_prohibitions", "confidence", "source_pixel_sha256",
+    "material_mask_sha256", "surface_bbox", "measurement_evidence"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "profile_type": { "const": "surface_style" },
+    "profile_id": { "$ref": "#/$defs/nonEmptyString" },
+    "material_family": {
+      "enum": ["ceramic", "glass", "paper", "metal", "wood", "stone", "textile", "unknown"]
+    },
+    "transfer_policy": { "enum": ["shape_only", "shape_finish", "abstract_pattern"] },
+    "appearance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "observed_lab", "normalized_material_lab", "finish",
+        "structural_texture", "abstract_pattern", "pattern_density"
+      ],
+      "properties": {
+        "observed_lab": { "$ref": "#/$defs/labSummary" },
+        "normalized_material_lab": { "$ref": "#/$defs/labSummary" },
+        "finish": { "enum": ["matte", "satin", "gloss", "translucent", "unknown"] },
+        "structural_texture": { "enum": ["smooth", "ribbed", "fluted", "rough", "embossed", "unknown"] },
+        "abstract_pattern": { "enum": ["none", "speckled", "striped", "dotted", "marbled", "unknown"] },
+        "pattern_density": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "text_brand_state": { "enum": ["verified_absent", "verified_present", "uncertain"] },
+    "transfer_permissions": {
+      "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "transfer_prohibitions": {
+      "type": "array",
+      "uniqueItems": true,
+      "allOf": [
+        { "contains": { "const": "visible_text" } },
+        { "contains": { "const": "logo" } },
+        { "contains": { "const": "illustration" } },
+        { "contains": { "const": "exact_pixel_pattern" } },
+        { "contains": { "const": "source_object_identity" } },
+        { "contains": { "const": "source_composition" } }
+      ],
+      "items": { "$ref": "#/$defs/nonEmptyString" }
+    },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "source_pixel_sha256": { "$ref": "#/$defs/sha256" },
+    "material_mask_sha256": { "$ref": "#/$defs/sha256" },
+    "surface_bbox": { "$ref": "#/$defs/bbox" },
+    "measurement_evidence": {
+      "type": "object",
+      "required": [
+        "extractor_version", "source_pixel_sha256", "material_mask_sha256",
+        "surface_bbox", "analysis_sample_count", "normalization",
+        "highlight_fraction", "luminance_deviation", "measurement_sha256"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "transfer_policy": { "const": "shape_only" } } },
+      "then": {
+        "properties": {
+          "transfer_prohibitions": {
+            "allOf": [
+              { "contains": { "const": "surface_color" } },
+              { "contains": { "const": "finish" } },
+              { "contains": { "const": "surface_pattern" } }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "transfer_policy": { "const": "abstract_pattern" } } },
+      "then": { "properties": { "text_brand_state": { "const": "verified_absent" } } }
+    }
+  ],
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1 },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "lab": {
+      "type": "array", "minItems": 3, "maxItems": 3,
+      "prefixItems": [
+        { "type": "number", "minimum": 0, "maximum": 100 },
+        { "type": "number", "minimum": -128, "maximum": 127 },
+        { "type": "number", "minimum": -128, "maximum": 127 }
+      ],
+      "items": false
+    },
+    "labSummary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["median", "p10", "p90"],
+      "properties": {
+        "median": { "$ref": "#/$defs/lab" },
+        "p10": { "$ref": "#/$defs/lab" },
+        "p90": { "$ref": "#/$defs/lab" }
+      }
+    },
+    "bbox": {
+      "type": "object", "additionalProperties": false,
+      "required": ["left", "top", "right", "bottom"],
+      "properties": {
+        "left": { "type": "number", "minimum": 0, "maximum": 1 },
+        "top": { "type": "number", "minimum": 0, "maximum": 1 },
+        "right": { "type": "number", "minimum": 0, "maximum": 1 },
+        "bottom": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    }
+  }
+}

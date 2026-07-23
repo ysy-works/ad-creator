@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0.0",
+  "container_design_id": "white_ceramic_mug_visible_handle_overhead_v1",
+  "display_name": "White ceramic mug with visible lower-left handle for overhead scenes",
+  "design": {
+    "class": "open handled mug",
+    "material": "white glazed ceramic",
+    "geometry": "compact circular body with a thin readable rim, gently rounded wall and one complete handle visible near the seven-to-eight-o'clock direction in the overhead view",
+    "components": [
+      "thin circular ceramic rim",
+      "compact round white ceramic body",
+      "one complete lower-left handle",
+      "plain unbranded exterior"
+    ],
+    "height_to_width_ratio": [0.68, 0.92]
+  },
+  "allowed_transfer": [
+    "white glazed ceramic material",
+    "compact circular mug silhouette",
+    "one complete handle that remains visible from overhead",
+    "thin rim and plain unbranded exterior"
+  ],
+  "forbidden_transfer": [
+    "reference coffee color, latte art, crema, bubbles, recipe or topping",
+    "source beverage streaks, syrup bands, fruit color or transparency on the opaque mug exterior or base",
+    "reference text, logo, watermark or decorative mark",
+    "reference table edge, floor grout, environmental shadow silhouette or exact coordinates"
+  ],
+  "compatibility": {
+    "beverage_temperatures": ["hot", "cold", "ambient"],
+    "supports_toppings": true,
+    "supports_straw": false,
+    "brand_surface": "plain exterior only; apply branding only when a separately verified target brand contract authorizes it"
+  }
+}

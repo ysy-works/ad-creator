@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0.0",
+  "container_design_id": "a6_curved_glass_white_saucer_v1",
+  "display_name": "A6 curved footed glass with white ceramic saucer",
+  "design": {
+    "class": "open footed glass",
+    "material": "clear glass",
+    "geometry": "compact wide oval rim, inward waist, rounded lower bowl and short narrow glass foot; centered on a broad low circular saucer approximately 1.55 times the glass width",
+    "components": [
+      "wide open oval glass rim",
+      "curved clear glass body",
+      "short narrow glass foot",
+      "broad low round white ceramic saucer"
+    ],
+    "height_to_width_ratio": [1.34, 1.62]
+  },
+  "allowed_transfer": [
+    "glass material and curved footed silhouette",
+    "rim, waist, rounded bowl and short foot geometry",
+    "the complete white ceramic saucer and the glass-on-saucer support relation"
+  ],
+  "forbidden_transfer": [
+    "reference coffee, cream, cocoa, color layers, garnish or toppings",
+    "reference text, logo, watermark or decorative brand mark",
+    "reference heater, plants, furniture, background, tray layout or exact shadow silhouette"
+  ],
+  "compatibility": {
+    "beverage_temperatures": ["cold", "ambient"],
+    "supports_toppings": true,
+    "supports_straw": false,
+    "brand_surface": "plain unobstructed front glass only; the saucer never receives branding"
+  }
+}

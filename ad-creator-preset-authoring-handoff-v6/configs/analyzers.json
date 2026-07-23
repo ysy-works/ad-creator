@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0.0",
+  "product": {
+    "model": "gemini-3.1-flash-lite",
+    "fallback_models": [
+      "gemini-2.5-flash-lite"
+    ],
+    "maximum_image_edge": 1024,
+    "thinking_level": "low",
+    "timeout_seconds": 180,
+    "cache_root": "outputs/analysis-cache/product"
+  },
+  "reference": {
+    "model": "gemini-3.1-flash-lite",
+    "fallback_models": [
+      "gemini-2.5-flash-lite"
+    ],
+    "embedding_model": "gemini-embedding-2",
+    "maximum_image_edge": 768,
+    "thinking_level": "minimal",
+    "timeout_seconds": 180,
+    "batch_size": 8,
+    "cache_root": "outputs/analysis-cache/reference"
+  },
+  "reference_scene": {
+    "model": "gemini-3.1-flash-lite",
+    "fallback_models": [
+      "gemini-2.5-flash-lite"
+    ],
+    "maximum_image_edge": 768,
+    "thinking_level": "low",
+    "timeout_seconds": 180,
+    "batch_size": 8,
+    "cache_root": "outputs/analysis-cache/reference-v2"
+  }
+}

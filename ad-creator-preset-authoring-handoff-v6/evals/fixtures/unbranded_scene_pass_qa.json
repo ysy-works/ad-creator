@@ -1,0 +1,111 @@
+{
+  "checks": {
+    "beverage_identity": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["The zero-credit fixture passes the exact uploaded product pixels through unchanged."],
+      "measurements": {}
+    },
+    "container_policy": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["The fixture validates orchestration only and introduces no conflicting container instruction."],
+      "measurements": {
+        "generated_height_to_width_ratio": 1.0,
+        "target_height_to_width_ratio": [0.95, 1.05]
+      }
+    },
+    "reference_brand_leakage": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["No reference pixels or reference branding are composited into the pass-through fixture."],
+      "measurements": {
+        "generated_logo_text": null,
+        "brand_detected": false,
+        "reference_brand_detected": false
+      }
+    },
+    "logo_text": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["The verified-absent source branding contract remains unbranded."],
+      "measurements": {
+        "generated_logo_text": null,
+        "brand_detected": false,
+        "reference_brand_detected": false
+      }
+    },
+    "product_composition": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["The fixture is used only to verify graph boundaries and deterministic post-processing."],
+      "measurements": {}
+    },
+    "hand_contact": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["No hand-contact mutation is introduced by the local fake provider."],
+      "measurements": {}
+    },
+    "wrist_exposure": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["No wrist is introduced by the local fake provider."],
+      "measurements": {}
+    },
+    "contact_shadow": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["No shadow mutation is introduced by the local fake provider."],
+      "measurements": {}
+    },
+    "cast_shadow": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["No shadow mutation is introduced by the local fake provider."],
+      "measurements": {}
+    },
+    "transmitted_light": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["No transparent-material mutation is introduced by the local fake provider."],
+      "measurements": {}
+    },
+    "lighting_physical_consistency": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["The fixture exercises contract transport rather than generation-quality scoring."],
+      "measurements": {}
+    },
+    "smartphone_naturalness": {
+      "status": "pass",
+      "confidence": 0.95,
+      "evidence": ["The uploaded smartphone source is passed through without synthetic rendering."],
+      "measurements": {}
+    },
+    "scene_slot_adherence": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["The local fixture verifies deterministic slot-contract transport without paid generation."],
+      "measurements": {}
+    },
+    "scene_subject_count": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["The local fixture introduces no additional scene subjects."],
+      "measurements": {}
+    },
+    "scene_support_contact": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["The local fixture does not mutate the source support contact."],
+      "measurements": {}
+    },
+    "scene_relational_consistency": {
+      "status": "pass",
+      "confidence": 0.99,
+      "evidence": ["The local fixture verifies relation metadata transport without claiming generation quality."],
+      "measurements": {}
+    }
+  }
+}

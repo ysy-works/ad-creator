@@ -1,0 +1,792 @@
+{
+  "bundle_id": "ad-creator-preset-authoring-handoff-v6",
+  "comfyui_custom_node_root": "comfy_nodes/ad_creator",
+  "created_at": "2026-07-21T04:18:37.977284+00:00",
+  "execution_code_included": true,
+  "file_count_excluding_index": 151,
+  "files": [
+    {
+      "path": "INSTALL_COMFYUI_NODES_KO.md",
+      "sha256": "1e8fe5e08368cee1821d0988c4d71ce025e13b94e0af0c9d3e7d8e630c759b0a",
+      "size_bytes": 800
+    },
+    {
+      "path": "README_AI_HANDOFF_KO.md",
+      "sha256": "f94f65b7bcfd1dbd8df4ab581dabe87b7589dda4b263beb97f00e9eab6367ef3",
+      "size_bytes": 9045
+    },
+    {
+      "path": "REPRESENTATIVE_REVIEW_KO.md",
+      "sha256": "7868b9b25cf07505331681d8c21ecfd80bf01bb35d0fcd9775b4b855bee74744",
+      "size_bytes": 1310
+    },
+    {
+      "path": "VALIDATION_CRITERIA.json",
+      "sha256": "3136942aa5e9a41f3f6315978e761b82b0dc5020431b23ba4e8a3f1e2a04066a",
+      "size_bytes": 8374
+    },
+    {
+      "path": "WHITE_BASIC_OPENAI_REVIEW_KO.md",
+      "sha256": "698232ca305086aa6b1820c62e23a08724882dc32d1c9810e13a1a3bf29c7d25",
+      "size_bytes": 4292
+    },
+    {
+      "path": "comfy_nodes/ad_creator/__init__.py",
+      "sha256": "5f1b8fc20b6b153836f9c41e448550750d51000e429b0456f1a49c7d8ae0020a",
+      "size_bytes": 199
+    },
+    {
+      "path": "comfy_nodes/ad_creator/js/feature_visibility.js",
+      "sha256": "87f1ad3f04f3d6af868087bb84e6c3dc2801d616e84eb732e3b245914831ce65",
+      "size_bytes": 791
+    },
+    {
+      "path": "comfy_nodes/ad_creator/nodes.py",
+      "sha256": "0bea7685d59d992aad64aa5c8d3a9ea54c80586babe0ab6cb03539df91d080dd",
+      "size_bytes": 116268
+    },
+    {
+      "path": "comfy_nodes/ad_creator/v3_contracts.py",
+      "sha256": "4e7fee62ac64a5c5ac37de70f9f0ae34f96c42e4fcf174b99f0f19022ae2f4bb",
+      "size_bytes": 8632
+    },
+    {
+      "path": "comfyui-inputs/ad_creator_original_input_01.jpg",
+      "sha256": "44409eab68bb58e05506535fa819ac5e01b86c129f02eadde6000276bedb2f38",
+      "size_bytes": 54306
+    },
+    {
+      "path": "comfyui-inputs/ad_creator_reference_a6.jpg",
+      "sha256": "8d7ef6fb5733f3d6e738e57d23b789c43b139413b6451471b3a0d3f4d0c782f4",
+      "size_bytes": 72837
+    },
+    {
+      "path": "comfyui-inputs/white_basic_product_source.jpg",
+      "sha256": "b6b9906e38373e73cda4ab3cc55ee8376d1af7b9b00c138ece969672fbd427bb",
+      "size_bytes": 32330
+    },
+    {
+      "path": "comfyui-inputs/white_basic_reference.jpg",
+      "sha256": "b779788b91b542cecc628e9a4855d1db705bcb2e24c732598969c5d6ca8f915b",
+      "size_bytes": 36834
+    },
+    {
+      "path": "comfyui-inputs/다운로드.jpeg",
+      "sha256": "44409eab68bb58e05506535fa819ac5e01b86c129f02eadde6000276bedb2f38",
+      "size_bytes": 54306
+    },
+    {
+      "path": "configs/analyzers.json",
+      "sha256": "593527a6b9ed79a4f161f9a88e53798e8bd2521321c7412a81d5afd5c9edf62c",
+      "size_bytes": 918
+    },
+    {
+      "path": "configs/evaluator/instagram-natural-panel-v1.json",
+      "sha256": "689f7d5bd1ab177ea120cb37ab0e5c9b29b8fe2d1d2b9b8dd07c66d32181323a",
+      "size_bytes": 2908
+    },
+    {
+      "path": "configs/evaluator.json",
+      "sha256": "1c88b48191ea0a40e0d52d24f5d0a55bcde3e0f5a93075dd7a5a063c13b7d5b1",
+      "size_bytes": 337
+    },
+    {
+      "path": "configs/providers/openai-gpt-image-1-mini.json",
+      "sha256": "ba00ecd0ab625ee2cb7edef10eb3e1660018f43cc7b22a9a64f696b968936640",
+      "size_bytes": 540
+    },
+    {
+      "path": "configs/service-features.json",
+      "sha256": "756dee012e4c04ee5172ab9d4d5373f855ece63e7dc80d2b9124382bd6c2a5d9",
+      "size_bytes": 358
+    },
+    {
+      "path": "configs/validation/a6-relational-v4-scale-controlled-medium-three-arm.json",
+      "sha256": "bad1e7d38be8610c3d55c23f8b3e51b4d2630df15494cc8a2208d5ecb96b4a16",
+      "size_bytes": 2013
+    },
+    {
+      "path": "data/reference-library/assignments.json",
+      "sha256": "c361cb6c22c6d020b8289d099dc2c90e20eea8739d41dba5e730921bd9f8c8b8",
+      "size_bytes": 582737
+    },
+    {
+      "path": "data/reference-library/catalog.sqlite",
+      "sha256": "a19bba9ebb67ac16557ba7d6180ee5275f43aea4cbfe6d1f986263d02031f040",
+      "size_bytes": 757760
+    },
+    {
+      "path": "data/reference-library/control-boards/a6-relational-scene-hint-v4/scene-hint-manifest.json",
+      "sha256": "bc006383e554142ad76ebe6b56a8fe389146dc3f09837e87c6bc2ae52d54a578",
+      "size_bytes": 5442
+    },
+    {
+      "path": "data/reference-library/control-boards/a6-relational-scene-hint-v4/scene-hint.png",
+      "sha256": "1a53514fabdbcb5508401504bc3cca1bcb8914318e98a8b1ab14acda17a91c9b",
+      "size_bytes": 282239
+    },
+    {
+      "path": "data/reference-library/scene-graphs-v2/ref_381224f47976e566_relational_v4.json",
+      "sha256": "9b5fd19c6e4658c0259be320c29780897729b5a2c13d4ac6477a16a047f363f8",
+      "size_bytes": 10486
+    },
+    {
+      "path": "data/reference-library/scene-graphs-v2/ref_edbb2b01b3166422.json",
+      "sha256": "2ac8a98bb5a79596102f8eed3c904ab18a193447115e172043380feb18b0992e",
+      "size_bytes": 5596
+    },
+    {
+      "path": "example/evaluation/campaign-summary.json",
+      "sha256": "5ba6a4e776b42afcceeee4635b050feb3fccc1b37389741931d0134b5738aa9c",
+      "size_bytes": 3080
+    },
+    {
+      "path": "example/evaluation/qa-initial.json",
+      "sha256": "e93081564efc03e117869e7523a7bde583db495dbd6802c07e946bf78a66e039",
+      "size_bytes": 5491
+    },
+    {
+      "path": "example/inputs/01-product-source.png",
+      "sha256": "5b0d4be1156ceb60100fff12d3e6b99ce278eb2893b474dfa963b218de6801c9",
+      "size_bytes": 472546
+    },
+    {
+      "path": "example/inputs/02-scene-hint.png",
+      "sha256": "1a53514fabdbcb5508401504bc3cca1bcb8914318e98a8b1ab14acda17a91c9b",
+      "size_bytes": 282239
+    },
+    {
+      "path": "example/output/a6-v4-reference-cup.png",
+      "sha256": "5db69307559e0d7071c33dee7075897f33e66467733f0d2dd3ac709c47063522",
+      "size_bytes": 1232389
+    },
+    {
+      "path": "example/reproduction/bundle.json",
+      "sha256": "5c90a607531a75c4ab2342c1bd79963e6d706fd8e4683741c0bf89f789a8588c",
+      "size_bytes": 6358
+    },
+    {
+      "path": "example/reproduction/prompt.txt",
+      "sha256": "290408086d9a4f45edd5fdc437cfa98eb6e4a6a371670c119652f0ee515bb10c",
+      "size_bytes": 6949
+    },
+    {
+      "path": "example/reproduction/request.json",
+      "sha256": "079f06d1af7b8de74b69000bd6bc65b728fdce2f31f1416a9fe6b7f62e1e5032",
+      "size_bytes": 31779
+    },
+    {
+      "path": "example/white-basic-openai/evaluation/panel-report.json",
+      "sha256": "41b613e10db93654e31f01f4abe7916e9bf42ff6c55c20c4d47c3efd8ec520a5",
+      "size_bytes": 2848
+    },
+    {
+      "path": "example/white-basic-openai/inputs/white_basic_product_source.jpg",
+      "sha256": "b6b9906e38373e73cda4ab3cc55ee8376d1af7b9b00c138ece969672fbd427bb",
+      "size_bytes": 32330
+    },
+    {
+      "path": "example/white-basic-openai/inputs/white_basic_reference.jpg",
+      "sha256": "b779788b91b542cecc628e9a4855d1db705bcb2e24c732598969c5d6ca8f915b",
+      "size_bytes": 36834
+    },
+    {
+      "path": "example/white-basic-openai/output/gpt-image-2-medium-1k.jpg",
+      "sha256": "f658a476a6e61919298da64e720567c424d66ef5c49ba580f9bcf2345444fd6d",
+      "size_bytes": 58576
+    },
+    {
+      "path": "example/white-basic-openai/preset-contract.json",
+      "sha256": "1888610356650d8f56ced98f3c8e70f1715dffe688987e56140fa35dd8390bea",
+      "size_bytes": 4600
+    },
+    {
+      "path": "example/white-basic-openai/reproduction/ledger-case.json",
+      "sha256": "c93667f1f0c458938996524e463bdb4bff7219a67f9195305e2438ec5a409c62",
+      "size_bytes": 5753
+    },
+    {
+      "path": "example/white-basic-openai/reproduction/prompt.txt",
+      "sha256": "b4de311da47f6165d41578795f3a3f5bc4514e58869b6c4380bbf89fda66e617",
+      "size_bytes": 3986
+    },
+    {
+      "path": "presets/container_designs/a6_curved_glass_white_saucer_v1.json",
+      "sha256": "dc2ee49518dc4f754adc49a58377ee6a2cb88a2950000ac8363ed7f8749e32a5",
+      "size_bytes": 1355
+    },
+    {
+      "path": "presets/editorial/instagram_white_diffuse_wall_table_v1/photographic-style-contract.json",
+      "sha256": "42e6e3e2d1904ff9935456f02b3ff696d4beba91879bc8f5b8923c2474153c52",
+      "size_bytes": 6078
+    },
+    {
+      "path": "presets/editorial/instagram_white_diffuse_wall_table_v1/reference-preset.json",
+      "sha256": "71b9a075afeb982c640574896599d00df10ee50398b665d6eabecab968e1ce3c",
+      "size_bytes": 7429
+    },
+    {
+      "path": "presets/editorial/product-integration-contract-v1.json",
+      "sha256": "4a35ca70aeee44780b22c3d284b48ca3dd14c60b42f6f3df78e79efe4a6d8369",
+      "size_bytes": 5665
+    },
+    {
+      "path": "presets/editorial/runtime-profile-v1.json",
+      "sha256": "da3b7c9afd22447c711a7349621b748fd7c148ebd6d5b433a9c4ff735c7c9d52",
+      "size_bytes": 4822
+    },
+    {
+      "path": "presets/editorial/tokyo_a6_relational_scene_hint_v4/photographic-style-contract.json",
+      "sha256": "33974c37e778e50169b83af697471881bc6c22a14522eb2ac63376b0650bada8",
+      "size_bytes": 8952
+    },
+    {
+      "path": "presets/editorial/tokyo_a6_relational_scene_hint_v4/reference-preset.json",
+      "sha256": "39553c8160c2bb4b7feb1e4e003130670a8eb43fd5383d604dc7ba216adb8de7",
+      "size_bytes": 11328
+    },
+    {
+      "path": "presets/lighting/white-diffuse-base-v1.json",
+      "sha256": "65c2dc5abcd4a9627598a6f9a483c031f2d1002fe7a9adffae90c8a75f59e7a6",
+      "size_bytes": 286
+    },
+    {
+      "path": "presets/moods/instagram_white_diffuse_wall_table_v1/lighting-sheet.json",
+      "sha256": "67b65c68071943b813e9e135d47346daf90325dacf5f4db478d363963ab2b76f",
+      "size_bytes": 3408
+    },
+    {
+      "path": "presets/moods/instagram_white_diffuse_wall_table_v1/mood-package.json",
+      "sha256": "dfc38c42a59d8b3cc041f5abee67baf1e7f2947eed803b95f8aa64b440794198",
+      "size_bytes": 1065
+    },
+    {
+      "path": "presets/moods/instagram_white_diffuse_wall_table_v1/scene-recipe.json",
+      "sha256": "0f75d8017497c85cc99d14a34134550896ada42c0886c013b27043f2e93e352c",
+      "size_bytes": 4329
+    },
+    {
+      "path": "presets/moods/soft_diffuse_window_neutral_v1/grade-profile.json",
+      "sha256": "7a22e671508f3354ce487ead495135841acdca5ea81a83443bcd61beaba33c1f",
+      "size_bytes": 581
+    },
+    {
+      "path": "presets/moods/tokyo_a6_relational_scene_hint_v4/lighting-sheet.json",
+      "sha256": "9a4b11f6c088bc2a7ed32b96a950546c5574dcc72ea76e8f44ffe514a19f9173",
+      "size_bytes": 6845
+    },
+    {
+      "path": "presets/moods/tokyo_a6_relational_scene_hint_v4/mood-package.json",
+      "sha256": "7e3e1e877d6a917528e994557a13cd0d443b301d04c4c833d8f79bd3a1704a76",
+      "size_bytes": 1459
+    },
+    {
+      "path": "presets/moods/tokyo_a6_relational_scene_hint_v4/scene-recipe.json",
+      "sha256": "81e340c4423de68ee6798d69c9044449f7f0b1fe7c49840c5ba6eb3bf972426b",
+      "size_bytes": 5681
+    },
+    {
+      "path": "presets/moods/tokyo_warm_cafe_dark_tray_companions_v1/grade-profile.json",
+      "sha256": "15fed565560da46bfd25ea8237965b3693f2d771c120d4248698271482a92b88",
+      "size_bytes": 1006
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "a70643119afbbe8ccdada291181e8dab2583661ae667b42b00fb7fb7ffc5a4b9",
+      "size_bytes": 537
+    },
+    {
+      "path": "requirements-lock.txt",
+      "sha256": "336c8a8185bfbcabda967568e681727f5fe0c8af18f03779b838997e54fff3d4",
+      "size_bytes": 53
+    },
+    {
+      "path": "schemas/brand-asset.schema.json",
+      "sha256": "eae4278c47b7c94e457b7752cb6f489b43099392b6d0dbf24b25452a61fe6d63",
+      "size_bytes": 3172
+    },
+    {
+      "path": "schemas/container-design.schema.json",
+      "sha256": "6d72eddfebca42e4516c233f91bbd754fbe56ad9015778ee9e19cb5d1c731caa",
+      "size_bytes": 2205
+    },
+    {
+      "path": "schemas/control-board-sanitation-evidence.schema.json",
+      "sha256": "6067c98113ec5347fb6185907ef02a3d4420f742248db4098ded897299dd7c3f",
+      "size_bytes": 2773
+    },
+    {
+      "path": "schemas/generation-request-v3.schema.json",
+      "sha256": "19fca91542ed5b2c3ad8d5559f77aeb7fe0429f25d09f637fcf3f17d4142bb39",
+      "size_bytes": 29209
+    },
+    {
+      "path": "schemas/grade-profile.schema.json",
+      "sha256": "81269508e10c2dbe96b5f6b282f04920af8a81521681c930f4348ed5bce2924b",
+      "size_bytes": 4402
+    },
+    {
+      "path": "schemas/instagram-natural-judge-report.schema.json",
+      "sha256": "8c61ed1869313e2ecb6595a3244e4e7eebc3f92e24d90f659c0cdf178b4c1d39",
+      "size_bytes": 4183
+    },
+    {
+      "path": "schemas/lighting-contract-v3.schema.json",
+      "sha256": "fce84fc94c78d901053006ef5f3e1bf67246ded9796a66e507ca668fa7698f39",
+      "size_bytes": 2506
+    },
+    {
+      "path": "schemas/lighting-sheet.schema.json",
+      "sha256": "6ef8b4f1bc1fa4830313f302a3249011f7da626a64bd472b6e71090b8920b9fe",
+      "size_bytes": 8381
+    },
+    {
+      "path": "schemas/mood-package.schema.json",
+      "sha256": "0584748c6682a08ae9281d4088455c74881842e2e8283e3d6554f156d4fe2bd8",
+      "size_bytes": 1935
+    },
+    {
+      "path": "schemas/photographic-style-contract.schema.json",
+      "sha256": "064ae8ede63180f42574984c5da83d7c2aab3716484ceb0da8abdb7a5646b067",
+      "size_bytes": 10170
+    },
+    {
+      "path": "schemas/product-analysis.schema.json",
+      "sha256": "28470192a3ab8c14adde9b8f3ffdf67c380d6109b0cf7a78899af6b7f2440374",
+      "size_bytes": 11965
+    },
+    {
+      "path": "schemas/product-integration-contract.schema.json",
+      "sha256": "f588da9eed841351e6230d9bc7709273687c06c00fe9638ab7c2f69a8763a4e0",
+      "size_bytes": 4598
+    },
+    {
+      "path": "schemas/product-spec-v3.schema.json",
+      "sha256": "650403c3725ab33e1de4daac80906ae2aa91e50c5c3e435cf37a1b0970d17693",
+      "size_bytes": 6823
+    },
+    {
+      "path": "schemas/qa-report.schema.json",
+      "sha256": "6ab948b86db6c47ade1897e61c07c872797291c8c6bc6e1dadd5d34d2b5fc277",
+      "size_bytes": 3421
+    },
+    {
+      "path": "schemas/reference-analysis-v3.schema.json",
+      "sha256": "064b14625863a2e3145aa1fa078d63c80c87441d5b9b60a31d5213afad174c49",
+      "size_bytes": 2864
+    },
+    {
+      "path": "schemas/reference-asset.schema.json",
+      "sha256": "a7c75d249a0f519c2c3737e943d17e059c150c915090a5cb710258da8238f4f1",
+      "size_bytes": 10408
+    },
+    {
+      "path": "schemas/reference-preset.schema.json",
+      "sha256": "c79bbb7446902990720403ec98ae8d38dbc3f339a1bbf4d76b2b000a9ebaeff0",
+      "size_bytes": 12838
+    },
+    {
+      "path": "schemas/reference-scene-graph.schema.json",
+      "sha256": "b81d9e53c9e96c45ba46d9a4ad6b04b5f2f3055d3f9939533216641b30b1b097",
+      "size_bytes": 16573
+    },
+    {
+      "path": "schemas/repair-plan.schema.json",
+      "sha256": "9331052d980cf9554c77ee164b7535ef4bd90043776d130c3681ec243ecc0ff2",
+      "size_bytes": 1593
+    },
+    {
+      "path": "schemas/run-manifest.schema.json",
+      "sha256": "994193692fc689a2138c17ef963be088926863773ebb8286fd4eb149fd3f6375",
+      "size_bytes": 2932
+    },
+    {
+      "path": "schemas/scene-recipe.schema.json",
+      "sha256": "5bc97b2d64762add3b6a4e44f1e577930302c4681321865858877106ea54bef5",
+      "size_bytes": 6016
+    },
+    {
+      "path": "schemas/service-features.schema.json",
+      "sha256": "ab7127623ae27c1e533b59179c31dbd699eccf51770f723266a95ef2b9831034",
+      "size_bytes": 1575
+    },
+    {
+      "path": "schemas/surface-style-profile.schema.json",
+      "sha256": "9bc715b2c520ccce6e4cfe82ceec4a82ce53c14fd5ae766f3a83e2ee45178feb",
+      "size_bytes": 4731
+    },
+    {
+      "path": "schemas/v3-brand-regression-fixture.schema.json",
+      "sha256": "1c5db4ce8e8b11f6f430011cf33587451f91dca6c4ebdb73756026b89efe7951",
+      "size_bytes": 2498
+    },
+    {
+      "path": "schemas/v3-image-evaluation-report.schema.json",
+      "sha256": "8f0b08318cfe23fc38d1b9e02db609c518260bca9270ece10bafc2859b24db90",
+      "size_bytes": 5970
+    },
+    {
+      "path": "schemas/wood-material-profile.schema.json",
+      "sha256": "7ae7c2474b363c192fce8863a8f0a63e9b522cc515aafd15e3da08125f8eb715",
+      "size_bytes": 9365
+    },
+    {
+      "path": "scripts/build_a6_relational_v4_workflows.py",
+      "sha256": "9c5b7d946cba4a352ef6c9384909d4c2a47d36274fb2891ee1d880fa81582ef2",
+      "size_bytes": 2945
+    },
+    {
+      "path": "scripts/prepare_a6_relational_scene_hint_v3.py",
+      "sha256": "583640d56fe6430f00347a3f8ab79ae71a5339168632529157a0b2693e5e926e",
+      "size_bytes": 15176
+    },
+    {
+      "path": "scripts/run_a6_relational_v4_three_arm.py",
+      "sha256": "4e32681f45cce4eeeede0562e6af6c80a7a048a14ba695994926545613b6aef5",
+      "size_bytes": 11823
+    },
+    {
+      "path": "scripts/smoke_comfyui_api.py",
+      "sha256": "b8d79e7aa5c6885b0ed62a3692dfcf2d9633023d47b4abb8209f85cb29158098",
+      "size_bytes": 11670
+    },
+    {
+      "path": "src/ad_creator/__init__.py",
+      "sha256": "5ed7e04a711f4a45ac3eced8ef959ebc521370a49e1b0b22c9bb0b94a29463d4",
+      "size_bytes": 70
+    },
+    {
+      "path": "src/ad_creator/analyzers/__init__.py",
+      "sha256": "cde0ef33ccc7511155f4ccb87a3be41a8a9a4da27b5a3afb14a712f8ed2dd093",
+      "size_bytes": 360
+    },
+    {
+      "path": "src/ad_creator/analyzers/gemini.py",
+      "sha256": "b88ac0114b889ce45cfcb58027c1a142b9edd20cc2161b7b5829bae23dcff651",
+      "size_bytes": 104170
+    },
+    {
+      "path": "src/ad_creator/brand_restoration.py",
+      "sha256": "5e84cf0d989bb068537248d36277750adcc8d5006860f80b160d6a04fad2cba3",
+      "size_bytes": 18397
+    },
+    {
+      "path": "src/ad_creator/campaign_recovery.py",
+      "sha256": "f79328a046957fe2f32f6b9b63efc92731fb0180bab6b73c221e07e0fe315584",
+      "size_bytes": 45010
+    },
+    {
+      "path": "src/ad_creator/cli.py",
+      "sha256": "d1674288a7bcd626307f89da135b58c26183050e18f2d9a8183b8061a2a36e8d",
+      "size_bytes": 14888
+    },
+    {
+      "path": "src/ad_creator/contact_sheet.py",
+      "sha256": "efc40a102b43e23399b3ce1fa6b7e861e22a25c9d237fa75f81f41347b80dac6",
+      "size_bytes": 5305
+    },
+    {
+      "path": "src/ad_creator/control_board.py",
+      "sha256": "59e343af421cf528de7a114829461e48d210c167d1d5764a6a41fa08cdbf116a",
+      "size_bytes": 15612
+    },
+    {
+      "path": "src/ad_creator/diagnostic_matrix.py",
+      "sha256": "83f98dee80cf72b6eb127b2d555da845b1ca47a9bf9477ed83d3db3ad52c948f",
+      "size_bytes": 50713
+    },
+    {
+      "path": "src/ad_creator/diagnostic_pilot.py",
+      "sha256": "48b81bec1fe32987f18b8d96354f18adbfd7997d3960c1afb4e12c50d95f999d",
+      "size_bytes": 42108
+    },
+    {
+      "path": "src/ad_creator/environment.py",
+      "sha256": "6daee499b759cdce62bf03d2a00d304dfc647b00a9621e87f1f88547b7b42808",
+      "size_bytes": 1172
+    },
+    {
+      "path": "src/ad_creator/evaluators/__init__.py",
+      "sha256": "2346ec36974566d3d7a2e1b401edcf5281198b7e90e236b0543eea6748aa0f76",
+      "size_bytes": 302
+    },
+    {
+      "path": "src/ad_creator/evaluators/base.py",
+      "sha256": "716ba12f493125ce44de0dac3770f1d8f14fb620f3f93647282a7c0ebabac857",
+      "size_bytes": 483
+    },
+    {
+      "path": "src/ad_creator/evaluators/fake.py",
+      "sha256": "7334a82ced81f5aaa85a83c67c15bbf44dece675289f37ab2edc095b1c188a97",
+      "size_bytes": 1279
+    },
+    {
+      "path": "src/ad_creator/evaluators/gemini.py",
+      "sha256": "fdb4d98abe1d3997ef558b0abfdba841f9e6c7be668533445a53eb7f73db57c8",
+      "size_bytes": 19832
+    },
+    {
+      "path": "src/ad_creator/features.py",
+      "sha256": "1884d7f94dc68b6e6b55f4b675fb9cdfec8010ccb691827c22bf1cd896bf087a",
+      "size_bytes": 2320
+    },
+    {
+      "path": "src/ad_creator/gemini_api.py",
+      "sha256": "0b0e9d90442e3886a789586374cec446a14e0cb251041b76724b03d15ee96906",
+      "size_bytes": 12277
+    },
+    {
+      "path": "src/ad_creator/generation_inputs.py",
+      "sha256": "1bee9b8df54c32eeb51297ddd8ae03e71744eb2c1aeb10541a9300d26c15c9bf",
+      "size_bytes": 3097
+    },
+    {
+      "path": "src/ad_creator/image_contracts.py",
+      "sha256": "f58f0b761874e36942cea3a5e99416364761ad39c223df4247b8f21c6c838300",
+      "size_bytes": 22995
+    },
+    {
+      "path": "src/ad_creator/jsonio.py",
+      "sha256": "2c2663c8f67a21442a87984360e20bee97e5423223d3d0994559fd3a33eb29c7",
+      "size_bytes": 1533
+    },
+    {
+      "path": "src/ad_creator/lighting_contracts.py",
+      "sha256": "3daa9e7d3357201ec57928eae2549690c9f98f42e902984519c6d0fdc21b576b",
+      "size_bytes": 16966
+    },
+    {
+      "path": "src/ad_creator/local_batch_evaluation.py",
+      "sha256": "8777e304855484047c09147618064c713a076772e1e56720a4ae492ad8c4d300",
+      "size_bytes": 46294
+    },
+    {
+      "path": "src/ad_creator/multi_pipeline.py",
+      "sha256": "898c4a31e6cfb39ec9297a0e9f6fa31ca23be778c547606588db452bd6e91a41",
+      "size_bytes": 20546
+    },
+    {
+      "path": "src/ad_creator/multi_subject_pilot.py",
+      "sha256": "691643de2e021c21a9e28bf7cbe43f18bfa8cfba285d92f2732f45cb015dd372",
+      "size_bytes": 25896
+    },
+    {
+      "path": "src/ad_creator/paid_readiness.py",
+      "sha256": "5c24e21ab99b583861f2ba79134c513adb2d595862f379e35b91ebdadd1ead68",
+      "size_bytes": 37147
+    },
+    {
+      "path": "src/ad_creator/pipeline.py",
+      "sha256": "e52ac60696eacb44f955068b766f98404052dd80255db64c7aea9e19e2fd9364",
+      "size_bytes": 32721
+    },
+    {
+      "path": "src/ad_creator/postprocessing.py",
+      "sha256": "e4e2ac8fcb009a879cd19c51687a8b3d1f561b48eefa25726838430cba3bc5bd",
+      "size_bytes": 7981
+    },
+    {
+      "path": "src/ad_creator/prompt_limits.py",
+      "sha256": "63e5bfe85718d28328170033008368827496181afc166ccd9219f1aef8cbb6f5",
+      "size_bytes": 2270
+    },
+    {
+      "path": "src/ad_creator/prompting.py",
+      "sha256": "641d8a0061dfed3e3dc322a782674dad75bdcadd0875488ee248572518833317",
+      "size_bytes": 125163
+    },
+    {
+      "path": "src/ad_creator/provider_profiles.py",
+      "sha256": "d00d13bd84e05bc776064c4fa17570b428839a636c375e135fb96eb725196a18",
+      "size_bytes": 4219
+    },
+    {
+      "path": "src/ad_creator/providers/__init__.py",
+      "sha256": "f9d6e218cf48ce04864fd4df20068ba6562504aa8bb38840fae1bc1f4b10b149",
+      "size_bytes": 465
+    },
+    {
+      "path": "src/ad_creator/providers/base.py",
+      "sha256": "4058766220e51970f2fd7913d52598253b0e4b0569e6760e1e2dea17b171aa38",
+      "size_bytes": 536
+    },
+    {
+      "path": "src/ad_creator/providers/fake.py",
+      "sha256": "c0cf6129970e69f474e4796dbc20f61e371ac2a58120c5f8e9c4fddfd0211b60",
+      "size_bytes": 3510
+    },
+    {
+      "path": "src/ad_creator/providers/higgsfield.py",
+      "sha256": "ea45f77c61b75b3dadf09c841c3c4f5115344d2d5557f2418358951c757f09ba",
+      "size_bytes": 13086
+    },
+    {
+      "path": "src/ad_creator/providers/openai.py",
+      "sha256": "8acaaaa00aa5bd98a1a57d8ceb61c578aef116c85ffbadbca05a627f6069a1ee",
+      "size_bytes": 14614
+    },
+    {
+      "path": "src/ad_creator/qa.py",
+      "sha256": "9fb3f68976bdfd5a13a97e47857d94a001404e498a2e17cdbffbe154727d5217",
+      "size_bytes": 46578
+    },
+    {
+      "path": "src/ad_creator/quality_workflow.py",
+      "sha256": "6da779ee90faa834ec469aba66669f8d591fc8d574cc8bbd123064be1f42c6b7",
+      "size_bytes": 21033
+    },
+    {
+      "path": "src/ad_creator/reference_analyzer_v3.py",
+      "sha256": "3c131039f3386e1b017845e3543612aaa2af6c941d12f51dd33cd1ae5a43cb59",
+      "size_bytes": 4059
+    },
+    {
+      "path": "src/ad_creator/reference_backfill_v3.py",
+      "sha256": "548cfa74d5f66fbad2804817e0dae6be089f7b8c6157596915f5d5c74f03a86a",
+      "size_bytes": 27718
+    },
+    {
+      "path": "src/ad_creator/reference_catalog.py",
+      "sha256": "5ca89d438dc8bc69578bf99d71eb87065542359f398baf15c08730613a02d697",
+      "size_bytes": 5964
+    },
+    {
+      "path": "src/ad_creator/reference_clustering.py",
+      "sha256": "e4c4be27199030b1e5a5140a17cce8556f18311beeee2358c70f3133b75bb99d",
+      "size_bytes": 16255
+    },
+    {
+      "path": "src/ad_creator/reference_contracts.py",
+      "sha256": "ad69e0d661e4895f6d2a0afab976cbfca945f316ebe9b15ce796b45cabb667ad",
+      "size_bytes": 14557
+    },
+    {
+      "path": "src/ad_creator/reference_library.py",
+      "sha256": "47d4c718b6ee2c063c5eaf213f2a1e5490c6c83885798ff8039eeffccd15c45a",
+      "size_bytes": 11196
+    },
+    {
+      "path": "src/ad_creator/reference_taxonomy.py",
+      "sha256": "0205041c5a9052f8ce986f89c9c525dc4397b300f38fec821c1b2a43d4c78564",
+      "size_bytes": 10756
+    },
+    {
+      "path": "src/ad_creator/request_validation.py",
+      "sha256": "7320824a6d0f28a47cb23bae806c75796389b5ca3d59a9a150eab48557ea3b77",
+      "size_bytes": 16803
+    },
+    {
+      "path": "src/ad_creator/runs.py",
+      "sha256": "5984d81de77be98c03fd4536a084041306b69a068bac6b81c4655199e70a5319",
+      "size_bytes": 8979
+    },
+    {
+      "path": "src/ad_creator/sanitation.py",
+      "sha256": "dc95b23c1706a176a356a11295f2bf6ebd5d38954006058cfe5809ddc8abead7",
+      "size_bytes": 22676
+    },
+    {
+      "path": "src/ad_creator/scene_graph.py",
+      "sha256": "03a6046ba7e749bef2f529f017018902ba1253238622bf3aa18651ccffa2a18b",
+      "size_bytes": 32282
+    },
+    {
+      "path": "src/ad_creator/serving_contracts.py",
+      "sha256": "6c873e8c91800bfef960496a81fc92b891f45aeeb11e0eeefe841ffe0c3227f7",
+      "size_bytes": 19203
+    },
+    {
+      "path": "src/ad_creator/surface_styles.py",
+      "sha256": "4fd477a46a26666620e40f40683b0828f0c41e085e83505e513aef3222ae5d15",
+      "size_bytes": 15416
+    },
+    {
+      "path": "src/ad_creator/v3_evaluator.py",
+      "sha256": "f8804019c91d183f657ccbe7e073d6619c9ee4d3e43872bd30fd331422db1bfd",
+      "size_bytes": 52577
+    },
+    {
+      "path": "src/ad_creator/validation_campaign.py",
+      "sha256": "92b75f69e97fa3c9fe1a23b8d07ea125d850f7dd717cf5aa41f472d0a21f50c1",
+      "size_bytes": 19450
+    },
+    {
+      "path": "src/ad_creator/vision_ocr.py",
+      "sha256": "194d6fc12128149490c993d397b8ad97ad5134d0515645bd13e156b5714a970f",
+      "size_bytes": 11585
+    },
+    {
+      "path": "src/ad_creator/wood_materials.py",
+      "sha256": "342316277fc31fb0a944bf3bb665724692bbbe6a065298b5bd7c4d8cdf9ad99a",
+      "size_bytes": 68217
+    },
+    {
+      "path": "workflows/02_adopt_reference_local_fake_api.json",
+      "sha256": "c2813505d73fb198644b1136101589b6e5ff36179a4672105679e7985e6ecf76",
+      "size_bytes": 3003
+    },
+    {
+      "path": "workflows/06_adopt_reference_openai.json",
+      "sha256": "841151ad0a8b99a1a93a70a0bc4a4952e586c96f8b7f8937569e479329c9e527",
+      "size_bytes": 12667
+    },
+    {
+      "path": "workflows/06_adopt_reference_openai_api.json",
+      "sha256": "79fe4560bcb7f4bf6796e47fa640f071e678eefbc06bf0c1e39c2faba9ed0df7",
+      "size_bytes": 3035
+    },
+    {
+      "path": "workflows/18_a6_relational_v4_scene_hint_reference_cup_higgsfield.json",
+      "sha256": "93985744a7c2f8888bdf3ea8db4c14a038e7fdba886584e5e6d9f4e90b4f991b",
+      "size_bytes": 14043
+    },
+    {
+      "path": "workflows/18_a6_relational_v4_scene_hint_reference_cup_higgsfield_api.json",
+      "sha256": "de2f489b758070279d3bd6807c2a0ba11fe629487bf1d6909fc22cde3c99ec96",
+      "size_bytes": 3580
+    },
+    {
+      "path": "workflows/18_a6_relational_v4_scene_hint_reference_cup_local_fake_api.json",
+      "sha256": "780164f9a7a8cd0e46d89cc5ffa2eb29b4fbece15f2a8ca6f424a1f3c2cf2ebc",
+      "size_bytes": 3588
+    },
+    {
+      "path": "workflows/20_white_basic_adopt_reference_openai.json",
+      "sha256": "5a53b15a19bbdbf3436abc042a152eb46f5eb5d36d589d91365cea1d946e319b",
+      "size_bytes": 12576
+    },
+    {
+      "path": "workflows/20_white_basic_adopt_reference_openai_api.json",
+      "sha256": "bb3220bef1ae8b27217464135c5048c783dfe7bfc936bb89432ed6d73ff4f40d",
+      "size_bytes": 3069
+    }
+  ],
+  "privacy": {
+    "credentials_included": false,
+    "raw_reference_included": true,
+    "raw_reference_usage": {
+      "a6": "internal handoff and offline analysis only; submit only the sanitized scene hint",
+      "white_basic": "declared optional provider reference input with input hash and copy exclusions; verify usage rights before redistribution"
+    },
+    "sanitized_scene_hint_included": true
+  },
+  "purpose": "Portable AI/team handoff for reference selection, preset authoring, ComfyUI execution and validation.",
+  "python_package_root": "src/ad_creator",
+  "representative_presets": [
+    {
+      "canonical_api_workflow": "workflows/18_a6_relational_v4_scene_hint_reference_cup_higgsfield_api.json",
+      "canonical_runtime_arm": "sanitized_scene_hint + reference container design",
+      "family": "multi_product_wood",
+      "preset_id": "tokyo_a6_relational_scene_hint_v4",
+      "review_state": "development baseline; human review required before publication"
+    },
+    {
+      "canonical_api_workflow": "workflows/20_white_basic_adopt_reference_openai_api.json",
+      "canonical_runtime_arm": "product source + selected white reference",
+      "family": "single_product_white_diffuse",
+      "preset_id": "instagram_white_diffuse_wall_table_v1",
+      "review_state": "GPT visual baseline is revise_and_review; OpenAI API workflow requires fresh zero-credit and paid validation"
+    }
+  ],
+  "schema_version": "1.0.0"
+}
