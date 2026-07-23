@@ -76,15 +76,20 @@ def main() -> int:
         _require(_sha256(path) == binding["sha256"], f"Contract asset hash mismatch: {name}")
 
     hints = bundle.get("hint_images")
-    _require(len(hints) == 1, "Exactly one provider scene reference is required.")
-    _require(hints[0].get("send_to_provider") is True, "Scene reference must be sent to the provider.")
-    _require(hints[0].get("role") == "reference_container_and_companion_scene", "Scene-reference role changed.")
-    _require(hints[0].get("container_mode_scope") == ["reconstruct_source", "adopt_reference"], "Scene reference must support both container modes.")
-    hint_path = bundle_path.parent / hints[0]["path"]
-    _require(hint_path.is_file(), "Provider scene-reference image is missing.")
-    _require(_sha256(hint_path) == hints[0]["sha256"], "Provider scene-reference hash mismatch.")
-    _require(hints[0].get("width") == 1024, "Provider scene-reference width changed.")
-    _require(hints[0].get("height") == 1536, "Provider scene-reference height changed.")
+    _require(len(hints) == 2, "Exactly two mode-specific provider evidence boards are required.")
+    expected_hint_roles = {
+        "reference_cup_geometry_and_companion_scene_evidence": ["adopt_reference"],
+        "user_cup_placement_and_companion_scene_evidence": ["reconstruct_source"],
+    }
+    _require({item.get("role") for item in hints} == set(expected_hint_roles), "Evidence-board roles changed.")
+    for hint in hints:
+        _require(hint.get("send_to_provider") is True, "Evidence board must be sent to the provider.")
+        _require(hint.get("container_mode_scope") == expected_hint_roles[hint["role"]], "Evidence-board mode scope changed.")
+        hint_path = bundle_path.parent / hint["path"]
+        _require(hint_path.is_file(), "Provider evidence board is missing.")
+        _require(_sha256(hint_path) == hint["sha256"], "Provider evidence-board hash mismatch.")
+        _require(hint.get("width") == 1024, "Provider evidence-board width changed.")
+        _require(hint.get("height") == 1536, "Provider evidence-board height changed.")
 
     provider_policy = bundle.get("provider_reference_policy")
     _require(isinstance(provider_policy, dict), "Provider-reference policy is missing.")
@@ -102,7 +107,11 @@ def main() -> int:
 
     props = bundle.get("scene_props_contract")
     _require(isinstance(props, dict), "Scene-props contract is missing.")
-    _require(props.get("enabled_container_modes") == ["adopt_reference"], "Scene props must remain adopt-reference only.")
+    _require(props.get("enabled_container_modes") == ["reconstruct_source", "adopt_reference"], "Scene props must support both container modes.")
+    _require(props.get("reference_image_role_by_container_mode") == {
+        "reconstruct_source": "user_cup_placement_and_companion_scene_evidence",
+        "adopt_reference": "reference_cup_geometry_and_companion_scene_evidence",
+    }, "Scene-props role routing changed.")
     _require(props.get("declared_companion_groups") == 2, "Declared companion-group count changed.")
     _require("tines point left" in props["dessert_group"]["fork"], "Fork direction contract is missing.")
     _require("BAUHAUS" in props["magazine_group"]["appearance"], "Magazine identity contract is missing.")
@@ -114,8 +123,17 @@ def main() -> int:
         registry_path=registry_path,
         allowed_statuses=("validated",),
     )
-    _require(len(resolved.provider_image_paths) == 1, "Exactly one scene-reference image must be submitted.")
-    _require(resolved.provider_image_roles == ("reference_container_and_companion_scene",), "Provider scene-reference role changed.")
+    resolved_source = load_published_preset(
+        SLOT_ID,
+        aspect_ratio="4:5",
+        container_mode="reconstruct_source",
+        registry_path=registry_path,
+        allowed_statuses=("validated",),
+    )
+    _require(len(resolved.provider_image_paths) == 1, "Exactly one reference-cup evidence board must be submitted.")
+    _require(resolved.provider_image_roles == ("reference_cup_geometry_and_companion_scene_evidence",), "Reference-cup evidence role changed.")
+    _require(len(resolved_source.provider_image_paths) == 1, "Exactly one user-cup evidence board must be submitted.")
+    _require(resolved_source.provider_image_roles == ("user_cup_placement_and_companion_scene_evidence",), "User-cup evidence role changed.")
     _require(resolved.provider_profile["model"] == "gpt-image-2", "Model profile changed.")
     _require(resolved.provider_profile["quality"] == "low", "Quality profile changed.")
     required_prompt_fragments = (
