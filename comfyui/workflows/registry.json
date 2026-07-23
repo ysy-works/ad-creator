@@ -18,6 +18,14 @@
           "node_id": "2",
           "input": "preset_id"
         },
+        "container_mode": {
+          "node_id": "2",
+          "input": "container_mode"
+        },
+        "serving_temperature": {
+          "node_id": "2",
+          "input": "serving_temperature"
+        },
         "aspect_ratio": {
           "node_id": "2",
           "input": "aspect_ratio"

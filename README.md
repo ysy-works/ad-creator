@@ -5,10 +5,11 @@
 ## 현재 범위
 
 - 서비스 선택값 12개를 `comfyui/presets/registry.json`에서 단일 관리
-- 승인된 화이트 미디엄·우드 미디엄 프리셋 2개만 활성화
+- 공개·검증 상태는 `comfyui/presets/registry.json`에서 관리
+- registry가 지정한 published 프리셋 하나를 기본값으로 사용
 - OpenAI `gpt-image-2`, `quality=low` provider profile 고정
 - 프리셋별 prompt, lighting sheet, grade profile, hint asset과 SHA-256 검증
-- 4:5(`1024x1280` → 무크롭 `880x1100`)와 1:1(`1024x1024`) 생성 계약
+- 4:5(`1024x1280`)와 1:1(`1024x1024`) 생성 결과를 무크롭·무리사이즈로 전달
 - 제품 원본은 기본 긴 변 1536px 상한, 저해상도 무확대·메타데이터 제거
 - 기존 `model-c-v1`은 삭제하지 않고 롤백 경로로 유지
 
@@ -23,7 +24,7 @@
 
 기존 `instagram_wood_45deg_relational_v3`는 삭제하지 않고 `available_not_routed` 대안으로 보존합니다. 새 서비스 옵션이 합의될 때만 별도 라우팅합니다.
 
-> 제품 입력의 기본값을 사용자 원본으로 유지할지, 레퍼런스 컵을 기본값 또는 선택 옵션으로 제공할지는 회의 결정 전입니다. 결정 전에는 현재 입력 정책을 변경하지 않습니다.
+컵 정책, 온도, 동반 피사체, 조명, 색감, 입력 역할과 typed transform은 각 프리셋 JSON이 선언합니다. 공용 런타임은 특정 프리셋 ID별 분기를 두지 않습니다.
 
 ## 실행 흐름
 
@@ -48,6 +49,7 @@ comfyui/
   presets/                          # 12-slot registry와 프리셋 bundle·자산
   workflows/                        # API/UI workflow와 workflow registry
   custom_nodes/ad_creator/          # ComfyUI node와 provider adapter
+    runtime/                         # provider 중립 resolver·prompt compiler·typed transform executor
   orchestrator/                     # workflow·preset routing
   gateway/                          # 업로드·큐·상태·결과 API
   deploy/                           # 담당자 인계·배포·검증 문서
@@ -63,7 +65,7 @@ python comfyui/scripts/validate_presets.py
 python -m unittest discover -s comfyui/tests -v
 ```
 
-현재 기준은 workflow 2개, preset slot 12개, published preset 2개입니다. 과거 45도 우드의 실제 OpenAI adapter-level `low` smoke 기록은 보존하지만, 새 A6 기본값과 1:1은 별도 승인된 유료 시각 검증 전입니다. GCP ComfyUI·Gateway 전체 E2E와 CommonQA도 출시 차단 조건입니다.
+공용 런타임의 안전 상한은 제품 최대 3장과 reference control 최대 1장을 합친 provider 입력 4장, 프롬프트 12,000자입니다. 상한 초과 시 입력이나 프롬프트를 임의 제거·절단하지 않고 제출 전에 실패합니다. 실제 published 개수와 기본값은 registry를 기준으로 확인합니다. GCP ComfyUI·Gateway 전체 E2E와 CommonQA는 출시 차단 조건입니다.
 
 ## 연동 문서
 

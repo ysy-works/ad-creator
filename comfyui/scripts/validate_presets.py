@@ -1,5 +1,5 @@
-import json
 import hashlib
+import json
 import sys
 from pathlib import Path
 
@@ -9,7 +9,11 @@ CUSTOM_NODES_DIR = COMFYUI_DIR / "custom_nodes"
 sys.path.insert(0, str(CUSTOM_NODES_DIR))
 sys.path.insert(0, str(COMFYUI_DIR.parent))
 
-from ad_creator.adapters.openai_image import load_published_preset, published_preset_slots
+from ad_creator.adapters.openai_image import (
+    default_published_preset_slot,
+    load_published_preset,
+    published_preset_slots,
+)
 from comfyui.orchestrator import resolve_published_preset
 
 
@@ -23,16 +27,37 @@ EXPECTED_SLOTS = {
         "handheld_lifestyle",
     )
 }
-EXPECTED_PUBLISHED = (
-    "natural_white__product_center",
-    "wood__product_center",
-)
-EXPECTED_WOOD_DEFAULT = "tokyo_a6_relational_scene_hint_v4"
-EXPECTED_WOOD_ALTERNATIVE = "instagram_wood_45deg_relational_v3"
 
 
 def _sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    content = path.read_bytes()
+    if path.suffix.lower() in {".json", ".txt"}:
+        content = content.replace(b"\r\n", b"\n")
+    return hashlib.sha256(content).hexdigest()
+
+
+def _validate_alternatives(registry: dict, registry_path: Path) -> None:
+    alternatives = registry.get("alternatives", {})
+    if not isinstance(alternatives, dict):
+        raise ValueError("Preset alternatives must be an object.")
+    for preset_id, alternative in alternatives.items():
+        if not isinstance(alternative, dict):
+            raise ValueError(f"Preset alternative must be an object: {preset_id}")
+        if alternative.get("enabled") is not False:
+            raise ValueError(f"Alternative must not be routed directly: {preset_id}")
+        bundle_path = (
+            registry_path.parent / str(alternative.get("bundle") or "")
+        ).resolve()
+        bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
+        if bundle.get("preset_id") != preset_id:
+            raise ValueError(f"Alternative bundle ID mismatch: {preset_id}")
+        for key in ("prompt_template", "lighting_sheet", "grade_profile"):
+            binding = bundle.get(key)
+            if not isinstance(binding, dict):
+                raise ValueError(f"Alternative is missing {key}: {preset_id}")
+            asset_path = (bundle_path.parent / str(binding.get("path") or "")).resolve()
+            if _sha256(asset_path) != binding.get("sha256"):
+                raise ValueError(f"Alternative {key} hash changed: {preset_id}")
 
 
 def main() -> int:
@@ -41,57 +66,59 @@ def main() -> int:
     slots = registry.get("slots")
     if not isinstance(slots, dict) or set(slots) != EXPECTED_SLOTS:
         raise ValueError("Preset registry must declare the exact 12 service slots.")
+
     published = published_preset_slots(registry_path=registry_path)
-    if published != EXPECTED_PUBLISHED:
-        raise ValueError("Pilot must publish exactly the two approved medium presets.")
-    if slots["wood__product_center"].get("preset_id") != EXPECTED_WOOD_DEFAULT:
-        raise ValueError("The routed wood medium preset must be the approved A6 preset.")
-    alternatives = registry.get("alternatives")
-    if not isinstance(alternatives, dict) or set(alternatives) != {EXPECTED_WOOD_ALTERNATIVE}:
-        raise ValueError("Registry must preserve exactly the reviewed 45-degree alternative.")
-    legacy = alternatives[EXPECTED_WOOD_ALTERNATIVE]
-    if legacy.get("enabled") is not False or legacy.get("status") != "available_not_routed":
-        raise ValueError("The 45-degree alternative must remain available but unrouted.")
-    legacy_bundle_path = (registry_path.parent / str(legacy.get("bundle") or "")).resolve()
-    legacy_bundle = json.loads(legacy_bundle_path.read_text(encoding="utf-8"))
-    if (
-        legacy_bundle.get("preset_id") != EXPECTED_WOOD_ALTERNATIVE
-        or legacy_bundle.get("status") != "available_not_routed"
-    ):
-        raise ValueError("The 45-degree alternative bundle is invalid.")
-    for key in ("prompt_template", "lighting_sheet", "grade_profile"):
-        binding = legacy_bundle.get(key)
-        if not isinstance(binding, dict):
-            raise ValueError(f"The 45-degree alternative is missing {key}.")
-        asset_path = (legacy_bundle_path.parent / str(binding.get("path") or "")).resolve()
-        if _sha256(asset_path) != binding.get("sha256"):
-            raise ValueError(f"The 45-degree alternative {key} hash changed.")
+    if not published:
+        raise ValueError("Preset registry must publish at least one reviewed preset.")
+    default_slot = default_published_preset_slot(registry_path=registry_path)
+    if default_slot not in published:
+        raise ValueError("Default preset must be one of the published slots.")
+
+    _validate_alternatives(registry, registry_path)
     legacy_routes: set[tuple[str, str]] = set()
     for slot_id in published:
-        portrait = load_published_preset(slot_id, aspect_ratio="4:5", registry_path=registry_path)
-        square = load_published_preset(slot_id, aspect_ratio="1:1", registry_path=registry_path)
+        portrait = load_published_preset(
+            slot_id, aspect_ratio="4:5", registry_path=registry_path
+        )
+        square = load_published_preset(
+            slot_id, aspect_ratio="1:1", registry_path=registry_path
+        )
         if portrait.aspect_status != "published":
             raise ValueError(f"4:5 must be published: {slot_id}")
         if square.aspect_status != "prepared_pending_visual_qa":
-            raise ValueError(f"1:1 must remain prepared pending visual QA: {slot_id}")
+            raise ValueError(f"1:1 must remain pending visual QA: {slot_id}")
+        for resolved in (portrait, square):
+            if len(resolved.prompt) > 12_000:
+                raise ValueError(f"Prompt exceeds 12,000 characters: {slot_id}")
+            if 1 + len(resolved.provider_image_paths) > 4:
+                raise ValueError(f"Provider input cap exceeded: {slot_id}")
+            if resolved.brand_input_enabled:
+                raise ValueError(f"Brand input must remain disabled: {slot_id}")
+
         legacy = slots[slot_id].get("legacy_gateway")
         if not isinstance(legacy, dict):
-            raise ValueError(f"Published preset has no legacy gateway route: {slot_id}")
+            raise ValueError(f"Published preset has no legacy route: {slot_id}")
         route = (legacy.get("background_style"), legacy.get("composition"))
         if not all(isinstance(value, str) and value for value in route):
-            raise ValueError(f"Published preset has an invalid legacy gateway route: {slot_id}")
+            raise ValueError(f"Published preset has an invalid legacy route: {slot_id}")
         if route in legacy_routes:
-            raise ValueError(f"Published presets have a duplicate legacy gateway route: {route}")
+            raise ValueError(f"Published presets have a duplicate legacy route: {route}")
         legacy_routes.add(route)
-        resolved = resolve_published_preset(
-            preset_id=None,
-            background_style=route[0],
-            composition=route[1],
-            registry_path=registry_path,
-        )
-        if resolved != slot_id:
+        if (
+            resolve_published_preset(
+                preset_id=None,
+                background_style=route[0],
+                composition=route[1],
+                registry_path=registry_path,
+            )
+            != slot_id
+        ):
             raise ValueError(f"Legacy route resolves to the wrong preset: {slot_id}")
-    print(f"Validated 12 preset slots; published: {', '.join(published)}")
+
+    print(
+        "Validated 12 preset slots; "
+        f"published: {', '.join(published)}; default: {default_slot}"
+    )
     return 0
 
 

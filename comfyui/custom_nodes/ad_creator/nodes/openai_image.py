@@ -9,6 +9,7 @@ import torch
 from PIL import Image
 
 from ..adapters.openai_image import (
+    default_published_preset_slot,
     load_published_preset,
     published_preset_slots,
     run_openai_image,
@@ -16,6 +17,8 @@ from ..adapters.openai_image import (
 
 
 SUPPORTED_ASPECT_RATIOS = ["4:5", "1:1"]
+SUPPORTED_CONTAINER_MODES = ["default", "adopt_reference", "reconstruct_source"]
+SUPPORTED_SERVING_TEMPERATURES = ["auto", "iced", "cold", "ambient", "hot"]
 
 
 def _tensor_to_pil(image) -> Image.Image:
@@ -88,7 +91,18 @@ class AdCreatorOpenAIImageGenerate:
         return {
             "required": {
                 "image": ("IMAGE",),
-                "preset_id": (preset_slots, {"default": preset_slots[0]}),
+                "preset_id": (
+                    preset_slots,
+                    {"default": default_published_preset_slot()},
+                ),
+                "container_mode": (
+                    SUPPORTED_CONTAINER_MODES,
+                    {"default": "default"},
+                ),
+                "serving_temperature": (
+                    SUPPORTED_SERVING_TEMPERATURES,
+                    {"default": "auto"},
+                ),
                 "aspect_ratio": (SUPPORTED_ASPECT_RATIOS, {"default": "4:5"}),
                 "request_id": (
                     "STRING",
@@ -98,12 +112,28 @@ class AdCreatorOpenAIImageGenerate:
         }
 
     @classmethod
-    def IS_CHANGED(cls, image, preset_id, aspect_ratio, request_id):
+    def IS_CHANGED(
+        cls,
+        image,
+        preset_id,
+        container_mode,
+        serving_temperature,
+        aspect_ratio,
+        request_id,
+    ):
         # A new queued user action is an explicit new paid generation. Gateway
         # idempotency prevents network retries from creating a second prompt.
         return float("nan")
 
-    def generate(self, image, preset_id, aspect_ratio, request_id):
+    def generate(
+        self,
+        image,
+        preset_id,
+        container_mode,
+        serving_temperature,
+        aspect_ratio,
+        request_id,
+    ):
         input_path = None
         try:
             with tempfile.NamedTemporaryFile(
@@ -118,6 +148,8 @@ class AdCreatorOpenAIImageGenerate:
             generated, metadata = run_openai_image(
                 image_path=input_path,
                 preset_slot_id=preset_id,
+                container_mode=container_mode,
+                serving_temperature=serving_temperature,
                 aspect_ratio=aspect_ratio,
                 timeout_seconds=_timeout_seconds(),
                 run_id=_resolved_run_id(request_id),

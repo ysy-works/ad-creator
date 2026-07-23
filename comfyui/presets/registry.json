@@ -1,5 +1,6 @@
 {
   "schema_version": 1,
+  "default_preset_slot": "wood__product_center",
   "provider_profile": "../config/providers/openai-gpt-image-2-low.json",
   "slots": {
     "natural_white__product_large": {

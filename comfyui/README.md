@@ -90,7 +90,9 @@ POST /generate (multipart/form-data)
 
 ## OpenAI GPT Image 2 low 파일럿
 
-`openai-gpt-image-2-low-v1`은 `gpt-image-2`, `quality=low`를 서버 profile에서 고정합니다. 서비스 ID는 `natural_white__product_center`, `wood__product_center` 두 개만 published이며 나머지 10개는 provider 호출 전에 거부합니다. 우드 기본값은 A6 다중 피사체 preset이고, 기존 45도 preset은 라우팅하지 않은 대안으로 보존합니다. `aspect_ratio=4:5`는 `1024x1280` 생성 후 무크롭 `880x1100`, `aspect_ratio=1:1`은 처음부터 `1024x1024`로 생성합니다. 1:1은 시각 QA 전까지 공개 UI에서 숨깁니다.
+`openai-gpt-image-2-low-v1`은 `gpt-image-2`, `quality=low`를 서버 profile에서 고정합니다. 공개 프리셋과 기본값은 `presets/registry.json`이 단일 권위입니다. `aspect_ratio=4:5`는 `1024x1280`, `aspect_ratio=1:1`은 `1024x1024`로 처음부터 생성하며 결과를 축소하거나 자르지 않습니다. 1:1은 시각 QA 전까지 공개 UI에서 숨깁니다.
+
+프리셋 실행 정책은 `custom_nodes/ad_creator/runtime/`의 provider 중립 코어가 JSON에서 해석합니다. ComfyUI 노드는 선택값과 이미지를 전달하고 provider adapter는 전송만 담당합니다. 컵 정책, 온도, 동반 피사체, 조명, 색감, 입력 역할과 typed transform은 프리셋 bundle이 선언합니다. 공용 상한은 제품 최대 3장과 reference control 최대 1장을 합친 4장, 프롬프트 12,000자이며 초과 요청은 제출 전에 실패합니다.
 
 제품 원본은 기본적으로 EXIF·파일명을 제거하고 긴 변 1536px까지만 축소하며 작은 사진은 확대하지 않습니다. 비용·OCR·제품 보존 비교 시에만 `AD_CREATOR_OPENAI_SOURCE_MAX_EDGE=3072`를 명시합니다.
 
@@ -180,6 +182,8 @@ background_style   vivid | wood | white
 strength           low | medium | high
 seed               선택 정수
 preset_id          OpenAI workflow에서 canonical service preset ID
+container_mode     default | adopt_reference | reconstruct_source
+serving_temperature auto | iced | cold | ambient | hot
 aspect_ratio       4:5(기본) | 1:1
 ```
 

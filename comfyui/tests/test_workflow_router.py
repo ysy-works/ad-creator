@@ -108,7 +108,14 @@ class WorkflowRouterTest(unittest.TestCase):
     def test_reports_workflow_input_names(self):
         self.assertEqual(
             workflow_input_names(workflow_id="openai-gpt-image-2-low-v1"),
-            {"source_image", "preset_id", "aspect_ratio", "request_id"},
+            {
+                "source_image",
+                "preset_id",
+                "container_mode",
+                "serving_temperature",
+                "aspect_ratio",
+                "request_id",
+            },
         )
 
 

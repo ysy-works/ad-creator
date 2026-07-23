@@ -12,7 +12,7 @@
 | OpenAI model | `gpt-image-2` |
 | OpenAI quality | `low` — 서버 provider profile에서 고정 |
 | 기본 비율 | `4:5` |
-| 4:5 계약 | PNG `1024x1280` 생성 → crop 없이 `880x1100` 전달 |
+| 4:5 계약 | PNG `1024x1280` 생성·전달 (축소·crop 없음) |
 | 1:1 계약 | PNG `1024x1024` 생성·전달; 시각 QA 전 공개 UI 비활성 |
 | 활성 프리셋 | 화이트 미디엄, 우드 미디엄 두 개만 |
 | 브라우저의 OpenAI 직접 호출 | 금지 |
@@ -27,8 +27,8 @@
 
 신규 워크플로 결과에는 다음 규칙만 허용합니다.
 
-1. Gateway가 받은 `880x1100` PNG를 그대로 반환한다.
-2. 백엔드가 리사이즈해야 한다면 전체 프레임을 보존해 `1080x1350`으로만 바꾼다.
+1. Gateway가 받은 `1024x1280` PNG를 그대로 반환한다.
+2. 백엔드는 결과를 재샘플링하지 않고 CDN에 저장한다.
 3. 중앙 크롭, `ImageOps.fit()` 기반 크롭, 1:1 변환은 금지한다.
 4. `aspect_ratio=1:1`은 처음부터 `1024x1024`로 생성하고 4:5 결과를 자르지 않는다.
 5. 요청 비율과 결과 비율이 다르면 조용히 자르지 말고 통합 오류로 실패시킨다.
@@ -145,7 +145,7 @@ Gateway의 `202 Accepted`, 상태 폴링, 결과 다운로드 계약은 기존�
 4. 프론트의 `aspect_ratio`를 allowlist(`4:5`, `1:1`) 검증해 Gateway에 그대로 전달합니다. 누락 시 `4:5`를 사용합니다.
 5. 신규 workflow에서는 두 활성 ID 외 요청을 Gateway 호출 전에 차단합니다.
 6. 신규 workflow payload에는 `strength="medium"`을 넣지 않습니다. 넣더라도 OpenAI quality가 바뀌어서는 안 됩니다.
-7. 신규 결과에는 정사각형 중앙 크롭을 적용하지 않습니다. 4:5는 `880x1100` 또는 무크롭 `1080x1350`, 1:1은 `1024x1024` 계약으로 검증합니다.
+7. 신규 결과에는 정사각형 중앙 크롭 또는 리사이즈를 적용하지 않습니다. 4:5는 `1024x1280`, 1:1은 `1024x1024` 계약으로 검증합니다.
 8. 성공 결과는 즉시 영구 저장소로 복사합니다. Gateway 임시 결과는 기존 정책상 만료될 수 있습니다.
 9. 동일 논리 요청의 네트워크 재시도에는 같은 `Idempotency-Key`와 같은 바이트·필드를 사용합니다. 사용자가 재생성을 명시했을 때만 새 키를 만듭니다.
 10. `failed`, `unknown`, `expired` 상태를 자동으로 새 유료 생성으로 재실행하지 않습니다.
@@ -267,7 +267,7 @@ Gateway의 `AD_CREATOR_HEALTH_WORKFLOW_ID`도 `model-c-v1`로 되돌립니다.
 - [ ] 화이트/우드 각각의 lighting sheet, preset contract, 허용 자산과 checksum이 배포된다.
 - [ ] 화이트 authoring reference가 provider 입력으로 전송되지 않는다.
 - [ ] 우드의 provider 입력에는 sanitized scene hint만 추가되고 material board는 전송되지 않는다.
-- [ ] 결과가 `880x1100` PNG이고 정사각형 크롭 없이 표시·다운로드된다.
+- [ ] 결과가 `1024x1280` PNG이고 정사각형 크롭·리사이즈 없이 표시·다운로드된다.
 - [ ] provider 원본 PNG와 audit sidecar가 job ID로 Gateway 기록에 연결되며 prompt·비밀키·원본 경로를 포함하지 않는다.
 - [ ] 기존 `model-c-v1` 회귀 테스트와 환경변수 롤백이 통과한다.
 - [ ] 실제 저화질 유료 smoke test 두 건의 ComfyUI prompt ID, OpenAI request ID, workflow ID, preset ID, 시간, 결과 파일을 운영 기록에 남긴다. 비밀키와 원본 이미지는 로그에 남기지 않는다.

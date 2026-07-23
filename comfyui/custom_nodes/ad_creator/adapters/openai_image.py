@@ -20,6 +20,12 @@ from typing import Any, Callable
 
 from PIL import Image, ImageOps
 
+from ..runtime import (
+    PresetRuntimeError,
+    execute_product_transforms,
+    resolve_preset_contract,
+)
+
 
 COMFYUI_PACKAGE_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_PRESET_REGISTRY = COMFYUI_PACKAGE_ROOT / "presets" / "registry.json"
@@ -77,6 +83,17 @@ class PublishedPreset:
     bundle_sha256: str
     prompt_sha256: str
     provider_profile_sha256: str
+    status: str = "published"
+    compiler_version: str = "legacy"
+    container_mode: str = "reconstruct_source"
+    serving_temperature: str = "source_authoritative"
+    temperature_resolution_source: str = "legacy"
+    companion_policy: str = "none"
+    brand_input_enabled: bool = False
+    brand_default_mode: str = "none"
+    brand_policy_sha256: str = ""
+    maximum_provider_inputs: int = 4
+    declared_transforms: tuple[dict[str, Any], ...] = ()
 
 
 def published_preset_slots(
@@ -106,6 +123,38 @@ def published_preset_slots(
             "INVALID_PRESET_CONFIGURATION", "Preset registry has no published slots."
         )
     return published
+
+
+def validated_preset_slots(
+    *, registry_path: str | Path = DEFAULT_PRESET_REGISTRY
+) -> tuple[str, ...]:
+    registry = _read_json(Path(registry_path).resolve())
+    slots = registry.get("slots")
+    if not isinstance(slots, dict):
+        raise OpenAIImageExecutionError(
+            "INVALID_PRESET_CONFIGURATION", "Preset registry slots must be an object."
+        )
+    return tuple(
+        slot_id
+        for slot_id, value in slots.items()
+        if isinstance(value, dict)
+        and value.get("enabled") is True
+        and value.get("status") == "validated"
+    )
+
+
+def default_published_preset_slot(
+    *, registry_path: str | Path = DEFAULT_PRESET_REGISTRY
+) -> str:
+    registry = _read_json(Path(registry_path).resolve())
+    slot_id = registry.get("default_preset_slot")
+    published = published_preset_slots(registry_path=registry_path)
+    if not isinstance(slot_id, str) or slot_id not in published:
+        raise OpenAIImageExecutionError(
+            "INVALID_PRESET_CONFIGURATION",
+            "default_preset_slot must name an enabled published preset.",
+        )
+    return slot_id
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -142,11 +191,10 @@ def _safe_path(root: Path, base: Path, relative_path: str) -> Path:
 
 
 def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as file:
-        for block in iter(lambda: file.read(1024 * 1024), b""):
-            digest.update(block)
-    return digest.hexdigest()
+    content = path.read_bytes()
+    if path.suffix.lower() in {".json", ".txt"}:
+        content = content.replace(b"\r\n", b"\n")
+    return hashlib.sha256(content).hexdigest()
 
 
 def _canonical_json_sha256(value: Any) -> str:
@@ -259,7 +307,7 @@ def _provider_profile(
         "4:5": {
             "status": "published",
             "size": "1024x1280",
-            "delivery_size": [880, 1100],
+            "delivery_size": [1024, 1280],
             "safe_crop": "none_exact_4x5",
         },
         "1:1": {
@@ -293,7 +341,7 @@ def _provider_profile(
         raise OpenAIImageExecutionError(
             "INVALID_PROVIDER_PROFILE", "Provider source preprocessing is invalid."
         )
-    if profile.get("moderation") != "auto" or profile.get("maximum_input_images") != 16:
+    if profile.get("moderation") != "auto" or profile.get("maximum_input_images") != 4:
         raise OpenAIImageExecutionError(
             "INVALID_PROVIDER_PROFILE",
             "Pilot moderation and maximum image-input settings are invalid.",
@@ -312,7 +360,7 @@ def _provider_profile(
     return selected
 
 
-def load_published_preset(
+def _load_published_preset_legacy(
     slot_id: str,
     *,
     aspect_ratio: str = "4:5",
@@ -520,6 +568,83 @@ def load_published_preset(
     )
 
 
+def load_published_preset(
+    slot_id: str,
+    *,
+    aspect_ratio: str = "4:5",
+    container_mode: str = "default",
+    serving_temperature: str = "auto",
+    registry_path: str | Path = DEFAULT_PRESET_REGISTRY,
+    allowed_statuses: tuple[str, ...] = ("published",),
+) -> PublishedPreset:
+    """Resolve a preset through the provider-neutral JSON runtime.
+
+    The legacy loader above remains temporarily as migration evidence only. All
+    active execution, ComfyUI and validation calls use this neutral resolver.
+    """
+
+    try:
+        contract = resolve_preset_contract(
+            slot_id,
+            aspect_ratio=aspect_ratio,
+            container_mode=container_mode,
+            serving_temperature=serving_temperature,
+            registry_path=registry_path,
+            allowed_statuses=allowed_statuses,
+        )
+    except PresetRuntimeError as exc:
+        raise OpenAIImageExecutionError(exc.code, exc.message) from exc
+    resolved_registry_path = Path(registry_path).resolve()
+    profile = _provider_profile(
+        _read_json(resolved_registry_path), resolved_registry_path, aspect_ratio
+    )
+    if (
+        contract.generation_size != profile["size"]
+        or [contract.delivery_width, contract.delivery_height] != profile["delivery_size"]
+        or contract.safe_crop != profile["safe_crop"]
+        or contract.output_format != profile["output_format"]
+    ):
+        raise OpenAIImageExecutionError(
+            "INVALID_PRESET_CONFIGURATION",
+            "Preset delivery contract conflicts with the provider profile.",
+        )
+    total_inputs = 1 + len(contract.provider_image_paths)
+    if total_inputs > min(
+        int(profile["maximum_input_images"]), contract.maximum_provider_inputs
+    ):
+        raise OpenAIImageExecutionError(
+            "PROVIDER_INPUT_LIMIT_EXCEEDED",
+            "Resolved preset exceeds the provider image-input limit.",
+        )
+    return PublishedPreset(
+        slot_id=contract.slot_id,
+        preset_id=contract.preset_id,
+        prompt=contract.prompt,
+        provider_profile=profile,
+        provider_image_paths=contract.provider_image_paths,
+        provider_image_roles=contract.provider_image_roles,
+        aspect_ratio=contract.aspect_ratio,
+        aspect_status=contract.aspect_status,
+        delivery_width=contract.delivery_width,
+        delivery_height=contract.delivery_height,
+        bbox_qa=contract.bbox_qa,
+        bundle_sha256=contract.bundle_sha256,
+        prompt_sha256=contract.prompt_sha256,
+        provider_profile_sha256=_canonical_json_sha256(profile),
+        status=contract.status,
+        compiler_version=contract.compiler_version,
+        container_mode=contract.container_mode,
+        serving_temperature=contract.serving_temperature,
+        temperature_resolution_source=contract.temperature_resolution_source,
+        companion_policy=contract.companion_policy,
+        brand_input_enabled=contract.brand_input_enabled,
+        brand_default_mode=contract.brand_default_mode,
+        brand_policy_sha256=contract.brand_policy_sha256,
+        maximum_provider_inputs=contract.maximum_provider_inputs,
+        declared_transforms=contract.declared_transforms,
+    )
+
+
 def _mime_type(path: Path) -> str:
     try:
         with Image.open(path) as image:
@@ -678,7 +803,12 @@ def _delivery_image(raw: bytes, width: int, height: int) -> Image.Image:
     except (OSError, Image.DecompressionBombError) as exc:
         raise OpenAIImageExecutionError("INVALID_OPENAI_RESPONSE", "OpenAI returned an invalid image.") from exc
 
-    return image.resize((width, height), Image.Resampling.LANCZOS)
+    if image.size != (width, height):
+        raise OpenAIImageExecutionError(
+            "INVALID_OPENAI_RESPONSE",
+            "OpenAI delivery dimensions do not match the published contract.",
+        )
+    return image
 
 
 def _run_id(value: str | None) -> str:
@@ -834,6 +964,10 @@ def run_openai_image(
     image_path: str | Path,
     preset_slot_id: str,
     aspect_ratio: str = "4:5",
+    container_mode: str = "default",
+    serving_temperature: str = "auto",
+    product_analysis: dict[str, Any] | None = None,
+    allowed_statuses: tuple[str, ...] = ("published",),
     api_key: str | None = None,
     timeout_seconds: float = 1200.0,
     registry_path: str | Path = DEFAULT_PRESET_REGISTRY,
@@ -848,22 +982,33 @@ def run_openai_image(
     preset = load_published_preset(
         preset_slot_id,
         aspect_ratio=aspect_ratio,
+        container_mode=container_mode,
+        serving_temperature=serving_temperature,
         registry_path=registry_path,
+        allowed_statuses=allowed_statuses,
     )
-    with _normalized_product_source(source, preset.provider_profile) as (
-        normalized_source,
-        source_preprocessing,
-    ):
-        return _run_openai_image_prepared(
-            source=normalized_source,
-            preset=preset,
-            source_preprocessing=source_preprocessing,
-            api_key=api_key,
-            timeout_seconds=timeout_seconds,
-            transport=transport,
-            run_id=run_id,
-            audit_dir=audit_dir,
-        )
+    try:
+        with execute_product_transforms(
+            source,
+            preset.declared_transforms,
+            product_analysis=product_analysis,
+        ) as (transformed_source, transform_audit):
+            with _normalized_product_source(
+                transformed_source, preset.provider_profile
+            ) as (normalized_source, source_preprocessing):
+                source_preprocessing["declared_transforms"] = transform_audit
+                return _run_openai_image_prepared(
+                    source=normalized_source,
+                    preset=preset,
+                    source_preprocessing=source_preprocessing,
+                    api_key=api_key,
+                    timeout_seconds=timeout_seconds,
+                    transport=transport,
+                    run_id=run_id,
+                    audit_dir=audit_dir,
+                )
+    except PresetRuntimeError as exc:
+        raise OpenAIImageExecutionError(exc.code, exc.message) from exc
 
 
 def _run_openai_image_prepared(
@@ -888,6 +1033,15 @@ def _run_openai_image_prepared(
     profile = preset.provider_profile
     image_paths = (source, *preset.provider_image_paths)
     roles = ("product_source", *preset.provider_image_roles)
+    if len(image_paths) > min(
+        4,
+        int(profile.get("maximum_input_images", 0)),
+        preset.maximum_provider_inputs,
+    ):
+        raise OpenAIImageExecutionError(
+            "PROVIDER_INPUT_LIMIT_EXCEEDED",
+            "Resolved request exceeds the four-image provider cap.",
+        )
     input_images = [
         _input_image_descriptor(role, path)
         for role, path in zip(roles, image_paths, strict=True)
@@ -902,6 +1056,14 @@ def _run_openai_image_prepared(
             "aspect_ratio": preset.aspect_ratio,
             "prompt_sha256": preset.prompt_sha256,
             "provider_profile_sha256": preset.provider_profile_sha256,
+            "compiler_version": preset.compiler_version,
+            "container_mode": preset.container_mode,
+            "serving_temperature": preset.serving_temperature,
+            "temperature_resolution_source": preset.temperature_resolution_source,
+            "companion_policy": preset.companion_policy,
+            "brand_input_enabled": preset.brand_input_enabled,
+            "brand_default_mode": preset.brand_default_mode,
+            "brand_policy_sha256": preset.brand_policy_sha256,
         }
     )
     resolved_run_id = _run_id(run_id)
@@ -974,6 +1136,16 @@ def _run_openai_image_prepared(
         "provider": profile["provider"],
         "model": profile["model"],
         "quality": profile["quality"],
+        "preset_status": preset.status,
+        "compiler_version": preset.compiler_version,
+        "container_mode": preset.container_mode,
+        "serving_temperature": preset.serving_temperature,
+        "temperature_resolution_source": preset.temperature_resolution_source,
+        "companion_policy": preset.companion_policy,
+        "brand_input_enabled": preset.brand_input_enabled,
+        "brand_default_mode": preset.brand_default_mode,
+        "brand_policy_sha256": preset.brand_policy_sha256,
+        "maximum_provider_inputs": preset.maximum_provider_inputs,
         "preset_slot_id": preset.slot_id,
         "preset_id": preset.preset_id,
         "aspect_ratio": preset.aspect_ratio,

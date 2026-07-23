@@ -82,12 +82,14 @@ class NodeExecutionTest(unittest.TestCase):
             )
             self.assertEqual(kwargs["run_id"], "gateway-job-123")
             self.assertEqual(kwargs["aspect_ratio"], "4:5")
-            self.assertTrue(str(kwargs["audit_dir"]).endswith("/audit"))
+            self.assertEqual(kwargs["container_mode"], "reconstruct_source")
+            self.assertEqual(kwargs["serving_temperature"], "cold")
+            self.assertEqual(Path(kwargs["audit_dir"]).name, "audit")
             with Image.open(observed_input) as prepared:
                 self.assertEqual(prepared.format, "PNG")
                 self.assertEqual(prepared.size, (4096, 12))
             return (
-                Image.new("RGB", (880, 1100), (240, 235, 225)),
+                Image.new("RGB", (1024, 1280), (240, 235, 225)),
                 {
                     "provider": "openai_images_api",
                     "model": "gpt-image-2",
@@ -109,11 +111,13 @@ class NodeExecutionTest(unittest.TestCase):
                     image, metadata_json = AdCreatorOpenAIImageGenerate().generate(
                         image=source,
                         preset_id="natural_white__product_center",
+                        container_mode="reconstruct_source",
+                        serving_temperature="cold",
                         aspect_ratio="4:5",
                         request_id="gateway-job-123",
                     )
 
-        self.assertEqual(tuple(image.shape), (1, 1100, 880, 3))
+        self.assertEqual(tuple(image.shape), (1, 1280, 1024, 3))
         metadata = json.loads(metadata_json)
         self.assertEqual(metadata["model"], "gpt-image-2")
         self.assertEqual(metadata["quality"], "low")
@@ -123,10 +127,20 @@ class NodeExecutionTest(unittest.TestCase):
     def test_openai_node_always_disables_comfyui_cache(self):
         self.assertNotEqual(
             AdCreatorOpenAIImageGenerate.IS_CHANGED(
-                None, "natural_white__product_center", "4:5", "request-1"
+                None,
+                "natural_white__product_center",
+                "reconstruct_source",
+                "cold",
+                "4:5",
+                "request-1",
             ),
             AdCreatorOpenAIImageGenerate.IS_CHANGED(
-                None, "natural_white__product_center", "4:5", "request-1"
+                None,
+                "natural_white__product_center",
+                "reconstruct_source",
+                "cold",
+                "4:5",
+                "request-1",
             ),
         )
 

@@ -32,6 +32,8 @@
       "inputs": [
         {"name": "image", "type": "IMAGE", "link": 1},
         {"name": "preset_id", "type": "COMBO", "widget": {"name": "preset_id"}, "link": null},
+        {"name": "container_mode", "type": "COMBO", "widget": {"name": "container_mode"}, "link": null},
+        {"name": "serving_temperature", "type": "COMBO", "widget": {"name": "serving_temperature"}, "link": null},
         {"name": "aspect_ratio", "type": "COMBO", "widget": {"name": "aspect_ratio"}, "link": null},
         {"name": "request_id", "type": "STRING", "widget": {"name": "request_id"}, "link": null}
       ],
@@ -40,7 +42,7 @@
         {"name": "metadata_json", "type": "STRING", "links": null, "slot_index": 1}
       ],
       "properties": {"Node name for S&R": "AdCreatorOpenAIImageGenerate"},
-      "widgets_values": ["natural_white__product_center", "4:5", "__AUTO__"]
+      "widgets_values": ["wood__product_center", "default", "auto", "4:5", "__AUTO__"]
     },
     {
       "id": 3,

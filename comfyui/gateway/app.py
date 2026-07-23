@@ -346,6 +346,8 @@ def _canonical_workflow_values(
     strength: str,
     seed: int | None,
     aspect_ratio: str,
+    container_mode: str,
+    serving_temperature: str,
 ) -> dict[str, Any]:
     try:
         accepted = workflow_input_names(workflow_id=workflow_id)
@@ -363,6 +365,8 @@ def _canonical_workflow_values(
         "strength": strength,
         "seed": seed,
         "aspect_ratio": aspect_ratio,
+        "container_mode": container_mode,
+        "serving_temperature": serving_temperature,
     }
     return {
         name: possible[name]
@@ -571,6 +575,8 @@ async def _submit_generation(
     request_id: str,
     preset_id: str | None = None,
     aspect_ratio: str = "4:5",
+    container_mode: str = "default",
+    serving_temperature: str = "auto",
 ) -> tuple[str, str, str]:
     extension = _validate_image(data, content_type)
     async with _SUBMISSION_LOCK:
@@ -607,6 +613,8 @@ async def _submit_generation(
             "preset_id": preset_id,
             "request_id": request_id,
             "aspect_ratio": aspect_ratio,
+            "container_mode": container_mode,
+            "serving_temperature": serving_temperature,
         }
         if seed is not None:
             possible_values["seed"] = seed
@@ -823,10 +831,7 @@ async def health() -> JSONResponse:
             checks[name] = False
     if settings.health_workflow_id == "openai-gpt-image-2-low-v1":
         try:
-            checks["preset_registry"] = published_preset_ids() == (
-                "natural_white__product_center",
-                "wood__product_center",
-            )
+            checks["preset_registry"] = bool(published_preset_ids())
         except PresetRegistryConfigurationError:
             checks["preset_registry"] = False
         try:
@@ -855,6 +860,12 @@ async def create_generation(
     strength: Annotated[Literal["low", "medium", "high"], Form()] = "medium",
     seed: Annotated[int | None, Form(ge=-1, le=2147483647)] = None,
     aspect_ratio: Annotated[Literal["4:5", "1:1"], Form()] = "4:5",
+    container_mode: Annotated[
+        Literal["default", "adopt_reference", "reconstruct_source"], Form()
+    ] = "default",
+    serving_temperature: Annotated[
+        Literal["auto", "iced", "cold", "ambient", "hot"], Form()
+    ] = "auto",
     idempotency_key: Annotated[str | None, Header(alias="Idempotency-Key")] = None,
     settings: Settings = Depends(require_api_key),
 ) -> dict[str, Any]:
@@ -885,6 +896,8 @@ async def create_generation(
         strength=strength,
         seed=seed,
         aspect_ratio=aspect_ratio,
+        container_mode=container_mode,
+        serving_temperature=serving_temperature,
     )
     request_hash = _request_hash(
         data=data,
@@ -949,6 +962,8 @@ async def create_generation(
             request_id=job_id,
             preset_id=selected_preset_id,
             aspect_ratio=aspect_ratio,
+            container_mode=container_mode,
+            serving_temperature=serving_temperature,
         )
     except _PromptSubmissionUncertain as exc:
         message = str(exc.error.detail)

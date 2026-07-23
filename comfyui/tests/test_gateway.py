@@ -319,6 +319,8 @@ class GatewayApiTest(unittest.TestCase):
             data={
                 "workflow_id": "openai-gpt-image-2-low-v1",
                 "preset_id": "wood__product_center",
+                "container_mode": "reconstruct_source",
+                "serving_temperature": "cold",
                 "aspect_ratio": "1:1",
             },
         )
@@ -327,6 +329,13 @@ class GatewayApiTest(unittest.TestCase):
             submit_generation.await_args.kwargs["preset_id"], "wood__product_center"
         )
         self.assertEqual(submit_generation.await_args.kwargs["aspect_ratio"], "1:1")
+        self.assertEqual(
+            submit_generation.await_args.kwargs["container_mode"],
+            "reconstruct_source",
+        )
+        self.assertEqual(
+            submit_generation.await_args.kwargs["serving_temperature"], "cold"
+        )
 
     @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
     def test_unpublished_preset_is_rejected_before_submission(self, submit_generation):
@@ -425,6 +434,42 @@ class GatewayApiTest(unittest.TestCase):
         )
         self.assertEqual(portrait.status_code, 202)
         self.assertEqual(square.status_code, 409)
+        self.assertEqual(submit_generation.await_count, 1)
+
+    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    def test_openai_idempotency_distinguishes_runtime_policy(self, submit_generation):
+        submit_generation.return_value = (
+            str(uuid.uuid4()),
+            "openai-gpt-image-2-low-v1",
+            "3",
+        )
+        image = _png()
+        common = {
+            "headers": _request_headers("openai-runtime-policy-conflict"),
+            "files": {"image": ("input.png", image, "image/png")},
+        }
+        cold = self.client.post(
+            "/v1/generations",
+            **common,
+            data={
+                "workflow_id": "openai-gpt-image-2-low-v1",
+                "preset_id": "wood__product_center",
+                "container_mode": "reconstruct_source",
+                "serving_temperature": "cold",
+            },
+        )
+        hot = self.client.post(
+            "/v1/generations",
+            **common,
+            data={
+                "workflow_id": "openai-gpt-image-2-low-v1",
+                "preset_id": "wood__product_center",
+                "container_mode": "reconstruct_source",
+                "serving_temperature": "hot",
+            },
+        )
+        self.assertEqual(cold.status_code, 202)
+        self.assertEqual(hot.status_code, 409)
         self.assertEqual(submit_generation.await_count, 1)
 
     @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
