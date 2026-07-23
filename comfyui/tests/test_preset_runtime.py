@@ -3,7 +3,9 @@ import json
 import sys
 import tempfile
 import unittest
+from copy import deepcopy
 from pathlib import Path
+from unittest.mock import patch
 
 from PIL import Image
 
@@ -17,6 +19,7 @@ from ad_creator.runtime import (
     execute_product_transforms,
     resolve_preset_contract,
 )
+from ad_creator.runtime import preset_contract as runtime_contract
 
 
 REGISTRY = COMFYUI_DIR / "presets" / "registry.json"
@@ -113,6 +116,66 @@ class PresetRuntimeTest(unittest.TestCase):
             contract.prompt,
         )
         self.assertIn("do not invent ice, condensation or steam", contract.prompt)
+
+    def test_pending_wood_overhead_uses_the_shared_runtime_contract(self):
+        registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
+        bundle_path = REGISTRY.parent / "wood__aerial_shot" / "preset.json"
+        bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
+        candidate_registry = deepcopy(registry)
+        candidate_bundle = deepcopy(bundle)
+        candidate_registry["slots"]["wood__aerial_shot"]["enabled"] = True
+        candidate_registry["slots"]["wood__aerial_shot"]["status"] = "validated"
+        candidate_bundle["status"] = "validated"
+        original_read_json = runtime_contract._read_json
+
+        def read_candidate(path: Path):
+            resolved = Path(path).resolve()
+            if resolved == REGISTRY.resolve():
+                return candidate_registry
+            if resolved == bundle_path.resolve():
+                return candidate_bundle
+            return original_read_json(path)
+
+        with patch.object(runtime_contract, "_read_json", side_effect=read_candidate):
+            with self.assertRaises(PresetRuntimeError) as raised:
+                resolve_preset_contract(
+                    "wood__aerial_shot",
+                    serving_temperature="auto",
+                    registry_path=REGISTRY,
+                    allowed_statuses=("validated",),
+                )
+            self.assertEqual(
+                raised.exception.code, "SERVING_TEMPERATURE_REVIEW_REQUIRED"
+            )
+            adopted = resolve_preset_contract(
+                "wood__aerial_shot",
+                serving_temperature="cold",
+                registry_path=REGISTRY,
+                allowed_statuses=("validated",),
+            )
+            reconstructed = resolve_preset_contract(
+                "wood__aerial_shot",
+                container_mode="reconstruct_source",
+                serving_temperature="auto",
+                registry_path=REGISTRY,
+                allowed_statuses=("validated",),
+            )
+
+        self.assertEqual(adopted.container_mode, "adopt_reference")
+        self.assertEqual(adopted.serving_temperature, "cold")
+        self.assertEqual(
+            adopted.provider_image_roles,
+            ("sanitized_wood_cane_brownie_control_board",),
+        )
+        self.assertEqual(reconstructed.container_mode, "reconstruct_source")
+        self.assertEqual(reconstructed.serving_temperature, "source_authoritative")
+        for contract in (adopted, reconstructed):
+            self.assertEqual(
+                [contract.delivery_width, contract.delivery_height], [1024, 1280]
+            )
+            self.assertEqual(contract.safe_crop, "none_exact_4x5")
+            self.assertFalse(contract.bbox_qa["crop_allowed"])
+            self.assertLessEqual(len(contract.prompt), 12_000)
 
     def test_declared_crop_uses_analyzed_geometry_or_audited_fallback(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import sys
 from pathlib import Path
 
 from PIL import Image
@@ -10,6 +11,9 @@ from PIL import Image
 COMFYUI_DIR = Path(__file__).resolve().parents[1]
 BUNDLE_DIR = COMFYUI_DIR / "presets" / "wood__aerial_shot"
 BUNDLE_PATH = BUNDLE_DIR / "preset.json"
+sys.path.insert(0, str(COMFYUI_DIR / "custom_nodes"))
+
+from ad_creator.runtime import preset_contract as runtime_contract
 
 
 def _require(condition: bool, message: str) -> None:
@@ -41,12 +45,23 @@ def main() -> int:
     bundle = json.loads(BUNDLE_PATH.read_text(encoding="utf-8"))
     _require(bundle.get("preset_id") == "instagram_wood_cane_brownie_overhead_v1", "Preset ID mismatch.")
     _require(bundle.get("status") == "visual_qa_pending", "Bundle must remain pending visual QA.")
+    policy = bundle.get("runtime_policy")
+    _require(isinstance(policy, dict), "Shared runtime policy is missing.")
+    _require(policy.get("compiler_version") == "preset-runtime-v1", "Runtime compiler changed.")
+    _require(policy.get("maximum_prompt_characters") == 12000, "Prompt cap must remain 12,000.")
+    _require(policy.get("maximum_provider_inputs") == 4, "Provider input cap must remain four.")
+    _require(policy.get("maximum_product_sources") == 3, "Product source cap must remain three.")
+    _require(policy.get("maximum_reference_controls") == 1, "Reference-control cap must remain one.")
+    _require(policy.get("default_container_mode") == "adopt_reference", "Default cup policy changed.")
+    _require(policy.get("supported_container_modes") == ["adopt_reference", "reconstruct_source"], "Cup policy modes changed.")
+    _require(policy.get("brand_input_policy", {}).get("enabled") is False, "Brand input must remain disabled.")
+    _require(runtime_contract._runtime_policy(bundle) == policy, "Runtime policy is not executable.")
     _asset(bundle["prompt_template"], "default prompt")
     _asset(bundle["lighting_sheet"], "lighting sheet")
     _asset(bundle["grade_profile"], "grade profile")
     for label, binding in bundle["contract_assets"].items():
         _asset(binding, label)
-    preserve_prompt = bundle["container_modes"]["preserve_source"]["prompt_template"]
+    preserve_prompt = bundle["container_modes"]["reconstruct_source"]["prompt_template"]
     preserve_path = _asset(preserve_prompt, "preserve-source prompt")
 
     policy = bundle["provider_reference_policy"]
@@ -56,21 +71,22 @@ def main() -> int:
     _require(hint.get("role") == "sanitized_wood_cane_brownie_control_board", "Sanitized control-board role changed.")
     _require("2x2 board layout" in hint.get("excluded_transfer", []), "Control-board panel-copy exclusion is missing.")
     _require("complete scene" in hint.get("excluded_transfer", []), "Complete-scene transfer exclusion is missing.")
+    _require(hint.get("container_mode_scope") == ["reconstruct_source", "adopt_reference"], "Hint cup-mode scope changed.")
     hint_path = _asset(hint, "sanitized control board")
     with Image.open(hint_path) as image:
         _require([image.width, image.height] == [1122, 1402], "Control-board dimensions changed.")
         image.verify()
 
     _require(bundle["camera_contract"]["pitch_degrees"] == [72, 80], "Camera pitch changed.")
-    preserve_mode = bundle["container_modes"]["preserve_source"]
-    _require(preserve_mode["camera_override"]["pitch_degrees"] == [85, 89], "Preserve-source camera override changed.")
-    _require(preserve_mode["camera_override"]["rim_shape"] == "near-circular", "Preserve-source rim contract changed.")
-    preserve_scale = preserve_mode["product_scale_override_4x5"]
-    _require(preserve_scale["width_ratio"] == [0.16, 0.21], "Preserve-source width contract changed.")
-    _require(preserve_scale["height_ratio"] == [0.17, 0.23], "Preserve-source height contract changed.")
-    _require("beverage_color_integration" in preserve_mode, "Generic beverage color-integration contract is missing.")
-    _require("pale_neutral_component_adaptation" in preserve_mode, "Generic pale-neutral component contract is missing.")
-    _require("transparent_beverage_color_integration" not in preserve_mode, "Beverage-type-specific color contract must not be present.")
+    source_mode = bundle["container_modes"]["reconstruct_source"]
+    _require(source_mode["camera_override"]["pitch_degrees"] == [85, 89], "Reconstructed-source camera override changed.")
+    _require(source_mode["camera_override"]["rim_shape"] == "near-circular", "Reconstructed-source rim contract changed.")
+    source_scale = source_mode["product_scale_override_4x5"]
+    _require(source_scale["width_ratio"] == [0.16, 0.21], "Reconstructed-source width contract changed.")
+    _require(source_scale["height_ratio"] == [0.17, 0.23], "Reconstructed-source height contract changed.")
+    _require("beverage_color_integration" in source_mode, "Generic beverage color-integration contract is missing.")
+    _require("pale_neutral_component_adaptation" in source_mode, "Generic pale-neutral component contract is missing.")
+    _require("transparent_beverage_color_integration" not in source_mode, "Beverage-type-specific color contract must not be present.")
     integration = bundle["product_wood_integration_contract"]
     for key in ("contact_occlusion", "cast_shadow", "opaque_container", "transparent_container", "local_edge_response"):
         _require(key in integration, f"Missing product-to-wood integration rule: {key}")
@@ -89,10 +105,12 @@ def main() -> int:
 
     delivery = bundle["aspect_ratio_contracts"]["4:5"]
     _require(delivery["status"] == "prepared_pending_visual_qa", "4:5 status changed.")
-    _require(delivery.get("provider_aspect_ratio") == "3:4", "Higgsfield GPT Image 2 must use its supported 3:4 provider canvas.")
-    _require(delivery["bbox_qa"].get("crop_axis") == "vertical_only", "3:4 to 4:5 crop must remove top and bottom margins only.")
+    _require(delivery.get("generation_size") == "1024x1280", "4:5 must use the shared provider canvas.")
+    _require([delivery.get("width"), delivery.get("height")] == [1024, 1280], "4:5 delivery must preserve the provider canvas.")
+    _require(delivery.get("safe_crop") == "none_exact_4x5", "4:5 must not crop provider output.")
+    _require(delivery["bbox_qa"].get("crop_allowed") is False, "4:5 crop must remain disabled.")
     _require(delivery["bbox_qa"].get("protected_objects_must_remain_complete") is True, "4:5 crop protection changed.")
-    print("Validated pending wood overhead preset, hashes, sanitized control board, light/shadow and product-to-wood integration contracts.")
+    print("Validated pending wood overhead preset, shared runtime policy, hashes, sanitized control board, light/shadow and product-to-wood integration contracts.")
     return 0
 
 

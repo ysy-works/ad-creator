@@ -6,13 +6,48 @@
   "composition": "aerial",
   "status": "visual_qa_pending",
   "source_review_status": "sanitized_control_board_prepared_preset_output_pending",
+  "runtime_policy": {
+    "schema_version": 1,
+    "compiler_version": "preset-runtime-v1",
+    "maximum_prompt_characters": 12000,
+    "maximum_provider_inputs": 4,
+    "maximum_product_sources": 3,
+    "maximum_reference_controls": 1,
+    "default_container_mode": "adopt_reference",
+    "supported_container_modes": ["adopt_reference", "reconstruct_source"],
+    "companion_policy": "reference_relational",
+    "brand_input_policy": {
+      "enabled": false,
+      "default_mode": "none",
+      "activation_requirement": "frontend_and_api_brand_asset_flow"
+    },
+    "temperature_policy": {
+      "mode": "preset_primary",
+      "container_mode_rules": {
+        "reconstruct_source": {
+          "allowed_product_states": ["iced", "cold", "ambient", "hot"],
+          "auto_action": "preserve_source_state"
+        },
+        "adopt_reference": {
+          "allowed_product_states": ["iced", "cold", "ambient", "hot"],
+          "auto_action": "requires_explicit_state"
+        }
+      },
+      "emergency_fallback": {
+        "enabled_when_policy_missing": true,
+        "minimum_confidence": 0.85,
+        "unknown_action": "needs_review",
+        "conflict_action": "needs_review"
+      }
+    }
+  },
   "prompt_template": {
     "path": "prompt-template.txt",
-    "sha256": "8414d5b51b2ccd34048f03aff0d93640eae191934d2df4bdf00cad0f004ed418"
+    "sha256": "72a93f18e9c97c915cc36e59ea96ec38d066d2d1dfed7863bb98665c2eea9b2a"
   },
   "lighting_sheet": {
     "path": "lighting-sheet.json",
-    "sha256": "27be72aef81e699bce4a23840fdf2440ef5312a742703a8787480c7a4e20bd32"
+    "sha256": "75d62517964fdffe913bc30cbb0a4141795f57ac8183655a35c46ea8d3c52e91"
   },
   "grade_profile": {
     "path": "grade-profile.json",
@@ -20,7 +55,7 @@
     "apply_in_pilot": false
   },
   "contract_assets": {
-    "scene_recipe": {"path": "scene-recipe.json", "sha256": "a9bbb1bb6aafc0aa11114bba30dcfad640efbea7560e0d7662768c21922f1280"},
+    "scene_recipe": {"path": "scene-recipe.json", "sha256": "3025535035d4d6ae277af204cdaaaddff6aa3fafb12f9c8f283f47ebab6010df"},
     "scene_graph": {"path": "scene-graph.json", "sha256": "aa3d9315ac03ce033cb1986dc3bda331e74d2292f4ecdae56db60f4776ccd39a"},
     "container_design": {"path": "container-design.json", "sha256": "797ad202466165d789f33950e2c9e1ff6e585b88502711b8c1bc915db3743040"},
     "photographic_style": {"path": "photographic-style-contract.json", "sha256": "546c1d56a7d2c21318c0c3a791232e679097603100abdbd59cf39eb1cc8668b0"}
@@ -38,7 +73,7 @@
       "width": 1122,
       "height": 1402,
       "send_to_provider": true,
-      "container_mode_scope": ["preserve_source", "adopt_reference"],
+      "container_mode_scope": ["reconstruct_source", "adopt_reference"],
       "transfer_scope": [
         "broad topology only: a newly constructed partial round table on the right and a newly constructed cane-chair family at upper-left",
         "isolated dark warm-brown directional wood material family without exact grain pixels",
@@ -48,7 +83,7 @@
         "empty product-zone relationship only; never render the board's empty ring"
       ],
       "container_transfer_by_mode": {
-        "preserve_source": "The board contains no source cup. Preserve the user's broad cup family, material, handle state and visible source serviceware.",
+        "reconstruct_source": "The board contains no source cup. Reconstruct the user's broad cup family, material, handle state and visible source serviceware.",
         "adopt_reference": "Use the preset's declared plain unbranded warm-white matte paper-cup design; the board supplies no cup design or beverage."
       },
       "excluded_transfer": ["2x2 board layout", "panel borders", "empty placement ring", "complete scene", "exact table crop", "exact chair silhouette", "exact shadow silhouette", "exact wood-grain pixels", "exact cane-weave pixels", "text", "logo", "watermark"]
@@ -58,16 +93,21 @@
     "analysis_source": "full_user_image",
     "camera_pose_authority": "preset",
     "provider_source_by_container_mode": {
-      "preserve_source": "full_product_crop_including_visible_source_serviceware",
+      "reconstruct_source": "full_product_crop_including_visible_source_serviceware",
       "adopt_reference": "beverage_surface_crop"
     },
     "invalid_geometry_fallback": "full_user_image"
   },
+  "transforms": [
+    {"type": "normalize_product_source"},
+    {"type": "select_hint_by_container_mode"},
+    {"type": "sanitize_reference_control"}
+  ],
   "default_container_mode": "adopt_reference",
   "container_modes": {
-    "preserve_source": {
+    "reconstruct_source": {
       "container_identity_scope": "source_family_material_handle_and_serviceware",
-      "prompt_template": {"path": "prompt-template-preserve-source.txt", "sha256": "aee7291186c8dde986bb6a3d1b725c78ade640437cadd1292d5cd9917c76f517"},
+      "prompt_template": {"path": "prompt-template-preserve-source.txt", "sha256": "61b01ef81fb50ee917e661bf2ffc999a23f5985c630ebafbfa55f03a682e52dd"},
       "camera_override": {"pitch_degrees": [85, 89], "focal_length_equivalent_mm": [45, 55], "projection": "near-vertical rectilinear overhead", "rim_shape": "near-circular", "visible_sidewall": "minimal"},
       "product_scale_override_4x5": {"width_ratio": [0.16, 0.21], "height_ratio": [0.17, 0.23], "center_x_ratio": [0.61, 0.69], "center_y_ratio": [0.65, 0.73], "must_remain_complete": true},
       "preserve": ["beverage identity", "surface arrangement", "broad source container family and material", "handle state", "visible source saucer, support plate and spoon"],
@@ -102,12 +142,11 @@
     "4:5": {
       "status": "prepared_pending_visual_qa",
       "visual_review_status": "not_yet_generated",
-      "prompt_addendum": "Generate on the provider-supported 3:4 portrait canvas while composing the complete scene inside its central 4:5 delivery-safe region. Keep one complete primary beverage 0.20-0.27 of the final 4:5 width and 0.17-0.24 of its height, centered around x=0.61-0.70 and y=0.64-0.73. Keep the brownie plate 0.25-0.32 of final width, centered around x=0.73-0.82 and y=0.46-0.55, with a small open gap from the beverage. Preserve the round table on the right, partial cane chair at upper-left and 0.28-0.42 meaningful pale floor-and-wall negative space. Keep all hard-gate objects clear of the narrow removable top and bottom margins.",
-      "provider_aspect_ratio": "3:4",
-      "generation_size": "1024x1365",
-      "safe_crop": "center_crop_3x4_to_4x5_top_bottom_margins_only",
-      "width": 880,
-      "height": 1100,
+      "prompt_addendum": "Generate the exact final 4:5 portrait canvas from the start; do not crop or resize after generation. Keep one complete primary beverage 0.20-0.27 of frame width and 0.17-0.24 of frame height, centered around x=0.61-0.70 and y=0.64-0.73. Keep the brownie plate 0.25-0.32 of frame width, centered around x=0.73-0.82 and y=0.46-0.55, with a small open gap from the beverage. Preserve the round table on the right, partial cane chair at upper-left and 0.28-0.42 meaningful pale floor-and-wall negative space. Keep every declared object and its attached shadow complete inside the frame.",
+      "generation_size": "1024x1280",
+      "safe_crop": "none_exact_4x5",
+      "width": 1024,
+      "height": 1280,
       "format": "png",
       "bbox_qa": {
         "product_width_ratio": [0.20, 0.27],
@@ -117,8 +156,7 @@
         "brownie_plate_width_ratio": [0.25, 0.32],
         "negative_space_ratio": [0.28, 0.42],
         "expected_primary_count": 1,
-        "crop_allowed": true,
-        "crop_axis": "vertical_only",
+        "crop_allowed": false,
         "protected_objects_must_remain_complete": true
       }
     },
@@ -135,7 +173,7 @@
   },
   "qa_contract": {
     "phase": "paid_visual_review_pending",
-    "hard_gates": ["beverage_identity", "container_mode", "camera_geometry", "round_table", "wood_grain", "cane_chair", "light_direction", "shadow_attachment_and_length", "product_wood_integration", "brownie_group", "teaspoon_orientation", "crop", "logo_ocr"],
+    "hard_gates": ["beverage_identity", "container_mode", "camera_geometry", "round_table", "wood_grain", "cane_chair", "light_direction", "shadow_attachment_and_length", "product_wood_integration", "brownie_group", "teaspoon_orientation", "full_frame", "logo_ocr"],
     "hard_fail": [
       "product looks pasted on, haloed, floating or sharper than the scene",
       "light or shadow direction conflicts with upper-left window sun",
@@ -146,7 +184,7 @@
       "source-derived pale low-chroma region is pure clipped white, brown-contaminated, flat gray or separated by a luminous hard boundary",
       "round table edge, cane chair or pale environmental depth disappears",
       "brownie, double-rim plate or wooden teaspoon is missing or replaced",
-      "preserve-source primary cup exceeds 0.21 of final width, has an oblique elliptical opening or exposes excessive sidewall",
+      "reconstruct-source primary cup exceeds 0.21 of final width, has an oblique elliptical opening or exposes excessive sidewall",
       "teaspoon bowl points upward instead of downward",
       "cookie, plastic packaging, undeclared prop, logo or text appears",
       "CGI, HDR, procedural wood, repeated cane texture or orange wash"

@@ -15,7 +15,7 @@
   ],
   "container_modes": {
     "adopt_reference": "use the declared unbranded warm-white paper cup; user beverage remains authoritative",
-    "preserve_source": "preserve broad source cup family and material plus visible source serviceware; rebuild projection, light and shadow under the preset camera"
+    "reconstruct_source": "reconstruct broad source cup family and material plus visible source serviceware; rebuild projection, light and shadow under the preset camera"
   },
   "forbidden": ["cookie", "plastic packaging", "fork", "napkin", "flower", "book", "phone", "extra beverage", "extra dessert", "logo", "text", "floating object", "detached shadow", "repeated cane texture"]
 }
