@@ -146,8 +146,11 @@ class PresetRuntimeTest(unittest.TestCase):
         for item in bundles.values():
             path = manifest_path.parent / item["bundle"]
             self.assertTrue(path.is_file())
+            content = path.read_bytes()
+            if path.suffix.lower() in {".json", ".txt"}:
+                content = content.replace(b"\r\n", b"\n")
             self.assertEqual(
-                hashlib.sha256(path.read_bytes()).hexdigest(),
+                hashlib.sha256(content).hexdigest(),
                 item["bundle_sha256"],
             )
 
