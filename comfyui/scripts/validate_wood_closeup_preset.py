@@ -45,7 +45,7 @@ def main() -> int:
     _require(prompt.count("{{ASPECT_CONTRACT}}") == 1, "ASPECT_CONTRACT placeholder is invalid.")
     _require('"CAFE AMERICANO"' in prompt, "Rear cup text lock is missing.")
     _require("1.05-1.12 times the cup bottom diameter" in prompt, "Straw ratio lock is missing.")
-    _require("never sent because it over-strengthens scene replication" in json.dumps(bundle), "Scene-clone safeguard is missing.")
+    _require("Do not copy the approved reference scene pixel-for-pixel." in prompt, "Scene-clone safeguard is missing.")
 
     _asset(bundle["lighting_sheet"], "lighting sheet")
     _asset(bundle["grade_profile"], "grade profile")
@@ -53,14 +53,13 @@ def main() -> int:
         _asset(binding, label)
 
     hints = bundle.get("hint_images")
-    _require(isinstance(hints, list) and len(hints) == 3, "Expected all three reviewed image assets.")
+    _require(isinstance(hints, list) and len(hints) == 2, "Expected two provider hint images.")
     roles = {item["role"] for item in hints}
     _require(
         roles
         == {
             "reference_cup_geometry_light_and_companion_evidence",
             "source_cup_geometry_light_and_companion_evidence",
-            "approved_full_reference_for_offline_review",
         },
         "Hint roles changed.",
     )
@@ -79,7 +78,7 @@ def main() -> int:
         "Square mode must remain pending visual QA.",
     )
 
-    print("Validated wood close-up preset bundle, contracts, hashes and three image assets.")
+    print("Validated wood close-up preset bundle, contracts, hashes and two provider hint images.")
     return 0
 
 

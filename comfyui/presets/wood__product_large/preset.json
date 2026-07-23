@@ -129,15 +129,6 @@
       "send_to_provider": true,
       "container_mode_scope": ["reconstruct_source"],
       "reason": "Checked-in conditional evidence sent only for reconstruct-source routing; excluded from the default adopted-container request to prevent cup mixing."
-    },
-    {
-      "role": "approved_full_reference_for_offline_review",
-      "path": "../assets/wood-closeup-approved-reference-v1.png",
-      "sha256": "4e17067c6696a71699e989bfc0fcb47d096a9626441698bec4b773904efd73c7",
-      "width": 1254,
-      "height": 1254,
-      "send_to_provider": false,
-      "reason": "User-approved authoring reference retained for audit only; never sent because it over-strengthens scene replication."
     }
   ],
   "default_container_mode": "adopt_reference",
