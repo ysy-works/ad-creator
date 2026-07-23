@@ -25,10 +25,17 @@ OPENAI_WORKFLOW_ID = "openai-gpt-image-2-low-v1"
 DEFAULT_WORKFLOW_ID = os.environ.get("COMFYUI_WORKFLOW_ID", MODEL_C_WORKFLOW_ID)
 
 # openai-gpt-image-2-low-v1에서 실제로 생성 가능한 preset_id (= 프론트 reference_id).
-# 나머지 10개는 유료 provider 호출 전에 차단한다 (인계서 3번 "아직 지원하지 않는 10개 ID").
+# 나머지는 유료 provider 호출 전에 차단한다.
+# 2026-07-24 소연님 검증 완료분 반영: 화이트 4종 + 우드 3종(핸드헬드 제외) 총 7개.
+# wood__handheld_lifestyle과 다크그레이(vivid) 4종은 아직 미검증이라 계속 비활성.
 OPENAI_ACTIVE_PRESET_IDS = {
+    "natural_white__product_large",
     "natural_white__product_center",
+    "natural_white__aerial_shot",
+    "natural_white__handheld_lifestyle",
+    "wood__product_large",
     "wood__product_center",
+    "wood__aerial_shot",
 }
 
 # references.json의 mood_id/composition_id -> 모델 API가 요구하는 값으로 변환
