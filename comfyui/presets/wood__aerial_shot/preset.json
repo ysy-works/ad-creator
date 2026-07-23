@@ -168,7 +168,17 @@
       "safe_crop": "none_exact_1x1",
       "width": 1024,
       "height": 1024,
-      "format": "png"
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [0.22, 0.31],
+        "product_height_ratio": [0.18, 0.26],
+        "center_x_ratio": [0.56, 0.65],
+        "center_y_ratio": [0.57, 0.67],
+        "negative_space_ratio": [0.22, 0.31],
+        "expected_primary_count": 1,
+        "crop_allowed": false,
+        "protected_objects_must_remain_complete": true
+      }
     }
   },
   "qa_contract": {
