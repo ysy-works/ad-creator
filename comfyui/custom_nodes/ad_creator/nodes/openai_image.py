@@ -87,7 +87,10 @@ class AdCreatorOpenAIImageGenerate:
     def INPUT_TYPES(cls):
         preset_slots = list(published_preset_slots())
         for preset_slot in preset_slots:
-            load_published_preset(preset_slot)
+            # UI metadata has no user-selected temperature yet. Validate each
+            # published contract with the source-preserving policy, which is
+            # valid for every published preset without inventing a temperature.
+            load_published_preset(preset_slot, container_mode="reconstruct_source")
         return {
             "required": {
                 "image": ("IMAGE",),

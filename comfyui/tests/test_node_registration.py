@@ -29,6 +29,18 @@ class NodeRegistrationTest(unittest.TestCase):
             self.assertEqual(node.RETURN_TYPES, ("IMAGE", "STRING"))
             self.assertEqual(node.CATEGORY, "Ad Creator")
 
+    def test_openai_node_ui_metadata_resolves_all_published_presets(self):
+        node = ad_creator.NODE_CLASS_MAPPINGS["AdCreatorOpenAIImageGenerate"]
+        inputs = node.INPUT_TYPES()
+        self.assertEqual(
+            tuple(inputs["required"]["preset_id"][0]),
+            (
+                "natural_white__product_center",
+                "natural_white__handheld_lifestyle",
+                "wood__product_center",
+            ),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
