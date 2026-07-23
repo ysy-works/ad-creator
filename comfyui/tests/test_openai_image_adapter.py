@@ -72,7 +72,11 @@ class PublishedPresetTest(unittest.TestCase):
     def test_reviewed_presets_remain_available_for_validation(self):
         self.assertEqual(
             validated_preset_slots(),
-            ("natural_white__aerial_shot", "wood__product_large"),
+            (
+                "natural_white__product_large",
+                "natural_white__aerial_shot",
+                "wood__product_large",
+            ),
         )
 
     def test_registry_declares_twelve_slots_and_reviewed_presets_are_published(self):
@@ -141,6 +145,12 @@ class PublishedPresetTest(unittest.TestCase):
         self.assertEqual(reconstructed.serving_temperature, "source_authoritative")
 
     def test_validated_presets_resolve_both_declared_container_modes(self):
+        white_closeup = load_published_preset(
+            "natural_white__product_large",
+            container_mode="adopt_reference",
+            serving_temperature="auto",
+            allowed_statuses=("validated",),
+        )
         white_reference = load_published_preset(
             "natural_white__aerial_shot",
             container_mode="adopt_reference",
@@ -164,6 +174,9 @@ class PublishedPresetTest(unittest.TestCase):
         )
         self.assertEqual(white_reference.container_mode, "adopt_reference")
         self.assertEqual(white_source.container_mode, "reconstruct_source")
+        self.assertEqual(white_closeup.container_mode, "adopt_reference")
+        self.assertEqual(white_closeup.serving_temperature, "cold")
+        self.assertEqual(white_closeup.aspect_ratio, "4:5")
         self.assertEqual(
             wood_reference.provider_image_roles,
             ("reference_cup_geometry_light_and_companion_evidence",),

@@ -63,11 +63,11 @@
   "contract_assets": {
     "scene_recipe": {
       "path": "scene-recipe.json",
-      "sha256": "e57bb7efa16fb5d4cdf4654c0be5e5c6abe585098436e8218820c4da7242c21f"
+      "sha256": "a6819eca9a7f04d151a4afc0bde2cde9e9a87530b3c342c8a34d5a5afab8b7ac"
     },
     "scene_graph": {
       "path": "scene-graph.json",
-      "sha256": "0ad57160aec94eed916bbcae10d6f1058196c1ae8110cc08fb72b5e202054572"
+      "sha256": "6df9f8ff369a5170030936e408f0ce85189b088be098a9afcffc1654adaa3a16"
     },
     "container_design": {
       "path": "container-design.json",

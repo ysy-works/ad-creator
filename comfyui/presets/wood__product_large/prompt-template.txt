@@ -9,7 +9,7 @@ The exact user drink remains the sole beverage-identity authority. Published con
 Preserve the user's beverage category, serving temperature, liquid colors and opacity, layer order, ice, foam, cream, fruit, garnish and natural asymmetry. Re-render the liquid, cup, reflections, refraction, transmission, condensation, contact and shadow together under the scene light; never paste or sticker the product into the scene.
 
 [CONTAINER MODES]
-For preserve_source, retain the user's broad cup family, material, rim, base, saucer, spoon and immediate serving assembly. Do not add the reference paper label or straw.
+For reconstruct_source, retain the user's broad cup family, material, rim, base, saucer, spoon and immediate serving assembly. Do not add the reference paper label or straw.
 For adopt_reference, discard the source cup and use the published tall clear PET cold cup: open rolled circular rim, gently tapered wall, narrow clear base ring, height-to-width ratio 1.47-1.55, and one off-white vertical rectangular paper label rotated naturally with the cup's cylindrical curvature. The exact lowercase heading is "cafe" with several lines of tiny understated English editorial copy. Use one plain black straw whose exposed rise above the rim is 1.05-1.12 times the cup bottom diameter, equivalent to 0.52-0.58 times the cup body height. Preserve its realistic diameter, slight lean and clean cylindrical cut end. Do not transfer the reference drink recipe, coffee color, milk diffusion, ice arrangement or condensation pixels.
 
 [COMPOSITION - HARD LOCK]

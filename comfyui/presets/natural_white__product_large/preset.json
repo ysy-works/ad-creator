@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "slot_id": "natural_white__product_large",
+  "preset_id": "instagram_white_diffuse_closeup_v1",
+  "family": "natural_white",
+  "composition": "closeup",
+  "status": "validated",
+  "source_review_status": "pending_provider_visual_validation",
+  "runtime_policy": {
+    "schema_version": 1,
+    "compiler_version": "preset-runtime-v1",
+    "maximum_prompt_characters": 12000,
+    "maximum_provider_inputs": 4,
+    "maximum_product_sources": 3,
+    "maximum_reference_controls": 1,
+    "default_container_mode": "adopt_reference",
+    "supported_container_modes": ["adopt_reference", "reconstruct_source"],
+    "companion_policy": "reference_relational",
+    "brand_input_policy": {"enabled": false, "default_mode": "none", "activation_requirement": "frontend_and_api_brand_asset_flow"},
+    "temperature_policy": {
+      "mode": "preset_primary",
+      "container_mode_rules": {
+        "adopt_reference": {"allowed_product_states": ["cold", "ambient"], "auto_action": "use_preset_default_state", "default_state": "cold"},
+        "reconstruct_source": {"allowed_product_states": ["iced", "cold", "ambient", "hot"], "auto_action": "preserve_source_state"}
+      },
+      "emergency_fallback": {"enabled_when_policy_missing": true, "minimum_confidence": 0.85, "unknown_action": "needs_review", "conflict_action": "needs_review"}
+    }
+  },
+  "provider_reference_policy": {"maximum_images": 2, "required_roles": ["user_product", "sanitized_scene_hint"]},
+  "transforms": [
+    {"type": "normalize_product_source"},
+    {"type": "select_hint_by_container_mode"},
+    {"type": "sanitize_reference_control"}
+  ],
+  "prompt_template": {"path": "prompt-template.txt", "sha256": "5fd004a036c3fa1b0f0312528448dd33db78e966d57a8823795701f4cfeee4de"},
+  "lighting_sheet": {"path": "lighting-sheet.json", "sha256": "8be06ed1a6ece045455aae404e4286f9a9674a87b25af990192db0a3971c95ad"},
+  "grade_profile": {"path": "grade-profile.json", "sha256": "ccb5ef1df3ee76c76ee0320dfdd5dd6bae414cbf5659c2e51a3ac55efe846b51", "apply_in_pilot": false},
+  "contract_assets": {
+    "scene_recipe": {"path": "scene-recipe.json", "sha256": "04da0d63dd8c701340d22cd5fd95e973b831686c8a5d6091b264fdd9480fae46"},
+    "container_design": {"path": "container-design.json", "sha256": "4b9c713491a49807d68875d38a19b8b53aedc1e285815ebf0b6147adceecc23b"}
+  },
+  "hint_images": [
+    {
+      "role": "sanitized_scene_hint",
+      "path": "../assets/white-closeup-sanitized-scene-hint-v1.png",
+      "sha256": "5d7549d447b701a5ed5aa2465790d34dcec3c5074ec4d8efe4db6932774c2b92",
+      "width": 971,
+      "height": 1620,
+      "container_mode_scope": ["adopt_reference", "reconstruct_source"],
+      "send_to_provider": true,
+      "reason": "Sanitized cup-saucer-spoon topology, close tabletop placement and broad light direction only; never transfer source beverage identity or text."
+    }
+  ],
+  "aspect_ratio_contracts": {
+    "4:5": {
+      "status": "validated",
+      "visual_review_status": "not_yet_generated",
+      "prompt_addendum": "Generate the exact final 4:5 canvas at 1024x1280. Keep the complete cup, saucer and spoon assembly inside x=0.26-0.76 and y=0.25-0.83 with 0.42-0.50 meaningful warm-neutral tabletop negative space. Keep the waffle and magazine as narrow peripheral edge traces only; no crop of the primary assembly.",
+      "generation_size": "1024x1280",
+      "safe_crop": "none_exact_4x5",
+      "width": 1024,
+      "height": 1280,
+      "format": "png",
+      "bbox_qa": {"product_width_ratio": [0.46, 0.52], "product_height_ratio": [0.50, 0.60], "center_x_ratio": [0.47, 0.53], "center_y_ratio": [0.47, 0.55], "negative_space_ratio": [0.42, 0.50], "crop_allowed": false}
+    },
+    "1:1": {
+      "status": "prepared_pending_visual_qa",
+      "visual_review_status": "not_yet_generated",
+      "prompt_addendum": "Generate the exact final 1:1 canvas at 1024x1024 from the start; never crop a portrait result. Keep the complete cup, saucer and spoon assembly readable with at least 0.38 meaningful warm-neutral tabletop negative space and no cropped primary object.",
+      "generation_size": "1024x1024",
+      "safe_crop": "none_exact_1x1",
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "bbox_qa": {"product_width_ratio": [0.48, 0.58], "product_height_ratio": [0.50, 0.64], "negative_space_ratio": [0.38, 0.52], "crop_allowed": false}
+    }
+  },
+  "qa_contract": {
+    "phase": "runtime_validated_pending_provider_visual_validation",
+    "hard_gates": ["product_identity", "container_mode", "saucer_and_spoon", "edge_prop_restraint", "transparent_material", "crop", "light_physical_coherence", "no_reference_text"],
+    "comparative_scores": ["naturalness", "mood_adherence", "scene_novelty"]
+  }
+}

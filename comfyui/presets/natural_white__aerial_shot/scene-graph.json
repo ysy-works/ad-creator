@@ -252,7 +252,7 @@
       "exact table-edge curve, grout intersections and pixel layout",
       "exact environmental shadow silhouette",
       "visible text, logos and watermarks outside the declared BAUHAUS magazine",
-      "fabric, coaster, napkin and undeclared props; preserve source saucer, support plate and spoon only when present in preserve_source mode"
+      "fabric, coaster, napkin and undeclared props; preserve source saucer, support plate and spoon only when present in reconstruct_source mode"
     ],
     "maximum_exact_products": 1,
     "maximum_generic_companions": 0,

@@ -67,7 +67,7 @@
   ],
   "prompt_template": {
     "path": "prompt-template.txt",
-    "sha256": "309bc6d46b5cd71f7dae1bd71c383e1ca103ee954e24d74049c04f77fea70dbc"
+    "sha256": "afe43e22e4189e21cf7113ac6c075e6f5c1ee8c42f3c921b16ce493df06714a5"
   },
   "lighting_sheet": {
     "path": "lighting-sheet.json",

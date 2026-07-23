@@ -82,7 +82,7 @@
   ],
   "forbidden": [
     "fabric, coaster, napkin or placemat",
-    "bread, flower, phone or any undeclared decorative prop; source saucer, support plate and spoon are allowed only when present in preserve_source mode",
+    "bread, flower, phone or any undeclared decorative prop; source saucer, support plate and spoon are allowed only when present in reconstruct_source mode",
     "any book or magazine other than the declared cropped BAUHAUS magazine",
     "marble veining, cloudy mottling, faux-stone patches, plaster texture, repeated procedural noise or CGI-smooth tabletop",
     "castella, sponge, chiffon, pound-cake or bread-like cheesecake texture",
@@ -98,7 +98,7 @@
       "the round table edge or left gray floor wedge disappears",
       "floor grout does not recede or the table reads as a flat background",
       "broad off-frame environmental shadow atmosphere is absent",
-      "fabric, coaster, napkin or an undeclared decorative prop appears; source saucer, support plate and spoon are allowed only when present in preserve_source mode",
+      "fabric, coaster, napkin or an undeclared decorative prop appears; source saucer, support plate and spoon are allowed only when present in reconstruct_source mode",
       "the cheesecake lacks a sunken center, higher irregular rim or three-zone cut face",
       "the fork tines do not point left or the handle does not extend right below the cake",
       "the declared BAUHAUS magazine is missing, substituted, enlarged or moved inward",

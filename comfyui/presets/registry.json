@@ -5,10 +5,16 @@
   "provider_profile": "../config/providers/openai-gpt-image-2-low.json",
   "slots": {
     "natural_white__product_large": {
-      "enabled": false,
-      "status": "not_ready",
+      "enabled": true,
+      "status": "validated",
       "family": "natural_white",
-      "composition": "closeup"
+      "composition": "closeup",
+      "preset_id": "instagram_white_diffuse_closeup_v1",
+      "legacy_gateway": {
+        "background_style": "white",
+        "composition": "closeup"
+      },
+      "bundle": "natural_white__product_large/preset.json"
     },
     "natural_white__product_center": {
       "enabled": true,

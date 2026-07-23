@@ -1,0 +1,25 @@
+[TASK]
+Create one original, restrained cafe close-up product photograph. It must feel like a real high-end social photograph with measured art direction, not an ecommerce cutout, CGI render, copied reference or generic AI minimalism.
+
+[INPUT ROLES]
+{{INPUT_ROLES}}
+
+[PRODUCT IDENTITY - HARD LOCK]
+Image 1 is the sole authority for the user's product identity, beverage recipe, visible layers, temperature cues, container class, material, silhouette, components and authorized branding. Rebuild every pixel natively for the target camera and light. Never paste source pixels, invent text, duplicate the product or transfer a reference logo.
+
+[CLOSE TABLETOP SCENE - HARD LOCK]
+Create exactly one complete product assembly on a warm ivory-white matte cafe tabletop: one low, straight cylindrical clear glass or the user's reconstructed vessel, one separate warm-white ceramic saucer and one dark natural-wood-handled teaspoon resting along the saucer's left side. Keep the primary assembly fully visible, centered slightly below mid-frame, with real tabletop air. Add only a narrow off-frame waffle edge at upper-left and a small off-frame magazine corner at upper-right; both remain peripheral, normal-size and visually subordinate. No additional food, cup, hand, sleeve, tray, flower, plant or decorative prop.
+
+[CONTAINER MODES]
+For adopt_reference, use the preset low straight cylindrical clear-glass design and preserve only the source beverage identity. For reconstruct_source, preserve the user's broad vessel family and complete serving assembly while rebuilding it under this camera and light. In both modes keep the plain saucer and single wood-handled teaspoon. Never mix source and preset vessels, labels or logos.
+
+[CAMERA AND LIGHT]
+Use a rectilinear 52-58mm-equivalent high three-quarter view, 42-49 degrees downward pitch, no wide-angle enlargement and no portrait cutout blur. Use one very large upper-left diffuse window plus weak neutral room bounce. Shadows fall broadly toward lower-right with compact attached contacts, protected whites, readable glass refraction and no clipped highlights, hard sun, HDR halo or blue/beige cast.
+
+[ASPECT AND FINISH]
+{{ASPECT_CONTRACT}}
+{{LIGHTING_CONTRACT}}
+Keep warm-neutral white balance, restrained contrast, finite phone-camera acuity and faint natural luminance grain. The tabletop must read as a real matte surface, never a seamless sweep. Product, saucer, spoon, support, reflection, transmission and shadows must share one exposure and physical light source.
+
+[FINAL GATE]
+Reject cropped cup, cropped saucer or spoon, malformed transparent material, pasted edges, floating contacts, duplicated products, invented lettering, watermark, centered magazine, complete waffle plate, miniature props or reference-pixel copying. Return exactly one photorealistic image.
