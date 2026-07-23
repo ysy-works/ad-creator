@@ -41,8 +41,9 @@ def finalize_result_image(image: Image.Image, workflow_id: str) -> Image.Image:
     """
     workflow_id별로 최종 결과 이미지 처리를 분기.
 
-    - openai-gpt-image-2-low-v1: 크롭 없이 그대로 반환 (Gateway가 이미 880x1100,
-      crop 없는 4:5로 정규화해서 줌 — 인계서 2번 "허용 규칙 1").
+    - openai-gpt-image-2-low-v1: 크롭 없이 그대로 반환. 2026-07-23 팀장 정정으로
+      4:5는 1024x1280, 1:1은 1024x1024를 provider가 무크롭으로 그대로 줌
+      (예전엔 4:5를 880x1100으로 축소했었는데 그 단계가 없어짐).
     - 그 외(model-c-v1 등 레거시): 기존처럼 1:1 정사각형 중앙 크롭.
     """
     if workflow_id == OPENAI_WORKFLOW_ID:
@@ -90,8 +91,11 @@ async def generate(
     workflow_id를 안 보내면 기본값(model.py의 DEFAULT_WORKFLOW_ID, 환경변수로 전환)이 사용됨.
 
     aspect_ratio: 프론트 4:5/1:1 토글에서 보내는 값("4:5" 또는 "1:1").
-    지금은 openai-gpt-image-2-low-v1이 4:5 고정이라 실제로 분기하지 않고 받기만 함
-    (1:1은 팀장님 쪽에서 별도 provider profile로 준비 중 — 완성되면 여기서 분기 추가 예정).
+    2026-07-23 팀장 정정: openai-gpt-image-2-low-v1은 이제 4:5(1024x1280)와
+    1:1(1024x1024) 둘 다 무크롭으로 생성 — 이 workflow에서는 사실상 필수값이며,
+    없거나 잘못된 값이면 model.py에서 ValueError로 400 처리됨. 프론트가 사용자
+    선택을 강제하므로 정상 흐름에서는 항상 채워져서 옴. model-c-v1은 이 값을
+    그냥 무시함(레거시라 비율 선택 개념 자체가 없음).
     """
     reference = _find_reference(reference_id)
     if reference is None:
@@ -101,7 +105,7 @@ async def generate(
     pil_image = Image.open(io.BytesIO(image_data)).convert("RGB")
 
     try:
-        result_image = generate_styled_image(pil_image, reference, workflow_id=workflow_id)
+        result_image = generate_styled_image(pil_image, reference, workflow_id=workflow_id, aspect_ratio=aspect_ratio)
     except ValueError as e:
         return JSONResponse(status_code=400, content={"error": str(e)})
     except Exception as e:

@@ -128,7 +128,7 @@ def _wait_until_done(status_url: str, headers: dict, max_wait_seconds: int = 420
     raise RuntimeError("이미지 생성이 제한 시간 내에 끝나지 않았습니다.")
 
 
-def _generate_with_model_c_v1(product_image: Image.Image, reference: dict) -> Image.Image:
+def _generate_with_model_c_v1(product_image: Image.Image, reference: dict, aspect_ratio: str = None) -> Image.Image:
     """
     model-c-v1 워크플로 — ComfyUI Gateway 경유 (팀장 제공 BACKEND_HANDOFF.md 스펙).
 
@@ -219,18 +219,25 @@ def _generate_with_model_c_v1_legacy_direct(product_image: Image.Image, referenc
     return Image.open(io.BytesIO(image_response.content)).convert("RGB")
 
 
-def _generate_with_openai_gpt_image_2_low(product_image: Image.Image, reference: dict) -> Image.Image:
+VALID_ASPECT_RATIOS = {"4:5", "1:1"}
+
+
+def _generate_with_openai_gpt_image_2_low(product_image: Image.Image, reference: dict, aspect_ratio: str = None) -> Image.Image:
     """
     openai-gpt-image-2-low-v1 워크플로.
 
-    2026-07-21 팀장 인계서(OPENAI_GPT_IMAGE_2_PILOT_HANDOFF_KO.md) 반영:
+    2026-07-21 팀장 인계서(OPENAI_GPT_IMAGE_2_PILOT_HANDOFF_KO.md) 반영, 이후
+    2026-07-23 팀장 정정사항 반영:
     model-c-v1과 달리 background_style/composition/strength/seed를 보내지 않고,
     Gateway의 canonical preset_id에 프론트 reference_id를 그대로 전달한다.
     현재는 natural_white__product_center, wood__product_center 두 개만 활성 —
     나머지 10개는 유료 provider 호출 전에 차단(ValueError -> router.py에서 400).
 
-    결과는 crop 없는 4:5 (880x1100) — 백엔드에서 추가로 정사각형 크롭하지 않는다
-    (router.py의 workflow별 리사이즈 분기 참고).
+    aspect_ratio는 "4:5" 또는 "1:1" 중 하나가 반드시 있어야 함 (프론트가 사용자
+    선택을 강제하므로 항상 채워져서 옴). provider가 4:5는 1024x1280,
+    1:1은 1024x1024를 무크롭으로 그대로 반환 — 백엔드는 리사이즈/크롭을
+    전혀 하지 않는다 (router.py의 workflow별 분기 참고. 예전엔 4:5를
+    880x1100으로 축소했었는데, 그 축소 단계 자체가 없어졌음).
     """
     if not GATEWAY_BASE_URL or not GATEWAY_API_KEY:
         raise RuntimeError(
@@ -241,6 +248,9 @@ def _generate_with_openai_gpt_image_2_low(product_image: Image.Image, reference:
     preset_id = reference["id"]
     if preset_id not in OPENAI_ACTIVE_PRESET_IDS:
         raise ValueError(f"아직 지원하지 않는 스타일입니다: {preset_id}")
+
+    if aspect_ratio not in VALID_ASPECT_RATIOS:
+        raise ValueError("결과 비율(4:5 또는 1:1)을 선택해주세요.")
 
     buffer = io.BytesIO()
     product_image.save(buffer, format="PNG")
@@ -256,6 +266,7 @@ def _generate_with_openai_gpt_image_2_low(product_image: Image.Image, reference:
     data = {
         "workflow_id": OPENAI_WORKFLOW_ID,
         "preset_id": preset_id,
+        "aspect_ratio": aspect_ratio,
     }
 
     submitted = _submit_generation(headers, files, data)
@@ -283,15 +294,18 @@ def resolve_workflow_id(workflow_id: str = None) -> str:
     return workflow_id or DEFAULT_WORKFLOW_ID
 
 
-def generate_styled_image(product_image: Image.Image, reference: dict, workflow_id: str = None) -> Image.Image:
+def generate_styled_image(product_image: Image.Image, reference: dict, workflow_id: str = None, aspect_ratio: str = None) -> Image.Image:
     """
     입력:
       - product_image: 사용자가 업로드한 원본 사진
       - reference: 선택한 레퍼런스 정보 (mood_id, composition_id 등 포함)
       - workflow_id: 사용할 워크플로 식별자. 없으면 DEFAULT_WORKFLOW_ID 사용.
+      - aspect_ratio: "4:5" 또는 "1:1". openai-gpt-image-2-low-v1에서는 필수
+        (2026-07-23 팀장 정정: 4:5=1024x1280, 1:1=1024x1024, 둘 다 무크롭).
+        model-c-v1은 이 값을 그냥 무시함(레거시 워크플로라 비율 선택 개념이 없음).
     """
     workflow_id = resolve_workflow_id(workflow_id)
     handler = WORKFLOW_REGISTRY.get(workflow_id)
     if handler is None:
         raise ValueError(f"알 수 없는 workflow_id입니다: {workflow_id}")
-    return handler(product_image, reference)
+    return handler(product_image, reference, aspect_ratio=aspect_ratio)
