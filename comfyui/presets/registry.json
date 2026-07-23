@@ -77,7 +77,7 @@
       "bundle": "wood__product_center_a6/preset.json"
     },
     "wood__aerial_shot": {
-      "enabled": false,
+      "enabled": true,
       "status": "visual_qa_pending",
       "family": "wood",
       "composition": "aerial",
