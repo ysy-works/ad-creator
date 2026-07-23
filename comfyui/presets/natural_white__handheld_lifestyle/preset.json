@@ -26,7 +26,8 @@
       "container_mode_rules": {
         "adopt_reference": {
           "allowed_product_states": ["iced", "cold", "ambient"],
-          "auto_action": "requires_explicit_state"
+          "auto_action": "use_preset_default_state",
+          "default_state": "cold"
         },
         "reconstruct_source": {
           "allowed_product_states": ["iced", "cold", "ambient", "hot"],
