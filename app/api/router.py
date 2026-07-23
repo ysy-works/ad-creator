@@ -9,7 +9,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from PIL import Image
 
-from app.model.model import generate_styled_image
+from app.model.model import generate_styled_image, resolve_workflow_id, OPENAI_WORKFLOW_ID
 from app.services.caption_generator import generate_caption_package
 
 router = APIRouter()
@@ -17,10 +17,11 @@ router = APIRouter()
 REFERENCES_PATH = Path(__file__).resolve().parent.parent / "config" / "references.json"
 
 
-def resize_to_instagram(image: Image.Image) -> Image.Image:
+def _crop_square_legacy(image: Image.Image) -> Image.Image:
     """
-    인스타그램 피드 비율(1:1 정사각형)로 이미지를 크롭/리사이즈.
-    1080x1080 픽셀로 고정.
+    model-c-v1 전용 기존 동작: 인스타그램 1:1 정사각형으로 중앙 크롭.
+    1080x1080 픽셀로 고정. (openai-gpt-image-2-low-v1에는 절대 적용하지 않음 —
+    4:5 프리셋의 제품 크기·여백·구도가 손상됨. 2026-07-21 팀장 인계서 2번 항목.)
     """
     target_size = (1080, 1080)
 
@@ -34,6 +35,19 @@ def resize_to_instagram(image: Image.Image) -> Image.Image:
 
     image = image.resize(target_size, Image.LANCZOS)
     return image
+
+
+def finalize_result_image(image: Image.Image, workflow_id: str) -> Image.Image:
+    """
+    workflow_id별로 최종 결과 이미지 처리를 분기.
+
+    - openai-gpt-image-2-low-v1: 크롭 없이 그대로 반환 (Gateway가 이미 880x1100,
+      crop 없는 4:5로 정규화해서 줌 — 인계서 2번 "허용 규칙 1").
+    - 그 외(model-c-v1 등 레거시): 기존처럼 1:1 정사각형 중앙 크롭.
+    """
+    if workflow_id == OPENAI_WORKFLOW_ID:
+        return image
+    return _crop_square_legacy(image)
 
 
 def image_to_base64(image: Image.Image) -> str:
@@ -68,11 +82,16 @@ async def generate(
     product_image: UploadFile = File(...),
     reference_id: str = Form(...),
     workflow_id: Optional[str] = Form(None),
+    aspect_ratio: Optional[str] = Form(None),
 ):
     """
     사용자가 올린 사진 + 고른 레퍼런스(reference_id) + (선택) workflow_id를 기반으로
     같은 분위기/구도의 이미지를 생성해서 반환.
-    workflow_id를 안 보내면 기본값(model-c-v1)이 사용됨.
+    workflow_id를 안 보내면 기본값(model.py의 DEFAULT_WORKFLOW_ID, 환경변수로 전환)이 사용됨.
+
+    aspect_ratio: 프론트 4:5/1:1 토글에서 보내는 값("4:5" 또는 "1:1").
+    지금은 openai-gpt-image-2-low-v1이 4:5 고정이라 실제로 분기하지 않고 받기만 함
+    (1:1은 팀장님 쪽에서 별도 provider profile로 준비 중 — 완성되면 여기서 분기 추가 예정).
     """
     reference = _find_reference(reference_id)
     if reference is None:
@@ -88,7 +107,7 @@ async def generate(
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": f"이미지 생성 실패: {e}"})
 
-    result_image = resize_to_instagram(result_image)
+    result_image = finalize_result_image(result_image, resolve_workflow_id(workflow_id))
 
     return JSONResponse(content={
         "result_image": image_to_base64(result_image),

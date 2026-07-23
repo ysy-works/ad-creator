@@ -15,9 +15,21 @@ MODEL_API_URL = os.environ.get("MODEL_API_URL", "http://136.65.68.28:8001")
 # 배포: Render 대시보드의 환경변수 설정에 동일하게 등록해야 함.
 GATEWAY_BASE_URL = os.environ.get("COMFYUI_GATEWAY_BASE_URL", "")
 GATEWAY_API_KEY = os.environ.get("COMFYUI_GATEWAY_API_KEY", "")
-GATEWAY_WORKFLOW_ID = os.environ.get("COMFYUI_WORKFLOW_ID", "model-c-v1")
 
-DEFAULT_WORKFLOW_ID = "model-c-v1"
+MODEL_C_WORKFLOW_ID = "model-c-v1"
+# 2026-07-21 팀장 인계서(OPENAI_GPT_IMAGE_2_PILOT_HANDOFF_KO.md) 기준 신규 워크플로.
+OPENAI_WORKFLOW_ID = "openai-gpt-image-2-low-v1"
+
+# 서비스 기본 workflow는 코드 상수가 아니라 환경변수로 선택 (인계서 5번-2).
+# 아직 미전환 상태이므로 기본값은 계속 model-c-v1 — 검증 끝난 뒤 배포 환경변수만 바꾼다.
+DEFAULT_WORKFLOW_ID = os.environ.get("COMFYUI_WORKFLOW_ID", MODEL_C_WORKFLOW_ID)
+
+# openai-gpt-image-2-low-v1에서 실제로 생성 가능한 preset_id (= 프론트 reference_id).
+# 나머지 10개는 유료 provider 호출 전에 차단한다 (인계서 3번 "아직 지원하지 않는 10개 ID").
+OPENAI_ACTIVE_PRESET_IDS = {
+    "natural_white__product_center",
+    "wood__product_center",
+}
 
 # references.json의 mood_id/composition_id -> 모델 API가 요구하는 값으로 변환
 MOOD_TO_BACKGROUND_STYLE = {
@@ -76,7 +88,7 @@ def _submit_generation(headers: dict, files: dict, data: dict, max_attempts: int
                 # 요청 자체는 접수됐을 수 있으니, 새로 제출하지 않고 상태부터 조회
                 return {
                     "generation_id": generation_id,
-                    "workflow_id": data.get("workflow_id", GATEWAY_WORKFLOW_ID),
+                    "workflow_id": data.get("workflow_id"),
                     "status": "queued",
                     "status_url": f"/v1/generations/{generation_id}",
                     "result_url": f"/v1/generations/{generation_id}/result",
@@ -148,7 +160,7 @@ def _generate_with_model_c_v1(product_image: Image.Image, reference: dict) -> Im
     }
     files = {"image": ("product.png", buffer, "image/png")}
     data = {
-        "workflow_id": GATEWAY_WORKFLOW_ID,
+        "workflow_id": MODEL_C_WORKFLOW_ID,
         "composition": composition,
         "background_style": background_style,
         "strength": "medium",
@@ -207,10 +219,68 @@ def _generate_with_model_c_v1_legacy_direct(product_image: Image.Image, referenc
     return Image.open(io.BytesIO(image_response.content)).convert("RGB")
 
 
+def _generate_with_openai_gpt_image_2_low(product_image: Image.Image, reference: dict) -> Image.Image:
+    """
+    openai-gpt-image-2-low-v1 워크플로.
+
+    2026-07-21 팀장 인계서(OPENAI_GPT_IMAGE_2_PILOT_HANDOFF_KO.md) 반영:
+    model-c-v1과 달리 background_style/composition/strength/seed를 보내지 않고,
+    Gateway의 canonical preset_id에 프론트 reference_id를 그대로 전달한다.
+    현재는 natural_white__product_center, wood__product_center 두 개만 활성 —
+    나머지 10개는 유료 provider 호출 전에 차단(ValueError -> router.py에서 400).
+
+    결과는 crop 없는 4:5 (880x1100) — 백엔드에서 추가로 정사각형 크롭하지 않는다
+    (router.py의 workflow별 리사이즈 분기 참고).
+    """
+    if not GATEWAY_BASE_URL or not GATEWAY_API_KEY:
+        raise RuntimeError(
+            "ComfyUI Gateway 환경변수가 설정되지 않았습니다 "
+            "(COMFYUI_GATEWAY_BASE_URL / COMFYUI_GATEWAY_API_KEY 확인 필요)."
+        )
+
+    preset_id = reference["id"]
+    if preset_id not in OPENAI_ACTIVE_PRESET_IDS:
+        raise ValueError(f"아직 지원하지 않는 스타일입니다: {preset_id}")
+
+    buffer = io.BytesIO()
+    product_image.save(buffer, format="PNG")
+    buffer.seek(0)
+
+    # 사용자가 "이미지 생성"을 누른 이 동작 하나당 새 Idempotency-Key 하나 (기존과 동일 원칙).
+    idempotency_key = str(uuid.uuid4())
+    headers = {
+        "Authorization": f"Bearer {GATEWAY_API_KEY}",
+        "Idempotency-Key": idempotency_key,
+    }
+    files = {"image": ("product.png", buffer, "image/png")}
+    data = {
+        "workflow_id": OPENAI_WORKFLOW_ID,
+        "preset_id": preset_id,
+    }
+
+    submitted = _submit_generation(headers, files, data)
+
+    status_url = f"{GATEWAY_BASE_URL.rstrip('/')}{submitted['status_url']}"
+    result_url = f"{GATEWAY_BASE_URL.rstrip('/')}{submitted['result_url']}"
+
+    _wait_until_done(status_url, headers)
+
+    image_response = requests.get(result_url, headers=headers, timeout=60)
+    image_response.raise_for_status()
+
+    return Image.open(io.BytesIO(image_response.content)).convert("RGB")
+
+
 # workflow_id -> 실제 호출 함수. 새 워크플로가 추가되면 여기 한 줄만 등록하면 됨.
 WORKFLOW_REGISTRY = {
     "model-c-v1": _generate_with_model_c_v1,
+    OPENAI_WORKFLOW_ID: _generate_with_openai_gpt_image_2_low,
 }
+
+
+def resolve_workflow_id(workflow_id: str = None) -> str:
+    """router.py에서도 크롭 여부 등을 판단할 때 같은 기준(기본값 포함)을 쓰기 위한 헬퍼."""
+    return workflow_id or DEFAULT_WORKFLOW_ID
 
 
 def generate_styled_image(product_image: Image.Image, reference: dict, workflow_id: str = None) -> Image.Image:
@@ -220,7 +290,7 @@ def generate_styled_image(product_image: Image.Image, reference: dict, workflow_
       - reference: 선택한 레퍼런스 정보 (mood_id, composition_id 등 포함)
       - workflow_id: 사용할 워크플로 식별자. 없으면 DEFAULT_WORKFLOW_ID 사용.
     """
-    workflow_id = workflow_id or DEFAULT_WORKFLOW_ID
+    workflow_id = resolve_workflow_id(workflow_id)
     handler = WORKFLOW_REGISTRY.get(workflow_id)
     if handler is None:
         raise ValueError(f"알 수 없는 workflow_id입니다: {workflow_id}")
