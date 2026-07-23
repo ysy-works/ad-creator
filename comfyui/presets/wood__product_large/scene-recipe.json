@@ -1,0 +1,140 @@
+{
+  "$schema": "../../../schemas/scene-recipe.schema.json",
+  "schema_version": "1.0.0",
+  "recipe_id": "instagram_wood_calm_window_closeup_v1",
+  "display_name": "우드 클로즈업 샷",
+  "compatible_presets": [
+    "instagram_wood_calm_window_closeup_v1"
+  ],
+  "generation_policy": {
+    "normal_paid_generations": 1,
+    "runtime_reference_image": false,
+    "traditional_compositing": false
+  },
+  "composition": {
+    "inherit_preset_bbox": true,
+    "subject_anchor_priority": "raw 3:4 primary bbox (0.281,0.412)-(0.627,0.824) and companion bbox (0.580,0.307)-(0.860,0.674) are hard locks",
+    "asymmetry_sources": [
+      "measured front-back stagger",
+      "unequal cup scale",
+      "diagonal sill",
+      "round live-edge table crop"
+    ]
+  },
+  "environment": {
+    "background_plane": "condition-image diagonal white sill, neutral-gray exterior and one very small distant potted plant physically supported by the sill",
+    "surface_character": "condition-image round pale matte live-edge wood with matching boundary, grain scale and cracks",
+    "sun_patch_shape": "none under every circumstance; broad diffuse field only"
+  },
+  "lighting": {
+    "source": "one very large diffuse upper-left rear window with neutral sill and room bounce",
+    "direction": "azimuth 300-330 degrees, elevation 32-46 degrees, shadows 118-150 degrees lower-right",
+    "shadow_description": "small dense attached base contacts transitioning to broad soft lower-right penumbrae",
+    "light_softness": [
+      0.86,
+      0.94
+    ],
+    "subject_to_wall_distance_cm": [
+      70,
+      130
+    ],
+    "shadow_density": [
+      0.14,
+      0.25
+    ],
+    "global_contrast": [
+      0.28,
+      0.38
+    ],
+    "background_lightness": [
+      0.56,
+      0.76
+    ],
+    "ambient_fill": "neutral sill and room bounce keeps paper, ice, beverage and wood independently readable",
+    "exposure_compensation_ev": [
+      -0.2,
+      -0.04
+    ],
+    "sun_patch_coverage": [
+      0.0,
+      0.0
+    ],
+    "highlight_behavior": "rolled paper white, broad transparent edges, irregular ice and sparse condensation sparkle",
+    "shadow_temperature": "neutral brown-gray with cool exterior influence and no amber veil"
+  },
+  "capture": {
+    "rendering_pipeline": "natural social capture with finite handheld acuity and one coherent exposure",
+    "shadow_processing": "keep attached contacts and soft penumbrae without HDR lifting or product spotlighting",
+    "local_texture": "preserve exact user-product evidence while rebuilding realistic rim thickness, ice, liquid boundaries, condensation and table contact under target light",
+    "forbidden_processing": [
+      "phone HDR",
+      "uniform hyper-sharpness",
+      "orange filter",
+      "AI-clean smoothing",
+      "synthetic portrait blur",
+      "cutout edge enhancement"
+    ]
+  },
+  "human_rendering": {
+    "skin_texture": "no hand unless a separate user contract explicitly requires one",
+    "light_response": "any separately authorized skin must share the same upper-left diffuse window light",
+    "forbidden": [
+      "invented hand",
+      "extra fingers",
+      "decorative sleeve",
+      "unrelated warm skin cast"
+    ]
+  },
+  "material_rules": {
+    "glass": "transparent containers show finite rim and base thickness, plausible refraction, irregular ice, local condensation and attached contact",
+    "plastic": "thin realistic highlights and plausible condensation remain distinct from glass thickness, paper fibers and liquid boundaries"
+  },
+  "coupling_rules": [
+    "Image 2 is mandatory camera, measured layout, support, light and local-color authority.",
+    "Exactly one Image 1 product occupies the measured primary bbox.",
+    "Exactly one smaller double-nested paper-cup Americano with exact small curved CAFE AMERICANO text occupies the measured companion bbox.",
+    "Both cups share the same round wood plane, diffuse source, shadow vector and exposure.",
+    "Adopt-reference mode uses Image 2 clear PET cup assembly plus its attached rectangular cafe paper label and tiny English body copy, but Image 1 beverage identity.",
+    "Preserve-source mode keeps the complete Image 1 container and never adds the Image 2 primary paper label.",
+    "The small plant pot rests on the white sill with distant scale and an attached contact shadow; no seam or gap growth is allowed.",
+    "No placeholder beverage contents, cafe latte wording, direct sun or gobo transfers."
+  ],
+  "forbidden": [
+    "oversized primary product",
+    "tiny or missing companion",
+    "single paper companion cup",
+    "flat crema",
+    "direct sunlight",
+    "plant-shaped or window-bar gobo",
+    "spotlight",
+    "multiple light sources",
+    "portrait bokeh",
+    "glossy orange wood",
+    "global amber wash",
+    "floating contact",
+    "unsupported plant",
+    "cafe latte wording",
+    "unauthorized text"
+  ],
+  "quality_gate": {
+    "hard_fail": [
+      "exact user product count or identity differs from one",
+      "primary or companion measured bbox fails",
+      "rear companion is not exactly two visibly nested paper cups carrying exact small CAFE AMERICANO text on the curved outer cup",
+      "condition-image diagonal sill, round-table boundary or close scale materially changes",
+      "direct sun, gobo shadow, spotlight, conflicting source or hard penumbra appears",
+      "4850-5100K reference-matched local wood warmth and neutral-gray exterior separation fails",
+      "the plant pot is not visibly supported by the white sill or appears to grow from a frame seam or gap",
+      "adopt-reference mode lacks the rectangular cafe paper label, preserve-source mode receives that label, or any unauthorized text appears",
+      "product, paper cup or shadow reads as pasted, floating or synthetic"
+    ],
+    "weights": {
+      "camera_geometry": 0.12,
+      "composition_rhythm": 0.22,
+      "color_and_tone": 0.14,
+      "lighting_space": 0.24,
+      "product_identity": 0.24,
+      "brand_integrity": 0.04
+    }
+  }
+}

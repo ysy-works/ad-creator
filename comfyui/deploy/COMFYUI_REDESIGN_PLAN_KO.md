@@ -99,7 +99,7 @@ comfyui/
     {"role": "sanitized_a6_scene_hint", "path": "../assets/wood-a6-multi-scene-hint.png", "sha256": "...", "send_to_provider": true}
   ],
   "aspect_ratio_contracts": {
-    "4:5": {"generation_size": "1024x1280", "width": 880, "height": 1100, "safe_crop": "none_exact_4x5"},
+    "4:5": {"generation_size": "1024x1280", "width": 1024, "height": 1280, "safe_crop": "none_exact_4x5"},
     "1:1": {"generation_size": "1024x1024", "width": 1024, "height": 1024, "safe_crop": "none_exact_1x1"}
   }
 }
@@ -158,11 +158,11 @@ provider subgraph는 다음 공통 입력·출력을 지킵니다.
       elapsed_ms, cost_metadata, provider_error
 ```
 
-OpenAI 구현은 `gpt-image-2`, `quality=low`를 유지하며 4:5는 `1024x1280` 생성 후 무크롭 `880x1100`, 1:1은 처음부터 `1024x1024`로 생성합니다. 입력 원본은 기본 긴 변 1536px 상한이며 확대하지 않습니다. `3072`는 승인된 OCR·identity·usage 비교 실험에서만 사용합니다. `gpt-image-2`에는 별도 `input_fidelity` 옵션을 보내지 않습니다.
+OpenAI 구현은 `gpt-image-2`, `quality=low`를 유지하며 4:5는 `1024x1280` 생성 결과를 축소·크롭 없이 그대로 전달하고, 1:1은 처음부터 `1024x1024`로 생성합니다. 입력 원본은 기본 긴 변 1536px 상한이며 확대하지 않습니다. `3072`는 승인된 OCR·identity·usage 비교 실험에서만 사용합니다. `gpt-image-2`에는 별도 `input_fidelity` 옵션을 보내지 않습니다.
 
 ### `AD_NormalizeOutput`
 
-- provider 결과를 요청 비율의 전달 크기(4:5 `880x1100`, 1:1 `1024x1024`)로 정규화합니다.
+- provider 결과를 요청 비율의 전달 크기(4:5 `1024x1280`, 1:1 `1024x1024`) 계약으로 검증하고 형식만 정규화합니다.
 - provider부터 요청 비율의 정확한 canvas를 요청하고 제품 전체, 그림자와 preset 여백을 crop 없이 보존합니다. provider가 다른 크기·비율을 반환하면 자르지 않고 실패합니다.
 - 백엔드가 추가로 정사각형 크롭하지 않도록 output manifest에 크기와 aspect ratio를 기록합니다.
 - 원본 provider 결과와 전달 결과를 서로 다른 파일로 저장해 회귀 원인을 추적합니다.
@@ -345,7 +345,7 @@ AD_ResolveRequest
 | Provider | model/quality/size 고정, `input_fidelity` 미전송, timeout, secret redaction, retries 0 |
 | Workflow | API/UI topology, binding, 최종 output node, legacy `model-c-v1` 보존 |
 | Gateway | canonical `preset_id`, legacy 두 조합 fallback, 나머지 400, idempotency |
-| Output | 4:5 `880x1100` 또는 1:1 `1024x1024`, 제품·그림자·여백 무크롭 |
+| Output | 4:5 `1024x1280` 또는 1:1 `1024x1024`, 제품·그림자·여백 무크롭·무리사이즈 |
 | Backend | workflow·비율 allowlist, 요청 비율 보존, 임의 crop 차단, rollback |
 | Frontend | 두 카드만 선택 가능, 10개 준비 중, 요청 비율 표시; 1:1은 QA 전 숨김 |
 | Paid smoke | 화이트·우드 각 1회, 독립 파일, 시간·오류·prompt ID 기록 |

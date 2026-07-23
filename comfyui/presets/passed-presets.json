@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "default_preset_id": "tokyo_a6_relational_scene_hint_v4",
+  "default_slot_id": "wood__product_center",
+  "policy": "Only the default preset is routed by default. Other passed presets are retained for explicit future expansion and must never replace the default silently.",
+  "presets": [
+    {
+      "preset_id": "tokyo_a6_relational_scene_hint_v4",
+      "status": "published_default",
+      "runtime_state": "routed",
+      "bundle": "wood__product_center_a6/preset.json",
+      "bundle_sha256": "412df4c95b95ea11506e99025cc6c010abd6789b199789e1321b8df189d38246"
+    },
+    {
+      "preset_id": "instagram_white_diffuse_wall_table_v1",
+      "status": "passed_by_user_review",
+      "runtime_state": "published_non_default",
+      "bundle": "natural_white__product_center/preset.json",
+      "bundle_sha256": "6ba1a03d4a67853005f3dce9722d22d7710639bfa4f43a5e61890196bd1733b2"
+    },
+    {
+      "preset_id": "instagram_wood_45deg_relational_v3",
+      "status": "passed_by_user_review",
+      "runtime_state": "retained_not_routed",
+      "bundle": "wood__product_center/preset.json",
+      "bundle_sha256": "6c90adcb4cbf89c08131e3422f7e0255af3059f49a0e5af273ef2ab5d627b773"
+    },
+    {
+      "preset_id": "instagram_white_direct_handheld_refined_v5",
+      "status": "passed_by_user_review",
+      "runtime_state": "published_non_default",
+      "bundle": "natural_white__handheld_lifestyle/preset.json",
+      "bundle_sha256": "1c5ffb0361ac58e125f0045b928a1bb4f2529181b052b756715bbc5234491e22"
+    }
+  ],
+  "excluded": [
+    {
+      "preset_id": "tokyo_pale_wood_magazine_birch_v5",
+      "status": "held_by_user_review",
+      "reason": "Explicitly excluded from passed and regression-protection sets."
+    }
+  ]
+}

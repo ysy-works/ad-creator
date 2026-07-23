@@ -12,7 +12,7 @@
 | OpenAI model | `gpt-image-2` |
 | OpenAI quality | `low` — 서버 provider profile에서 고정 |
 | 기본 비율 | `4:5` |
-| 4:5 계약 | PNG `1024x1280` 생성 → crop 없이 `880x1100` 전달 |
+| 4:5 계약 | PNG `1024x1280` 생성·전달 (축소·crop 없음) |
 | 1:1 계약 | PNG `1024x1024` 생성·전달; 시각 QA 전 공개 UI 비활성 |
 | 활성 프리셋 | 화이트 미디엄, 우드 미디엄 두 개만 |
 | 브라우저의 OpenAI 직접 호출 | 금지 |
@@ -27,8 +27,8 @@
 
 신규 워크플로 결과에는 다음 규칙만 허용합니다.
 
-1. Gateway가 받은 `880x1100` PNG를 그대로 반환한다.
-2. 백엔드가 리사이즈해야 한다면 전체 프레임을 보존해 `1080x1350`으로만 바꾼다.
+1. Gateway가 받은 `1024x1280` PNG를 그대로 반환한다.
+2. 백엔드는 결과를 재샘플링하지 않고 CDN에 저장한다.
 3. 중앙 크롭, `ImageOps.fit()` 기반 크롭, 1:1 변환은 금지한다.
 4. `aspect_ratio=1:1`은 처음부터 `1024x1024`로 생성하고 4:5 결과를 자르지 않는다.
 5. 요청 비율과 결과 비율이 다르면 조용히 자르지 말고 통합 오류로 실패시킨다.
@@ -43,9 +43,12 @@ Gateway의 canonical `preset_id`에는 프론트의 기존 `reference_id`를 그
 | 프론트 `reference_id` = Gateway `preset_id` | 표시 | 내부 ComfyUI preset contract | 상태 |
 | --- | --- | --- | --- |
 | `natural_white__product_center` | 뉴트럴 화이트 · 미디엄샷 | `instagram_white_diffuse_wall_table_v1` | 활성 |
+| `natural_white__handheld_lifestyle` | 화이트 직사광 · 핸드헬드 | `instagram_white_direct_handheld_refined_v5` | 활성(비기본) |
 | `wood__product_center` | 우드 · A6 다중 피사체 미디엄샷 | `tokyo_a6_relational_scene_hint_v4` | 활성 |
 
 화이트 authoring reference는 오프라인 구도·조명 설계 근거이며 OpenAI에 보내는 런타임 입력이 아닙니다. A6 우드 프리셋은 검수·비식별화된 A6 scene hint만 런타임 보조 이미지로 사용할 수 있습니다. 원본 레퍼런스, 로컬 Mac 절대경로, 원본 속 음료·로고 픽셀을 전송하면 안 됩니다. 기존 45도 `instagram_wood_45deg_relational_v3`는 `available_not_routed`로 보존하며 별도 옵션 계약 없이 자동 선택하지 않습니다.
+
+화이트 직사광 손 컷은 제품 원본과 세척된 scene hint 1장만 전송합니다. 기본 `adopt_reference`는 cold/iced/ambient 상태만 허용하며 자동 온도 상태는 제출 전에 차단합니다. `reconstruct_source`만 원본 컵의 서빙 상태를 보존합니다. 두 정책 모두 무로고가 최종 권위입니다.
 
 사용자 제품 사진은 ComfyUI에서 EXIF·파일명을 제거하고 기본 긴 변 최대 1536px의 고품질 JPEG로 정규화한 뒤 OpenAI에 전송합니다. 긴 변이 1536px 이하인 입력은 확대하지 않습니다. 우드 선택 시에는 이 파일과 sanitized A6 scene hint가 함께 외부 전송됩니다. `3072`는 동일 입력·동일 prompt 조건의 OCR·identity·usage 비교 실험에서만 명시적으로 사용하며 자동 운영값으로 쓰지 않습니다. 유료 비교 실험은 별도 승인 후 실행합니다.
 
@@ -57,7 +60,6 @@ Gateway의 canonical `preset_id`에는 프론트의 기존 `reference_id`를 그
 
 - `natural_white__product_large`
 - `natural_white__aerial_shot`
-- `natural_white__handheld_lifestyle`
 - `wood__product_large`
 - `wood__aerial_shot`
 - `wood__handheld_lifestyle`
@@ -116,6 +118,7 @@ aspect_ratio=4:5
 
 ```text
 background_style=white + composition=medium -> natural_white__product_center
+background_style=white + composition=handheld -> natural_white__handheld_lifestyle
 background_style=wood  + composition=medium -> wood__product_center
 ```
 
@@ -145,7 +148,7 @@ Gateway의 `202 Accepted`, 상태 폴링, 결과 다운로드 계약은 기존�
 4. 프론트의 `aspect_ratio`를 allowlist(`4:5`, `1:1`) 검증해 Gateway에 그대로 전달합니다. 누락 시 `4:5`를 사용합니다.
 5. 신규 workflow에서는 두 활성 ID 외 요청을 Gateway 호출 전에 차단합니다.
 6. 신규 workflow payload에는 `strength="medium"`을 넣지 않습니다. 넣더라도 OpenAI quality가 바뀌어서는 안 됩니다.
-7. 신규 결과에는 정사각형 중앙 크롭을 적용하지 않습니다. 4:5는 `880x1100` 또는 무크롭 `1080x1350`, 1:1은 `1024x1024` 계약으로 검증합니다.
+7. 신규 결과에는 정사각형 중앙 크롭 또는 리사이즈를 적용하지 않습니다. 4:5는 `1024x1280`, 1:1은 `1024x1024` 계약으로 검증합니다.
 8. 성공 결과는 즉시 영구 저장소로 복사합니다. Gateway 임시 결과는 기존 정책상 만료될 수 있습니다.
 9. 동일 논리 요청의 네트워크 재시도에는 같은 `Idempotency-Key`와 같은 바이트·필드를 사용합니다. 사용자가 재생성을 명시했을 때만 새 키를 만듭니다.
 10. `failed`, `unknown`, `expired` 상태를 자동으로 새 유료 생성으로 재실행하지 않습니다.
@@ -267,7 +270,7 @@ Gateway의 `AD_CREATOR_HEALTH_WORKFLOW_ID`도 `model-c-v1`로 되돌립니다.
 - [ ] 화이트/우드 각각의 lighting sheet, preset contract, 허용 자산과 checksum이 배포된다.
 - [ ] 화이트 authoring reference가 provider 입력으로 전송되지 않는다.
 - [ ] 우드의 provider 입력에는 sanitized scene hint만 추가되고 material board는 전송되지 않는다.
-- [ ] 결과가 `880x1100` PNG이고 정사각형 크롭 없이 표시·다운로드된다.
+- [ ] 결과가 `1024x1280` PNG이고 정사각형 크롭·리사이즈 없이 표시·다운로드된다.
 - [ ] provider 원본 PNG와 audit sidecar가 job ID로 Gateway 기록에 연결되며 prompt·비밀키·원본 경로를 포함하지 않는다.
 - [ ] 기존 `model-c-v1` 회귀 테스트와 환경변수 롤백이 통과한다.
 - [ ] 실제 저화질 유료 smoke test 두 건의 ComfyUI prompt ID, OpenAI request ID, workflow ID, preset ID, 시간, 결과 파일을 운영 기록에 남긴다. 비밀키와 원본 이미지는 로그에 남기지 않는다.

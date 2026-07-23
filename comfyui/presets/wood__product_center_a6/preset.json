@@ -6,6 +6,45 @@
   "composition": "medium",
   "status": "published",
   "source_review_status": "passed_by_user_review",
+  "runtime_policy": {
+    "schema_version": 1,
+    "compiler_version": "preset-runtime-v1",
+    "maximum_prompt_characters": 12000,
+    "maximum_provider_inputs": 4,
+    "maximum_product_sources": 3,
+    "maximum_reference_controls": 1,
+    "default_container_mode": "reconstruct_source",
+    "supported_container_modes": ["reconstruct_source"],
+    "companion_policy": "reference_relational",
+    "brand_input_policy": {
+      "enabled": false,
+      "default_mode": "none",
+      "activation_requirement": "frontend_and_api_brand_asset_flow"
+    },
+    "temperature_policy": {
+      "mode": "preset_primary",
+      "container_mode_rules": {
+        "reconstruct_source": {
+          "allowed_product_states": ["iced", "cold", "ambient", "hot"],
+          "auto_action": "preserve_source_state"
+        }
+      },
+      "emergency_fallback": {
+        "enabled_when_policy_missing": true,
+        "minimum_confidence": 0.85,
+        "unknown_action": "needs_review",
+        "conflict_action": "needs_review"
+      }
+    }
+  },
+  "provider_reference_policy": {
+    "maximum_images": 2
+  },
+  "transforms": [
+    {"type": "normalize_product_source"},
+    {"type": "select_hint_by_container_mode"},
+    {"type": "sanitize_reference_control"}
+  ],
   "prompt_template": {
     "path": "prompt-template.txt",
     "sha256": "d1503a595ff9d598b00d9c88eed32ca22f7b6505d1bf730dd7b4e0598a3c3fcb"
@@ -38,8 +77,8 @@
       "prompt_addendum": "Generate the exact final 4:5 canvas. Keep the exact right-front product 0.13-0.15 of frame width and 0.15-0.18 of frame height, centered around x=0.61-0.63 and y=0.565-0.59. Keep the complete round tray 0.44-0.50 of frame width and no more than 0.31 of frame height, with 0.50-0.60 meaningful room-and-table release.",
       "generation_size": "1024x1280",
       "safe_crop": "none_exact_4x5",
-      "width": 880,
-      "height": 1100,
+      "width": 1024,
+      "height": 1280,
       "format": "png",
       "bbox_qa": {
         "product_width_ratio": [0.13, 0.15],

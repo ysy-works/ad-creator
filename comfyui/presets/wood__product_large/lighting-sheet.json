@@ -1,0 +1,175 @@
+{
+  "schema_version": "2.0.0",
+  "lighting_sheet_id": "instagram_wood_calm_window_closeup_sheet_v1",
+  "mood": "우드 클로즈업 샷: one quiet close pair on pale live-edge wood under a single broad diffuse window",
+  "reference_cluster": {
+    "anchor_preset_id": "instagram_wood_calm_window_closeup_v1",
+    "minimum_cluster_size": 1,
+    "runtime_pixels_allowed": false,
+    "selection_rule": "the user-approved close 4:5 wood reference is the sole geometric, support, light, screen-color and tone anchor",
+    "source_images": [
+      "data/reference-library/control-boards/wood-closeup-shot-v3/reference-4x5-close.png"
+    ]
+  },
+  "key_light": {
+    "source": "one very large diffused upper-left rear window",
+    "direction": "upper-left and slightly behind toward lower-right",
+    "relative_size": "broad low-contrast source spanning both cups, table and sill without direct sun",
+    "subject_to_wall_distance_cm": [
+      70,
+      120
+    ],
+    "azimuth_degrees": [
+      300,
+      330
+    ],
+    "elevation_degrees": [
+      32,
+      46
+    ],
+    "angular_size_degrees": [
+      42,
+      62
+    ],
+    "distance_class": "near-window diffuse daylight"
+  },
+  "ambient_fill": "quiet neutral room and pale-sill bounce opens paper, ice and wood without flattening contacts",
+  "reference_anchor": {
+    "asset_id": "ref_95fa7947818ce496",
+    "pixel_sha256": "fdcf3f83e673d7ed06cecb376eb7b94386bb2c1657f942136017aeeadc919523",
+    "role": "offline camera, pair geometry, pale-wood, diffused-light and restrained-tone evidence; only the sanitized scene hint may carry low-frequency relationships"
+  },
+  "fill_contract": {
+    "key_to_fill_ratio": [
+      1.15,
+      1.42
+    ],
+    "source": "broad white sill, pale table, quiet occupied-room bounce and low-frequency off-frame occlusion",
+    "color_bias": "neutral gray room return outside the wood surface, never blue or amber"
+  },
+  "screen_light_map": {
+    "lit_area_ratio": [
+      0.56,
+      0.7
+    ],
+    "shadow_area_ratio": [
+      0.14,
+      0.25
+    ],
+    "dominant_shadow_vector_degrees": [
+      118,
+      150
+    ],
+    "falloff": "broad source rolls from upper-left rear across both cups into soft lower-right contacts, with faint low-frequency room-presence modulation outside the products",
+    "gobo_geometry": "no readable gobo; allow only very faint amorphous off-frame occupancy modulation, never a plant, person, mullion or object silhouette"
+  },
+  "specular_contract": {
+    "highlight_shape": "broad interrupted transparent edges, rolled paper white, tiny irregular ice responses and sparse condensation sparkle",
+    "highlight_width_ratio": [
+      0.1,
+      0.28
+    ],
+    "rim_continuity": "readable but naturally interrupted by viewing angle, paper fibers, ice and condensation",
+    "transparent_caustic": "subtle, local and bounded to real transparent paths"
+  },
+  "camera_coupling": {
+    "support_plane": "52-58mm view at 90-120cm and 20-25 degrees above one round pale live-edge table",
+    "shadow_projection": "both contacts share a 118-150 degree lower-right direction and broad penumbrae",
+    "depth_response": "measured overlap, relative scale, table ellipse and tonal falloff establish depth before softness"
+  },
+  "color_separation": {
+    "lit_neutral": "4850-5100K subdued warm-neutral daylight below clipping, matched to the 4:5 reference screen color",
+    "shadow_neutral": "neutral brown-gray with cool exterior influence",
+    "material_locality": "warm beige-brown remains local to wood; paper stays neutral; exterior stays cool gray; user beverage keeps source color"
+  },
+  "qa_geometry": {
+    "shadow_vector_tolerance_degrees": 18,
+    "lit_area_tolerance": 0.12,
+    "penumbra_ratio_tolerance": 0.12
+  },
+  "shadow_contract": {
+    "density": [
+      0.14,
+      0.25
+    ],
+    "edge": "broad soft environmental penumbra with denser compact contacts and faint non-descriptive room modulation",
+    "attachment": "each drink base intersects the same wood plane with no floating gap or pasted halo",
+    "transparent_material": "bounded drink-colored transmission only where the exact user product is physically transparent",
+    "contact_shadow": {
+      "opacity": [
+        0.22,
+        0.36
+      ],
+      "footprint": [
+        0.05,
+        0.14
+      ],
+      "behavior": "small dense attached ellipses directly under both cup bases and a tiny distant contact under the sill pot"
+    },
+    "cast_shadow": {
+      "opacity": [
+        0.06,
+        0.14
+      ],
+      "footprint": [
+        0.16,
+        0.4
+      ],
+      "behavior": "short overlapping 118-150 degree lower-right shadows with broad soft edges integrated into low-frequency room bounce"
+    },
+    "transmitted_light": {
+      "opacity": [
+        0.04,
+        0.14
+      ],
+      "footprint": [
+        0.08,
+        0.28
+      ],
+      "behavior": "subtle bounded lift inside physically transparent product paths only"
+    },
+    "qa_ratios": {
+      "cast_area_to_cup_bbox": [
+        0.16,
+        0.56
+      ],
+      "wrist_length_to_cup_height": [
+        0.0,
+        0.01
+      ],
+      "transparent_lift_inside_shadow": [
+        0.03,
+        0.18
+      ]
+    }
+  },
+  "capture_contract": {
+    "exposure_compensation_ev": [
+      -0.2,
+      -0.04
+    ],
+    "hdr": "restrained single-exposure response with protected paper, sill and transparent highlights",
+    "white_balance": "4850-5100K subdued warm-neutral daylight matched to Image 2 with source-authoritative product color",
+    "texture": "finite natural acuity, matte wood pores, paper fibers, irregular ice, crema bubbles and nonuniform condensation; never uniformly crisp"
+  },
+  "grade_strengths": {
+    "natural": 0.12,
+    "balanced": 0.18,
+    "expressive": 0.22
+  },
+  "forbidden": [
+    "direct sunlight",
+    "hard studio spotlight",
+    "plant-shaped, person-shaped or window-bar gobo",
+    "multiple conflicting catchlights",
+    "orange or yellow wash",
+    "glossy synthetic wood",
+    "clipped paper white",
+    "glowing geometric ice",
+    "flat crema",
+    "detached contact shadow",
+    "sterile shadowless room",
+    "portrait bokeh",
+    "HDR halos"
+  ]
+}

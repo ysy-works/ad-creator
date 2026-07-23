@@ -15,10 +15,12 @@ CUSTOM_NODES_DIR = COMFYUI_DIR / "custom_nodes"
 sys.path.insert(0, str(CUSTOM_NODES_DIR))
 
 from ad_creator.adapters.openai_image import (
+    default_published_preset_slot,
     OpenAIHTTPResponse,
     OpenAIImageExecutionError,
     load_published_preset,
     published_preset_slots,
+    validated_preset_slots,
     run_openai_image,
     _safe_error,
 )
@@ -57,10 +59,21 @@ class PublishedPresetTest(unittest.TestCase):
     def test_node_choices_are_derived_from_published_registry_slots(self):
         self.assertEqual(
             published_preset_slots(),
-            ("natural_white__product_center", "wood__product_center"),
+            (
+                "natural_white__product_center",
+                "natural_white__handheld_lifestyle",
+                "wood__product_center",
+            ),
         )
 
-    def test_registry_declares_twelve_slots_and_only_two_published(self):
+    def test_a6_is_the_default_and_new_presets_remain_validated(self):
+        self.assertEqual(default_published_preset_slot(), "wood__product_center")
+        self.assertEqual(
+            validated_preset_slots(),
+            ("natural_white__aerial_shot", "wood__product_large"),
+        )
+
+    def test_registry_declares_twelve_slots_and_reviewed_presets_are_published(self):
         registry = json.loads(
             (COMFYUI_DIR / "presets" / "registry.json").read_text(encoding="utf-8")
         )
@@ -68,25 +81,38 @@ class PublishedPresetTest(unittest.TestCase):
         enabled = {
             slot_id: value["preset_id"]
             for slot_id, value in registry["slots"].items()
-            if value["enabled"]
+            if value["enabled"] and value["status"] == "published"
         }
         self.assertEqual(
             enabled,
             {
                 "natural_white__product_center": "instagram_white_diffuse_wall_table_v1",
+                "natural_white__handheld_lifestyle": "instagram_white_direct_handheld_refined_v5",
                 "wood__product_center": "tokyo_a6_relational_scene_hint_v4",
             },
         )
 
     def test_published_assets_and_prompt_roles_are_hash_verified(self):
         white = load_published_preset("natural_white__product_center")
+        handheld = load_published_preset(
+            "natural_white__handheld_lifestyle",
+            container_mode="adopt_reference",
+            serving_temperature="cold",
+        )
         wood = load_published_preset("wood__product_center")
 
         self.assertEqual(white.provider_profile["model"], "gpt-image-2")
         self.assertEqual(white.provider_profile["quality"], "low")
         self.assertNotIn("input_fidelity", white.provider_profile)
         self.assertEqual(white.provider_image_paths, ())
+        self.assertEqual(handheld.provider_image_roles, ("sanitized_scene_hint",))
+        self.assertEqual(handheld.brand_default_mode, "none")
+        self.assertIn("unbranded straight-sided clear plastic cold-drink cup", handheld.prompt)
         self.assertEqual(wood.provider_image_roles, ("sanitized_a6_scene_hint",))
+        self.assertEqual(wood.container_mode, "reconstruct_source")
+        self.assertFalse(wood.brand_input_enabled)
+        self.assertEqual(wood.brand_default_mode, "none")
+        self.assertLessEqual(len(wood.prompt), 12000)
         self.assertNotIn("{{", white.prompt)
         self.assertIn("Sheet=instagram_white_diffuse_wall_table_sheet_v1", white.prompt)
         self.assertIn("three-point group", wood.prompt)
@@ -95,6 +121,54 @@ class PublishedPresetTest(unittest.TestCase):
     def test_unpublished_slot_is_rejected(self):
         with self.assertRaisesRegex(OpenAIImageExecutionError, "PRESET_NOT_READY"):
             load_published_preset("natural_white__product_large")
+
+    def test_validated_presets_resolve_both_declared_container_modes(self):
+        white_reference = load_published_preset(
+            "natural_white__aerial_shot",
+            container_mode="adopt_reference",
+            allowed_statuses=("validated",),
+        )
+        white_source = load_published_preset(
+            "natural_white__aerial_shot",
+            container_mode="reconstruct_source",
+            allowed_statuses=("validated",),
+        )
+        wood_reference = load_published_preset(
+            "wood__product_large",
+            container_mode="adopt_reference",
+            serving_temperature="cold",
+            allowed_statuses=("validated",),
+        )
+        wood_source = load_published_preset(
+            "wood__product_large",
+            container_mode="reconstruct_source",
+            allowed_statuses=("validated",),
+        )
+        self.assertEqual(white_reference.container_mode, "adopt_reference")
+        self.assertEqual(white_source.container_mode, "reconstruct_source")
+        self.assertEqual(
+            wood_reference.provider_image_roles,
+            ("reference_cup_geometry_light_and_companion_evidence",),
+        )
+        self.assertEqual(
+            wood_source.provider_image_roles,
+            ("source_cup_geometry_light_and_companion_evidence",),
+        )
+        for preset in (white_reference, white_source, wood_reference, wood_source):
+            self.assertLessEqual(1 + len(preset.provider_image_paths), 4)
+            self.assertIn("Brand input is disabled", preset.prompt)
+        self.assertEqual(wood_reference.brand_default_mode, "preset_typography")
+        self.assertIn("CAFE AMERICANO", wood_reference.prompt)
+
+    def test_cold_reference_container_rejects_hot_and_unknown_state(self):
+        for serving_temperature in ("hot", "auto"):
+            with self.assertRaises(OpenAIImageExecutionError):
+                load_published_preset(
+                    "wood__product_large",
+                    container_mode="adopt_reference",
+                    serving_temperature=serving_temperature,
+                    allowed_statuses=("validated",),
+                )
 
 
 class OpenAIImageAdapterTest(unittest.TestCase):
@@ -122,16 +196,18 @@ class OpenAIImageAdapterTest(unittest.TestCase):
                     audit_dir=root / "audit",
                 )
 
-                self.assertEqual(image.size, (880, 1100))
+                self.assertEqual(image.size, (1024, 1280))
                 self.assertEqual(metadata["model"], "gpt-image-2")
                 self.assertEqual(metadata["quality"], "low")
-                self.assertEqual(metadata["delivery_dimensions"], [880, 1100])
+                self.assertEqual(metadata["delivery_dimensions"], [1024, 1280])
                 self.assertEqual(metadata["aspect_ratio"], "4:5")
                 self.assertEqual(metadata["aspect_status"], "published")
                 self.assertEqual(metadata["source_preprocessing"]["uploaded_dimensions"], [480, 640])
                 self.assertFalse(metadata["source_preprocessing"]["upscaled"])
                 self.assertEqual(metadata["source_preprocessing"]["max_long_edge"], 1536)
                 self.assertEqual(metadata["automatic_retries"], 0)
+                self.assertFalse(metadata["brand_input_enabled"])
+                self.assertEqual(metadata["maximum_provider_inputs"], expected_inputs)
                 self.assertEqual(metadata["run_id"], f"test-{slot_id}")
                 self.assertEqual(metadata["raw_dimensions"], [1024, 1280])
                 self.assertEqual(len(metadata["prompt_sha256"]), 64)

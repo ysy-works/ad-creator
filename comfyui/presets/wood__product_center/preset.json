@@ -43,8 +43,8 @@
   "delivery": {
     "generation_size": "1024x1280",
     "safe_crop": "none_exact_4x5",
-    "width": 880,
-    "height": 1100,
+    "width": 1024,
+    "height": 1280,
     "format": "png"
   },
   "qa_contract": {

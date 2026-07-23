@@ -1,0 +1,412 @@
+{
+  "schema_version": "2.0.0",
+  "analysis_metadata": {
+    "provider": "manual_visual_review",
+    "model": "human_approved_reference_contract",
+    "prompt_version": "reference_scene_graph_v2",
+    "analyzed_at": "2026-07-21T00:00:00+09:00",
+    "confidence": 0.98
+  },
+  "asset": {
+    "asset_id": "ref_95fa7947818ce496",
+    "relative_path": "comfyui-inputs/ad_creator_reference_wood_window_closeup_v1.png",
+    "file_sha256": "4e17067c6696a71699e989bfc0fcb47d096a9626441698bec4b773904efd73c7",
+    "pixel_sha256": "fdcf3f83e673d7ed06cecb376eb7b94386bb2c1657f942136017aeeadc919523",
+    "width_px": 1254,
+    "height_px": 1254,
+    "format": "PNG",
+    "source_folder_tags": [
+      "user_approved",
+      "wood",
+      "soft_window",
+      "closeup"
+    ],
+    "dhash": "5b42293fe5b43470",
+    "duplicate_of": null
+  },
+  "scene_mode": "pair",
+  "observed_major_subject_count": 2,
+  "object_inventory_complete": true,
+  "objects": [
+    {
+      "slot_id": "beverage_primary",
+      "kind": "beverage",
+      "role": "primary",
+      "description": "Measured front-left product slot; Image 1 replaces neutral contents, while container geometry follows the selected source/reference policy",
+      "body_bbox": {
+        "left": 0.281,
+        "top": 0.412,
+        "right": 0.627,
+        "bottom": 0.824,
+        "confidence": 0.98
+      },
+      "full_bbox": {
+        "left": 0.272,
+        "top": 0.145,
+        "right": 0.635,
+        "bottom": 0.824,
+        "confidence": 0.98
+      },
+      "straw": {
+        "present": true,
+        "bbox": {
+          "left": 0.27,
+          "top": 0.145,
+          "right": 0.455,
+          "bottom": 0.455,
+          "confidence": 0.98
+        },
+        "centerline": [
+          {
+            "x": 0.275,
+            "y": 0.145
+          },
+          {
+            "x": 0.445,
+            "y": 0.455
+          }
+        ],
+        "emergence_point": {
+          "x": 0.445,
+          "y": 0.455
+        },
+        "angle_degrees": -17.0
+      },
+      "container": {
+        "class": "tall transparent cold beverage cup",
+        "material": "clear plastic",
+        "silhouette": "gently tapered cylinder",
+        "components": [
+          "open transparent rim",
+          "tall clear tapered body",
+          "visible ice and layered latte contents excluded from transfer",
+          "paper label and straw excluded from transfer"
+        ]
+      },
+      "interaction": "resting",
+      "support_surface_id": "surface_live_edge_wood_table",
+      "depth_order": 2,
+      "occlusion_fraction": 0.0,
+      "replaceable": true,
+      "allowed_kinds": [
+        "beverage",
+        "dessert"
+      ],
+      "visible_text": [
+        "cafe latte",
+        "body copy"
+      ],
+      "brand_or_watermark_state": "present",
+      "crop_safe": true
+    },
+    {
+      "slot_id": "beverage_secondary",
+      "kind": "beverage",
+      "role": "secondary",
+      "description": "Measured behind-right iced Americano in exactly two visibly nested white paper cups with two separated rims, rich fine crema and exact small CAFE AMERICANO text wrapped to the cylinder",
+      "body_bbox": {
+        "left": 0.58,
+        "top": 0.307,
+        "right": 0.86,
+        "bottom": 0.674,
+        "confidence": 0.98
+      },
+      "full_bbox": {
+        "left": 0.572,
+        "top": 0.292,
+        "right": 0.868,
+        "bottom": 0.68,
+        "confidence": 0.98
+      },
+      "straw": {
+        "present": false,
+        "bbox": null,
+        "centerline": null,
+        "emergence_point": null,
+        "angle_degrees": null
+      },
+      "container": {
+        "class": "double nested open paper cup",
+        "material": "white paper",
+        "silhouette": "two slightly offset tapered cylinders with a double rim",
+        "components": [
+          "two visibly nested white paper cup rims",
+          "matte white tapered outer walls",
+          "dark iced Americano surface",
+          "irregular ice and rich fine crema bubbles"
+        ]
+      },
+      "interaction": "resting",
+      "support_surface_id": "surface_live_edge_wood_table",
+      "depth_order": 1,
+      "occlusion_fraction": 0.0,
+      "replaceable": false,
+      "allowed_kinds": [
+        "beverage"
+      ],
+      "visible_text": [
+        "CAFE AMERICANO"
+      ],
+      "brand_or_watermark_state": "present",
+      "crop_safe": true
+    },
+    {
+      "slot_id": "prop_plant",
+      "kind": "prop",
+      "role": "accent",
+      "description": "Very small distant low-detail plant in one low matte pot physically resting on the broad white interior window sill; never emerging from a frame seam or gap",
+      "body_bbox": {
+        "left": 0.72,
+        "top": 0.115,
+        "right": 0.84,
+        "bottom": 0.245,
+        "confidence": 0.9
+      },
+      "full_bbox": {
+        "left": 0.715,
+        "top": 0.105,
+        "right": 0.845,
+        "bottom": 0.25,
+        "confidence": 0.9
+      },
+      "straw": {
+        "present": false,
+        "bbox": null,
+        "centerline": null,
+        "emergence_point": null,
+        "angle_degrees": null
+      },
+      "container": {
+        "class": "small background plant accent",
+        "material": "organic foliage",
+        "silhouette": "irregular low-detail leaves",
+        "components": [
+          "soft green leaf masses",
+          "partly hidden stem or pot"
+        ]
+      },
+      "interaction": "resting",
+      "support_surface_id": "surface_window_sill",
+      "depth_order": 0,
+      "occlusion_fraction": 0.0,
+      "replaceable": false,
+      "allowed_kinds": [
+        "prop"
+      ],
+      "visible_text": [],
+      "brand_or_watermark_state": "absent",
+      "crop_safe": true
+    }
+  ],
+  "relations": [
+    {
+      "from_slot_id": "beverage_primary",
+      "predicate": "left_of",
+      "to_slot_id": "beverage_secondary",
+      "confidence": 0.98
+    },
+    {
+      "from_slot_id": "beverage_primary",
+      "predicate": "in_front_of",
+      "to_slot_id": "beverage_secondary",
+      "confidence": 0.98
+    },
+    {
+      "from_slot_id": "beverage_primary",
+      "predicate": "paired_with",
+      "to_slot_id": "beverage_secondary",
+      "confidence": 0.96
+    },
+    {
+      "from_slot_id": "prop_plant",
+      "predicate": "behind",
+      "to_slot_id": "beverage_primary",
+      "confidence": 0.9
+    },
+    {
+      "from_slot_id": "prop_plant",
+      "predicate": "behind",
+      "to_slot_id": "beverage_secondary",
+      "confidence": 0.9
+    }
+  ],
+  "support_surfaces": [
+    {
+      "surface_id": "surface_live_edge_wood_table",
+      "kind": "table",
+      "bbox": {
+        "left": 0.14,
+        "top": 0.565,
+        "right": 1.0,
+        "bottom": 1.0,
+        "confidence": 0.98
+      },
+      "plane_description": "Round pale matte live-edge wood tabletop with natural irregular edge, subtle growth rings and low-saturation warm beige-brown tone",
+      "supports_objects": true,
+      "perspective_scale": [
+        0.92,
+        1.08
+      ]
+    },
+    {
+      "surface_id": "surface_window_sill",
+      "kind": "shelf",
+      "bbox": {
+        "left": 0.0,
+        "top": 0.13,
+        "right": 1.0,
+        "bottom": 0.43,
+        "confidence": 0.92
+      },
+      "plane_description": "Broad white horizontal interior window sill behind the table; the small distant plant pot rests fully on this plane with a tiny attached contact shadow",
+      "supports_objects": true,
+      "perspective_scale": [
+        0.88,
+        1.12
+      ]
+    }
+  ],
+  "protected_regions": [
+    {
+      "region_id": "region_window_release",
+      "kind": "negative_space",
+      "bbox": {
+        "left": 0.0,
+        "top": 0.0,
+        "right": 1.0,
+        "bottom": 0.33,
+        "confidence": 0.94
+      },
+      "reason": "retain soft window depth and cool-gray release without copying exact exterior geometry"
+    }
+  ],
+  "insertion_zones": [
+    {
+      "zone_id": "zone_beverage_primary",
+      "bbox": {
+        "left": 0.281,
+        "top": 0.412,
+        "right": 0.627,
+        "bottom": 0.824,
+        "confidence": 0.98
+      },
+      "support_surface_id": "surface_live_edge_wood_table",
+      "allowed_kinds": [
+        "beverage",
+        "dessert"
+      ],
+      "scale_range": [
+        0.9,
+        1.1
+      ],
+      "confidence": 0.98,
+      "reason": "complete foreground-left product slot with stable table contact, separation from the companion and safe 4:5 crop margin"
+    }
+  ],
+  "composition": {
+    "shot_type": "tabletop",
+    "camera_height": "slightly_above",
+    "camera_pitch": "20-25 degree downward pitch",
+    "lens_character": "phone_mild_tele",
+    "subject_position": "measured front-left product and smaller behind-right double-paper-cup companion",
+    "negative_space": "0.28-0.36 through upper gray release, broad diagonal white sill and restrained pair gap",
+    "asymmetry_source": "front-back stagger, unequal cup scales and irregular live edge",
+    "crop_character": "close 4:5 scene condition mapped to raw 3:4 coordinates and a centered 4:5 delivery crop without subject enlargement"
+  },
+  "depth": {
+    "plane_count": 3,
+    "foreground": "pale live-edge wood table and exact user product slot",
+    "product_plane": "front-left primary slot on the wood table",
+    "midground": "behind-right paper-cup companion and low-detail plant",
+    "background": "window sill and cool gray exterior",
+    "perspective_cues": [
+      "normal-lens size falloff",
+      "primary overlap in front of companion",
+      "elliptical cup rims",
+      "attached table contacts",
+      "soft window falloff"
+    ],
+    "far_plane_softness": "subtle",
+    "atmospheric_separation": "mild"
+  },
+  "lighting": {
+    "source_type": "soft_window",
+    "direction": "one very large upper-left and slightly rear window source toward lower-right",
+    "source_size": "large",
+    "hardness": 0.14,
+    "contrast": 0.38,
+    "shadow": "small dense attached contacts and broad 118-150 degree lower-right penumbrae",
+    "highlight": "rolled paper white, broad transparent rim lift and small irregular ice responses",
+    "transmitted_light": "subtle and physically bounded inside transparent user-product paths only",
+    "white_balance": "mixed"
+  },
+  "color": {
+    "exposure": "balanced",
+    "saturation": "restrained",
+    "contrast": "soft",
+    "black_point": "natural",
+    "palette_hex": [
+      "#BBAB9A",
+      "#8B7761",
+      "#504131",
+      "#F1EFEE",
+      "#E3DCD5"
+    ],
+    "mean_luminance": 0.5843,
+    "luminance_stddev": 0.4934,
+    "mean_saturation": 0.2105,
+    "edge_energy": 0.0453
+  },
+  "facets": {
+    "mood_tags": [
+      "quiet",
+      "low-saturation",
+      "warm-neutral",
+      "natural-cafe"
+    ],
+    "environment_tags": [
+      "window",
+      "cafe",
+      "gray-exterior"
+    ],
+    "material_tags": [
+      "pale-live-edge-wood",
+      "paper",
+      "transparent-container"
+    ],
+    "shot_tags": [
+      "tabletop",
+      "closeup",
+      "relational-pair"
+    ]
+  },
+  "taxonomy": {
+    "environment_family": "warm_wood",
+    "lighting_family": "soft_window",
+    "camera_angle": "slightly_above",
+    "capture_style": "group",
+    "scene_complexity": "pair",
+    "dominant_surface": "pale matte live-edge wood table",
+    "wood_prominence": 0.72,
+    "accent_color_prominence": 0.16,
+    "frontend_mood": "wood",
+    "frontend_angle": "slightly_above",
+    "confidence": 0.98
+  },
+  "runtime_policy": {
+    "scene_pixels_allowed": false,
+    "container_pixels_allowed": true,
+    "copy_exclusions": [
+      "neutral placeholder drinks",
+      "reference latte or Americano recipe and exact ice arrangement",
+      "the words cafe latte and all unauthorized labels, logos or body copy",
+      "any text except the conditional primary cafe paper label and exact companion phrase CAFE AMERICANO",
+      "specific plant identity"
+    ],
+    "maximum_exact_products": 1,
+    "maximum_generic_companions": 1,
+    "maximum_major_subjects": 3,
+    "maximum_props": 2
+  },
+  "quality_flags": []
+}

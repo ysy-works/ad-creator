@@ -1,5 +1,7 @@
 {
   "schema_version": 1,
+  "default_preset_slot": "wood__product_center",
+  "passed_presets_manifest": "passed-presets.json",
   "provider_profile": "../config/providers/openai-gpt-image-2-low.json",
   "slots": {
     "natural_white__product_large": {
@@ -21,22 +23,40 @@
       "bundle": "natural_white__product_center/preset.json"
     },
     "natural_white__aerial_shot": {
-      "enabled": false,
-      "status": "not_ready",
+      "enabled": true,
+      "status": "validated",
       "family": "natural_white",
-      "composition": "aerial"
+      "composition": "aerial",
+      "preset_id": "instagram_white_neutral_overhead_spatial_v1",
+      "legacy_gateway": {
+        "background_style": "white",
+        "composition": "aerial"
+      },
+      "bundle": "natural_white__aerial_shot/preset.json"
     },
     "natural_white__handheld_lifestyle": {
-      "enabled": false,
-      "status": "not_ready",
+      "enabled": true,
+      "status": "published",
       "family": "natural_white",
-      "composition": "handheld"
+      "composition": "handheld",
+      "preset_id": "instagram_white_direct_handheld_refined_v5",
+      "legacy_gateway": {
+        "background_style": "white",
+        "composition": "handheld"
+      },
+      "bundle": "natural_white__handheld_lifestyle/preset.json"
     },
     "wood__product_large": {
-      "enabled": false,
-      "status": "not_ready",
+      "enabled": true,
+      "status": "validated",
       "family": "wood",
-      "composition": "closeup"
+      "composition": "closeup",
+      "preset_id": "instagram_wood_calm_window_closeup_v1",
+      "legacy_gateway": {
+        "background_style": "wood",
+        "composition": "closeup"
+      },
+      "bundle": "wood__product_large/preset.json"
     },
     "wood__product_center": {
       "enabled": true,

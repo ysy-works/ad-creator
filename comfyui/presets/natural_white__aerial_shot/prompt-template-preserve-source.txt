@@ -1,0 +1,25 @@
+[TASK]
+Create one new original Instagram-native cafe photograph from a near-vertical overhead camera. Use Image 1 as the sole authority for the user's beverage and broad source-container identity. Use Image 2 only as the integrated scene hint for the Basque cheesecake setting, partial BAUHAUS magazine, clean white table, spatial composition and lighting atmosphere. Do not transfer Image 2's white mug, coffee, latte art, exact shadows or pixels.
+
+[INPUT ROLES]
+Image 1 is the user product source. Preserve its broad cup or glass family, material, color, rim and structural design together with the actual beverage identity, color, opacity, ice, foam, cream, fruit, garnish and approximate top-surface arrangement. If the cup is visibly paired with a cup saucer or support plate and spoon, preserve their design, material, color, count and cup-relative arrangement. Discard only the source camera pose, background, lighting and shadows.
+Image 2 is the integrated companion-scene hint. It controls only the Basque cheesecake, warm-white plate, fork, cropped BAUHAUS magazine, clean matte white tabletop, relative scene placement, depth cues and lighting atmosphere. Its white mug and coffee are forbidden transfer content.
+
+[CONTAINER AND BEVERAGE - PRESERVE SOURCE]
+Reconstruct one cup or glass in the same broad family, material, color and simple structural design as Image 1 under the preset overhead camera. Preserve realistic rim thickness, material response and refraction when transparent. Preserve the user's actual drink colors, opacity, ice, foam, cream, fruit, garnish and top-surface arrangement as closely as physically possible. Beverage colors remain inside the container; do not stain the exterior. Preserve a source cup saucer or support plate and source spoon when present, including their design and relative arrangement, but do not invent either when absent. Do not add a new handle, logo, label or straw. Do not copy the white ceramic mug or unrelated serviceware from Image 2.
+
+[CAMERA AND COMPOSITION - HARD LOCK]
+Use a 42-52mm-equivalent rectilinear camera pitched 84-89 degrees downward. The cup or glass rim is nearly circular with only slight physically plausible sidewall visibility. Place the complete primary drink and its preserved source serviceware just below center on the right-dominant large circular white table. Preserve a narrow gray tiled-floor wedge on the left with receding grout, the raised curved table edge and calm negative space. Add the declared dessert group at twelve o'clock and the cropped magazine at the far right around two-to-three o'clock. No downstream crop, fabric, coaster, napkin, bread, flower, phone, chair, plant or undeclared prop.
+
+[DECLARED COMPANION SCENE]
+At twelve o'clock above the drink, reproduce Image 2's modest warm-white matte ceramic plate, one authentic triangular Basque burnt cheesecake and one slim four-tine stainless dessert fork. The cheesecake has a gently sunken center, slightly higher irregular curved edge, thin deeply caramelized dark-brown top, thick pale ivory-to-light-custard moist cream-cheese middle and thin darker golden baked base. It must never read as castella, sponge, chiffon, pound cake or bread. The fork lies below the cake across the lower plate, four tines pointing left and handle extending right without touching the cake.
+
+At the far right edge, retain only a cropped peripheral portion of Image 2's same white BAUHAUS magazine with bold black BAUHAUS typography, gray architectural cover graphic and visible white edge or spine. Do not replace its title, invent lettering, enlarge it or move it toward the center.
+
+[LIGHTING AND MATERIAL]
+Use broad upper-left natural window light, one compact attached product shadow and broad low-density environmental shadow fields from unseen room elements. Keep warm-neutral whites, neutral-to-faintly-cool gray floor and shadows, restrained saturation, low-to-medium contrast, protected highlights, faint luminance grain and finite real-photo acuity.
+
+The tabletop is a real clean plain warm-neutral white painted or matte-laminate cafe table. Keep extremely subtle physical grain and natural illumination falloff, but prohibit marble veins, cloudy or watercolor mottling, faux-stone patches, plaster, canvas, speckles, stains, scratches, repeated procedural noise, plastic smoothness, CGI, 3D-rendered or AI-smoothed surfaces.
+
+[FINAL GATE]
+Return exactly one photorealistic image. Reject any result that changes the user's beverage identity or broad source-container design, converts the source cup into the white reference mug, removes or redesigns a visibly paired source saucer, support plate or spoon, invents serviceware absent from the source, uses an oblique camera, exposes excessive sidewall, loses the floor wedge or room depth, creates a marble-like table, omits or substitutes the declared cheesecake, fork or BAUHAUS magazine, or introduces undeclared props, text, branding or watermarks.

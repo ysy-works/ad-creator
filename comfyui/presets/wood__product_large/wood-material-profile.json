@@ -1,0 +1,41 @@
+{
+  "schema_version": "3.1.0",
+  "status": "draft",
+  "family_axes": {
+    "lightness": "light",
+    "color_family": "brown",
+    "grain_pattern": "cathedral",
+    "finish": "raw-matte"
+  },
+  "appearance": {
+    "lab": {
+      "median": [
+        65.0,
+        6.5,
+        14.5
+      ],
+      "p10": [
+        42.0,
+        5.0,
+        10.0
+      ],
+      "p90": [
+        78.0,
+        7.5,
+        18.0
+      ]
+    },
+    "chroma": 15.9,
+    "grain_direction_degrees": 7.0,
+    "grain_frequency": 0.11,
+    "grain_contrast": 0.22,
+    "surface_occupancy": null,
+    "surface_occupancy_basis": "unavailable",
+    "observed_lab": null
+  },
+  "confidence": 0.68,
+  "species": "unknown",
+  "source_pixel_sha256": "fdcf3f83e673d7ed06cecb376eb7b94386bb2c1657f942136017aeeadc919523",
+  "artifact": null,
+  "measurement_evidence": null
+}

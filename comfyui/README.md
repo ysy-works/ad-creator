@@ -54,6 +54,7 @@ comfyui/
   presets/
     registry.json
     natural_white__product_center/
+    natural_white__handheld_lifestyle/
     wood__product_center/
     wood__product_center_a6/
   custom_nodes/ad_creator/
@@ -90,7 +91,11 @@ POST /generate (multipart/form-data)
 
 ## OpenAI GPT Image 2 low 파일럿
 
-`openai-gpt-image-2-low-v1`은 `gpt-image-2`, `quality=low`를 서버 profile에서 고정합니다. 서비스 ID는 `natural_white__product_center`, `wood__product_center` 두 개만 published이며 나머지 10개는 provider 호출 전에 거부합니다. 우드 기본값은 A6 다중 피사체 preset이고, 기존 45도 preset은 라우팅하지 않은 대안으로 보존합니다. `aspect_ratio=4:5`는 `1024x1280` 생성 후 무크롭 `880x1100`, `aspect_ratio=1:1`은 처음부터 `1024x1024`로 생성합니다. 1:1은 시각 QA 전까지 공개 UI에서 숨깁니다.
+`openai-gpt-image-2-low-v1`은 `gpt-image-2`, `quality=low`를 서버 profile에서 고정합니다. 프리셋은 현재 여러 작업 환경에서 수정·추가·시각 검증 중이며, 검증을 통과한 항목부터 registry에 순차 반영됩니다. README에 published 개수를 고정하지 않고 `presets/registry.json`의 현재 상태와 활성 여부를 기준으로 합니다. 기존 대안 프리셋은 실행 의존성과 비교 검증을 위해 삭제하지 않습니다. `aspect_ratio=4:5`는 `1024x1280`을 축소·크롭 없이 그대로 전달하고, `aspect_ratio=1:1`은 처음부터 `1024x1024`로 생성합니다. 1:1은 시각 QA 전까지 공개 UI에서 숨깁니다.
+
+프리셋 실행 정책은 `custom_nodes/ad_creator/runtime/`의 단일 코어가 JSON에서 해석합니다. ComfyUI 노드는 선택값과 이미지를 전달하고 provider adapter는 전송만 담당합니다. `container_mode`, `serving_temperature`, 동반 피사체, 사용자 로고 입력 상태, 기본 표면 문구, 입력 역할과 typed transform은 preset bundle이 선언합니다. 전역 설계 상한은 제품 최대 3장과 reference control 최대 1장을 합친 4장이지만 현재 공개 Gateway workflow는 제품 1장만 라우팅합니다. 프롬프트는 12,000자를 넘으면 제출 전에 실패합니다.
+
+`natural_white__handheld_lifestyle`는 화이트 직사광 손 컷 v5의 비기본 활성 슬롯이다. 제품 원본과 비식별화된 장면 힌트만 외부 provider에 전달하며, 기본은 레퍼런스 컵 채택(`adopt_reference`)이다. 이 모드는 hot/ice 호환 오류를 막기 위해 명시적으로 해석된 `iced`·`cold`·`ambient` 상태가 필요하다. 사용자 컵 재생성(`reconstruct_source`)만 원본 서빙 상태를 자동 보존할 수 있으며, 두 모드 모두 사용자 로고 입력은 비활성이다.
 
 제품 원본은 기본적으로 EXIF·파일명을 제거하고 긴 변 1536px까지만 축소하며 작은 사진은 확대하지 않습니다. 비용·OCR·제품 보존 비교 시에만 `AD_CREATOR_OPENAI_SOURCE_MAX_EDGE=3072`를 명시합니다.
 
@@ -180,6 +185,8 @@ background_style   vivid | wood | white
 strength           low | medium | high
 seed               선택 정수
 preset_id          OpenAI workflow에서 canonical service preset ID
+container_mode     default | adopt_reference | reconstruct_source
+serving_temperature auto | iced | cold | ambient | hot
 aspect_ratio       4:5(기본) | 1:1
 ```
 

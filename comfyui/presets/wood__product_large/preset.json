@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "slot_id": "wood__product_large",
+  "preset_id": "instagram_wood_calm_window_closeup_v1",
+  "family": "wood",
+  "composition": "closeup",
+  "status": "validated",
+  "source_review_status": "pending_provider_visual_validation",
+  "runtime_policy": {
+    "schema_version": 1,
+    "compiler_version": "preset-runtime-v1",
+    "maximum_prompt_characters": 12000,
+    "maximum_provider_inputs": 4,
+    "maximum_product_sources": 3,
+    "maximum_reference_controls": 1,
+    "default_container_mode": "adopt_reference",
+    "supported_container_modes": ["adopt_reference", "reconstruct_source"],
+    "companion_policy": "reference_relational",
+    "brand_input_policy": {
+      "enabled": false,
+      "default_mode": "preset_typography",
+      "preset_typography": [
+        {
+          "text": "CAFE AMERICANO",
+          "target_surface": "rear companion outer paper cup front",
+          "transfer_scope": "preset-declared generic beverage descriptor only; never source or reference brand authority"
+        }
+      ],
+      "future_user_logo_override": {
+        "enabled": false,
+        "activation_requirement": "frontend_and_api_brand_asset_flow",
+        "request_scope": "per_image",
+        "target_surface": "rear companion outer paper cup front",
+        "replacement_action": "replace_default_typography_only",
+        "non_target_surface_action": "never_propagate_logo",
+        "missing_or_invalid_asset_action": "retain_preset_default_typography"
+      }
+    },
+    "temperature_policy": {
+      "mode": "preset_primary",
+      "container_mode_rules": {
+        "adopt_reference": {
+          "allowed_product_states": ["iced", "cold", "ambient"],
+          "auto_action": "requires_explicit_state"
+        },
+        "reconstruct_source": {
+          "allowed_product_states": ["iced", "cold", "ambient", "hot"],
+          "auto_action": "preserve_source_state"
+        }
+      },
+      "emergency_fallback": {
+        "enabled_when_policy_missing": true,
+        "minimum_confidence": 0.85,
+        "unknown_action": "needs_review",
+        "conflict_action": "needs_review"
+      }
+    }
+  },
+  "provider_reference_policy": {
+    "maximum_images": 2,
+    "required_roles": ["user_product", "container_mode_scene_hint"]
+  },
+  "transforms": [
+    {"type": "normalize_product_source"},
+    {"type": "select_hint_by_container_mode"},
+    {"type": "sanitize_reference_control"}
+  ],
+  "prompt_template": {
+    "path": "prompt-template.txt",
+    "sha256": "309bc6d46b5cd71f7dae1bd71c383e1ca103ee954e24d74049c04f77fea70dbc"
+  },
+  "lighting_sheet": {
+    "path": "lighting-sheet.json",
+    "sha256": "e2cb94baed44b56ad06b09643713eb4c79ae9ed8fb72bba91632efe85e8c3f23"
+  },
+  "grade_profile": {
+    "path": "grade-profile.json",
+    "sha256": "d422ca92577e3dc47ad0ec8894a33349775117c96e741c95020f27fed220862a",
+    "apply_in_pilot": false
+  },
+  "contract_assets": {
+    "scene_recipe": {
+      "path": "scene-recipe.json",
+      "sha256": "a0858518a6013d39c5fdec429dd0398ec85f7a40b212520a3d0957f159150f2d"
+    },
+    "scene_graph": {
+      "path": "scene-graph.json",
+      "sha256": "bb616c88f1e0982c58621216168e537ba31b4d16142a338f03da227cf042dd96"
+    },
+    "container_design": {
+      "path": "container-design.json",
+      "sha256": "e35c80a29f39eca692dfc06aa0c3373419276cc631d0338da9d7e35d820b8167"
+    },
+    "photographic_style": {
+      "path": "photographic-style-contract.json",
+      "sha256": "e677b9fa2c1c9b62acae1f16dcca8a988f476f67ceb34767559e98f9009c6328"
+    },
+    "wood_material": {
+      "path": "wood-material-profile.json",
+      "sha256": "73ca637dfab275d1f582310d8c09e141976ed4871f303f750091353173a2e672"
+    }
+  },
+  "hint_images": [
+    {
+      "role": "reference_cup_geometry_light_and_companion_evidence",
+      "path": "../assets/wood-closeup-reference-cup-geometry-evidence-v1.png",
+      "sha256": "361ab885fadafbdb99a366cdaca19505c003d0c9ef58e27dcb98796597d8bba0",
+      "width": 1000,
+      "height": 1250,
+      "send_to_provider": true,
+      "container_mode_scope": ["adopt_reference"],
+      "transfer_scope": [
+        "clear PET cup construction and cafe paper label",
+        "rear nested paper cup, crema and curved CAFE AMERICANO text",
+        "window direction, distant sill planter, wood color and grain",
+        "relative scale, perspective, air and contact-shadow behavior"
+      ],
+      "excluded_transfer": [
+        "reference primary coffee recipe, milk diffusion and ice arrangement",
+        "exact scene pixels and shadow silhouette"
+      ]
+    },
+    {
+      "role": "source_cup_geometry_light_and_companion_evidence",
+      "path": "../assets/wood-closeup-source-cup-geometry-evidence-v1.png",
+      "sha256": "31cb9d2bde6be1811c9cba0f381abc9eb31bef590c33aa00b7d37725fce695c0",
+      "width": 1000,
+      "height": 1250,
+      "send_to_provider": true,
+      "container_mode_scope": ["reconstruct_source"],
+      "reason": "Checked-in conditional evidence sent only for reconstruct-source routing; excluded from the default adopted-container request to prevent cup mixing."
+    },
+    {
+      "role": "approved_full_reference_for_offline_review",
+      "path": "../assets/wood-closeup-approved-reference-v1.png",
+      "sha256": "4e17067c6696a71699e989bfc0fcb47d096a9626441698bec4b773904efd73c7",
+      "width": 1254,
+      "height": 1254,
+      "send_to_provider": false,
+      "reason": "User-approved authoring reference retained for audit only; never sent because it over-strengthens scene replication."
+    }
+  ],
+  "default_container_mode": "adopt_reference",
+  "container_modes": {
+    "adopt_reference": {
+      "provider_hint_role": "reference_cup_geometry_light_and_companion_evidence",
+      "source_product_authority": "beverage_only",
+      "container_design_path": "container-design.json",
+      "prompt_addendum": "[ACTIVE CONTAINER MODE]\nUse adopt_reference for this execution. Discard the source vessel and rebuild the exact user beverage inside the declared clear PET reference cup. Keep the preset CAFE AMERICANO companion typography. Do not preserve or transfer any source or reference brand."
+    },
+    "reconstruct_source": {
+      "provider_hint_role": "source_cup_geometry_light_and_companion_evidence",
+      "source_product_authority": "full_user_product",
+      "preserve_serving_assembly": true,
+      "prompt_addendum": "[ACTIVE CONTAINER MODE]\nUse reconstruct_source for this execution. Rebuild the user's broad cup family, material and complete serving assembly under the preset camera and light; never paste source pixels and never add the reference primary paper label or straw. Keep the preset CAFE AMERICANO companion typography."
+    }
+  },
+  "camera_contract": {
+    "pitch_degrees": [20, 25],
+    "focal_length_equivalent_mm": [50, 60],
+    "projection": "rectilinear normal-to-mild-tele close environmental",
+    "discard_source_pose": true
+  },
+  "aspect_ratio_contracts": {
+    "4:5": {
+      "status": "published",
+      "prompt_addendum": "Generate the exact final 4:5 portrait canvas. Keep the complete primary cup at front-left around x=0.28-0.63 and y=0.41-0.82; keep the smaller rear paper cup around x=0.58-0.86 and y=0.31-0.67. Preserve the full rims, bases, contacts, round table edge, diagonal sill and distant planter. Do not crop or enlarge after generation.",
+      "generation_size": "1024x1280",
+      "safe_crop": "none_exact_4x5",
+      "width": 1024,
+      "height": 1280,
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [0.30, 0.38],
+        "product_height_ratio": [0.39, 0.49],
+        "center_x_ratio": [0.42, 0.49],
+        "center_y_ratio": [0.59, 0.66],
+        "negative_space_ratio": [0.28, 0.40],
+        "expected_primary_count": 1,
+        "expected_companion_count": 1,
+        "crop_allowed": false
+      }
+    },
+    "1:1": {
+      "status": "prepared_pending_visual_qa",
+      "prompt_addendum": "Generate a native square composition rather than cropping the portrait layout. Keep the complete primary cup front-left and the smaller rear paper cup behind-right, with the diagonal sill, distant planter and enough wood-table margin for both attached shadows.",
+      "generation_size": "1024x1024",
+      "safe_crop": "none_exact_1x1",
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [0.28, 0.36],
+        "product_height_ratio": [0.40, 0.52],
+        "center_x_ratio": [0.40, 0.48],
+        "center_y_ratio": [0.56, 0.65],
+        "negative_space_ratio": [0.25, 0.38],
+        "expected_primary_count": 1,
+        "expected_companion_count": 1,
+        "crop_allowed": false
+      }
+    }
+  },
+  "qa_contract": {
+    "phase": "paid_medium_user_review_passed_for_4x5",
+    "hard_gates": [
+      "beverage_identity",
+      "selected_container_mode",
+      "close_subject_scale",
+      "window_light_direction_and_temperature",
+      "transparent_liquid_integration",
+      "rear_double_paper_cup_geometry",
+      "rear_crema",
+      "exact_curved_CAFE_AMERICANO",
+      "straw_proportion_when_adopted",
+      "distant_sill_planter",
+      "natural_wood_without_mold_like_stain",
+      "contact_and_air"
+    ],
+    "hard_fail": [
+      "scene is copied pixel-for-pixel from the reference",
+      "primary beverage looks pasted or does not share scene light",
+      "CAFE AMERICANO is missing, distorted or flat",
+      "rear paper cup is not visibly double nested",
+      "plant emerges from a window-frame gap",
+      "adopted straw is substantially longer or shorter than the declared ratio",
+      "reference and user cup designs are mixed",
+      "dark wood mark reads as mold, scorch or ink"
+    ]
+  }
+}
