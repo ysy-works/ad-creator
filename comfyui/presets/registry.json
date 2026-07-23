@@ -72,9 +72,15 @@
     },
     "wood__aerial_shot": {
       "enabled": false,
-      "status": "not_ready",
+      "status": "visual_qa_pending",
       "family": "wood",
-      "composition": "aerial"
+      "composition": "aerial",
+      "preset_id": "instagram_wood_cane_brownie_overhead_v1",
+      "legacy_gateway": {
+        "background_style": "wood",
+        "composition": "aerial"
+      },
+      "bundle": "wood__aerial_shot/preset.json"
     },
     "wood__handheld_lifestyle": {
       "enabled": false,

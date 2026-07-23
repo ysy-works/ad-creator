@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "instagram_wood_cane_overhead_photographic_style_v1",
+  "camera": {"pitch_degrees": [72, 80], "focal_length_equivalent_mm": [45, 55], "projection": "rectilinear casual off-axis overhead", "roll_degrees": [-2, 2]},
+  "composition": {"type": "diagonal relational overhead", "flow": "cane chair upper-left to round table right to beverage and brownie", "negative_space_ratio": [0.28, 0.42]},
+  "capture": {"exposure_compensation_ev": [-0.62, -0.28], "white_balance_kelvin": [3800, 4450], "saturation_delta": [-0.18, -0.08], "acuity": "finite phone-camera detail without oversharpening"},
+  "materials": {
+    "wood": "directional grain, pores, worn tonal variation, restrained reflection and rounded edge",
+    "cane": "natural beige irregular woven depth with light passing through openings",
+    "paper": "matte warm-white subtle fiber",
+    "transparent_container": "real refraction and background-dependent lower-sidewall transmission",
+    "brownie": "dark moist crumb with irregular cream and restrained cocoa",
+    "wood_teaspoon": "small reclaimed dark wood, slim handle and elongated narrow oval bowl"
+  },
+  "hard_fail": ["AI rendered look", "procedural wood", "repeated cane pattern", "short detached shadows", "cutout product halo", "orange wash", "HDR", "perfect geometry", "logo", "text"]
+}

@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "slot_id": "wood__aerial_shot",
+  "preset_id": "instagram_wood_cane_brownie_overhead_v1",
+  "family": "wood",
+  "composition": "aerial",
+  "status": "visual_qa_pending",
+  "source_review_status": "sanitized_control_board_prepared_preset_output_pending",
+  "prompt_template": {
+    "path": "prompt-template.txt",
+    "sha256": "8414d5b51b2ccd34048f03aff0d93640eae191934d2df4bdf00cad0f004ed418"
+  },
+  "lighting_sheet": {
+    "path": "lighting-sheet.json",
+    "sha256": "27be72aef81e699bce4a23840fdf2440ef5312a742703a8787480c7a4e20bd32"
+  },
+  "grade_profile": {
+    "path": "grade-profile.json",
+    "sha256": "e4e7f6d468bde9ddf2c39b9074fb1cc011ef5a6e29f6ed8740403dd48a5935a4",
+    "apply_in_pilot": false
+  },
+  "contract_assets": {
+    "scene_recipe": {"path": "scene-recipe.json", "sha256": "a9bbb1bb6aafc0aa11114bba30dcfad640efbea7560e0d7662768c21922f1280"},
+    "scene_graph": {"path": "scene-graph.json", "sha256": "aa3d9315ac03ce033cb1986dc3bda331e74d2292f4ecdae56db60f4776ccd39a"},
+    "container_design": {"path": "container-design.json", "sha256": "797ad202466165d789f33950e2c9e1ff6e585b88502711b8c1bc915db3743040"},
+    "photographic_style": {"path": "photographic-style-contract.json", "sha256": "546c1d56a7d2c21318c0c3a791232e679097603100abdbd59cf39eb1cc8668b0"}
+  },
+  "provider_reference_policy": {
+    "maximum_images": 2,
+    "required_roles": ["user_product", "sanitized_scene_control_board"],
+    "cost_control": "Use exactly one user-product image and one sanitized control board. Never submit the finished scene reference or split table, chair, brownie, spoon or lighting into extra provider inputs."
+  },
+  "hint_images": [
+    {
+      "role": "sanitized_wood_cane_brownie_control_board",
+      "path": "../assets/wood-overhead-sanitized-control-board-v3.png",
+      "sha256": "13e47e3854b1ea7ee531bd4aecb4a9d3775a3fa5083ddd0a542175f6d8b3f51f",
+      "width": 1122,
+      "height": 1402,
+      "send_to_provider": true,
+      "container_mode_scope": ["preserve_source", "adopt_reference"],
+      "transfer_scope": [
+        "broad topology only: a newly constructed partial round table on the right and a newly constructed cane-chair family at upper-left",
+        "isolated dark warm-brown directional wood material family without exact grain pixels",
+        "isolated natural cane-webbing and bentwood material family without exact chair geometry",
+        "original-reference double-green-rim plate, dark rectangular moist brownie, generous melting white cream, uneven cocoa dust and approved reclaimed-wood teaspoon identity and relative arrangement",
+        "upper-left key direction, broad partial product-crossing environmental shadow and elongated lower-right cast-shadow behavior",
+        "empty product-zone relationship only; never render the board's empty ring"
+      ],
+      "container_transfer_by_mode": {
+        "preserve_source": "The board contains no source cup. Preserve the user's broad cup family, material, handle state and visible source serviceware.",
+        "adopt_reference": "Use the preset's declared plain unbranded warm-white matte paper-cup design; the board supplies no cup design or beverage."
+      },
+      "excluded_transfer": ["2x2 board layout", "panel borders", "empty placement ring", "complete scene", "exact table crop", "exact chair silhouette", "exact shadow silhouette", "exact wood-grain pixels", "exact cane-weave pixels", "text", "logo", "watermark"]
+    }
+  ],
+  "runtime_input_policy": {
+    "analysis_source": "full_user_image",
+    "camera_pose_authority": "preset",
+    "provider_source_by_container_mode": {
+      "preserve_source": "full_product_crop_including_visible_source_serviceware",
+      "adopt_reference": "beverage_surface_crop"
+    },
+    "invalid_geometry_fallback": "full_user_image"
+  },
+  "default_container_mode": "adopt_reference",
+  "container_modes": {
+    "preserve_source": {
+      "container_identity_scope": "source_family_material_handle_and_serviceware",
+      "prompt_template": {"path": "prompt-template-preserve-source.txt", "sha256": "aee7291186c8dde986bb6a3d1b725c78ade640437cadd1292d5cd9917c76f517"},
+      "camera_override": {"pitch_degrees": [85, 89], "focal_length_equivalent_mm": [45, 55], "projection": "near-vertical rectilinear overhead", "rim_shape": "near-circular", "visible_sidewall": "minimal"},
+      "product_scale_override_4x5": {"width_ratio": [0.16, 0.21], "height_ratio": [0.17, 0.23], "center_x_ratio": [0.61, 0.69], "center_y_ratio": [0.65, 0.73], "must_remain_complete": true},
+      "preserve": ["beverage identity", "surface arrangement", "broad source container family and material", "handle state", "visible source saucer, support plate and spoon"],
+      "discard": ["source camera pose", "source background", "source lighting", "source shadows"],
+      "wood_integration": "rebuild local reflection, refraction, warm bounce, attached contact occlusion and cast shadow according to material; never paste source pixels with a halo",
+      "beverage_color_integration": "the source image remains authoritative for ingredient identity and internal hue, luminance and saturation relationships; adapt only scene-relative brightness, saturation, reflected fill, transmitted light and boundary contrast so every beverage shares the surrounding table, floor and shadow field without washing out, neon-brightening, glowing or becoming visually detached",
+      "pale_neutral_component_adaptation": "for every source-derived pale low-chroma beverage region, preserve its relative hierarchy while applying the scene's slightly underexposed warm-neutral diffuse pale-material response; it must read as white by contrast without exact pixel copying, pure-white clipping, brown contamination, flat grayness or a luminous cutout boundary"
+    },
+    "adopt_reference": {
+      "container_identity_scope": "discard_source_container",
+      "container_design_path": "container-design.json",
+      "preserve": ["beverage identity", "surface color and opacity", "ice, foam, cream, fruit and garnish", "approximate top-surface arrangement"],
+      "discard": ["source container geometry", "source serviceware", "source camera pose", "source background and shadow"],
+      "wood_integration": "use warm reflected fill and attached shadow on paper while prohibiting wood grain or beverage color on the opaque exterior"
+    }
+  },
+  "camera_contract": {
+    "pitch_degrees": [72, 80],
+    "focal_length_equivalent_mm": [45, 55],
+    "projection": "rectilinear casual off-axis overhead",
+    "roll_degrees": [-2, 2],
+    "discard_source_pose": true
+  },
+  "product_wood_integration_contract": {
+    "contact_occlusion": "compact dense attachment directly beneath the vessel or preserved serviceware",
+    "cast_shadow": "one height-dependent elongated lower-right shadow attached to the product under the same upper-left window sun",
+    "local_edge_response": "keep the top plane and rim slightly more resolved; reduce lower-sidewall edge contrast and micro-acuity gradually, add a thin wood-colored environment wrap and prohibit any bright or dark cutout contour",
+    "opaque_container": "subtle warm-brown reflected fill only on shadow-facing lower edge; prohibit wood pattern, beverage stain or transparency",
+    "transparent_container": "preserve beverage identity while locally bending and darkening visible wood grain through clear lower sidewalls; restrict transmitted lift to the key-side rim, ice edges and a small lower-glass accent; merge the base into compact dense contact occlusion"
+  },
+  "aspect_ratio_contracts": {
+    "4:5": {
+      "status": "prepared_pending_visual_qa",
+      "visual_review_status": "not_yet_generated",
+      "prompt_addendum": "Generate on the provider-supported 3:4 portrait canvas while composing the complete scene inside its central 4:5 delivery-safe region. Keep one complete primary beverage 0.20-0.27 of the final 4:5 width and 0.17-0.24 of its height, centered around x=0.61-0.70 and y=0.64-0.73. Keep the brownie plate 0.25-0.32 of final width, centered around x=0.73-0.82 and y=0.46-0.55, with a small open gap from the beverage. Preserve the round table on the right, partial cane chair at upper-left and 0.28-0.42 meaningful pale floor-and-wall negative space. Keep all hard-gate objects clear of the narrow removable top and bottom margins.",
+      "provider_aspect_ratio": "3:4",
+      "generation_size": "1024x1365",
+      "safe_crop": "center_crop_3x4_to_4x5_top_bottom_margins_only",
+      "width": 880,
+      "height": 1100,
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [0.20, 0.27],
+        "product_height_ratio": [0.17, 0.24],
+        "center_x_ratio": [0.61, 0.70],
+        "center_y_ratio": [0.64, 0.73],
+        "brownie_plate_width_ratio": [0.25, 0.32],
+        "negative_space_ratio": [0.28, 0.42],
+        "expected_primary_count": 1,
+        "crop_allowed": true,
+        "crop_axis": "vertical_only",
+        "protected_objects_must_remain_complete": true
+      }
+    },
+    "1:1": {
+      "status": "prepared_pending_visual_qa",
+      "visual_review_status": "not_yet_generated",
+      "prompt_addendum": "Generate the exact final 1:1 square canvas from the start; do not crop a portrait composition. Recompose the same diagonal cane-chair, round-table, beverage, brownie and teaspoon relationships with 0.22-0.31 pale environmental negative space and preserve the complete product and declared companion group.",
+      "generation_size": "1024x1024",
+      "safe_crop": "none_exact_1x1",
+      "width": 1024,
+      "height": 1024,
+      "format": "png"
+    }
+  },
+  "qa_contract": {
+    "phase": "paid_visual_review_pending",
+    "hard_gates": ["beverage_identity", "container_mode", "camera_geometry", "round_table", "wood_grain", "cane_chair", "light_direction", "shadow_attachment_and_length", "product_wood_integration", "brownie_group", "teaspoon_orientation", "crop", "logo_ocr"],
+    "hard_fail": [
+      "product looks pasted on, haloed, floating or sharper than the scene",
+      "light or shadow direction conflicts with upper-left window sun",
+      "product, plate or spoon shadow is detached or unnaturally short",
+      "wood grain leaks onto an opaque cup or beverage color stains its exterior",
+      "transparent container loses source beverage identity or ignores local refraction",
+      "beverage becomes washed out, gray, fluorescent, globally over-bright, glowing or visually detached from the shared table-and-shadow light field",
+      "source-derived pale low-chroma region is pure clipped white, brown-contaminated, flat gray or separated by a luminous hard boundary",
+      "round table edge, cane chair or pale environmental depth disappears",
+      "brownie, double-rim plate or wooden teaspoon is missing or replaced",
+      "preserve-source primary cup exceeds 0.21 of final width, has an oblique elliptical opening or exposes excessive sidewall",
+      "teaspoon bowl points upward instead of downward",
+      "cookie, plastic packaging, undeclared prop, logo or text appears",
+      "CGI, HDR, procedural wood, repeated cane texture or orange wash"
+    ],
+    "comparative_scores": ["naturalness", "mood_adherence", "light_shadow_fidelity", "product_environment_integration", "beverage_preservation"]
+  }
+}

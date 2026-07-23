@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0.0",
+  "grade_profile_id": "instagram_wood_cane_overhead_warm_restrained_v2",
+  "description": "Darker low-contrast late-afternoon cafe grade that preserves wood, cane and beverage local-color separation inside partial environmental shadow.",
+  "operations": [
+    {"type": "exposure", "ev": -0.26},
+    {"type": "contrast", "amount": -0.03},
+    {"type": "saturation", "amount": -0.08},
+    {"type": "temperature", "amount": 0.035},
+    {"type": "grain", "amount": 0.018}
+  ],
+  "protected": ["beverage local color", "foam highlights", "wood pore detail", "cane openings", "shadow attachment"],
+  "forbidden": ["orange filter", "teal shadows", "matte lifted blacks", "HDR halo", "clarity crunch", "uniform brown wash"]
+}

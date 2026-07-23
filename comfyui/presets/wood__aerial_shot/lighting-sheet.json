@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0.0",
+  "lighting_sheet_id": "instagram_wood_cane_overhead_window_sun_sheet_v2",
+  "mood": "quiet darker late-afternoon cafe with directional window sun, a broad partial room shadow crossing the product, long attached shadows and off-frame presence",
+  "key_light": {
+    "source": "one upper-left window-sun source softened only slightly by glazing and room distance",
+    "direction": "upper left toward lower right",
+    "azimuth_degrees": [-52, -38],
+    "elevation_degrees": [34, 46],
+    "relative_size": "small-to-medium natural window sun; defined shadows with restrained soft penumbra",
+    "key_to_fill_ratio": [2.6, 4.2]
+  },
+  "screen_light_map": {
+    "lit_area_ratio": [0.24, 0.40],
+    "shadow_area_ratio": [0.50, 0.68],
+    "dominant_shadow_vector_degrees": [122, 142],
+    "falloff": "restrained sun fields cross chair and pale floor while a broad low-density room-shadow field crosses the primary beverage and surrounding table without crushing wood or beverage color",
+    "off_frame_evidence": "one coherent partial window-frame or furniture shadow continues across the product, table and beyond the canvas without revealing its source"
+  },
+  "shadow_contract": {
+    "contact_opacity": [0.30, 0.52],
+    "cast_opacity": [0.28, 0.55],
+    "penumbra_ratio": [0.035, 0.11],
+    "vector": "lower-right and consistent for beverage, brownie plate, teaspoon, table and chair",
+    "beverage_shadow_length_to_height": [0.95, 1.65],
+    "plate_shadow_length_to_plate_height": [1.25, 2.1],
+    "attachment": "dense compact occlusion at every support contact; no gap or floating edge"
+  },
+  "wood_bounce_contract": {
+    "opaque_container": "subtle warm-brown reflected fill only on lower shadow-facing rim and underside; no wood pattern or stain transfer",
+    "transparent_container": "physically local refraction of wood grain through clear lower sidewalls; transmitted lift is restricted to the key-side rim, ice edges and a small lower-glass accent while the broad partial environmental shadow remains visible through the container",
+    "edge_integration": "match local scene contrast, finite acuity and grain; prohibit bright matte halos and oversharpened masks"
+  },
+  "capture_contract": {
+    "exposure_compensation_ev": [-0.92, -0.52],
+    "white_balance_kelvin": [3800, 4450],
+    "hdr": "restrained single-exposure social photo; no tone-mapped halo",
+    "highlight_protection": "milk, foam, ice, plate and pale floor retain texture; no glowing white beverage body",
+    "black_detail": "wood pores and cane openings remain readable in shadow"
+  },
+  "forbidden": [
+    "diffuse shadowless studio light",
+    "conflicting light directions",
+    "short detached product shadow",
+    "full-frame orange veil",
+    "clipped foam",
+    "crushed featureless wood",
+    "invented spotlight",
+    "fully sunlit primary beverage",
+    "milk or fruit bleached by transmitted light",
+    "isolated product-only shadow patch",
+    "cutout halo"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "container_design_id": "plain_warm_white_paper_cup_overhead_v2",
+  "material": "matte paper with subtle fiber",
+  "color": "warm white",
+  "silhouette": "simple slightly tapered paper cup with rolled circular rim and flat supported base",
+  "handle": "none",
+  "branding": "none",
+  "camera_behavior": "near-circular rim at 72-80 degree downward pitch with moderate physically plausible sidewall",
+  "source_authority": "text-only reconstruction from the approved original reference; the sanitized provider control board contains no cup design",
+  "wood_interaction": "soft warm reflected fill on shadow-facing lower edge and dense attached base occlusion; never transfer wood grain or beverage color onto paper",
+  "hard_fail": ["logo", "printing", "handle", "plastic gloss", "floating base", "wood grain on exterior", "beverage stain outside rim"]
+}
