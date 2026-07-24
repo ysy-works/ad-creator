@@ -42,6 +42,7 @@ class NodeRegistrationTest(unittest.TestCase):
                 "wood__product_large",
                 "wood__product_center",
                 "wood__aerial_shot",
+                "wood__handheld_lifestyle",
                 "vivid__product_large",
                 "vivid__product_center",
                 "vivid__aerial_shot",

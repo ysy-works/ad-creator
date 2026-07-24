@@ -338,14 +338,14 @@ class GatewayApiTest(unittest.TestCase):
         )
 
     @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
-    def test_unpublished_preset_is_rejected_before_submission(self, submit_generation):
+    def test_unknown_preset_is_rejected_before_submission(self, submit_generation):
         response = self.client.post(
             "/v1/generations",
             headers=_request_headers("unpublished-preset-key"),
             files={"image": ("input.png", _png(), "image/png")},
             data={
                 "workflow_id": "openai-gpt-image-2-low-v1",
-                "preset_id": "wood__handheld_lifestyle",
+                "preset_id": "unknown__handheld_lifestyle",
             },
         )
         self.assertEqual(response.status_code, 400)

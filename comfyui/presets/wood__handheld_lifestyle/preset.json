@@ -1,0 +1,274 @@
+{
+  "schema_version": 1,
+  "slot_id": "wood__handheld_lifestyle",
+  "preset_id": "instagram_wood_handheld_two_person_v1",
+  "family": "wood",
+  "composition": "handheld",
+  "status": "published",
+  "source_review_status": "passed_by_user_review",
+  "runtime_policy": {
+    "schema_version": 1,
+    "compiler_version": "preset-runtime-v1",
+    "maximum_prompt_characters": 16000,
+    "maximum_provider_inputs": 4,
+    "maximum_product_sources": 3,
+    "maximum_reference_controls": 1,
+    "default_container_mode": "adopt_reference",
+    "supported_container_modes": [
+      "adopt_reference",
+      "reconstruct_source"
+    ],
+    "companion_policy": "reference_relational",
+    "brand_input_policy": {
+      "enabled": false,
+      "default_mode": "none",
+      "activation_requirement": "frontend_and_api_brand_asset_flow"
+    },
+    "temperature_policy": {
+      "mode": "preset_primary",
+      "container_mode_rules": {
+        "adopt_reference": {
+          "allowed_product_states": [
+            "iced",
+            "cold",
+            "ambient",
+            "hot"
+          ],
+          "auto_action": "preserve_source_state"
+        },
+        "reconstruct_source": {
+          "allowed_product_states": [
+            "iced",
+            "cold",
+            "ambient",
+            "hot"
+          ],
+          "auto_action": "preserve_source_state"
+        }
+      },
+      "emergency_fallback": {
+        "enabled_when_policy_missing": true,
+        "minimum_confidence": 0.85,
+        "unknown_action": "needs_review",
+        "conflict_action": "needs_review"
+      }
+    }
+  },
+  "provider_reference_policy": {
+    "maximum_images": 2,
+    "required_roles": [
+      "user_product",
+      "container_mode_scene_hint"
+    ]
+  },
+  "transforms": [
+    {
+      "type": "normalize_product_source"
+    },
+    {
+      "type": "select_hint_by_container_mode"
+    },
+    {
+      "type": "sanitize_reference_control"
+    }
+  ],
+  "prompt_template": {
+    "path": "prompt-template-adopt-reference.txt",
+    "sha256": "82881ec59a037a9a628e4b85262b77f1ff00415d3ba5f166e289dfa6f6662030"
+  },
+  "container_modes": {
+    "adopt_reference": {
+      "prompt_template": {
+        "path": "prompt-template-adopt-reference.txt",
+        "sha256": "82881ec59a037a9a628e4b85262b77f1ff00415d3ba5f166e289dfa6f6662030"
+      },
+      "provider_hint_role": "reference_cup_pose_light_and_scene_evidence",
+      "source_product_authority": "beverage_only",
+      "container_design_path": "container-design.json",
+      "prompt_addendum": "[ACTIVE CONTAINER MODE] Discard the source vessel and rebuild the exact user beverage inside the compact off-white reference mug. Preserve the right-side handle and lower-left cup-axis lean from the selected evidence board. Never transfer the reference beverage, source saucer, source label, or any brand."
+    },
+    "reconstruct_source": {
+      "prompt_template": {
+        "path": "prompt-template-reconstruct-source.txt",
+        "sha256": "43f1603252400c3df8c288564a17e5316ae07570a32182fe6dd8c47470b918c0"
+      },
+      "provider_hint_role": "source_cup_pose_light_and_scene_evidence",
+      "source_product_authority": "full_user_product",
+      "preserve_serving_assembly": true,
+      "prompt_addendum": "[ACTIVE CONTAINER MODE] Rebuild the complete user cup and beverage under the preset camera and light. If a source saucer exists, the lower hand holds only the cup body; omit the saucer or move it naturally to the counter. Never paste source pixels or mix in the reference target mug."
+    }
+  },
+  "lighting_sheet": {
+    "path": "mood/lighting-sheet.json",
+    "sha256": "2e91506035df10672288032d76887b8259dab8bcb2372c8723e546376cf05db9"
+  },
+  "grade_profile": {
+    "path": "mood/grade-profile.json",
+    "sha256": "e306fd9c1f9c8d242c7a000cce855c1efc6f59a25e9489ff4b8257764b08981f",
+    "apply_in_pilot": false
+  },
+  "contract_assets": {
+    "reference_preset": {
+      "path": "editorial/reference-preset.json",
+      "sha256": "017e9d9e09916b8549cb0ebcee417472adc92efc9f6a0ff774fa8a5af7abf441"
+    },
+    "photographic_style_contract": {
+      "path": "editorial/photographic-style-contract.json",
+      "sha256": "2ca19cead3faa4b69bbb27843ff2dffcf4a28530df32d974ecacee3c155a202b"
+    },
+    "scene_recipe": {
+      "path": "mood/scene-recipe.json",
+      "sha256": "a9a20fba963c2380fd1ee48b01219e1a2a0b0a9a5cc93edf3ddd545bcd04d4d6"
+    },
+    "mood_package": {
+      "path": "mood/mood-package.json",
+      "sha256": "619dd4bbf6bc9df49fd4011d273478d5e4fcf7d4d4081f202412c6f42579542e"
+    },
+    "scene_graph": {
+      "path": "scene-graph.json",
+      "sha256": "62a507363211995bc262a09da60f6d8e5ddd85ea0c75caf67f37881f51617ef9"
+    },
+    "container_design": {
+      "path": "container-design.json",
+      "sha256": "f8cb45b266d478cde76d0c399f2511598fbe9fc0bf6364b08420c3f4a5ab02d9"
+    }
+  },
+  "hint_images": [
+    {
+      "role": "reference_cup_pose_light_and_scene_evidence",
+      "path": "control-board/scene-hint-adopt-reference.png",
+      "sha256": "d538e5b161c78493e804327cd39e917c4e89af497440790db059c092b5977999",
+      "width": 1125,
+      "height": 1500,
+      "container_mode_scope": [
+        "adopt_reference"
+      ],
+      "send_to_provider": true,
+      "reason": "Segmented evidence for the compact reference mug, two local hand poses, pale oak, props and cloudy-window photometry; never an output layout."
+    },
+    {
+      "role": "source_cup_pose_light_and_scene_evidence",
+      "path": "control-board/scene-hint-reconstruct-source.png",
+      "sha256": "34be85659c758294021a1b286e039d0f0372721cb963804ecbe3cc13e4363f8b",
+      "width": 1125,
+      "height": 1500,
+      "container_mode_scope": [
+        "reconstruct_source"
+      ],
+      "send_to_provider": true,
+      "reason": "Final segmented real-photo plus 3D angle evidence for the lower-left cup-axis lean, hand anatomy, companion, props and light; it has no user-product identity authority."
+    }
+  ],
+  "camera_contract": {
+    "pitch_degrees": [
+      48,
+      56
+    ],
+    "focal_length_equivalent_mm": [
+      45,
+      52
+    ],
+    "projection": "rectilinear high-oblique seat-side view approaching overhead",
+    "discard_source_pose": true
+  },
+  "aspect_ratio_contracts": {
+    "4:5": {
+      "status": "published",
+      "visual_review_status": "passed_by_user_review",
+      "prompt_addendum": "Generate the exact final 4:5 portrait canvas. Keep the target hand-cup unit lower-centre around x=0.22-0.63 and y=0.45-0.96, with the cup body itself about 0.20-0.22 frame width and 0.26-0.29 frame height. Keep the smaller companion above-left, the pastry partial at upper-right, the magazine/saucer cropped at right, two distinct lower legs and the cool window plane. Do not crop, enlarge or rotate after generation.",
+      "generation_size": "1024x1280",
+      "safe_crop": "none_exact_4x5",
+      "width": 1024,
+      "height": 1280,
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [
+          0.20,
+          0.22
+        ],
+        "product_height_ratio": [
+          0.26,
+          0.29
+        ],
+        "center_x_ratio": [
+          0.43,
+          0.52
+        ],
+        "center_y_ratio": [
+          0.58,
+          0.66
+        ],
+        "negative_space_ratio": [
+          0.32,
+          0.46
+        ],
+        "expected_primary_count": 1,
+        "expected_companion_count": 1,
+        "crop_allowed": false
+      }
+    },
+    "1:1": {
+      "status": "published",
+      "visual_review_status": "runtime_contract_only_pending_visual_review",
+      "prompt_addendum": "Generate a native square composition rather than cropping the portrait layout. Preserve the same high-oblique hierarchy, lower-centre left-hand target, smaller upper-left companion, two lower legs, window recession and cropped right-side props. Keep the target cup about 0.19-0.22 frame width with breathing room around the complete hand and rim.",
+      "generation_size": "1024x1024",
+      "safe_crop": "none_exact_1x1",
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [
+          0.19,
+          0.22
+        ],
+        "product_height_ratio": [
+          0.25,
+          0.30
+        ],
+        "center_x_ratio": [
+          0.42,
+          0.53
+        ],
+        "center_y_ratio": [
+          0.56,
+          0.67
+        ],
+        "negative_space_ratio": [
+          0.28,
+          0.44
+        ],
+        "expected_primary_count": 1,
+        "expected_companion_count": 1,
+        "crop_allowed": false
+      }
+    }
+  },
+  "qa_contract": {
+    "phase": "paid_medium_hot_and_iced_user_review_passed",
+    "hard_gates": [
+      "beverage_identity",
+      "selected_container_mode",
+      "lower_left_cup_axis",
+      "gravity_level_liquid",
+      "right_side_hot_handle",
+      "exact_two_hands_two_cups",
+      "two_distinct_lower_legs",
+      "lower_bare_wrist",
+      "upper_leather_exclusivity",
+      "cloudy_faded_afternoon_light",
+      "natural_beverage_relighting",
+      "beverage_local_acuity_integration",
+      "scene_hint_leakage"
+    ],
+    "hard_fail": [
+      "cup axis leans right or toward the window",
+      "hot source handle is missing, mirrored or not on image-right",
+      "lower hand holds a source saucer",
+      "lower black sleeve or leather cuff appears",
+      "one lower leg is missing or both legs merge",
+      "beverage is paper white, neon, sticker-like or uniquely oversharpened",
+      "scene reproduces the segmented evidence board or copied reference pixels",
+      "primary drink is oversized, top-only or physically floating"
+    ]
+  }
+}

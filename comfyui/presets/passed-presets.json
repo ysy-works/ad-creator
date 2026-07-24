@@ -59,6 +59,13 @@
       "runtime_state": "published_non_default",
       "bundle": "wood__aerial_shot/preset.json",
       "bundle_sha256": "782317e120250eb3a4e14c27b317a1da656964d3f74e6db01aaa571733964afb"
+    },
+    {
+      "preset_id": "instagram_wood_handheld_two_person_v1",
+      "status": "passed_by_user_review",
+      "runtime_state": "published_non_default",
+      "bundle": "wood__handheld_lifestyle/preset.json",
+      "bundle_sha256": "503a6b8624960de6644d19f48c868c95381c3e7e808c96cd508ad99db5a89ae3"
     }
   ],
   "excluded": [

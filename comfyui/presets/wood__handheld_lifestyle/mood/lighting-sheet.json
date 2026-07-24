@@ -1,0 +1,178 @@
+{
+  "schema_version": "2.0.0",
+  "lighting_sheet_id": "instagram_wood_handheld_two_person_sheet_v1",
+  "mood": "우드 저채도 투인 핸드헬드: two held drinks beside a pale oak counter under one cloudy afternoon window",
+  "reference_cluster": {
+    "anchor_preset_id": "instagram_wood_handheld_two_person_v1",
+    "minimum_cluster_size": 1,
+    "runtime_pixels_allowed": false,
+    "selection_rule": "the cropped user-approved wood handheld reference anchors submitted hand-pose/crop topology, counter/window direction and faded cloudy-afternoon tone without copying pixels",
+    "source_images": [
+      "data/reference-library/control-boards/wood-handheld-two-person-v1/scene-hint.png"
+    ]
+  },
+  "key_light": {
+    "source": "one very large cloud-filtered upper-right rear window",
+    "direction": "upper-right window counter toward lower-left hands and laps",
+    "relative_size": "broad low-contrast overcast source spanning hands, cups, counter and right-side props without direct sun or golden-hour beam",
+    "subject_to_wall_distance_cm": [
+      65,
+      115
+    ],
+    "azimuth_degrees": [
+      36,
+      58
+    ],
+    "elevation_degrees": [
+      38,
+      52
+    ],
+    "angular_size_degrees": [
+      48,
+      68
+    ],
+    "distance_class": "near-window cloudy afternoon daylight"
+  },
+  "ambient_fill": "quiet cool-gray sill and room bounce keeps ceramic, leather, skin, ice and oak separate while preserving hand/cup contacts and off-frame room presence",
+  "reference_anchor": {
+    "asset_id": "ref_c61e3c79a9b4d2ef",
+    "pixel_sha256": "37e5a9ab7862f2feb726a5ef7eb32f75d36a6da28842caa9d2bf755e64f65f3a",
+    "role": "submitted static scene hint for crop topology, two hand grips, exclusive clothing zones, counter/window/prop geometry and faded cloudy-afternoon photometry; never transfer pixels, text or identities"
+  },
+  "fill_contract": {
+    "key_to_fill_ratio": [
+      1.16,
+      1.42
+    ],
+    "source": "cool-gray sill, pale counter and quiet room return, with dark lap fabric providing natural local occlusion",
+    "color_bias": "cloudy neutral-gray outside locally faded oak warmth; never blue cast, amber wash or red sunset"
+  },
+  "screen_light_map": {
+    "lit_area_ratio": [
+      0.44,
+      0.56
+    ],
+    "shadow_area_ratio": [
+      0.3,
+      0.42
+    ],
+    "dominant_shadow_vector_degrees": [
+      196,
+      228
+    ],
+    "falloff": "broad cloud-filtered upper-right field rolls across the counter and cups into lower-left hand/lap shadow, with real finger occlusion, quiet off-frame presence and no artificial pattern",
+    "gobo_geometry": "no readable gobo, blind stripe, plant silhouette, mullion shadow or spotlight"
+  },
+  "specular_contract": {
+    "highlight_shape": "muted broad ceramic/window rolloff, finite thin source-cup edges, irregular ice responses and restrained natural skin sheen; milk highlights sit below ceramic/window peak",
+    "highlight_width_ratio": [
+      0.1,
+      0.28
+    ],
+    "rim_continuity": "finite and physically interrupted by viewing angle, ice, cup wall and hand occlusion",
+    "transparent_caustic": "subtle, local and bounded to the actual transparent user-drink path"
+  },
+  "camera_coupling": {
+    "support_plane": "45-52mm high-oblique view across a pale oak window counter and two hand-held carriers",
+    "shadow_projection": "both hands and cups share upper-right illumination and lower-left broad falloff",
+    "depth_response": "staggered hand scale, counter recession, overlap and tonal falloff establish depth before softness"
+  },
+  "color_separation": {
+    "lit_neutral": "5400-5750K protected cloudy neutral-gray daylight with faded film density",
+    "shadow_neutral": "soft neutral charcoal with faint cool window influence",
+    "material_locality": "faded oak/coffee warmth remains local; ceramic and sill stay cool-neutral; charcoal clothing retains detail; user beverage retains source layer relationships while low-chroma milk shares the scene's muted highlight shoulder and reflected fill"
+  },
+  "qa_geometry": {
+    "shadow_vector_tolerance_degrees": 18,
+    "lit_area_tolerance": 0.12,
+    "penumbra_ratio_tolerance": 0.14
+  },
+  "shadow_contract": {
+    "density": [
+      0.24,
+      0.38
+    ],
+    "edge": "compact attached finger/cup occlusion transitioning to broad cloudy environmental lower-left penumbrae",
+    "attachment": "user cup intersects the bare lower hand naturally; props rest on the same counter; no floating halo",
+    "transparent_material": "bounded user-drink-colored transmission only through real clear material",
+    "contact_shadow": {
+      "opacity": [
+        0.26,
+        0.42
+      ],
+      "footprint": [
+        0.04,
+        0.13
+      ],
+      "behavior": "small dense occlusion at fingers, cup grip and counter props"
+    },
+    "cast_shadow": {
+      "opacity": [
+        0.1,
+        0.21
+      ],
+      "footprint": [
+        0.14,
+        0.4
+      ],
+      "behavior": "broad soft lower-left counter and lap falloff aligned to the cloudy window with quiet off-frame occupancy"
+    },
+    "transmitted_light": {
+      "opacity": [
+        0.03,
+        0.11
+      ],
+      "footprint": [
+        0.05,
+        0.18
+      ],
+      "behavior": "restrained colored lift inside true transparent user drink only; low-chroma milk never becomes self-luminous or paper white"
+    },
+    "qa_ratios": {
+      "cast_area_to_cup_bbox": [
+        0.12,
+        0.46
+      ],
+      "wrist_length_to_cup_height": [
+        0.28,
+        1.0
+      ],
+      "transparent_lift_inside_shadow": [
+        0.03,
+        0.14
+      ]
+    }
+  },
+  "capture_contract": {
+    "exposure_compensation_ev": [
+      -0.34,
+      -0.16
+    ],
+    "hdr": "single-exposure cloudy-afternoon response with protected gray-white ceramics/window, gently faded film shoulder and textured dark clothing",
+    "white_balance": "5400-5750K cloudy neutral-gray daylight with source-authoritative user beverage layer relationships",
+    "texture": "finite natural acuity, subdued oak pores, leather grain and skin texture; primary beverage liquid and ice sit about 5-7 percent below the adjacent hand/rim edge acuity, never uniformly sharp or visibly blurred"
+  },
+  "grade_strengths": {
+    "natural": 0.14,
+    "balanced": 0.18,
+    "expressive": 0.2
+  },
+  "forbidden": [
+    "direct sunlight",
+    "hard studio spotlight",
+    "window-bar gobo",
+    "multiple conflicting catchlights",
+    "orange/yellow wash",
+    "red sunset cast",
+    "glossy synthetic wood",
+    "clipped ceramic",
+    "paper-white milk",
+    "glowing geometric ice",
+    "flat crema",
+    "detached hand/cup shadow",
+    "sterile room",
+    "portrait bokeh",
+    "HDR halos",
+    "teal-and-orange grade"
+  ]
+}

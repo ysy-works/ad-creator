@@ -67,6 +67,7 @@ class PublishedPresetTest(unittest.TestCase):
                 "wood__product_large",
                 "wood__product_center",
                 "wood__aerial_shot",
+                "wood__handheld_lifestyle",
                 "vivid__product_large",
                 "vivid__product_center",
                 "vivid__aerial_shot",
@@ -113,6 +114,7 @@ class PublishedPresetTest(unittest.TestCase):
                 "wood__product_large": "instagram_wood_calm_window_closeup_v1",
                 "wood__product_center": "tokyo_a6_relational_scene_hint_v4",
                 "wood__aerial_shot": "instagram_wood_cane_brownie_overhead_v1",
+                "wood__handheld_lifestyle": "instagram_wood_handheld_two_person_v1",
                 "vivid__product_large": "instagram_dark_grey_closeup_v1",
                 "vivid__product_center": "instagram_dark_grey_medium_v1",
                 "vivid__aerial_shot": "instagram_dark_grey_aerial_v1",
@@ -197,9 +199,28 @@ class PublishedPresetTest(unittest.TestCase):
                 "user_product_image",
             )
 
-    def test_unpublished_slot_is_rejected(self):
-        with self.assertRaisesRegex(OpenAIImageExecutionError, "PRESET_NOT_READY"):
-            load_published_preset("wood__handheld_lifestyle")
+    def test_wood_handheld_resolves_final_mode_specific_hints(self):
+        adopted = load_published_preset(
+            "wood__handheld_lifestyle",
+            container_mode="adopt_reference",
+            serving_temperature="auto",
+        )
+        reconstructed = load_published_preset(
+            "wood__handheld_lifestyle",
+            container_mode="reconstruct_source",
+            serving_temperature="auto",
+        )
+        self.assertEqual(
+            adopted.provider_image_roles,
+            ("reference_cup_pose_light_and_scene_evidence",),
+        )
+        self.assertEqual(
+            reconstructed.provider_image_roles,
+            ("source_cup_pose_light_and_scene_evidence",),
+        )
+        self.assertIn("lower-left 7–8 o’clock", reconstructed.prompt)
+        self.assertIn("5–7%", reconstructed.prompt)
+        self.assertEqual(reconstructed.serving_temperature, "source_authoritative")
 
     def test_white_handheld_resolves_its_two_declared_cup_policies(self):
         adopted = load_published_preset(

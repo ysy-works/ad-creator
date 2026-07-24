@@ -89,10 +89,16 @@
       "bundle": "wood__aerial_shot/preset.json"
     },
     "wood__handheld_lifestyle": {
-      "enabled": false,
-      "status": "not_ready",
+      "enabled": true,
+      "status": "published",
       "family": "wood",
-      "composition": "handheld"
+      "composition": "handheld",
+      "preset_id": "instagram_wood_handheld_two_person_v1",
+      "legacy_gateway": {
+        "background_style": "wood",
+        "composition": "handheld"
+      },
+      "bundle": "wood__handheld_lifestyle/preset.json"
     },
     "vivid__product_large": {
       "enabled": true,
