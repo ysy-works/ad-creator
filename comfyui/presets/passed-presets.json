@@ -65,7 +65,7 @@
       "status": "passed_by_user_review",
       "runtime_state": "published_non_default",
       "bundle": "wood__handheld_lifestyle/preset.json",
-      "bundle_sha256": "503a6b8624960de6644d19f48c868c95381c3e7e808c96cd508ad99db5a89ae3"
+      "bundle_sha256": "1ce2e98065c58589d18cb490dc27fba48c18182c9b3dbc99fc94a60fa8c74418"
     }
   ],
   "excluded": [

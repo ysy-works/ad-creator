@@ -74,13 +74,13 @@
   ],
   "prompt_template": {
     "path": "prompt-template-adopt-reference.txt",
-    "sha256": "82881ec59a037a9a628e4b85262b77f1ff00415d3ba5f166e289dfa6f6662030"
+    "sha256": "15ddad9c666ec9008ab6adeb9e4dacf89555169bccaebb3e63c0d8f149e91caa"
   },
   "container_modes": {
     "adopt_reference": {
       "prompt_template": {
         "path": "prompt-template-adopt-reference.txt",
-        "sha256": "82881ec59a037a9a628e4b85262b77f1ff00415d3ba5f166e289dfa6f6662030"
+        "sha256": "15ddad9c666ec9008ab6adeb9e4dacf89555169bccaebb3e63c0d8f149e91caa"
       },
       "provider_hint_role": "reference_cup_pose_light_and_scene_evidence",
       "source_product_authority": "beverage_only",
@@ -90,7 +90,7 @@
     "reconstruct_source": {
       "prompt_template": {
         "path": "prompt-template-reconstruct-source.txt",
-        "sha256": "43f1603252400c3df8c288564a17e5316ae07570a32182fe6dd8c47470b918c0"
+        "sha256": "efb234092a15330f3fcfb37572269fef8e083a571d05a7195749b8dbad5241b1"
       },
       "provider_hint_role": "source_cup_pose_light_and_scene_evidence",
       "source_product_authority": "full_user_product",

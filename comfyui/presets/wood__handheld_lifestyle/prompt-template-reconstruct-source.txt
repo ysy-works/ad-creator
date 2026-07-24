@@ -1,5 +1,5 @@
 [WOOD HANDHELD TWO-PERSON — RECONSTRUCT SOURCE]
-Create one original 3:4 or square Instagram-native cafe photograph. It must feel like an ordinary, beautifully observed cloudy-afternoon photograph with restrained faded-film character—not an advertisement, collage, copied reference, CGI render, or generic AI lifestyle image.
+Create one original native 4:5 portrait or 1:1 square Instagram cafe photograph, as resolved by the aspect contract below. It must feel like an ordinary, beautifully observed cloudy-afternoon photograph with restrained faded-film character—not an advertisement, collage, copied reference, CGI render, or generic AI lifestyle image.
 
 {{INPUT_ROLES}}
 
