@@ -103,7 +103,7 @@ def _safe_path(root: Path, base: Path, relative_path: str) -> Path:
 
 def _sha256(path: Path) -> str:
     content = path.read_bytes()
-    if path.suffix.lower() in {".json", ".txt"}:
+    if path.suffix.lower() in {".json", ".txt", ".md"}:
         content = content.replace(b"\r\n", b"\n")
     return hashlib.sha256(content).hexdigest()
 

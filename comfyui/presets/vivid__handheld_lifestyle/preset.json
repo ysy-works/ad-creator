@@ -74,7 +74,7 @@
     },
     "team_prompt_archive": {
       "path": "../dark_grey/prompt.md",
-      "sha256": "1a09e1511111b88bc155992f4b0c958bdf7f9287642509ece5a25996a7ced43b"
+      "sha256": "1c576427ebb9c20126ec8a68f7fde3df39dc7f6d5ab2c9c8966a202a7c268292"
     },
     "team_hint_manifest": {
       "path": "../dark_grey/source-hints-manifest.json",
