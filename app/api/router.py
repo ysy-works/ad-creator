@@ -20,7 +20,7 @@ REFERENCES_PATH = Path(__file__).resolve().parent.parent / "config" / "reference
 def _crop_square_legacy(image: Image.Image) -> Image.Image:
     """
     model-c-v1 전용 기존 동작: 인스타그램 1:1 정사각형으로 중앙 크롭.
-    1080x1080 픽셀로 고정. (openai-gpt-image-2-low-v1에는 절대 적용하지 않음 —
+    1080x1080 픽셀로 고정. (gpt-image-2-v1에는 절대 적용하지 않음 —
     4:5 프리셋의 제품 크기·여백·구도가 손상됨. 2026-07-21 팀장 인계서 2번 항목.)
     """
     target_size = (1080, 1080)
@@ -41,7 +41,7 @@ def finalize_result_image(image: Image.Image, workflow_id: str) -> Image.Image:
     """
     workflow_id별로 최종 결과 이미지 처리를 분기.
 
-    - openai-gpt-image-2-low-v1: 크롭 없이 그대로 반환. 2026-07-23 팀장 정정으로
+    - gpt-image-2-v1: 크롭 없이 그대로 반환. 2026-07-23 팀장 정정으로
       4:5는 1024x1280, 1:1은 1024x1024를 provider가 무크롭으로 그대로 줌
       (예전엔 4:5를 880x1100으로 축소했었는데 그 단계가 없어짐).
     - 그 외(model-c-v1 등 레거시): 기존처럼 1:1 정사각형 중앙 크롭.
@@ -97,7 +97,7 @@ async def generate(
     컵으로 바꿀지 선택. 아직 Gateway/모델 쪽 정확한 계약(파라미터명, 스타일별
     지원 여부)이 확정되지 않아 지금은 강제 검증 없이 Gateway로 그대로 전달만
     한다. 계약 확정되면 model.py에서 preset_id별 유효성 검증 추가 예정.
-    2026-07-23 팀장 정정: openai-gpt-image-2-low-v1은 이제 4:5(1024x1280)와
+    2026-07-23 팀장 정정: gpt-image-2-v1은 이제 4:5(1024x1280)와
     1:1(1024x1024) 둘 다 무크롭으로 생성 — 이 workflow에서는 사실상 필수값이며,
     없거나 잘못된 값이면 model.py에서 ValueError로 400 처리됨. 프론트가 사용자
     선택을 강제하므로 정상 흐름에서는 항상 채워져서 옴. model-c-v1은 이 값을
