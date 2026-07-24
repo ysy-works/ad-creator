@@ -19,6 +19,7 @@ from ..adapters.openai_image import (
 SUPPORTED_ASPECT_RATIOS = ["4:5", "1:1"]
 SUPPORTED_CONTAINER_MODES = ["default", "adopt_reference", "reconstruct_source"]
 SUPPORTED_SERVING_TEMPERATURES = ["auto", "iced", "cold", "ambient", "hot"]
+SUPPORTED_QUALITIES = ["low", "medium", "high"]
 
 
 def _tensor_to_pil(image) -> Image.Image:
@@ -76,7 +77,7 @@ def _timeout_seconds() -> float:
 class AdCreatorOpenAIImageGenerate:
     DESCRIPTION = (
         "Runs a published Ad Creator preset with OpenAI GPT Image 2. "
-        "Quality is fixed to low by the checked-in provider profile."
+        "Quality defaults to medium and can be selected inside ComfyUI."
     )
     CATEGORY = "Ad Creator"
     FUNCTION = "generate"
@@ -107,6 +108,7 @@ class AdCreatorOpenAIImageGenerate:
                     {"default": "auto"},
                 ),
                 "aspect_ratio": (SUPPORTED_ASPECT_RATIOS, {"default": "4:5"}),
+                "quality": (SUPPORTED_QUALITIES, {"default": "medium"}),
                 "request_id": (
                     "STRING",
                     {"default": "__AUTO__", "multiline": False},
@@ -122,6 +124,7 @@ class AdCreatorOpenAIImageGenerate:
         container_mode,
         serving_temperature,
         aspect_ratio,
+        quality,
         request_id,
     ):
         # A new queued user action is an explicit new paid generation. Gateway
@@ -135,6 +138,7 @@ class AdCreatorOpenAIImageGenerate:
         container_mode,
         serving_temperature,
         aspect_ratio,
+        quality,
         request_id,
     ):
         input_path = None
@@ -154,6 +158,7 @@ class AdCreatorOpenAIImageGenerate:
                 container_mode=container_mode,
                 serving_temperature=serving_temperature,
                 aspect_ratio=aspect_ratio,
+                quality=quality,
                 timeout_seconds=_timeout_seconds(),
                 run_id=_resolved_run_id(request_id),
                 audit_dir=_audit_directory(),

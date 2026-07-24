@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "lighting_sheet_id": "vivid__handheld_lifestyle_dark_grey_shared_light_v1",
+  "mood": "restrained dark-grey editorial cafe realism with protected product detail and one physically coherent natural-light field",
+  "shot_variant": "handheld",
+  "key_light": {
+    "source": "one broad daylight source from the declared window or upper side",
+    "direction": "upper-right or upper-left according to the selected shot branch",
+    "relative_size": "large and soft with finite directional structure"
+  },
+  "ambient_fill": "low neutral room bounce; preserve charcoal separation without gray haze",
+  "shadow_contract": {
+    "edge": "soft attached contact shadow with no floating gap or pasted halo",
+    "attachment": "every cup, hand and declared prop remains physically attached to its support"
+  },
+  "capture_contract": {
+    "white_balance": "neutral 5000-5750K with restrained cool-grey surfaces",
+    "texture": "finite phone or compact-camera acuity, natural grain and real material microtexture"
+  },
+  "forbidden": [
+    "night-time neon grading",
+    "crushed black product detail",
+    "HDR or CGI gloss",
+    "detached or conflicting shadows",
+    "copied reference text, logo or beverage identity",
+    "sticker-like product edges"
+  ]
+}

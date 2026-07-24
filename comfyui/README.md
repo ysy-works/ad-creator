@@ -8,12 +8,12 @@
 
 ```text
 Frontend
-  -> Backend (workflow_id 전달, 기본값: model-c-v1)
+  -> Backend (workflow_id 전달, 서비스 기본값: gpt-image-2-v1)
     -> HTTPS Generation Gateway (Bearer 인증)
       -> ComfyUI /upload/image + /prompt
       -> workflow registry
         -> model-c-v1 custom node -> 기존 model-c HTTP API
-        -> openai-gpt-image-2-low-v1 custom node -> OpenAI Images API
+        -> gpt-image-2-v1 custom node -> OpenAI Images API
       -> ComfyUI SaveImage
     <- generation_id / 상태 / 결과
 ```
@@ -49,6 +49,8 @@ comfyui/
     registry.json
     model-c-v1.api.json
     model-c-v1.ui.json
+    gpt-image-2-v1.api.json
+    gpt-image-2-v1.ui.json
     openai-gpt-image-2-low-v1.api.json
     openai-gpt-image-2-low-v1.ui.json
   presets/
@@ -89,11 +91,11 @@ POST /generate (multipart/form-data)
 
 `guidance_scale`, `steps`, `width`, `height`, 자유 프롬프트, 별도 레퍼런스 이미지는 현재 API 계약에 없으므로 임의로 노출하지 않습니다.
 
-## OpenAI GPT Image 2 low 파일럿
+## OpenAI GPT Image 2 공용 런타임
 
-`openai-gpt-image-2-low-v1`은 `gpt-image-2`, `quality=low`를 서버 profile에서 고정합니다. 공개 프리셋과 기본값은 `presets/registry.json`이 단일 권위입니다. `aspect_ratio=4:5`는 `1024x1280`, `aspect_ratio=1:1`은 `1024x1024`로 처음부터 생성하며 결과를 축소하거나 자르지 않습니다. 1:1은 시각 QA 전까지 공개 UI에서 숨깁니다.
+`gpt-image-2-v1`은 `gpt-image-2`를 사용하며 기본 품질은 `medium`입니다. ComfyUI 노드에서는 `low|medium|high`를 선택할 수 있지만 Gateway 입력에는 품질을 노출하지 않으므로 프론트·백엔드가 선택하지 않으면 항상 `medium`입니다. `openai-gpt-image-2-low-v1`은 즉시 롤백 가능한 low 고정 별칭으로 유지합니다. 공개 프리셋과 기본값은 `presets/registry.json`이 단일 권위입니다. `aspect_ratio=4:5`는 `1024x1280`, `aspect_ratio=1:1`은 `1024x1024`로 처음부터 생성하며 결과를 축소하거나 자르지 않습니다.
 
-프리셋 실행 정책은 `custom_nodes/ad_creator/runtime/`의 provider 중립 코어가 JSON에서 해석합니다. ComfyUI 노드는 선택값과 이미지를 전달하고 provider adapter는 전송만 담당합니다. 컵 정책, 온도, 동반 피사체, 조명, 색감, 입력 역할과 typed transform은 프리셋 bundle이 선언합니다. 공용 상한은 제품 최대 3장과 reference control 최대 1장을 합친 4장, 프롬프트 12,000자이며 초과 요청은 제출 전에 실패합니다.
+프리셋 실행 정책은 `custom_nodes/ad_creator/runtime/`의 provider 중립 코어가 JSON에서 해석합니다. ComfyUI 노드는 선택값과 이미지를 전달하고 provider adapter는 전송만 담당합니다. 컵 정책, 온도, 동반 피사체, 조명, 색감, 입력 역할과 typed transform은 프리셋 bundle이 선언합니다. 공용 상한은 제품 최대 3장과 reference control 최대 1장을 합친 4장입니다. 프롬프트는 각 bundle이 선언한 상한을 따르며 전역 하드 상한은 50,000자입니다.
 
 `natural_white__handheld_lifestyle`는 화이트 직사광 손 컷 v5의 비기본 활성 슬롯이다. 제품 원본과 비식별화된 장면 힌트만 외부 provider에 전달하며, 기본은 레퍼런스 컵 채택(`adopt_reference`)이다. 이 모드는 hot/ice 호환 오류를 막기 위해 명시적으로 해석된 `iced`·`cold`·`ambient` 상태가 필요하다. 사용자 컵 재생성(`reconstruct_source`)만 원본 서빙 상태를 자동 보존할 수 있으며, 두 모드 모두 사용자 로고 입력은 비활성이다.
 
@@ -218,7 +220,7 @@ AD_CREATOR_GATEWAY_API_KEY=32자-이상의-랜덤-비밀키
 AD_CREATOR_GENERATION_SIGNING_KEY=API-키와-다른-32자-이상의-비밀키
 AD_CREATOR_GATEWAY_DB=/var/lib/ad-creator-gateway/gateway.sqlite3
 AD_CREATOR_MAX_QUEUED=3
-AD_CREATOR_HEALTH_WORKFLOW_ID=model-c-v1
+AD_CREATOR_HEALTH_WORKFLOW_ID=gpt-image-2-v1
 ```
 
 Gateway는 다음처럼 로컬에서 실행합니다.
@@ -279,8 +281,9 @@ model-c GET /health
 
 | `workflow_id` | 상태 | 설명 |
 | --- | --- | --- |
-| `model-c-v1` | 현재 기본값 | 기존 NF4 API 파이프라인 |
-| `openai-gpt-image-2-low-v1` | 두 프리셋 파일럿 | GPT Image 2 low·4:5 파이프라인 |
+| `gpt-image-2-v1` | 현재 기본값 | GPT Image 2, medium 기본, 4:5·1:1 공용 파이프라인 |
+| `openai-gpt-image-2-low-v1` | 롤백 별칭 | GPT Image 2 low 고정 |
+| `model-c-v1` | 레거시 롤백 | 기존 NF4 API 파이프라인 |
 
 - 모델의 내부 구현만 바뀌고 입출력 계약이 같으면 같은 ID를 유지합니다.
 - 필수 입력, 노드 연결, 결과 계약이 바뀌면 새 ID를 추가합니다.

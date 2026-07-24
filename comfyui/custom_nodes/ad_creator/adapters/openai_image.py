@@ -262,7 +262,10 @@ def _lighting_prompt(sheet: dict[str, Any]) -> str:
 
 
 def _provider_profile(
-    registry: dict[str, Any], registry_path: Path, aspect_ratio: str
+    registry: dict[str, Any],
+    registry_path: Path,
+    aspect_ratio: str,
+    quality: str | None = None,
 ) -> dict[str, Any]:
     package_root = registry_path.parent.parent.resolve()
     profile_path = _safe_path(
@@ -274,7 +277,6 @@ def _provider_profile(
     required = {
         "provider": "openai_images_api",
         "model": "gpt-image-2",
-        "quality": "low",
         "endpoint": "https://api.openai.com/v1/images/edits",
         "output_format": "png",
         "automatic_retries": 0,
@@ -283,8 +285,24 @@ def _provider_profile(
         if profile.get(field) != expected:
             raise OpenAIImageExecutionError(
                 "INVALID_PROVIDER_PROFILE",
-                f"OpenAI pilot requires {field}={expected!r}.",
+                f"OpenAI runtime requires {field}={expected!r}.",
             )
+    allowed_qualities = profile.get("allowed_qualities", ["low"])
+    if (
+        not isinstance(allowed_qualities, list)
+        or set(allowed_qualities) - {"low", "medium", "high"}
+        or not allowed_qualities
+    ):
+        raise OpenAIImageExecutionError(
+            "INVALID_PROVIDER_PROFILE", "Provider quality settings are invalid."
+        )
+    selected_quality = str(quality or profile.get("quality") or "")
+    if selected_quality not in allowed_qualities:
+        raise OpenAIImageExecutionError(
+            "INVALID_PROVIDER_PROFILE",
+            f"Unsupported GPT Image 2 quality: {selected_quality}",
+        )
+    profile["quality"] = selected_quality
     if profile.get("default_aspect_ratio") != "4:5":
         raise OpenAIImageExecutionError(
             "INVALID_PROVIDER_PROFILE", "OpenAI pilot default aspect ratio must be 4:5."
@@ -311,7 +329,7 @@ def _provider_profile(
             "safe_crop": "none_exact_4x5",
         },
         "1:1": {
-            "status": "prepared_pending_visual_qa",
+            "status": "published",
             "size": "1024x1024",
             "delivery_size": [1024, 1024],
             "safe_crop": "none_exact_1x1",
@@ -574,6 +592,7 @@ def load_published_preset(
     aspect_ratio: str = "4:5",
     container_mode: str = "default",
     serving_temperature: str = "auto",
+    quality: str | None = None,
     registry_path: str | Path = DEFAULT_PRESET_REGISTRY,
     allowed_statuses: tuple[str, ...] = ("published",),
 ) -> PublishedPreset:
@@ -596,7 +615,10 @@ def load_published_preset(
         raise OpenAIImageExecutionError(exc.code, exc.message) from exc
     resolved_registry_path = Path(registry_path).resolve()
     profile = _provider_profile(
-        _read_json(resolved_registry_path), resolved_registry_path, aspect_ratio
+        _read_json(resolved_registry_path),
+        resolved_registry_path,
+        aspect_ratio,
+        quality,
     )
     if (
         contract.generation_size != profile["size"]
@@ -966,6 +988,7 @@ def run_openai_image(
     aspect_ratio: str = "4:5",
     container_mode: str = "default",
     serving_temperature: str = "auto",
+    quality: str | None = None,
     product_analysis: dict[str, Any] | None = None,
     allowed_statuses: tuple[str, ...] = ("published",),
     api_key: str | None = None,
@@ -984,6 +1007,7 @@ def run_openai_image(
         aspect_ratio=aspect_ratio,
         container_mode=container_mode,
         serving_temperature=serving_temperature,
+        quality=quality,
         registry_path=registry_path,
         allowed_statuses=allowed_statuses,
     )

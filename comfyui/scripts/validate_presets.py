@@ -98,6 +98,13 @@ def main() -> int:
         )
         if set(supported_modes or []) != {"adopt_reference", "reconstruct_source"}:
             raise ValueError(f"Published preset must support both cup modes: {slot_id}")
+        prompt_limit = (
+            runtime_policy.get("maximum_prompt_characters")
+            if isinstance(runtime_policy, dict)
+            else None
+        )
+        if not isinstance(prompt_limit, int):
+            raise ValueError(f"Prompt limit is missing: {slot_id}")
 
         portrait = load_published_preset(
             slot_id,
@@ -116,8 +123,10 @@ def main() -> int:
         if square.aspect_status != "published":
             raise ValueError(f"1:1 must be published: {slot_id}")
         for resolved in (portrait, square):
-            if len(resolved.prompt) > 12_000:
-                raise ValueError(f"Prompt exceeds 12,000 characters: {slot_id}")
+            if len(resolved.prompt) > prompt_limit:
+                raise ValueError(
+                    f"Prompt exceeds its declared character limit: {slot_id}"
+                )
             if 1 + len(resolved.provider_image_paths) > 4:
                 raise ValueError(f"Provider input cap exceeded: {slot_id}")
             if resolved.brand_input_enabled:

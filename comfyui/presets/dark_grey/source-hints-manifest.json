@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "artifact_type": "team_supplied_raw_hint_manifest",
+  "risk_acceptance": "Raw references may transfer cup, logo, text or exact composition. They are intentionally sent for this release and require later sanitization.",
+  "assets": [
+    {
+      "path": "source-hints/aerial_shot.jpg",
+      "sha256": "4ccb10b34724a16eac286d45f5755b15fb5a120404f103b4a53fe020906bf71d",
+      "width": 1152,
+      "height": 1536,
+      "runtime_provider_input": false
+    },
+    {
+      "path": "source-hints/black_table_chair.png",
+      "sha256": "c3a8297505968dd9e6b3f029f321ad15bb44fcb70392edca52c35628f6715159",
+      "width": 371,
+      "height": 246,
+      "runtime_provider_input": false
+    },
+    {
+      "path": "source-hints/glass_background.jpg",
+      "sha256": "9c227863c95ab48a71fb1f34be367e82b26eda85929c1b2d01771276f31e8f66",
+      "width": 500,
+      "height": 640,
+      "runtime_provider_input": true
+    },
+    {
+      "path": "source-hints/hot_handheld.jpg",
+      "sha256": "5e53768c81f3d78f8b6528a15108e9b60fb0f44ec48b54f52a18a8f7898e26fd",
+      "width": 735,
+      "height": 903,
+      "runtime_provider_input": false
+    },
+    {
+      "path": "source-hints/ice_glass.png",
+      "sha256": "f0a193b466a155d80c0e39391646df665f9103e2e2348af2c77feef7a0c30e1b",
+      "width": 177,
+      "height": 331,
+      "runtime_provider_input": true
+    },
+    {
+      "path": "source-hints/ice_handheld.jpg",
+      "sha256": "5bac69cd2e2ad0bca3d0b6444aa805ed51a4b8c1d1e5ddda5fb6d142123d4367",
+      "width": 1080,
+      "height": 1350,
+      "runtime_provider_input": true
+    },
+    {
+      "path": "source-hints/layout.webp",
+      "sha256": "1359c2dde2de0ad64645f8fc265b5efd7ee4c26efb4312c853357fb8e9dd73ef",
+      "width": 896,
+      "height": 1344,
+      "runtime_provider_input": true
+    },
+    {
+      "path": "source-hints/pot.png",
+      "sha256": "d94cd4be554eba4462daa6be290ed12e1a4beb7250d0015d42dfa83f08a5a69b",
+      "width": 201,
+      "height": 180,
+      "runtime_provider_input": false
+    }
+  ]
+}

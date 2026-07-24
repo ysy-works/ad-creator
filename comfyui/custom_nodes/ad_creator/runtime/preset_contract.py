@@ -12,7 +12,7 @@ from PIL import Image
 GLOBAL_MAX_PROVIDER_INPUTS = 4
 GLOBAL_MAX_PRODUCT_SOURCES = 3
 GLOBAL_MAX_REFERENCE_CONTROLS = 1
-MAX_PROMPT_CHARACTERS = 12_000
+MAX_PROMPT_CHARACTERS = 50_000
 SUPPORTED_CONTAINER_MODES = {"adopt_reference", "reconstruct_source"}
 LEGACY_CONTAINER_MODE_ALIASES = {"preserve_source": "reconstruct_source"}
 SUPPORTED_SERVING_TEMPERATURES = {"auto", "iced", "cold", "ambient", "hot"}
@@ -186,7 +186,6 @@ def _runtime_policy(bundle: dict[str, Any]) -> dict[str, Any]:
     required = {
         "schema_version": 1,
         "compiler_version": RUNTIME_COMPILER_VERSION,
-        "maximum_prompt_characters": MAX_PROMPT_CHARACTERS,
         "maximum_provider_inputs": GLOBAL_MAX_PROVIDER_INPUTS,
         "maximum_product_sources": GLOBAL_MAX_PRODUCT_SOURCES,
         "maximum_reference_controls": GLOBAL_MAX_REFERENCE_CONTROLS,
@@ -197,6 +196,16 @@ def _runtime_policy(bundle: dict[str, Any]) -> dict[str, Any]:
                 "INVALID_PRESET_CONFIGURATION",
                 f"runtime_policy requires {field}={expected!r}.",
             )
+    prompt_limit = policy.get("maximum_prompt_characters")
+    if (
+        not isinstance(prompt_limit, int)
+        or isinstance(prompt_limit, bool)
+        or not 1 <= prompt_limit <= MAX_PROMPT_CHARACTERS
+    ):
+        raise PresetRuntimeError(
+            "INVALID_PRESET_CONFIGURATION",
+            f"maximum_prompt_characters must be between 1 and {MAX_PROMPT_CHARACTERS}.",
+        )
     companion = policy.get("companion_policy")
     if companion not in {"none", "reference_relational", "explicit_only"}:
         raise PresetRuntimeError(
@@ -685,10 +694,11 @@ def resolve_preset_contract(
         raise PresetRuntimeError(
             "INVALID_PRESET_CONFIGURATION", "Prompt has unresolved placeholders."
         )
-    if len(prompt) > MAX_PROMPT_CHARACTERS:
+    prompt_limit = int(policy["maximum_prompt_characters"])
+    if len(prompt) > prompt_limit:
         raise PresetRuntimeError(
             "PROMPT_LIMIT_EXCEEDED",
-            f"Compiled prompt is {len(prompt)} characters; limit is {MAX_PROMPT_CHARACTERS}.",
+            f"Compiled prompt is {len(prompt)} characters; preset limit is {prompt_limit}.",
         )
 
     per_preset_limit = GLOBAL_MAX_PROVIDER_INPUTS

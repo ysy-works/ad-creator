@@ -42,8 +42,13 @@ class NodeRegistrationTest(unittest.TestCase):
                 "wood__product_large",
                 "wood__product_center",
                 "wood__aerial_shot",
+                "vivid__product_large",
+                "vivid__product_center",
+                "vivid__aerial_shot",
+                "vivid__handheld_lifestyle",
             ),
         )
+        self.assertEqual(inputs["required"]["quality"][1]["default"], "medium")
 
 
 if __name__ == "__main__":

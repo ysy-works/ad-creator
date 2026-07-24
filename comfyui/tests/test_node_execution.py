@@ -84,6 +84,7 @@ class NodeExecutionTest(unittest.TestCase):
             self.assertEqual(kwargs["aspect_ratio"], "4:5")
             self.assertEqual(kwargs["container_mode"], "reconstruct_source")
             self.assertEqual(kwargs["serving_temperature"], "cold")
+            self.assertEqual(kwargs["quality"], "medium")
             self.assertEqual(Path(kwargs["audit_dir"]).name, "audit")
             with Image.open(observed_input) as prepared:
                 self.assertEqual(prepared.format, "PNG")
@@ -93,7 +94,7 @@ class NodeExecutionTest(unittest.TestCase):
                 {
                     "provider": "openai_images_api",
                     "model": "gpt-image-2",
-                    "quality": "low",
+                    "quality": "medium",
                 },
             )
 
@@ -114,13 +115,14 @@ class NodeExecutionTest(unittest.TestCase):
                         container_mode="reconstruct_source",
                         serving_temperature="cold",
                         aspect_ratio="4:5",
+                        quality="medium",
                         request_id="gateway-job-123",
                     )
 
         self.assertEqual(tuple(image.shape), (1, 1280, 1024, 3))
         metadata = json.loads(metadata_json)
         self.assertEqual(metadata["model"], "gpt-image-2")
-        self.assertEqual(metadata["quality"], "low")
+        self.assertEqual(metadata["quality"], "medium")
         self.assertIsNotNone(observed_input)
         self.assertFalse(observed_input.exists())
 
@@ -132,6 +134,7 @@ class NodeExecutionTest(unittest.TestCase):
                 "reconstruct_source",
                 "cold",
                 "4:5",
+                "medium",
                 "request-1",
             ),
             AdCreatorOpenAIImageGenerate.IS_CHANGED(
@@ -140,6 +143,7 @@ class NodeExecutionTest(unittest.TestCase):
                 "reconstruct_source",
                 "cold",
                 "4:5",
+                "medium",
                 "request-1",
             ),
         )

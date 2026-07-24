@@ -15,17 +15,17 @@
       "container_mode": "default",
       "serving_temperature": "auto",
       "aspect_ratio": "4:5",
-      "quality": "low",
+      "quality": "medium",
       "request_id": "__REQUEST_ID__"
     },
     "class_type": "AdCreatorOpenAIImageGenerate",
     "_meta": {
-      "title": "Published preset · OpenAI GPT Image 2 · low"
+      "title": "Published preset - OpenAI GPT Image 2 - medium default"
     }
   },
   "3": {
     "inputs": {
-      "filename_prefix": "ad_creator/openai-gpt-image-2-low-v1",
+      "filename_prefix": "ad_creator/gpt-image-2-v1",
       "images": ["2", 0]
     },
     "class_type": "SaveImage",

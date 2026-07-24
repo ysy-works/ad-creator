@@ -47,8 +47,9 @@ class WorkflowRouterTest(unittest.TestCase):
         self.assertEqual(resolved["prompt"]["2"]["inputs"]["request_id"], "job-123")
         self.assertEqual(resolved["prompt"]["2"]["inputs"]["aspect_ratio"], "1:1")
 
-    def test_default_model_c_workflow_remains_available_for_rollback(self):
+    def test_model_c_workflow_remains_available_for_explicit_rollback(self):
         resolved = build_prompt(
+            workflow_id="model-c-v1",
             values={
                 "source_image": "uploads/request.png",
                 "composition": "aerial",
@@ -61,6 +62,19 @@ class WorkflowRouterTest(unittest.TestCase):
         self.assertEqual(resolved["prompt"]["1"]["inputs"], {"image": "uploads/request.png"})
         self.assertEqual(resolved["prompt"]["2"]["inputs"]["composition"], "aerial")
         self.assertEqual(resolved["prompt"]["2"]["inputs"]["seed"], 42)
+
+    def test_default_workflow_uses_medium_quality_without_quality_input(self):
+        resolved = build_prompt(
+            values={
+                "source_image": "uploads/request.png",
+                "preset_id": "wood__product_center",
+                "aspect_ratio": "4:5",
+                "request_id": "job-medium",
+            }
+        )
+        self.assertEqual(resolved["workflow_id"], "gpt-image-2-v1")
+        self.assertEqual(resolved["prompt"]["2"]["inputs"]["quality"], "medium")
+        self.assertNotIn("quality", workflow_input_names(workflow_id="gpt-image-2-v1"))
 
     def test_rejects_unknown_workflow(self):
         with self.assertRaises(UnknownWorkflowError):

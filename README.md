@@ -7,7 +7,7 @@
 - 서비스 선택값 12개를 `comfyui/presets/registry.json`에서 단일 관리
 - 공개·검증 상태는 `comfyui/presets/registry.json`에서 관리
 - registry의 `default_preset_slot`만 기본값으로 사용하며, A6 `tokyo_a6_relational_scene_hint_v4`는 기본값을 유지
-- OpenAI `gpt-image-2`, `quality=low` provider profile 고정
+- OpenAI `gpt-image-2`, 기본 `quality=medium`; ComfyUI 내부에서만 `low|medium|high` 선택 가능
 - 프리셋별 prompt, lighting sheet, grade profile, hint asset과 SHA-256 검증
 - 4:5(`1024x1280`)와 1:1(`1024x1024`) 생성 결과를 무크롭·무리사이즈로 전달
 - 제품 원본은 기본 긴 변 1536px 상한, 저해상도 무확대·메타데이터 제거
@@ -29,7 +29,7 @@
 Frontend reference_id
   -> Backend
   -> Generation Gateway
-  -> openai-gpt-image-2-low-v1
+  -> gpt-image-2-v1
   -> preset registry / bundle 검증
   -> OpenAI Images API
   -> provider 원본 + audit sidecar 저장
@@ -64,7 +64,7 @@ python comfyui/scripts/validate_wood_closeup_preset.py
 python -m unittest discover -s comfyui/tests -v
 ```
 
-공용 런타임의 안전 상한은 제품 최대 3장과 reference control 최대 1장을 합친 provider 입력 4장, 프롬프트 12,000자입니다. 상한 초과 시 입력이나 프롬프트를 임의 제거·절단하지 않고 제출 전에 실패합니다. 현재 공개 Gateway workflow는 백엔드 다중 업로드 연동 전이므로 제품 1장만 받고, 프리셋별 reference control도 최대 1장만 보냅니다. 실제 published 개수와 기본값은 registry를 기준으로 확인하며, GCP ComfyUI·Gateway 전체 E2E와 CommonQA는 출시 차단 조건입니다.
+공용 런타임의 안전 상한은 제품 최대 3장과 reference control 최대 1장을 합친 provider 입력 4장입니다. 프롬프트는 프리셋별 선언 상한을 적용하며 전역 하드 상한은 50,000자입니다. 상한 초과 시 입력이나 프롬프트를 임의 제거·절단하지 않고 제출 전에 실패합니다. 현재 공개 Gateway workflow는 백엔드 다중 업로드 연동 전이므로 제품 1장만 받고, 프리셋별 reference control도 최대 1장만 보냅니다. 실제 published 개수와 기본값은 registry를 기준으로 확인하며, GCP ComfyUI·Gateway 전체 E2E와 CommonQA는 출시 차단 조건입니다.
 
 ## 연동 문서
 

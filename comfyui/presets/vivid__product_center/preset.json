@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "slot_id": "vivid__product_center",
+  "preset_id": "instagram_dark_grey_medium_v1",
+  "family": "vivid",
+  "composition": "medium",
+  "status": "published",
+  "source_review_status": "passed_by_user_review",
+  "runtime_policy": {
+    "schema_version": 1,
+    "compiler_version": "preset-runtime-v1",
+    "maximum_prompt_characters": 50000,
+    "maximum_provider_inputs": 4,
+    "maximum_product_sources": 3,
+    "maximum_reference_controls": 1,
+    "default_container_mode": "reconstruct_source",
+    "supported_container_modes": [
+      "adopt_reference",
+      "reconstruct_source"
+    ],
+    "companion_policy": "reference_relational",
+    "brand_input_policy": {
+      "enabled": false,
+      "default_mode": "none",
+      "activation_requirement": "frontend_and_api_brand_asset_flow"
+    },
+    "temperature_policy": {
+      "mode": "preset_primary",
+      "container_mode_rules": {
+        "adopt_reference": {
+          "allowed_product_states": [
+            "iced",
+            "cold",
+            "ambient",
+            "hot"
+          ],
+          "auto_action": "preserve_source_state"
+        },
+        "reconstruct_source": {
+          "allowed_product_states": [
+            "iced",
+            "cold",
+            "ambient",
+            "hot"
+          ],
+          "auto_action": "preserve_source_state"
+        }
+      },
+      "emergency_fallback": {
+        "enabled_when_policy_missing": true,
+        "minimum_confidence": 0.85,
+        "unknown_action": "needs_review",
+        "conflict_action": "needs_review"
+      }
+    }
+  },
+  "prompt_template": {
+    "path": "prompt-template-reconstruct-source.txt",
+    "sha256": "dce592d0b5b5578cb3d8f1281e73b827dfc48d03b96af0cebd224481bdbc949a"
+  },
+  "lighting_sheet": {
+    "path": "lighting-sheet.json",
+    "sha256": "b6845bb55641f68625def0ac45e084c962a7fd67d35b5dbaa782d4074c5c212b"
+  },
+  "grade_profile": {
+    "path": "grade-profile.json",
+    "sha256": "f4a3ec63cfcd747f1fe432aa636a60fcb76559f0ccc661f9f54211418ad63e1c",
+    "apply_in_pilot": false
+  },
+  "contract_assets": {
+    "team_source_contract": {
+      "path": "../dark_grey/preset.json",
+      "sha256": "b54e7bf1e59d57dabc15efd1d8b60bdb93771edfa1e27bfad0d48322b2ac488e"
+    },
+    "team_prompt_archive": {
+      "path": "../dark_grey/prompt.md",
+      "sha256": "1a09e1511111b88bc155992f4b0c958bdf7f9287642509ece5a25996a7ced43b"
+    },
+    "team_hint_manifest": {
+      "path": "../dark_grey/source-hints-manifest.json",
+      "sha256": "ad20e9a6ff3287899540e344e80058a90717541f09bf305eafcad65254421df3"
+    }
+  },
+  "provider_reference_policy": {
+    "maximum_images": 2,
+    "required_roles": [
+      "user_product",
+      "raw_dark_grey_glass_wall_reference"
+    ],
+    "risk_acceptance": "Raw team hint is sent by explicit product-owner decision; sanitize in a later revision."
+  },
+  "hint_images": [
+    {
+      "role": "raw_dark_grey_glass_wall_reference",
+      "path": "../dark_grey/source-hints/glass_background.jpg",
+      "sha256": "9c227863c95ab48a71fb1f34be367e82b26eda85929c1b2d01771276f31e8f66",
+      "width": 500,
+      "height": 640,
+      "send_to_provider": true,
+      "container_mode_scope": [
+        "adopt_reference",
+        "reconstruct_source"
+      ],
+      "allowed_transfer": [
+        "declared shot topology",
+        "camera relationship",
+        "broad dark-grey material family",
+        "broad light distribution"
+      ],
+      "forbidden_transfer": [
+        "reference beverage identity",
+        "reference serving state",
+        "reference logo or text",
+        "exact person identity"
+      ]
+    }
+  ],
+  "transforms": [
+    {
+      "type": "normalize_product_source"
+    },
+    {
+      "type": "select_hint_by_container_mode"
+    },
+    {
+      "type": "sanitize_reference_control"
+    }
+  ],
+  "default_container_mode": "reconstruct_source",
+  "container_modes": {
+    "reconstruct_source": {
+      "container_identity_scope": "source_container_class_material_silhouette_handle_lid_and_visible_branding",
+      "prompt_template": {
+        "path": "prompt-template-reconstruct-source.txt",
+        "sha256": "dce592d0b5b5578cb3d8f1281e73b827dfc48d03b96af0cebd224481bdbc949a"
+      },
+      "preserve": [
+        "source beverage identity and serving state",
+        "source cup material, silhouette, handle and lid",
+        "authorized visible source branding"
+      ],
+      "discard": [
+        "source camera pose",
+        "source background",
+        "source lighting and shadows"
+      ]
+    },
+    "adopt_reference": {
+      "container_identity_scope": "published_dark_grey_temperature_compatible_container",
+      "prompt_template": {
+        "path": "prompt-template-adopt-reference.txt",
+        "sha256": "24fbe34e491fcd3e2046d138838f068ff9dbbd12408fceee63f5fba5a5edbe9a"
+      },
+      "preserve": [
+        "source beverage identity and serving state",
+        "source liquid color, opacity, ice, foam, layers and garnish"
+      ],
+      "discard": [
+        "source container geometry and material",
+        "source container branding",
+        "reference beverage identity and serving state"
+      ]
+    }
+  },
+  "aspect_ratio_contracts": {
+    "4:5": {
+      "status": "published",
+      "visual_review_status": "representative_matrix_pending",
+      "prompt_addendum": "Generate the exact final 4:5 canvas at 1024x1280. Keep the complete beverage in the lower-right at 0.30-0.40 frame width. Preserve the black counter in the lower 35-45 percent and the daylight glass-wall context as the larger quiet upper field.",
+      "generation_size": "1024x1280",
+      "safe_crop": "none_exact_4x5",
+      "width": 1024,
+      "height": 1280,
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [
+          0.28,
+          0.42
+        ],
+        "product_height_ratio": [
+          0.22,
+          0.5
+        ],
+        "expected_primary_count": 1,
+        "crop_allowed": false,
+        "protected_objects_must_remain_complete": true
+      }
+    },
+    "1:1": {
+      "status": "published",
+      "visual_review_status": "representative_matrix_pending",
+      "prompt_addendum": "Generate the exact final 1:1 canvas at 1024x1024 from the start. Keep the complete beverage in the lower-right at 0.30-0.40 frame width, with a balanced black counter and daylight glass-wall field.",
+      "generation_size": "1024x1024",
+      "safe_crop": "none_exact_1x1",
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [
+          0.26,
+          0.44
+        ],
+        "product_height_ratio": [
+          0.22,
+          0.5
+        ],
+        "expected_primary_count": 1,
+        "crop_allowed": false,
+        "protected_objects_must_remain_complete": true
+      }
+    }
+  },
+  "qa_contract": {
+    "phase": "representative_paid_visual_review_pending",
+    "hard_gates": [
+      "beverage_identity",
+      "container_mode",
+      "serving_state",
+      "camera_geometry",
+      "product_environment_integration",
+      "hint_copy_contamination",
+      "brand_ocr",
+      "crop"
+    ],
+    "known_release_risk": "Raw provider hints are not sanitized in this revision.",
+    "comparative_scores": [
+      "naturalness",
+      "mood_adherence",
+      "product_preservation",
+      "light_shadow_fidelity"
+    ]
+  }
+}

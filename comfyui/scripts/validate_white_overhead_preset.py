@@ -117,7 +117,7 @@ def main() -> int:
     _require(len(resolved.provider_image_paths) == 1, "Exactly one scene-reference image must be submitted.")
     _require(resolved.provider_image_roles == ("reference_container_and_companion_scene",), "Provider scene-reference role changed.")
     _require(resolved.provider_profile["model"] == "gpt-image-2", "Model profile changed.")
-    _require(resolved.provider_profile["quality"] == "low", "Quality profile changed.")
+    _require(resolved.provider_profile["quality"] == "medium", "Default quality changed.")
     required_prompt_fragments = (
         "84-89 degrees",
         "nearly circular",

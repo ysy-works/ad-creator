@@ -18,12 +18,12 @@ class WorkflowRegistryTest(unittest.TestCase):
         registry_path = COMFYUI_DIR / "workflows" / "registry.json"
         self.assertEqual(
             VALIDATOR.validate_registry(registry_path),
-            ["openai-gpt-image-2-low-v1", "model-c-v1"],
+            ["gpt-image-2-v1", "openai-gpt-image-2-low-v1", "model-c-v1"],
         )
 
-    def test_default_workflow_remains_model_c_until_pilot_cutover(self):
+    def test_default_workflow_is_canonical_gpt_image_2(self):
         registry = json.loads((COMFYUI_DIR / "workflows" / "registry.json").read_text(encoding="utf-8"))
-        self.assertEqual(registry["default_workflow_id"], "model-c-v1")
+        self.assertEqual(registry["default_workflow_id"], "gpt-image-2-v1")
 
     def test_registry_rejects_path_traversal(self):
         with tempfile.TemporaryDirectory() as directory:

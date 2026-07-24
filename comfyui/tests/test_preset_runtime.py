@@ -68,7 +68,10 @@ class PresetRuntimeTest(unittest.TestCase):
             self.assertLessEqual(contract.maximum_provider_inputs, 4)
             self.assertLessEqual(1 + len(contract.provider_image_paths), 4)
             self.assertFalse(contract.brand_input_enabled)
-            self.assertLessEqual(len(contract.prompt), 12_000)
+            self.assertLessEqual(
+                len(contract.prompt),
+                contract.runtime_policy["maximum_prompt_characters"],
+            )
             self.assertIn("Brand input is disabled", contract.prompt)
 
     def test_white_handheld_has_atomic_temperature_and_cup_policy(self):
@@ -159,7 +162,10 @@ class PresetRuntimeTest(unittest.TestCase):
             )
             self.assertEqual(contract.safe_crop, "none_exact_4x5")
             self.assertFalse(contract.bbox_qa["crop_allowed"])
-            self.assertLessEqual(len(contract.prompt), 12_000)
+            self.assertLessEqual(
+                len(contract.prompt),
+                contract.runtime_policy["maximum_prompt_characters"],
+            )
 
     def test_declared_crop_uses_analyzed_geometry_or_audited_fallback(self):
         with tempfile.TemporaryDirectory() as directory:

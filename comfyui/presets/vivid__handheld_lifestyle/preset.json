@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "slot_id": "vivid__handheld_lifestyle",
+  "preset_id": "instagram_dark_grey_handheld_v1",
+  "family": "vivid",
+  "composition": "handheld",
+  "status": "published",
+  "source_review_status": "passed_by_user_review",
+  "runtime_policy": {
+    "schema_version": 1,
+    "compiler_version": "preset-runtime-v1",
+    "maximum_prompt_characters": 50000,
+    "maximum_provider_inputs": 4,
+    "maximum_product_sources": 3,
+    "maximum_reference_controls": 1,
+    "default_container_mode": "reconstruct_source",
+    "supported_container_modes": [
+      "adopt_reference",
+      "reconstruct_source"
+    ],
+    "companion_policy": "none",
+    "brand_input_policy": {
+      "enabled": false,
+      "default_mode": "none",
+      "activation_requirement": "frontend_and_api_brand_asset_flow"
+    },
+    "temperature_policy": {
+      "mode": "preset_primary",
+      "container_mode_rules": {
+        "adopt_reference": {
+          "allowed_product_states": [
+            "iced",
+            "cold",
+            "ambient",
+            "hot"
+          ],
+          "auto_action": "preserve_source_state"
+        },
+        "reconstruct_source": {
+          "allowed_product_states": [
+            "iced",
+            "cold",
+            "ambient",
+            "hot"
+          ],
+          "auto_action": "preserve_source_state"
+        }
+      },
+      "emergency_fallback": {
+        "enabled_when_policy_missing": true,
+        "minimum_confidence": 0.85,
+        "unknown_action": "needs_review",
+        "conflict_action": "needs_review"
+      }
+    }
+  },
+  "prompt_template": {
+    "path": "prompt-template-reconstruct-source.txt",
+    "sha256": "ffa952d93cab1517062bd4eefda507bfcdcaed1ed3c96d89ad7c1a1fbc8da315"
+  },
+  "lighting_sheet": {
+    "path": "lighting-sheet.json",
+    "sha256": "63029aa9b240b589c278c2b0125097e15963064d91e3685ebed59dc6f50b731d"
+  },
+  "grade_profile": {
+    "path": "grade-profile.json",
+    "sha256": "b3bd2ff2898f22e0229541aa6d694292a29709755d1ae4fff8ec5efd159c1b03",
+    "apply_in_pilot": false
+  },
+  "contract_assets": {
+    "team_source_contract": {
+      "path": "../dark_grey/preset.json",
+      "sha256": "b54e7bf1e59d57dabc15efd1d8b60bdb93771edfa1e27bfad0d48322b2ac488e"
+    },
+    "team_prompt_archive": {
+      "path": "../dark_grey/prompt.md",
+      "sha256": "1a09e1511111b88bc155992f4b0c958bdf7f9287642509ece5a25996a7ced43b"
+    },
+    "team_hint_manifest": {
+      "path": "../dark_grey/source-hints-manifest.json",
+      "sha256": "ad20e9a6ff3287899540e344e80058a90717541f09bf305eafcad65254421df3"
+    }
+  },
+  "provider_reference_policy": {
+    "maximum_images": 2,
+    "required_roles": [
+      "user_product",
+      "raw_dark_grey_handheld_pose_reference"
+    ],
+    "risk_acceptance": "Raw team hint is sent by explicit product-owner decision; sanitize in a later revision."
+  },
+  "hint_images": [
+    {
+      "role": "raw_dark_grey_handheld_pose_reference",
+      "path": "../dark_grey/source-hints/ice_handheld.jpg",
+      "sha256": "5bac69cd2e2ad0bca3d0b6444aa805ed51a4b8c1d1e5ddda5fb6d142123d4367",
+      "width": 1080,
+      "height": 1350,
+      "send_to_provider": true,
+      "container_mode_scope": [
+        "adopt_reference",
+        "reconstruct_source"
+      ],
+      "allowed_transfer": [
+        "declared shot topology",
+        "camera relationship",
+        "broad dark-grey material family",
+        "broad light distribution"
+      ],
+      "forbidden_transfer": [
+        "reference beverage identity",
+        "reference serving state",
+        "reference logo or text",
+        "exact person identity"
+      ]
+    }
+  ],
+  "transforms": [
+    {
+      "type": "normalize_product_source"
+    },
+    {
+      "type": "select_hint_by_container_mode"
+    },
+    {
+      "type": "sanitize_reference_control"
+    }
+  ],
+  "default_container_mode": "reconstruct_source",
+  "container_modes": {
+    "reconstruct_source": {
+      "container_identity_scope": "source_container_class_material_silhouette_handle_lid_and_visible_branding",
+      "prompt_template": {
+        "path": "prompt-template-reconstruct-source.txt",
+        "sha256": "ffa952d93cab1517062bd4eefda507bfcdcaed1ed3c96d89ad7c1a1fbc8da315"
+      },
+      "preserve": [
+        "source beverage identity and serving state",
+        "source cup material, silhouette, handle and lid",
+        "authorized visible source branding"
+      ],
+      "discard": [
+        "source camera pose",
+        "source background",
+        "source lighting and shadows"
+      ]
+    },
+    "adopt_reference": {
+      "container_identity_scope": "published_dark_grey_temperature_compatible_container",
+      "prompt_template": {
+        "path": "prompt-template-adopt-reference.txt",
+        "sha256": "0ee357f1e48517f491d883728b519c9a036ce12c9695645f167410f7af35f8ae"
+      },
+      "preserve": [
+        "source beverage identity and serving state",
+        "source liquid color, opacity, ice, foam, layers and garnish"
+      ],
+      "discard": [
+        "source container geometry and material",
+        "source container branding",
+        "reference beverage identity and serving state"
+      ]
+    }
+  },
+  "aspect_ratio_contracts": {
+    "4:5": {
+      "status": "published",
+      "visual_review_status": "representative_matrix_pending",
+      "prompt_addendum": "Generate the exact final 4:5 canvas at 1024x1280. Keep one complete hand-beverage unit uncropped. For an iced source, hold the upright cup against the dark-grey wall; for a hot source, keep the mug base on the black table with the hand resting on or beside it.",
+      "generation_size": "1024x1280",
+      "safe_crop": "none_exact_4x5",
+      "width": 1024,
+      "height": 1280,
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [
+          0.18,
+          0.38
+        ],
+        "product_height_ratio": [
+          0.2,
+          0.58
+        ],
+        "expected_primary_count": 1,
+        "crop_allowed": false,
+        "protected_objects_must_remain_complete": true
+      }
+    },
+    "1:1": {
+      "status": "published",
+      "visual_review_status": "representative_matrix_pending",
+      "prompt_addendum": "Generate the exact final 1:1 canvas at 1024x1024 from the start. Keep one complete hand-beverage unit and preserve the source-temperature branch without cropping the hand, wrist, cup rim or base.",
+      "generation_size": "1024x1024",
+      "safe_crop": "none_exact_1x1",
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [
+          0.16,
+          0.4
+        ],
+        "product_height_ratio": [
+          0.2,
+          0.58
+        ],
+        "expected_primary_count": 1,
+        "crop_allowed": false,
+        "protected_objects_must_remain_complete": true
+      }
+    }
+  },
+  "qa_contract": {
+    "phase": "representative_paid_visual_review_pending",
+    "hard_gates": [
+      "beverage_identity",
+      "container_mode",
+      "serving_state",
+      "camera_geometry",
+      "product_environment_integration",
+      "hint_copy_contamination",
+      "brand_ocr",
+      "crop"
+    ],
+    "known_release_risk": "Raw provider hints are not sanitized in this revision.",
+    "comparative_scores": [
+      "naturalness",
+      "mood_adherence",
+      "product_preservation",
+      "light_shadow_fidelity"
+    ]
+  }
+}

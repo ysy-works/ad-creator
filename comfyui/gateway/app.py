@@ -829,7 +829,10 @@ async def health() -> JSONResponse:
             checks[name] = True
         except HTTPException:
             checks[name] = False
-    if settings.health_workflow_id == "openai-gpt-image-2-low-v1":
+    if settings.health_workflow_id in {
+        "gpt-image-2-v1",
+        "openai-gpt-image-2-low-v1",
+    }:
         try:
             checks["preset_registry"] = bool(published_preset_ids())
         except PresetRegistryConfigurationError:

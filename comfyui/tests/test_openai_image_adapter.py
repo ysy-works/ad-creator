@@ -67,11 +67,25 @@ class PublishedPresetTest(unittest.TestCase):
                 "wood__product_large",
                 "wood__product_center",
                 "wood__aerial_shot",
+                "vivid__product_large",
+                "vivid__product_center",
+                "vivid__aerial_shot",
+                "vivid__handheld_lifestyle",
             ),
         )
 
     def test_default_is_declared_by_the_registry(self):
         self.assertEqual(default_published_preset_slot(), "wood__product_center")
+
+    def test_quality_defaults_to_medium_and_all_three_profiles_resolve(self):
+        default = load_published_preset("wood__product_center")
+        low = load_published_preset("wood__product_center", quality="low")
+        high = load_published_preset("wood__product_center", quality="high")
+        self.assertEqual(default.provider_profile["quality"], "medium")
+        self.assertEqual(low.provider_profile["quality"], "low")
+        self.assertEqual(high.provider_profile["quality"], "high")
+        with self.assertRaisesRegex(OpenAIImageExecutionError, "Unsupported"):
+            load_published_preset("wood__product_center", quality="ultra")
 
     def test_reviewed_presets_remain_available_for_validation(self):
         self.assertEqual(
@@ -99,6 +113,10 @@ class PublishedPresetTest(unittest.TestCase):
                 "wood__product_large": "instagram_wood_calm_window_closeup_v1",
                 "wood__product_center": "tokyo_a6_relational_scene_hint_v4",
                 "wood__aerial_shot": "instagram_wood_cane_brownie_overhead_v1",
+                "vivid__product_large": "instagram_dark_grey_closeup_v1",
+                "vivid__product_center": "instagram_dark_grey_medium_v1",
+                "vivid__aerial_shot": "instagram_dark_grey_aerial_v1",
+                "vivid__handheld_lifestyle": "instagram_dark_grey_handheld_v1",
             },
         )
 
@@ -112,7 +130,7 @@ class PublishedPresetTest(unittest.TestCase):
         wood = load_published_preset("wood__product_center")
 
         self.assertEqual(white.provider_profile["model"], "gpt-image-2")
-        self.assertEqual(white.provider_profile["quality"], "low")
+        self.assertEqual(white.provider_profile["quality"], "medium")
         self.assertNotIn("input_fidelity", white.provider_profile)
         self.assertEqual(white.provider_image_paths, ())
         self.assertEqual(handheld.provider_image_roles, ("sanitized_scene_hint",))
@@ -267,7 +285,7 @@ class OpenAIImageAdapterTest(unittest.TestCase):
         Image.new("RGB", (480, 640), (180, 90, 60)).save(source, format="PNG")
         return source
 
-    def test_white_and_wood_use_gpt_image_2_low_and_return_4x5(self):
+    def test_white_and_wood_use_gpt_image_2_medium_and_return_4x5(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             source = self._source(root)
@@ -288,7 +306,7 @@ class OpenAIImageAdapterTest(unittest.TestCase):
 
                 self.assertEqual(image.size, (1024, 1280))
                 self.assertEqual(metadata["model"], "gpt-image-2")
-                self.assertEqual(metadata["quality"], "low")
+                self.assertEqual(metadata["quality"], "medium")
                 self.assertEqual(metadata["delivery_dimensions"], [1024, 1280])
                 self.assertEqual(metadata["aspect_ratio"], "4:5")
                 self.assertEqual(metadata["aspect_status"], "published")
@@ -312,7 +330,7 @@ class OpenAIImageAdapterTest(unittest.TestCase):
                     headers["Content-Type"].startswith("multipart/form-data; boundary=")
                 )
                 self.assertIn(b'name="model"\r\n\r\ngpt-image-2\r\n', body)
-                self.assertIn(b'name="quality"\r\n\r\nlow\r\n', body)
+                self.assertIn(b'name="quality"\r\n\r\nmedium\r\n', body)
                 self.assertIn(b'name="size"\r\n\r\n1024x1280\r\n', body)
                 self.assertNotIn(b"input_fidelity", body)
                 self.assertEqual(body.count(b'name="image[]"'), submitted_inputs)
