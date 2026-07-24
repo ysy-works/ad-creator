@@ -135,7 +135,7 @@ def _wait_until_done(status_url: str, headers: dict, max_wait_seconds: int = 420
     raise RuntimeError("이미지 생성이 제한 시간 내에 끝나지 않았습니다.")
 
 
-def _generate_with_model_c_v1(product_image: Image.Image, reference: dict, aspect_ratio: str = None) -> Image.Image:
+def _generate_with_model_c_v1(product_image: Image.Image, reference: dict, aspect_ratio: str = None, cup_source: str = None) -> Image.Image:
     """
     model-c-v1 워크플로 — ComfyUI Gateway 경유 (팀장 제공 BACKEND_HANDOFF.md 스펙).
 
@@ -229,7 +229,7 @@ def _generate_with_model_c_v1_legacy_direct(product_image: Image.Image, referenc
 VALID_ASPECT_RATIOS = {"4:5", "1:1"}
 
 
-def _generate_with_openai_gpt_image_2_low(product_image: Image.Image, reference: dict, aspect_ratio: str = None) -> Image.Image:
+def _generate_with_openai_gpt_image_2_low(product_image: Image.Image, reference: dict, aspect_ratio: str = None, cup_source: str = None) -> Image.Image:
     """
     openai-gpt-image-2-low-v1 워크플로.
 
@@ -245,6 +245,12 @@ def _generate_with_openai_gpt_image_2_low(product_image: Image.Image, reference:
     1:1은 1024x1024를 무크롭으로 그대로 반환 — 백엔드는 리사이즈/크롭을
     전혀 하지 않는다 (router.py의 workflow별 분기 참고. 예전엔 4:5를
     880x1100으로 축소했었는데, 그 축소 단계 자체가 없어졌음).
+
+    cup_source는 "uploaded"(업로드한 컵 그대로) 또는 "model"(모델이 준비한
+    컵으로 교체). 2026-07-24 소연님 회의 요청사항인데, Gateway/모델 쪽 정확한
+    파라미터명·스타일별 지원 여부가 아직 확정 전이라 값이 있으면 그대로
+    실어 보내기만 하고 검증은 하지 않는다. 계약 확정되면 OPENAI_ACTIVE_PRESET_IDS
+    처럼 preset_id별 유효성 검증을 추가할 예정.
     """
     if not GATEWAY_BASE_URL or not GATEWAY_API_KEY:
         raise RuntimeError(
@@ -275,6 +281,8 @@ def _generate_with_openai_gpt_image_2_low(product_image: Image.Image, reference:
         "preset_id": preset_id,
         "aspect_ratio": aspect_ratio,
     }
+    if cup_source:
+        data["cup_source"] = cup_source
 
     submitted = _submit_generation(headers, files, data)
 
@@ -301,7 +309,7 @@ def resolve_workflow_id(workflow_id: str = None) -> str:
     return workflow_id or DEFAULT_WORKFLOW_ID
 
 
-def generate_styled_image(product_image: Image.Image, reference: dict, workflow_id: str = None, aspect_ratio: str = None) -> Image.Image:
+def generate_styled_image(product_image: Image.Image, reference: dict, workflow_id: str = None, aspect_ratio: str = None, cup_source: str = None) -> Image.Image:
     """
     입력:
       - product_image: 사용자가 업로드한 원본 사진
@@ -310,9 +318,11 @@ def generate_styled_image(product_image: Image.Image, reference: dict, workflow_
       - aspect_ratio: "4:5" 또는 "1:1". openai-gpt-image-2-low-v1에서는 필수
         (2026-07-23 팀장 정정: 4:5=1024x1280, 1:1=1024x1024, 둘 다 무크롭).
         model-c-v1은 이 값을 그냥 무시함(레거시 워크플로라 비율 선택 개념이 없음).
+      - cup_source: "uploaded" 또는 "model". 2026-07-24 소연님 요청사항이며
+        계약 미확정 상태라 있으면 전달만 하고 검증은 안 함.
     """
     workflow_id = resolve_workflow_id(workflow_id)
     handler = WORKFLOW_REGISTRY.get(workflow_id)
     if handler is None:
         raise ValueError(f"알 수 없는 workflow_id입니다: {workflow_id}")
-    return handler(product_image, reference, aspect_ratio=aspect_ratio)
+    return handler(product_image, reference, aspect_ratio=aspect_ratio, cup_source=cup_source)
