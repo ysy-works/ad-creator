@@ -84,6 +84,7 @@ async def generate(
     reference_id: str = Form(...),
     workflow_id: Optional[str] = Form(None),
     aspect_ratio: Optional[str] = Form(None),
+    cup_source: Optional[str] = Form(None),
 ):
     """
     사용자가 올린 사진 + 고른 레퍼런스(reference_id) + (선택) workflow_id를 기반으로
@@ -91,6 +92,11 @@ async def generate(
     workflow_id를 안 보내면 기본값(model.py의 DEFAULT_WORKFLOW_ID, 환경변수로 전환)이 사용됨.
 
     aspect_ratio: 프론트 4:5/1:1 토글에서 보내는 값("4:5" 또는 "1:1").
+    cup_source: 프론트 컵 선택 토글에서 보내는 값("uploaded" 또는 "model").
+    2026-07-24 소연님 회의 요청사항 — 업로드한 컵 그대로 쓸지, 모델이 준비한
+    컵으로 바꿀지 선택. 아직 Gateway/모델 쪽 정확한 계약(파라미터명, 스타일별
+    지원 여부)이 확정되지 않아 지금은 강제 검증 없이 Gateway로 그대로 전달만
+    한다. 계약 확정되면 model.py에서 preset_id별 유효성 검증 추가 예정.
     2026-07-23 팀장 정정: openai-gpt-image-2-low-v1은 이제 4:5(1024x1280)와
     1:1(1024x1024) 둘 다 무크롭으로 생성 — 이 workflow에서는 사실상 필수값이며,
     없거나 잘못된 값이면 model.py에서 ValueError로 400 처리됨. 프론트가 사용자
@@ -105,7 +111,7 @@ async def generate(
     pil_image = Image.open(io.BytesIO(image_data)).convert("RGB")
 
     try:
-        result_image = generate_styled_image(pil_image, reference, workflow_id=workflow_id, aspect_ratio=aspect_ratio)
+        result_image = generate_styled_image(pil_image, reference, workflow_id=workflow_id, aspect_ratio=aspect_ratio, cup_source=cup_source)
     except ValueError as e:
         return JSONResponse(status_code=400, content={"error": str(e)})
     except Exception as e:
