@@ -17,7 +17,7 @@
 
 프리셋은 여러 작업 환경에서 계속 수정·추가·검증되고 있습니다. 특정 시점의 공개·검증 프리셋 목록이나 개수를 README에 고정하지 않습니다. 실제 서비스 사용 가능 여부, 내부 contract와 provider 입력 정책은 항상 `comfyui/presets/registry.json` 및 각 preset bundle을 기준으로 확인합니다.
 
-통과 프리셋 네 개의 정확한 보관 상태는 `comfyui/presets/passed-presets.json`이 권위입니다. A6만 기본값이며 화이트 확산광, 우드 45도, 화이트 직사광은 삭제하지 않고 추후 확장용으로 보관합니다. 보류된 옅은 우드 프리셋은 통과 목록에서 제외합니다.
+통과 프리셋의 정확한 보관 상태는 `comfyui/presets/passed-presets.json`이 권위입니다. A6만 기본값이며 보류된 프리셋은 통과 목록에서 제외합니다.
 
 기존 `instagram_wood_45deg_relational_v3`는 삭제하지 않고 `available_not_routed` 대안으로 보존합니다. 새 서비스 옵션이 합의될 때만 별도 라우팅합니다.
 
@@ -71,5 +71,6 @@ python -m unittest discover -s comfyui/tests -v
 - 백엔드·프론트 계약: `comfyui/deploy/OPENAI_GPT_IMAGE_2_PILOT_HANDOFF_KO.md`
 - ComfyUI 재설계 계획: `comfyui/deploy/COMFYUI_REDESIGN_PLAN_KO.md`
 - 실제 검증 기록: `comfyui/deploy/OPENAI_PILOT_VALIDATION_20260721_KO.md`
+- 공용 medium 런타임 검증 기록: `comfyui/deploy/OPENAI_COMMON_RUNTIME_VALIDATION_20260724_KO.md`
 
 기본값은 검수된 4:5입니다. 1:1 계약은 전 구간에 준비했지만 실제 시각 QA가 끝날 때까지 공개 UI 선택지는 열지 않습니다. 어떤 비율도 다른 비율에서 잘라 만들지 않습니다.
