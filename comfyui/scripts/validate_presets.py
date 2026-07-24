@@ -88,6 +88,17 @@ def main() -> int:
     _validate_passed_manifest(registry, registry_path)
     legacy_routes: set[tuple[str, str]] = set()
     for slot_id in published:
+        bundle_path = registry_path.parent / str(slots[slot_id].get("bundle") or "")
+        bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
+        runtime_policy = bundle.get("runtime_policy")
+        supported_modes = (
+            runtime_policy.get("supported_container_modes")
+            if isinstance(runtime_policy, dict)
+            else None
+        )
+        if set(supported_modes or []) != {"adopt_reference", "reconstruct_source"}:
+            raise ValueError(f"Published preset must support both cup modes: {slot_id}")
+
         portrait = load_published_preset(
             slot_id,
             aspect_ratio="4:5",
@@ -111,6 +122,24 @@ def main() -> int:
                 raise ValueError(f"Provider input cap exceeded: {slot_id}")
             if resolved.brand_input_enabled:
                 raise ValueError(f"Brand input must remain disabled: {slot_id}")
+
+        for container_mode in ("adopt_reference", "reconstruct_source"):
+            for aspect_ratio in ("4:5", "1:1"):
+                resolved = load_published_preset(
+                    slot_id,
+                    aspect_ratio=aspect_ratio,
+                    container_mode=container_mode,
+                    serving_temperature="auto",
+                    registry_path=registry_path,
+                )
+                if resolved.container_mode != container_mode:
+                    raise ValueError(
+                        f"Cup mode resolved incorrectly: {slot_id} {container_mode}"
+                    )
+                if resolved.aspect_status != "published":
+                    raise ValueError(
+                        f"Aspect ratio is not published: {slot_id} {aspect_ratio}"
+                    )
 
         legacy = slots[slot_id].get("legacy_gateway")
         if not isinstance(legacy, dict):

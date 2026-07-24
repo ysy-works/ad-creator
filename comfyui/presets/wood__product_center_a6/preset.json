@@ -14,7 +14,7 @@
     "maximum_product_sources": 3,
     "maximum_reference_controls": 1,
     "default_container_mode": "reconstruct_source",
-    "supported_container_modes": ["reconstruct_source"],
+    "supported_container_modes": ["adopt_reference", "reconstruct_source"],
     "companion_policy": "reference_relational",
     "brand_input_policy": {
       "enabled": false,
@@ -24,6 +24,10 @@
     "temperature_policy": {
       "mode": "preset_primary",
       "container_mode_rules": {
+        "adopt_reference": {
+          "allowed_product_states": ["iced", "cold", "ambient", "hot"],
+          "auto_action": "preserve_source_state"
+        },
         "reconstruct_source": {
           "allowed_product_states": ["iced", "cold", "ambient", "hot"],
           "auto_action": "preserve_source_state"
@@ -60,16 +64,60 @@
   },
   "hint_images": [
     {
-      "role": "sanitized_a6_scene_hint",
+      "role": "authoring_a6_scene_hint",
       "path": "../assets/wood-a6-multi-scene-hint.png",
       "sha256": "26d5e84e61e9942477624faa8ce23ab40100809d0a8280185393d45ca7214b66",
       "width": 768,
       "height": 1024,
-      "send_to_provider": true,
+      "send_to_provider": false,
       "allowed_transfer": ["camera_distance", "compact_three_item_scale", "round_dark_tray_relationships", "light_distribution", "restrained_palette", "material_response"],
       "forbidden_transfer": ["reference_beverage_identity", "reference_beverage_recipe", "text", "logo", "identifiable_room_objects", "exact_crop", "exact_shadow"]
+    },
+    {
+      "role": "wood_medium_source_container_scene_hint",
+      "path": "../assets/wood-medium-source-container-scene-hint-v1.png",
+      "sha256": "ecb052cab0690306880eecbefc947e0d233b4b57608d8d38729e3e979eaadc27",
+      "width": 1085,
+      "height": 1450,
+      "send_to_provider": true,
+      "container_mode_scope": ["reconstruct_source"],
+      "allowed_transfer": ["camera_distance", "compact_three_item_scale", "right_front_product_position_and_empty_bbox", "round_dark_tray_relationships", "light_distribution", "restrained_palette", "material_response"],
+      "forbidden_transfer": ["reference_container_geometry", "reference_saucer_geometry", "reference_beverage_identity", "reference_beverage_recipe", "text", "logo", "identifiable_room_objects", "exact_crop", "exact_shadow"]
+    },
+    {
+      "role": "wood_medium_reference_container_scene_hint",
+      "path": "../assets/wood-medium-reference-container-scene-hint-v1.png",
+      "sha256": "2e2ab739c666bbb856606e0540c5ca27e8708a2d30d37ae61b159f1b4a285ce9",
+      "width": 1086,
+      "height": 1448,
+      "send_to_provider": true,
+      "container_mode_scope": ["adopt_reference"],
+      "allowed_transfer": ["camera_distance", "compact_three_item_scale", "right_front_rounded_clear_glass_geometry", "right_front_plain_white_saucer_geometry", "round_dark_tray_relationships", "light_distribution", "restrained_palette", "material_response"],
+      "forbidden_transfer": ["reference_beverage_identity", "reference_beverage_recipe", "reference_beverage_color", "reference_foam_or_layers", "text", "logo", "identifiable_room_objects", "exact_crop", "exact_shadow"]
     }
   ],
+  "container_modes": {
+    "reconstruct_source": {
+      "container_identity_scope": "source_container_class_material_silhouette_handle_state_and_components",
+      "provider_hint_role": "wood_medium_source_container_scene_hint",
+      "prompt_template": {
+        "path": "prompt-template.txt",
+        "sha256": "d1503a595ff9d598b00d9c88eed32ca22f7b6505d1bf730dd7b4e0598a3c3fcb"
+      },
+      "preserve": ["source beverage identity", "source serving state", "source container class, material, silhouette, handle state and components", "authorized visible source branding"],
+      "discard": ["source camera pose", "source background", "source lighting", "source shadows"]
+    },
+    "adopt_reference": {
+      "container_identity_scope": "published_right_front_rounded_clear_glass_and_plain_white_saucer",
+      "provider_hint_role": "wood_medium_reference_container_scene_hint",
+      "prompt_template": {
+        "path": "prompt-template-adopt-reference.txt",
+        "sha256": "eee3b52c304471138a4020bdf27adfdf506056af3f8a69ae400849ee530603f2"
+      },
+      "preserve": ["source beverage identity", "source serving state", "source liquid layers, toppings and ice state"],
+      "discard": ["source container geometry", "source container material", "source container branding", "reference beverage identity", "reference beverage color, foam and recipe"]
+    }
+  },
   "aspect_ratio_contracts": {
     "4:5": {
       "status": "published",
@@ -116,7 +164,7 @@
   },
   "qa_contract": {
     "phase": "common_qa_pending",
-    "hard_gates": ["identity", "logo_ocr", "crop", "subject_count", "tray_complete"],
+    "hard_gates": ["identity", "container_mode", "beverage_identity", "logo_ocr", "crop", "subject_count", "tray_complete", "reference_hint_contamination"],
     "comparative_scores": ["naturalness", "mood_adherence", "relational_composition"],
     "aspect_ratio_specific_bbox": true
   }

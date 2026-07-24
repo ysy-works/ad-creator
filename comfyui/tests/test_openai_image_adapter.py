@@ -118,7 +118,10 @@ class PublishedPresetTest(unittest.TestCase):
         self.assertEqual(handheld.provider_image_roles, ("sanitized_scene_hint",))
         self.assertEqual(handheld.brand_default_mode, "none")
         self.assertIn("unbranded straight-sided clear plastic cold-drink cup", handheld.prompt)
-        self.assertEqual(wood.provider_image_roles, ("sanitized_a6_scene_hint",))
+        self.assertEqual(
+            wood.provider_image_roles,
+            ("wood_medium_source_container_scene_hint",),
+        )
         self.assertEqual(wood.container_mode, "reconstruct_source")
         self.assertFalse(wood.brand_input_enabled)
         self.assertEqual(wood.brand_default_mode, "none")
@@ -127,6 +130,54 @@ class PublishedPresetTest(unittest.TestCase):
         self.assertIn("Sheet=instagram_white_diffuse_wall_table_sheet_v1", white.prompt)
         self.assertIn("three-point group", wood.prompt)
         self.assertEqual(wood.aspect_ratio, "4:5")
+
+    def test_white_and_wood_medium_resolve_both_cup_modes(self):
+        white_source = load_published_preset(
+            "natural_white__product_center",
+            container_mode="reconstruct_source",
+            serving_temperature="auto",
+        )
+        white_reference = load_published_preset(
+            "natural_white__product_center",
+            container_mode="adopt_reference",
+            serving_temperature="auto",
+        )
+        wood_source = load_published_preset(
+            "wood__product_center",
+            container_mode="reconstruct_source",
+            serving_temperature="auto",
+        )
+        wood_reference = load_published_preset(
+            "wood__product_center",
+            container_mode="adopt_reference",
+            serving_temperature="auto",
+        )
+
+        self.assertEqual(white_source.provider_image_roles, ())
+        self.assertEqual(
+            white_reference.provider_image_roles,
+            ("white_medium_reference_cup_hint",),
+        )
+        self.assertIn("short straight-sided clear glass tumbler", white_reference.prompt)
+        self.assertIn(
+            "Ignore Image 2's product scale, position, framing, background, lighting and shadow",
+            white_reference.prompt,
+        )
+        self.assertEqual(
+            wood_source.provider_image_roles,
+            ("wood_medium_source_container_scene_hint",),
+        )
+        self.assertEqual(
+            wood_reference.provider_image_roles,
+            ("wood_medium_reference_container_scene_hint",),
+        )
+        self.assertIn("rounded clear-glass vessel", wood_reference.prompt)
+        for contract in (white_source, white_reference, wood_source, wood_reference):
+            self.assertEqual(contract.serving_temperature, "source_authoritative")
+            self.assertEqual(
+                contract.temperature_resolution_source,
+                "user_product_image",
+            )
 
     def test_unpublished_slot_is_rejected(self):
         with self.assertRaisesRegex(OpenAIImageExecutionError, "PRESET_NOT_READY"):
@@ -221,9 +272,9 @@ class OpenAIImageAdapterTest(unittest.TestCase):
             root = Path(directory)
             source = self._source(root)
             client_request_ids: set[str] = set()
-            for slot_id, expected_inputs in (
-                ("natural_white__product_center", 1),
-                ("wood__product_center", 2),
+            for slot_id, maximum_inputs, submitted_inputs in (
+                ("natural_white__product_center", 2, 1),
+                ("wood__product_center", 2, 2),
             ):
                 transport = StubTransport()
                 image, metadata = run_openai_image(
@@ -246,7 +297,7 @@ class OpenAIImageAdapterTest(unittest.TestCase):
                 self.assertEqual(metadata["source_preprocessing"]["max_long_edge"], 1536)
                 self.assertEqual(metadata["automatic_retries"], 0)
                 self.assertFalse(metadata["brand_input_enabled"])
-                self.assertEqual(metadata["maximum_provider_inputs"], expected_inputs)
+                self.assertEqual(metadata["maximum_provider_inputs"], maximum_inputs)
                 self.assertEqual(metadata["run_id"], f"test-{slot_id}")
                 self.assertEqual(metadata["raw_dimensions"], [1024, 1280])
                 self.assertEqual(len(metadata["prompt_sha256"]), 64)
@@ -264,7 +315,7 @@ class OpenAIImageAdapterTest(unittest.TestCase):
                 self.assertIn(b'name="quality"\r\n\r\nlow\r\n', body)
                 self.assertIn(b'name="size"\r\n\r\n1024x1280\r\n', body)
                 self.assertNotIn(b"input_fidelity", body)
-                self.assertEqual(body.count(b'name="image[]"'), expected_inputs)
+                self.assertEqual(body.count(b'name="image[]"'), submitted_inputs)
                 self.assertLess(body.index(b'filename="image-1.jpg"'), body.rindex(b"--"))
                 self.assertEqual(timeout, 1200.0)
                 self.assertNotEqual(headers["X-Client-Request-Id"], metadata["request_hash"])

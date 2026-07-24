@@ -9,14 +9,14 @@
       "status": "published_default",
       "runtime_state": "routed",
       "bundle": "wood__product_center_a6/preset.json",
-      "bundle_sha256": "9d972790b1679e089b1ced4ac808dffffef88136ef2a9bebc84c599a7e49a914"
+      "bundle_sha256": "79331ce346dd17a94fdf4a3b9626dd1bb66927d8dc2337f0bc7b569e2df73f13"
     },
     {
       "preset_id": "instagram_white_diffuse_wall_table_v1",
       "status": "passed_by_user_review",
       "runtime_state": "published_non_default",
       "bundle": "natural_white__product_center/preset.json",
-      "bundle_sha256": "fd37b8b402c8125a4f34754d9ee4eead71d1e9ceb4797f1751723e54152d534b"
+      "bundle_sha256": "d275c99dd4216695bba1a2377a9b92ea23783e336e357419eccad7e1ee198b23"
     },
     {
       "preset_id": "instagram_wood_45deg_relational_v3",

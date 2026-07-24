@@ -14,7 +14,7 @@
     "maximum_product_sources": 3,
     "maximum_reference_controls": 1,
     "default_container_mode": "reconstruct_source",
-    "supported_container_modes": ["reconstruct_source"],
+    "supported_container_modes": ["adopt_reference", "reconstruct_source"],
     "companion_policy": "none",
     "brand_input_policy": {
       "enabled": false,
@@ -24,6 +24,10 @@
     "temperature_policy": {
       "mode": "preset_primary",
       "container_mode_rules": {
+        "adopt_reference": {
+          "allowed_product_states": ["iced", "cold", "ambient", "hot"],
+          "auto_action": "preserve_source_state"
+        },
         "reconstruct_source": {
           "allowed_product_states": ["iced", "cold", "ambient", "hot"],
           "auto_action": "preserve_source_state"
@@ -38,10 +42,12 @@
     }
   },
   "provider_reference_policy": {
-    "maximum_images": 1
+    "maximum_images": 2
   },
   "transforms": [
-    {"type": "normalize_product_source"}
+    {"type": "normalize_product_source"},
+    {"type": "select_hint_by_container_mode"},
+    {"type": "sanitize_reference_control"}
   ],
   "prompt_template": {
     "path": "prompt-template.txt",
@@ -65,8 +71,40 @@
       "height": 1200,
       "send_to_provider": false,
       "reason": "The approved white preset is contract-driven; raw authoring pixels must not control runtime generation."
+    },
+    {
+      "role": "white_medium_reference_cup_hint",
+      "path": "../assets/white-medium-reference-cup-hint-v2.png",
+      "sha256": "d903e227396447b347b43d26d13abf1bf3708eea6e8360abb9fffc2c1847d160",
+      "width": 982,
+      "height": 1602,
+      "send_to_provider": true,
+      "container_mode_scope": ["adopt_reference"],
+      "allowed_transfer": ["short_straight_clear_glass_geometry", "thin_circular_rim", "flat_base", "fine_vertical_fluting", "transparent_glass_material"],
+      "forbidden_transfer": ["reference_product_scale_and_position", "reference_composition", "reference_lighting", "reference_beverage_identity", "reference_beverage_recipe", "text", "logo", "exact_wall_marks", "exact_table_marks", "exact_shadow"]
     }
   ],
+  "container_modes": {
+    "reconstruct_source": {
+      "container_identity_scope": "source_container_class_material_silhouette_and_components",
+      "prompt_template": {
+        "path": "prompt-template.txt",
+        "sha256": "3db26d0fac4789e1d22a7d5d362b6fca06889807e8966529fb6db570c2a96971"
+      },
+      "preserve": ["source beverage identity", "source serving state", "source container class, material, silhouette and components", "authorized visible source branding"],
+      "discard": ["source camera pose", "source background", "source lighting", "source shadows"]
+    },
+    "adopt_reference": {
+      "container_identity_scope": "published_short_fluted_clear_glass",
+      "provider_hint_role": "white_medium_reference_cup_hint",
+      "prompt_template": {
+        "path": "prompt-template-adopt-reference.txt",
+        "sha256": "f848625ac899840c08fe53241eaaa7fc2ce1e6193e8023965f71bf532825bb5d"
+      },
+      "preserve": ["source beverage identity", "source serving state", "source liquid layers, toppings and ice state"],
+      "discard": ["source container geometry", "source container material", "source container branding", "reference beverage identity", "reference beverage color and recipe"]
+    }
+  },
   "aspect_ratio_contracts": {
     "4:5": {
       "status": "published",
@@ -107,7 +145,7 @@
   },
   "qa_contract": {
     "phase": "common_qa_pending",
-    "hard_gates": ["identity", "logo_ocr", "crop"],
+    "hard_gates": ["identity", "container_mode", "beverage_identity", "logo_ocr", "crop", "reference_hint_contamination"],
     "comparative_scores": ["naturalness", "mood_adherence"],
     "aspect_ratio_specific_bbox": true
   }
