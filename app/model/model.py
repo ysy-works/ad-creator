@@ -18,16 +18,19 @@ GATEWAY_API_KEY = os.environ.get("COMFYUI_GATEWAY_API_KEY", "")
 
 MODEL_C_WORKFLOW_ID = "model-c-v1"
 # 2026-07-21 팀장 인계서(OPENAI_GPT_IMAGE_2_PILOT_HANDOFF_KO.md) 기준 신규 워크플로.
-OPENAI_WORKFLOW_ID = "openai-gpt-image-2-low-v1"
+# 2026-07-24 소연님 안내: 파일럿 단계의 임시 이름(openai-gpt-image-2-low-v1)에서
+# 최종 이름 gpt-image-2-v1로 변경. 품질(low/medium/high)이 이제 workflow 이름에
+# 고정되지 않고 ComfyUI 내부에서 선택 가능한 옵션이 됨 — 기본값은 medium.
+OPENAI_WORKFLOW_ID = "gpt-image-2-v1"
 
 # 서비스 기본 workflow는 코드 상수가 아니라 환경변수로 선택 (인계서 5번-2).
 # 아직 미전환 상태이므로 기본값은 계속 model-c-v1 — 검증 끝난 뒤 배포 환경변수만 바꾼다.
 DEFAULT_WORKFLOW_ID = os.environ.get("COMFYUI_WORKFLOW_ID", MODEL_C_WORKFLOW_ID)
 
-# openai-gpt-image-2-low-v1에서 실제로 생성 가능한 preset_id (= 프론트 reference_id).
-# 나머지는 유료 provider 호출 전에 차단한다.
-# 2026-07-24 소연님 검증 완료분 반영: 화이트 4종 + 우드 3종(핸드헬드 제외) 총 7개.
-# wood__handheld_lifestyle과 다크그레이(vivid) 4종은 아직 미검증이라 계속 비활성.
+# gpt-image-2-v1(구 openai-gpt-image-2-low-v1)에서 실제로 생성 가능한
+# preset_id (= 프론트 reference_id). 나머지는 유료 provider 호출 전에 차단한다.
+# 2026-07-24 소연님 검증 완료분 반영: 다크그레이 4종 + 우드 나머지 1종
+# (wood__handheld_lifestyle) 추가로, 이제 12개 전부 활성.
 OPENAI_ACTIVE_PRESET_IDS = {
     "natural_white__product_large",
     "natural_white__product_center",
@@ -36,6 +39,11 @@ OPENAI_ACTIVE_PRESET_IDS = {
     "wood__product_large",
     "wood__product_center",
     "wood__aerial_shot",
+    "wood__handheld_lifestyle",
+    "vivid__product_large",
+    "vivid__product_center",
+    "vivid__aerial_shot",
+    "vivid__handheld_lifestyle",
 }
 
 # references.json의 mood_id/composition_id -> 모델 API가 요구하는 값으로 변환
@@ -229,9 +237,9 @@ def _generate_with_model_c_v1_legacy_direct(product_image: Image.Image, referenc
 VALID_ASPECT_RATIOS = {"4:5", "1:1"}
 
 
-def _generate_with_openai_gpt_image_2_low(product_image: Image.Image, reference: dict, aspect_ratio: str = None, cup_source: str = None) -> Image.Image:
+def _generate_with_gpt_image_2(product_image: Image.Image, reference: dict, aspect_ratio: str = None, cup_source: str = None) -> Image.Image:
     """
-    openai-gpt-image-2-low-v1 워크플로.
+    gpt-image-2-v1 워크플로 (2026-07-24 소연님 안내로 이름 확정, 구 이름 openai-gpt-image-2-low-v1).
 
     2026-07-21 팀장 인계서(OPENAI_GPT_IMAGE_2_PILOT_HANDOFF_KO.md) 반영, 이후
     2026-07-23 팀장 정정사항 반영:
@@ -300,7 +308,7 @@ def _generate_with_openai_gpt_image_2_low(product_image: Image.Image, reference:
 # workflow_id -> 실제 호출 함수. 새 워크플로가 추가되면 여기 한 줄만 등록하면 됨.
 WORKFLOW_REGISTRY = {
     "model-c-v1": _generate_with_model_c_v1,
-    OPENAI_WORKFLOW_ID: _generate_with_openai_gpt_image_2_low,
+    OPENAI_WORKFLOW_ID: _generate_with_gpt_image_2,
 }
 
 
@@ -315,7 +323,7 @@ def generate_styled_image(product_image: Image.Image, reference: dict, workflow_
       - product_image: 사용자가 업로드한 원본 사진
       - reference: 선택한 레퍼런스 정보 (mood_id, composition_id 등 포함)
       - workflow_id: 사용할 워크플로 식별자. 없으면 DEFAULT_WORKFLOW_ID 사용.
-      - aspect_ratio: "4:5" 또는 "1:1". openai-gpt-image-2-low-v1에서는 필수
+      - aspect_ratio: "4:5" 또는 "1:1". gpt-image-2-v1에서는 필수
         (2026-07-23 팀장 정정: 4:5=1024x1280, 1:1=1024x1024, 둘 다 무크롭).
         model-c-v1은 이 값을 그냥 무시함(레거시 워크플로라 비율 선택 개념이 없음).
       - cup_source: "uploaded" 또는 "model". 2026-07-24 소연님 요청사항이며
