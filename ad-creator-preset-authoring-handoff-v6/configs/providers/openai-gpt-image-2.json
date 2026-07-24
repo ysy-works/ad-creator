@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0.0",
+  "provider": "openai_images_api",
+  "model": "gpt-image-2",
+  "submission_path": "images_edit",
+  "endpoint": "https://api.openai.com/v1/images/edits",
+  "api_key_environment_variable": "OPENAI_API_KEY",
+  "timeout_seconds": 1200,
+  "size": "1024x1536",
+  "input_fidelity": "high",
+  "output_format": "png",
+  "moderation": "auto",
+  "automatic_retries": 0,
+  "billing": {
+    "legacy_credit_accounting": "not_applicable",
+    "legacy_credits": 0,
+    "usage_source": "provider_response_metadata"
+  }
+}

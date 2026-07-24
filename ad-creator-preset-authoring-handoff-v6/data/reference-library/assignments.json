@@ -16162,6 +16162,42 @@
         "scene_complexity": "solo",
         "wood_prominence": 0.0
       }
+    },
+    "ref_c61e3c79a9b4d2ef": {
+      "analysis_status": "analyzed",
+      "canonical_asset_id": "ref_c61e3c79a9b4d2ef",
+      "cluster_id": "wood_handheld_two_person_v1",
+      "confidence": 0.98,
+      "evidence": [
+        "user-approved crop",
+        "two hand-held beverage slots",
+        "pale oak window counter",
+        "soft upper-right window",
+        "manual scene-graph review"
+      ],
+      "membership": "core",
+      "mood_package_path": "presets/moods/instagram_wood_handheld_two_person_v1/mood-package.json",
+      "runtime_capabilities": {
+        "cross_kind_slot_ids": [],
+        "default_target_slot_id": "beverage_primary",
+        "replaceable_slot_ids": [
+          "beverage_primary"
+        ],
+        "supports_cross_kind_replacement": false
+      },
+      "taxonomy": {
+        "accent_color_prominence": 0.12,
+        "camera_angle": "high_angle",
+        "capture_style": "held_product",
+        "confidence": 0.98,
+        "dominant_surface": "pale matte oak window counter",
+        "environment_family": "warm_wood",
+        "frontend_angle": "high_angle",
+        "frontend_mood": "wood",
+        "lighting_family": "soft_window",
+        "scene_complexity": "pair",
+        "wood_prominence": 0.64
+      }
     }
   },
   "clusters": {

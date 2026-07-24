@@ -40,6 +40,11 @@ _MODEL_POLICIES = {
         maximum_characters=12_000,
         verification_state="verified_live",
     ),
+    ("openai_images_api", "gpt-image-2"): PromptLimitPolicy(
+        policy_id="openai_gpt_image_2_direct_api_16000_v1",
+        maximum_characters=16_000,
+        verification_state="verified_live",
+    ),
 }
 
 

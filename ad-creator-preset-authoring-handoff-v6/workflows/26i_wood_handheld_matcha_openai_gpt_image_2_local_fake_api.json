@@ -1,0 +1,190 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "white_closeup_matcha_user_source.png"
+    }
+  },
+  "2": {
+    "class_type": "AD_LoadReviewedProductAnalysisV2",
+    "inputs": {
+      "image": [
+        "1",
+        0
+      ],
+      "product_analysis_path": "configs/reviewed-product-analysis-wood-handheld-matcha-user-v1.json"
+    }
+  },
+  "3": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "ad_creator_reference_wood_handheld_two_person_v2.png"
+    }
+  },
+  "4": {
+    "class_type": "AD_ResolveReferenceSceneGraph",
+    "inputs": {
+      "reference_image": [
+        "3",
+        0
+      ],
+      "catalog_path": "data/reference-library/catalog.sqlite",
+      "scene_graph_catalog_path": "data/reference-library/scene-graphs-v2/ref_c61e3c79a9b4d2ef_wood_handheld_two_person_v1.json",
+      "assignments_path": "data/reference-library/assignments.json",
+      "fallback_mood_package_path": "presets/moods/instagram_wood_handheld_two_person_v1/mood-package.json"
+    }
+  },
+  "5": {
+    "class_type": "AD_LoadMoodPackage",
+    "inputs": {
+      "mood_package_path": "presets/moods/instagram_wood_handheld_two_person_v1/mood-package.json"
+    }
+  },
+  "6": {
+    "class_type": "AD_BuildSceneGenerationRequest",
+    "inputs": {
+      "image": [
+        "2",
+        0
+      ],
+      "mood_json": [
+        "5",
+        0
+      ],
+      "product_analysis_json": [
+        "2",
+        1
+      ],
+      "scene_reference_json": [
+        "4",
+        1
+      ],
+      "scene_graph_json": [
+        "4",
+        2
+      ],
+      "container_mode": "preserve_source",
+      "target_slot_id": "beverage_primary",
+      "placement_mode": "replace",
+      "product_kind": "beverage",
+      "cross_kind_replacement": false,
+      "unbound_slot_policy": "genericize",
+      "container_design_path": "",
+      "auto_paid_repair": false,
+      "features_path": "configs/service-features.json",
+      "provider_profile_path": "configs/providers/openai-gpt-image-2.json",
+      "seed": 905,
+      "quality_tier": "default",
+      "reference_control_role": "sanitized_scene_hint",
+      "container_design_source": "source",
+      "container_reference": [
+        "13",
+        0
+      ]
+    }
+  },
+  "8": {
+    "class_type": "AD_InstagramCrop",
+    "inputs": {
+      "image": [
+        "7",
+        0
+      ],
+      "target_width": 880,
+      "target_height": 1100
+    }
+  },
+  "9": {
+    "class_type": "AD_ApplyMoodGrade",
+    "inputs": {
+      "image": [
+        "8",
+        0
+      ],
+      "mood_json": [
+        "5",
+        0
+      ],
+      "strength": "natural",
+      "protection_mask": [
+        "14",
+        0
+      ]
+    }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "9",
+        0
+      ],
+      "filename_prefix": "ad_creator/wood_handheld_two_person/matcha_user_source_cup_gpt_image_2_medium_angle_board_v3_openai_smoke"
+    }
+  },
+  "11": {
+    "class_type": "AD_SaveRunManifest",
+    "inputs": {
+      "request_json": [
+        "6",
+        2
+      ],
+      "job_json": [
+        "7",
+        1
+      ],
+      "metrics_json": [
+        "9",
+        1
+      ],
+      "output_label": "ad_creator/wood_handheld_two_person/matcha_user_source_cup_gpt_image_2_medium_angle_board_v3_openai_smoke"
+    }
+  },
+  "13": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "ad_creator_wood_handheld_two_person_scene_hint_iced_v1.png"
+    }
+  },
+  "14": {
+    "class_type": "AD_ProductBBoxProtectionMask",
+    "inputs": {
+      "request_json": [
+        "6",
+        2
+      ],
+      "target_width": 880,
+      "target_height": 1100,
+      "padding_ratio": 0.025,
+      "feather_ratio": 0.02
+    }
+  },
+  "7": {
+    "class_type": "AD_FakeGenerate",
+    "inputs": {
+      "image": [
+        "6",
+        0
+      ],
+      "request_json": [
+        "6",
+        2
+      ],
+      "fixture_image_path": ""
+    }
+  },
+  "12": {
+    "class_type": "AD_FakeQualityRoute",
+    "inputs": {
+      "request_json": [
+        "6",
+        2
+      ],
+      "lighting_sheet_json": [
+        "5",
+        1
+      ],
+      "qa_fixture_path": "evals/fixtures/unbranded_scene_pass_qa.json"
+    }
+  }
+}

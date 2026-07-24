@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "mood_package_id": "instagram_wood_handheld_two_person_v1",
+  "display_name": "우드 저채도 투인 핸드헬드",
+  "preset_path": "presets/editorial/instagram_wood_handheld_two_person_v1/reference-preset.json",
+  "runtime_profile_path": "presets/editorial/runtime-profile-v1.json",
+  "scene_recipe_path": "presets/moods/instagram_wood_handheld_two_person_v1/scene-recipe.json",
+  "lighting_sheet_path": "presets/moods/instagram_wood_handheld_two_person_v1/lighting-sheet.json",
+  "grade_profile_path": "presets/moods/instagram_wood_handheld_two_person_v1/grade-profile.json",
+  "photographic_style_contract_path": "presets/editorial/instagram_wood_handheld_two_person_v1/photographic-style-contract.json",
+  "product_integration_contract_path": "presets/editorial/product-integration-contract-v1.json",
+  "reference_control_board_path": "data/reference-library/control-boards/wood-handheld-two-person-v1/scene-hint.png",
+  "reference_control_board_manifest_path": "data/reference-library/control-boards/wood-handheld-two-person-v1/scene-hint-manifest.json",
+  "runtime_reference_policy": "offline_contract_only",
+  "compatibility": {
+    "composition_modes": [
+      "two_held_drinks_on_window_counter"
+    ],
+    "materials": [
+      "glass",
+      "plastic",
+      "paper",
+      "ceramic"
+    ]
+  }
+}

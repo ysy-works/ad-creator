@@ -54,8 +54,10 @@ def apply_provider_profile(
     applied["submission_path"] = provider_profile["submission_path"]
 
     if provider_profile["provider"] == "openai_images_api":
-        if provider_profile["model"] != "gpt-image-1-mini":
-            raise ValueError("OpenAI provider profile must use gpt-image-1-mini")
+        if provider_profile["model"] not in {"gpt-image-1-mini", "gpt-image-2"}:
+            raise ValueError(
+                "OpenAI provider profile must use gpt-image-1-mini or gpt-image-2"
+            )
         if provider_profile["submission_path"] != "images_edit":
             raise ValueError("OpenAI provider profile must use images_edit")
         if provider_profile.get("size") not in {

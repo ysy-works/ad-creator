@@ -425,6 +425,262 @@ FINAL AUDIT: require identity, close-scale hierarchy, double rims, curved CAFE A
 """.strip()
 
 
+def _wood_handheld_two_person_master_contract(
+    *,
+    preset: dict[str, Any],
+    product_analysis: dict[str, Any],
+    scene_graph: dict[str, Any] | None,
+    lighting_sheet: dict[str, Any] | None,
+    photographic_style_contract: dict[str, Any] | None,
+    container_mode: str,
+    reference_control_role: str,
+) -> str:
+    """Compile the non-lossy hand, cup and window relationship for Wood Handheld."""
+    if (
+        preset.get("preset_id") != "instagram_wood_handheld_two_person_v1"
+        or scene_graph is None
+        or lighting_sheet is None
+        or photographic_style_contract is None
+    ):
+        return ""
+    serving_temperature = (
+        product_analysis.get("identity", {})
+        .get("serving_state", {})
+        .get("temperature", "unknown")
+    )
+    hot_product = serving_temperature == "hot"
+    container_material = str(
+        product_analysis.get("identity", {})
+        .get("container", {})
+        .get("material", "")
+    ).lower()
+    hot_metal = hot_product and any(
+        token in container_material for token in ("metal", "steel", "chrome")
+    )
+
+    objects = {item["slot_id"]: item for item in scene_graph["objects"]}
+    primary_object = objects["beverage_primary"]
+    primary = primary_object["body_bbox"]
+    primary_pose_instruction = (
+        (
+            "Image 2 upper-right is POSE-ONLY authority: transfer its high-oblique "
+            "camera, bare LEFT-hand middle-lower grip and wrist; ignore its cup pixels, "
+            "white ceramic, beverage and material. Image 1 alone owns the complete target "
+            "cup. Keep its handle fully visible on IMAGE-RIGHT. In image coordinates the "
+            "cup axis is nearly neutral: from BASE CENTER to RIM CENTER it moves only "
+            "slightly toward lower-left 7-8 o'clock, a real 3D lean of 4-6 degrees. Never "
+            "lean right, upper-right or strongly diagonal. Keep the liquid gravity-level "
+            "with a small physically plausible air gap. Reject eye-level 2D rotation."
+        )
+        if hot_product
+        else (
+            "Image 2 upper-right is the iced-pose authority: under its high-oblique "
+            "camera, from BASE CENTER to RIM CENTER the cup axis moves only slightly "
+            "toward image lower-left 7-8 o'clock, a real 3D lean of 4-6 degrees. The "
+            "left hand supports the middle-lower cup, the sidewall remains visible and "
+            "the liquid free surface stays gravity-level. Never lean right, upper-right "
+            "or strongly diagonal, and never rotate an eye-level cup in 2D."
+        )
+    )
+    primary_pose_instruction += (
+        " COLOR FIREWALL: Image 2 upper-right supplies geometry only—never its RGB, "
+        "white point, fill, material or light. Image 1 alone owns target beverage color "
+        "and material; scene illumination comes from the lighting contract."
+    )
+    companion = objects["beverage_secondary"]["body_bbox"]
+    pastry = objects["prop_pastry_plate"]["body_bbox"]
+    magazine = objects["prop_magazine_saucer"]["body_bbox"]
+    primary_hand = next(
+        item for item in scene_graph["protected_regions"] if item["region_id"] == "region_primary_hand"
+    )["bbox"]
+    companion_hand = next(
+        item for item in scene_graph["protected_regions"] if item["region_id"] == "region_companion_hand"
+    )["bbox"]
+    camera = photographic_style_contract["camera_geometry"]
+    composition = photographic_style_contract["composition_geometry"]
+    tone = photographic_style_contract["tone_signature"]
+    finish = photographic_style_contract["finish_signature"]
+    key = lighting_sheet["key_light"]
+    fill = lighting_sheet["fill_contract"]
+    light_map = lighting_sheet["screen_light_map"]
+    shadow = lighting_sheet["shadow_contract"]
+    capture = lighting_sheet["capture_contract"]
+
+    def box(value: dict[str, Any]) -> str:
+        return (
+            f"({value['left']:.3f},{value['top']:.3f})-"
+            f"({value['right']:.3f},{value['bottom']:.3f})"
+        )
+
+    if container_mode not in {"preserve_source", "adopt_reference"}:
+        raise ValueError(
+            "Wood Handheld Two-Person requires preserve_source or adopt_reference container mode"
+        )
+    if reference_control_role != "sanitized_scene_hint":
+        raise ValueError("Wood Handheld Two-Person requires the static relational scene hint")
+
+    if container_mode == "adopt_reference":
+        input_authority = (
+            "Image 1 alone owns the iced beverage identity, matcha-to-milk relationship, "
+            "ice, foam and authorized branding; its source tumbler has no authority. "
+            "Image 2's upper-right panel owns the compact off-white ceramic target mug "
+            "geometry and its attached lower bare-hand grip."
+        )
+        lower_panel_role = (
+            "upper-right supplies the lower bare left wrist/hair tie, attached grip and "
+            "compact ceramic reference mug geometry, but not its latte art or beverage"
+        )
+        primary_rule = (
+            "Transfer the upper-right panel's attached grip and compact mug geometry "
+            "into this 6 o'clock zone: bare left wrist and thin black hair tie enter from "
+            "the bottom, fingers wrap the short off-white ceramic mug, and no cuff or "
+            "sleeve appears. Hold the adopted mug lower-centre at 20-22 percent frame "
+            "width and 26-29 percent frame height. Preserve its short cylindrical body, thin rim, rounded lower wall "
+            "and one small loop handle; reconstruct Image 1's iced matcha beverage "
+            "inside it without copying reference latte art or the source tumbler."
+        )
+        hand_cup_rule = (
+            "Preserve the upper-right panel's attached palm/finger/mug proportions, "
+            "finger joints, thumb opposition, grip pressure and occlusion while "
+            "regenerating anonymous skin and ceramic; do not preserve panel coordinates."
+        )
+        liquid_rule = (
+            "Rebuild Image 1 beverage content volumetrically inside the adopted opaque "
+            "ceramic mug: preserve matcha/milk relation, irregular ice, foam and opacity, "
+            "but discard the source transparent tumbler. Window light crosses the open "
+            "liquid surface and ice, while the mug receives broad ceramic rolloff and "
+            "attached hand occlusion."
+        )
+        milk_boundary_rule = (
+            "At the open top, integrate milk and matcha through meniscus, irregular ice, "
+            "shared window reflection and ceramic-rim bounce; do not expose a transparent "
+            "sidewall or reproduce the reference latte-art pattern."
+        )
+        final_primary = (
+            "compact lower-centre matcha beverage in the adopted off-white reference "
+            "mug, held by the bare 6 o'clock hand/hair tie"
+        )
+    else:
+        input_authority = (
+            f"Image 1 alone owns the exact {'hot' if hot_product else 'iced'} beverage and complete user cup: rim, "
+            "wall, base, transparency, ice, layers, topping and authorized branding. "
+            "Reconstruct it; never paste its pixels, hand, background, camera, source "
+            "light or shadow."
+        )
+        lower_panel_role = (
+            "upper-right supplies only the lower bare left wrist/hair tie and open grip "
+            "contour; it contains no target-cup or beverage authority"
+        )
+        primary_rule = (
+            "Transfer only the upper-right panel's grip geometry into this 6 o'clock "
+            "zone: bare left wrist and thin black hair tie enter from the bottom, fingers "
+            "adapt around the smaller user cup, and no cuff or sleeve appears. Hold the "
+            "user product lower-centre at 20-22 percent frame width and 26-29 percent "
+            f"frame height. {primary_pose_instruction} Keep rim, wall and base on one "
+            "perspective axis with a visible sidewall, vertical iced layers, irregular "
+            "ice and curved-wall refraction."
+        )
+        hand_cup_rule = (
+            "Preserve the upper-right panel's wrist angle, finger approach and grip "
+            "pressure only; adapt the final fingers to Image 1 cup geometry and never "
+            "infer a cup silhouette from the neutralized panel."
+        )
+        liquid_rule = (
+            (
+                (
+                    "Rebuild Image 1's hot coffee volumetrically inside the complete source "
+                    "metal cup: preserve the thin crema, rolled rim, angular handle, reflective "
+                    "steel sidewall and base while discarding the saucer. Window, hand and oak "
+                    "reflections must curve coherently across the metal without mirror-CGI glare."
+                )
+                if hot_metal
+                else
+                (
+                    "Rebuild Image 1's hot cappuccino volumetrically inside its complete "
+                    "source ceramic cup while discarding the source saucer. Preserve the "
+                    "compact tapered body, rounded rim, two thin parallel black rim stripes, "
+                    "small black CAPPUCCINO typography curved naturally with the wall, "
+                    "right-side loop handle, foot and thin crema. Glaze, stripes and typography "
+                    "share the same curvature, highlight rolloff and hand occlusion—never a "
+                    "flat sticker or pasted graphic."
+                )
+            )
+            if hot_product
+            else (
+                "Rebuild Image 1 volumetrically at the compact absolute frame scale: preserve layers, "
+                "green/milk relation, ice, opacity and source-cup silhouette while re-lighting "
+                "it. Window light crosses clear wall, liquid and irregular submerged ice, "
+                "producing restrained connected transmission within the hand/counter shadow."
+            )
+        )
+        milk_boundary_rule = (
+            (
+                "Keep the coffee surface gravity-level inside the tilted rim; preserve a "
+                "small asymmetric rim-to-liquid gap, thin crema and no spill."
+            )
+            if hot_product
+            else (
+                "Soften the glass-to-milk contrast only through finite refraction, meniscus, "
+                "wall thickness and shared reflection; do not blur it."
+            )
+        )
+        final_primary = (
+            f"compact lower-centre exact {'hot drink and source cup' if hot_product else 'user drink'} in the bare 6 o'clock hand/hair tie"
+        )
+
+    relighting_block = (
+        (
+            """BEVERAGE RELIGHTING - HARD LOCK: Image 1 metal and coffee are already light-conditioned by their source. Preserve cup design and coffee/crema identity, not source reflections or white point. Rebuild the stainless-steel reflection field from the cloudy window, pale oak, skin and charcoal clothing; keep the rolled rim and angular handle readable without clipped mirror bands. The coffee free surface remains gravity-level inside the subtly tilted cup, with a small asymmetric air gap and no spill. Discard the source saucer, hand, sleeve, wall and shadow. Never turn steel into ceramic, chrome CGI or transparent glass."""
+            if hot_metal
+            else
+            """BEVERAGE RELIGHTING - HARD LOCK: Image 1 ceramic and cappuccino are already light-conditioned by their source. Preserve cup design, stripe/text relationships and coffee identity, not exact source RGB, source white point, reflections or wall light. Rebuild the off-white glaze under the preset's cloudy window, pale-oak bounce, skin occlusion and charcoal-clothing fill. Let the ceramic shift naturally toward a quiet warm-gray ivory while remaining distinct from the cooler sill; keep the two black stripes and CAPPUCCINO typography integrated into curved glaze, never sticker-like. Reinterpret coffee and crema with restrained faded-film color density, not exact RGB copying. The coffee free surface stays gravity-level inside the subtly tilted rim with a small asymmetric air gap and no spill. Discard the source saucer, hand, striped sleeve, wall and shadow. Never bleach ceramic, erase the design, or turn the cup into plain white plastic, metal or glass."""
+        )
+        if hot_product
+        else
+        """MILK RELIGHTING - HARD LOCK: Image 1 milk is already light-conditioned by its source environment; preserve matcha identity, green-to-milk hierarchy and internal transitions, not exact source RGB, source saturation or source white point. Reinterpret both liquids through the preset's cloudy daylight and restrained faded-film color density: matcha becomes muted natural olive-green with living tonal variation, never neon or brown sludge; milk becomes quiet warm-gray ivory with faint olive depth, never paper white. The brightest milk is 10-18 percent below the brightest ceramic/window highlight, receives counter/skin reflection, and darkens gently toward sidewall and lower hand. Both layers, ice and glass share the same film shoulder, shadow hue and reflected fill. Keep the cup rim, hand contact and layer boundaries readable, but lower only the beverage liquid-and-ice local edge acuity and microcontrast about 5-7 percent relative to the adjacent hand and rim; this is subtle optical integration, never blur, lost identity or softened branding. Keep it pale and appetizing but forbid self-luminous white, a flat opaque sticker layer or a hard cutout boundary. {milk_boundary_rule} Do not make ice geometric, glass plastic, a cup floating, or a drink sticker-like. Companion foam/crema is generic, imperfect and unbranded.""".format(
+            milk_boundary_rule=milk_boundary_rule
+        )
+    )
+    product_highlight_rule = (
+        (
+            "The metal cup, coffee and skin share the same bounded window reflection; no isolated chrome-white band may float on the cup."
+            if hot_metal
+            else
+            "The ivory ceramic cup, coffee and skin share one bounded cloudy-window reflection; stripes and typography follow the glaze curvature without a separate sticker highlight."
+        )
+        if hot_product
+        else
+        "Window sill is the brightest neutral-gray surface, ceramic is below it, and the milk inside the user drink is lower again; no isolated white point may float in the drink."
+    )
+    relighting_name = "beverage relighting" if hot_product else "milk relighting"
+    luminance_name = (
+        ("metal/coffee luminance" if hot_metal else "ceramic/coffee luminance")
+        if hot_product
+        else "milk luminance"
+    )
+
+    return f"""
+[WOOD HANDHELD TWO-PERSON MASTER CONTRACT - FULL FIDELITY]
+INPUT AUTHORITY: {input_authority} Image 2 is a four-panel non-contiguous evidence board, never a scene layout. Upper-left supplies only the companion leather sleeve, hand grip and ceramic cup/drink; {lower_panel_role}; lower-left supplies only croissant, magazine and saucer context; lower-right supplies only pale-oak grain direction, sill and cloudy-window photometry. Structured boxes below own final placement. Never render panel seams or transfer a face, identity, text, logo, exact latte art, wood knot, reflection or pixel.
+
+FRAME MAP RAW 3:4: primary bbox={box(primary)}; bare-hand zone={box(primary_hand)}. {primary_rule} Companion bbox={box(companion)}; leather-hand zone={box(companion_hand)}. Transfer the upper-left panel's local grip/clothing only: one smaller generic off-white ceramic hot cup; leather is exclusive to this arm. Pastry bbox={box(pastry)} stays partial upper-right. Magazine plus saucer bbox={box(magazine)} stays cropped right with the small empty upper-centre saucer. Exactly two hands and two cups; target in the lower person's left hand. No face, third person, extra wrist/drink, empty hand, white shirt or lower black sleeve.
+
+CAMERA: rectilinear {camera['focal_length_equivalent_mm'][0]}-{camera['focal_length_equivalent_mm'][1]}mm-equivalent optics; distance {camera['working_distance_cm'][0]}-{camera['working_distance_cm'][1]}cm; pitch {camera['pitch_degrees'][0]}-{camera['pitch_degrees'][1]} degrees; yaw {camera['yaw_degrees'][0]}..{camera['yaw_degrees'][1]} degrees; roll {camera['roll_degrees'][0]}..{camera['roll_degrees'][1]} degrees. The structured boxes—not Image 2 panel coordinates—form one high-oblique seat-side frame: compact lower product below centre, smaller companion above-left and peripheral right props. Never reproduce the evidence-board grid, gutters, panel crops or four-up composition. Preserve normal hands, real cup ellipses and diagonal counter recession. Build four depth planes: lower bare left wrist/two distinct thighs; held user drink; companion/props; cool window/exterior. Use scale, finger occlusion, overlap, perspective, under-counter darkness, off-frame occlusion and tonal falloff before softness. {composition['negative_space']} Reject wide-angle hands, flat overhead circles, product-ad symmetry, portrait bokeh, global blur, cropped fingers and full-body framing.
+
+LIGHT SOURCE - HARD LOCK: exactly one {key['source']}, direction {key['direction']}, azimuth {key['azimuth_degrees'][0]}-{key['azimuth_degrees'][1]} degrees, elevation {key['elevation_degrees'][0]}-{key['elevation_degrees'][1]} degrees and apparent angular size {key['angular_size_degrees'][0]}-{key['angular_size_degrees'][1]} degrees. This is cloudy late-afternoon window daylight, not sunset: cool-neutral gray-white window rolloff, muted local beige in the oak, no red, orange or yellow beam. Key-to-fill ratio={fill['key_to_fill_ratio'][0]}-{fill['key_to_fill_ratio'][1]}; lit-area ratio={light_map['lit_area_ratio'][0]}-{light_map['lit_area_ratio'][1]}; shadow-area ratio={light_map['shadow_area_ratio'][0]}-{light_map['shadow_area_ratio'][1]}. The broad cloud-filtered field travels from upper-right to lower-left. It creates compact finger/cup occlusion, then a broad soft lower-left falloff across counter, dark laps and unseen off-frame room occupancy. {product_highlight_rule} No direct sun, blind stripe, gobo, second key, spotlight, conflicting catchlight or isolated product lighting.
+
+HAND, BODY, CUP AND LIQUID PHYSICS: use the two upper panels only as local pose/design guides; regenerate anonymous anatomy at scene-graph positions. Upper-left alone wears charcoal matte leather. Lower person uses a bare left hand/hair tie above exactly two connected dark-clothed thighs and knees. Retain a shallow central V, unequal folds and tonal separation; never one fused leg mass. The lower black sleeve stays outside crop. {hand_cup_rule} Reject missing, fused, duplicated or third legs, beauty-smoothed skin, mannequin grip, wrist cuff or lower leather. {liquid_rule}
+
+{relighting_block}
+
+COUNTER, PROPS AND AIR: pale oak is matte with long real grain and pores, but its color density is gently faded; new grain phase is allowed but no gloss, orange grade or copied knot topology. The cool gray-white window ledge keeps protected rolloff. The upper-right croissant on its white plate, right-side blank neutral magazine partly under a saucer, and small upper-centre empty saucer must remain as modest cropped spatial evidence, never hero props. All magazine lettering must be blank/unreadable. Preserve a real spatial cavity under the counter and near the dark laps, subtle occlusion from people/surfaces outside the frame, and a cooler exterior/window plane beyond the sill. These low-frequency layer changes create room air and everyday presence; do not substitute fog, global blur, decorative bokeh or invented silhouettes.
+
+COLOR AND EXPOSURE: white balance={capture['white_balance']}; exposure={capture['exposure_compensation_ev'][0]}..{capture['exposure_compensation_ev'][1]}EV. {tone['contrast_curve']}. Black={tone['black_point']}; white={tone['white_point']}; shadows={tone['shadow_color']}; highlights={tone['highlight_color']}. Apply a restrained faded-film print response: 6-10 percent reduced color density, softly compressed highlight shoulder, a very slight opened black toe and faint low-contrast sensor grain. It must read as a cloudy afternoon photograph with naturally weathered color, not as sepia, sunset, teal-and-orange, a retro effect overlay or washed gray haze. Warmth remains local to oak and coffee. Ceramic/window stay cool-neutral, charcoal clothing retains grain, and Image 1 beverage identity remains recognizable after the {relighting_name} inside the shared exposure. Finish={finish['acuity']} / {finish['microcontrast']}. Reject yellow veil, blue cast, red sunset, HDR halo, clipped ceramic, crushed leather, lifted gray shadows, paper-white milk or a clean commercial color grade.
+
+FINAL AUDIT: assemble the four evidence roles through the 3:4 map, never its grid: {final_primary}; smaller upper-left ceramic companion in the only leather sleeve; two separated lower thighs/knees; upper-right window/croissant; right magazine/saucers. One cloudy window joins hands, cups, counter, reflections, {luminance_name} and shadows. Reject collage seams, scene text, faces, source pixels, missing/fused/duplicate limbs, lower black sleeve, missing props, oversized/top-only product, paper-white milk or AI-perfect materials.
+""".strip()
+
+
 def _white_closeup_master_contract(
     *,
     preset: dict[str, Any],
@@ -1244,6 +1500,16 @@ def build_generation_request(
                 "material proportions while regenerating all refraction, reflection, contact and shadow under "
                 "Image 2 light. Reconstruct one coherent exposure; never paste, mask-blend or trace the source."
             )
+        elif preset.get("preset_id") == "instagram_wood_handheld_two_person_v1":
+            container_contract = (
+                "WOOD_HANDHELD_SEGMENTED_EVIDENCE: Image 2 is a four-panel non-contiguous evidence board, "
+                "never a scene layout. Its upper panels separately supply the companion leather-hand/cup and "
+                "lower bare-wrist/hair-tie hand/cup poses; lower panels separately supply props and pale-oak/"
+                "cloudy-window material-light evidence. Image 1 exclusively owns the exact iced beverage and "
+                "complete source cup. Structured scene boxes own final placement. Rebuild one photograph; never "
+                "render the board grid, seams or panel coordinates and never copy identity, text, latte art, "
+                "wood knots, reflections or pixels. Lower hand has no sleeve; leather is upper-left only."
+            )
         else:
             container_contract = (
                 "PRESERVE_SOURCE_WITH_SANITIZED_SCENE_HINT: Image 2 is a photographic evidence board "
@@ -1506,6 +1772,15 @@ def build_generation_request(
         container_mode=effective_container_mode,
         reference_control_role=reference_control_role,
     )
+    wood_handheld_master_contract = _wood_handheld_two_person_master_contract(
+        preset=preset,
+        product_analysis=analysis,
+        scene_graph=scene_graph,
+        lighting_sheet=lighting_sheet,
+        photographic_style_contract=photographic_style_contract,
+        container_mode=effective_container_mode,
+        reference_control_role=reference_control_role,
+    )
     white_closeup_master_contract = _white_closeup_master_contract(
         preset=preset,
         product_analysis=analysis,
@@ -1634,6 +1909,15 @@ def build_generation_request(
                 "Image 2=approved white-closeup scene, saucer, spoon and photometric anchor"
             )
     if (
+        preset.get("preset_id") == "instagram_wood_handheld_two_person_v1"
+        and "scene_hint" in image_roles
+    ):
+        role_description = (
+            "Image 1=exact user beverage and complete user-cup authority; "
+            "Image 2=four-panel evidence board: separate upper leather-hand/cup, lower bare-wrist/hair-tie "
+            "hand/cup, prop cluster and pale-wood/cloudy-window evidence; panel positions are never output layout"
+        )
+    if (
         preset.get("preset_id") == "instagram_wood_calm_window_closeup_v1"
         and effective_container_mode == "adopt_reference"
     ):
@@ -1716,7 +2000,7 @@ Moment={_humanize(sampled['micro_moment'])}; setup={_humanize(sampled['pov_mode'
 {spatial_depth_contract or 'Use overlap, scale and perspective lines to separate near, middle and far planes. Keep the complete product sharp; reduce only far-background fine detail slightly. Reject uniform blur, portrait cutout blur and DSLR bokeh.'} {phone_prompt_summary}
 
 [PHYSICS AND SAFETY]
-Product, {('hand, ' if not scene_reference or reference_interaction == 'held' else '')}environment, highlights, reflections, transmission and shadows share one source/camera. Render {container['material']} physically: glass keeps rim/base thickness and refraction; plastic keeps thin reflections. Preserve contact; reject floating edges or conflicting shadows. Scene pixels are not submitted; extra images obey declared roles. Invent details; never copy {_clip(forbidden_copy, 150)}. Discard {_clip(discarded_context_text, 100)}. Add no unverified text, logo, watermark or pseudo-branding. Reject malformed hands, extra fingers, uniform blur, studio/catalog/CGI appearance, HDR halos and movie-like grading. {_clip('Also reject ' + '; '.join(scene_recipe['forbidden']), 170) if scene_recipe else ''}
+Product, {('hand, ' if not scene_reference or reference_interaction == 'held' else '')}environment, highlights, reflections, transmission and shadows share one source/camera. Render {container['material']} physically: glass keeps rim/base thickness and refraction; plastic keeps thin reflections. Preserve contact; reject floating edges or conflicting shadows. {('Image 2 is a segmented evidence board: use each panel only for its declared local pose, material, prop or light role; structured geometry owns final placement; never output its grid or crop layout.' if preset.get('preset_id') == 'instagram_wood_handheld_two_person_v1' else 'Scene pixels are not submitted; extra images obey declared roles.')} Invent details; never copy {_clip(forbidden_copy, 150)}. Discard {_clip(discarded_context_text, 100)}. Add no unverified text, logo, watermark or pseudo-branding. Reject malformed hands, extra fingers, uniform blur, studio/catalog/CGI appearance, HDR halos and movie-like grading. {_clip('Also reject ' + '; '.join(scene_recipe['forbidden']), 170) if scene_recipe else ''}
 
 [FINAL GATE]
 The beverage, selected container policy, {final_brand_gate}, visual anchor, bbox, negative space, physical depth, {('hand contact' if not scene_reference or reference_interaction == 'held' else 'support-plane contact')} and single-source light must all agree. {'Every active slot, relation and exact product count must also match the scene plan.' if slot_plan else ''} Correct any violation before returning the image.
@@ -1733,9 +2017,12 @@ The beverage, selected container policy, {final_brand_gate}, visual anchor, bbox
         recipe_limit = 430
         lighting_limit = 430
         container_contract_limit = 1500
-        if preset.get("preset_id") == "instagram_wood_calm_window_closeup_v1":
+        if preset.get("preset_id") in {
+            "instagram_wood_calm_window_closeup_v1",
+            "instagram_wood_handheld_two_person_v1",
+        }:
             # The full-fidelity wood master block carries the non-lossy geometry,
-            # light, atmosphere, label and material rules. Trim only duplicate summaries.
+            # light, atmosphere, hand/cup or label and material rules. Trim only duplicates.
             style_summary_limit = 400
             preset_block_limit = 120
             scene_reference_limit = 260
@@ -1763,7 +2050,7 @@ The beverage, selected container policy, {final_brand_gate}, visual anchor, bbox
             if observational_social
             else "Create one new original professionally art-directed editorial cafe photograph with quiet material intelligence and precise visual restraint. It must not read as a casual smartphone image, generic cafe stock, ecommerce catalog, CGI or a copied reference."
         )
-        prompt = f"""{editorial_heading}
+    prompt = f"""{editorial_heading}
 {editorial_opening} Inputs: {role_description}.{brand_asset_instruction}
 
 [EXACT PRODUCT]
@@ -1782,10 +2069,30 @@ Capture={_clip(preset_composition['shot_type'], 80)}; angle={_clip(preset_compos
 {_clip(preset['capture']['look'], 160)}. {_clip(preset['capture']['realism'], 150)}. Create depth through camera geometry, plane overlap, scale and light falloff before softness. Keep the complete product sharp without wide-angle looming, computational halos, generic bokeh or plastic retouching. Add no unverified text, logo or watermark. Reject floating contact, invented props, malformed hands and conflicting shadows.
 
 {wood_closeup_master_contract}
+{wood_handheld_master_contract}
 {white_closeup_master_contract}
 
 [FINAL GATE]
 Return the image only when exact beverage identity, selected container policy, {final_brand_gate}, approved scale/position corridors, camera geometry, negative-space topology, support contact, palette, material hierarchy and single-source light all agree.
+"""
+
+    if preset.get("preset_id") == "instagram_wood_handheld_two_person_v1":
+        # This preset's master contract owns its geometry, hand pose, light and
+        # milk relighting in full. Avoid spending the verified 12k allowance on
+        # duplicate generic summaries, while retaining the source-product facts.
+        prompt = f"""{editorial_heading}
+{editorial_opening} Inputs: {role_description}.{brand_asset_instruction}
+
+[EXACT PRODUCT]
+Beverage={_clip(identity['beverage'], 160)}. Container={container_summary}. Preserve {_clip(must_preserve_text, 300)}. {_clip(container_contract, 100)} {_clip(logo_directive, 80)}
+
+[SOURCE-TO-SCENE INTEGRATION]
+Image 1 keeps the complete user beverage/cup. Image 2 is a four-panel evidence board; use local evidence only and never render its grid. Rebuild all light, optics, contacts and shadows as one photograph. Active scene: bound lower user drink, one generic upper companion, one partial pastry plate and one magazine/saucer cluster only.
+
+{wood_handheld_master_contract}
+
+[FINAL GATE]
+Return only when exact user beverage, structured hierarchy, Image 2 local pose/material evidence, compact scale, bare lower wrist, exclusive upper leather, two hands/cups, cloudy faded photometry, {'beverage relighting' if analysis.get('identity', {}).get('serving_state', {}).get('temperature') == 'hot' else 'milk relighting'}, contact and depth agree. No board grid, source pixels, text, face, logo, lower sleeve, extra limb or CGI finish.
 """
 
     if preset.get("preset_id") == "instagram_white_diffuse_closeup_v1":
@@ -1822,6 +2129,48 @@ Return the image only when exact beverage identity, selected container policy, {
                 + ", ".join(found_contradictions)
             )
 
+    if preset.get("preset_id") == "instagram_wood_handheld_two_person_v1":
+        handheld_temperature = (
+            analysis.get("identity", {})
+            .get("serving_state", {})
+            .get("temperature", "unknown")
+        )
+        required_handheld_terms = [
+            "exactly two hands",
+            "upper-left ceramic companion",
+            "upper-right croissant",
+            "magazine plus saucer",
+            "no face",
+            "lower black sleeve",
+            "cloudy late-afternoon",
+            (
+                "BEVERAGE RELIGHTING"
+                if handheld_temperature == "hot"
+                else "MILK RELIGHTING"
+            ),
+        ]
+        required_handheld_terms.extend(
+            [
+                "adopted off-white reference mug",
+                "source tumbler has no authority",
+            ]
+            if effective_container_mode == "adopt_reference"
+            else [
+                "visible sidewall",
+                "complete user cup",
+            ]
+        )
+        missing_handheld_terms = [
+            term
+            for term in required_handheld_terms
+            if term.casefold() not in prompt.casefold()
+        ]
+        if missing_handheld_terms:
+            raise ValueError(
+                "Wood Handheld prompt lost core relationship terms: "
+                + ", ".join(missing_handheld_terms)
+            )
+
     forbidden_language = runtime_profile["language_policy"]["forbidden"]
     found = [term for term in forbidden_language if term.lower() in prompt.lower()]
     if found:
@@ -1853,6 +2202,21 @@ Return the image only when exact beverage identity, selected container policy, {
             "glass, liquid, ceramic and spoon do not share one coherent exposure and reflection system",
             "bright low-chroma milk, foam or cream retains an isolated source-white point instead of sharing the saucer and table exposure",
             "white-room depth lacks peripheral scale falloff, off-frame occupancy shadow or table-plane air",
+        ):
+            if failure not in quality_gate["hard_fail"]:
+                quality_gate["hard_fail"].append(failure)
+    if preset.get("preset_id") == "instagram_wood_handheld_two_person_v1":
+        for failure in (
+            "lower-centre user drink lacks one credible 6 o'clock hand or a visible source-cup sidewall",
+            "upper-left leather-sleeved companion hand or ceramic hot cup is missing",
+            "scene contains more or fewer than two hands and two cups, or contains a face",
+            "upper-right croissant/window or right-side magazine and saucer context is missing",
+            "hands, user drink, counter, reflections and shadows do not share one diffuse window exposure",
+            "reference magazine text, logo, watermark, identity or exact pixels leaked into output",
+            "lower 6 o'clock hand has a black cuff or leather sleeve instead of the Image 2 bare wrist and slim hair tie",
+            "user drink exceeds 22 percent frame width or 29 percent frame height, becomes vertically product-presented, reverses the required top-camera-ward/base-window-ward tilt, becomes a pouring pose or obscures the counter depth planes",
+            "cloudy faded-afternoon film response, cool-neutral window separation or local oak warmth is absent",
+            "low-chroma milk is paper white, self-luminous or detached from the shared ceramic/window highlight shoulder",
         ):
             if failure not in quality_gate["hard_fail"]:
                 quality_gate["hard_fail"].append(failure)

@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "static_relational_scene_hint",
+  "policy_version": "wood_handheld_two_person_scene_hint_v4",
+  "role": "scene_hint",
+  "relative_path": "data/reference-library/control-boards/wood-handheld-two-person-v1/scene-hint.png",
+  "width_px": 1125,
+  "height_px": 1500,
+  "aspect_ratio": "3:4",
+  "sha256": "d538e5b161c78493e804327cd39e917c4e89af497440790db059c092b5977999",
+  "pixel_sha256": "d830b0dfcd7511077f74a604e26897cd340a86e1bd3b1fb29c9b53fac106dfa2",
+  "source_binding": {
+    "asset_id": "ref_c61e3c79a9b4d2ef",
+    "relative_path": "comfyui-inputs/ad_creator_reference_wood_handheld_two_person_v2.png",
+    "pixel_sha256": "37e5a9ab7862f2feb726a5ef7eb32f75d36a6da28842caa9d2bf755e64f65f3a"
+  },
+  "retained_relationships": [
+    "separate upper companion hand, leather clothing, cup and drink evidence",
+    "separate lower bare-wrist hand, hair tie, cup and drink evidence",
+    "separate croissant, magazine and saucer context evidence",
+    "separate pale-oak grain direction, sill and cloudy-window photometry evidence"
+  ],
+  "forbidden_transfer": [
+    "faces and identities",
+    "readable magazine text or logos",
+    "reference latte art and beverage recipe",
+    "exact pixels, wood knots, reflections and hand skin identity"
+  ],
+  "sanitation": {
+    "runtime_role": "non-contiguous pose, object, material and photometry evidence board",
+    "construction": "four independently cropped and low-frequency-reduced panels; no panel preserves full-scene topology",
+    "reference_product_pixels_authoritative": false,
+    "reference_text_transfer_allowed": false,
+    "source_product_transfer_allowed": false
+  }
+}

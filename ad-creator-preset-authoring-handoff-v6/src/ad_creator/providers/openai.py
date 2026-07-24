@@ -24,6 +24,7 @@ from .base import ProviderJob
 
 OPENAI_IMAGE_EDITS_ENDPOINT = "https://api.openai.com/v1/images/edits"
 OPENAI_IMAGE_MODEL = "gpt-image-1-mini"
+OPENAI_IMAGE_MODELS = {"gpt-image-1-mini", "gpt-image-2"}
 OPENAI_IMAGE_SIZES = {"1024x1024", "1024x1536", "1536x1024"}
 
 
@@ -140,7 +141,7 @@ class OpenAIImageProvider:
         self.api_key = api_key or os.environ.get("OPENAI_API_KEY")
         if not self.api_key:
             raise OpenAIUnavailable("OPENAI_API_KEY is not configured")
-        if model != OPENAI_IMAGE_MODEL:
+        if model not in OPENAI_IMAGE_MODELS:
             raise ValueError(f"Unsupported OpenAI image model: {model}")
         if endpoint != OPENAI_IMAGE_EDITS_ENDPOINT:
             raise ValueError("OpenAI image provider must use the official image edits endpoint")
@@ -306,11 +307,12 @@ class OpenAIImageProvider:
             "prompt": prompt,
             "quality": quality,
             "size": self.size,
-            "input_fidelity": self.input_fidelity,
             "output_format": self.output_format,
             "moderation": self.moderation,
             "n": 1,
         }
+        if self.model != "gpt-image-2":
+            payload["input_fidelity"] = self.input_fidelity
         headers = {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
@@ -351,7 +353,9 @@ class OpenAIImageProvider:
             "model": self.model,
             "quality": quality,
             "size": self.size,
-            "input_fidelity": self.input_fidelity,
+            "input_fidelity": (
+                self.input_fidelity if self.model != "gpt-image-2" else None
+            ),
             "output_format": self.output_format,
             "image_roles": [item["role"] for item in image_inputs],
             "request_id": response.request_id,

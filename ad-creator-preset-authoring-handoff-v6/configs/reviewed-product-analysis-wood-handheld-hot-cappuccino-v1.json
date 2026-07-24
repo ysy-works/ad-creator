@@ -1,0 +1,167 @@
+{
+  "schema_version": "2.0.0",
+  "product_kind": "beverage",
+  "analysis_metadata": {
+    "provider": "manual_visual_review",
+    "model": "human_reviewed_visible_pixels",
+    "prompt_version": "product_analysis_v2_brand_crosscheck",
+    "analyzed_at": "2026-07-23T00:00:00+09:00",
+    "confidence": 0.96,
+    "brand_crosscheck": "not_needed",
+    "identity_override": "manual_pixel_review"
+  },
+  "source_binding": {
+    "pixel_sha256": "d46433d21cf349d39275a87515b17bc354b1dc3694ff5ab96ee29881c424641f",
+    "width_px": 1200,
+    "height_px": 1600,
+    "dhash": "000000053261a512",
+    "mean_rgb": [
+      0.600375,
+      0.580895,
+      0.543231
+    ]
+  },
+  "product_summary": "Hot cappuccino in a compact off-white glazed ceramic cup with two thin black rim stripes, small curved black typography and one loop handle on image-right. Preserve the exact cup and coffee; discard the source saucer, hand, sleeve, wall and source lighting for this cup-body grip pose.",
+  "identity": {
+    "beverage": "hot cappuccino with a thin natural crema",
+    "container": {
+      "class": "compact off-white glazed ceramic handled cup",
+      "material": "off-white glazed ceramic",
+      "geometry": "compact gently tapered ceramic body, thick rounded rim, stable foot and one rounded loop handle; preserve the source cup, not its saucer",
+      "components": [
+        "off-white ceramic cup",
+        "right-side rounded loop handle",
+        "two thin black rim stripes",
+        "small curved black cup typography",
+        "hot cappuccino"
+      ]
+    },
+    "branding": {
+      "state": "verified_absent",
+      "main_text": null,
+      "visible_text": [],
+      "non_text_mark": null,
+      "placement": "no intentional branding or readable text should be added",
+      "colors": [],
+      "confidence": 0.98
+    },
+    "must_preserve": [
+      "hot cappuccino identity and thin natural crema",
+      "compact off-white glazed ceramic cup",
+      "thick rounded rim and right-side rounded loop handle",
+      "two thin parallel black stripes following the cylindrical rim curvature",
+      "small black CAPPUCCINO typography naturally printed on the curved ceramic wall",
+      "complete cup sidewall, handle and base",
+      "no invented extra logo, text, straw, ice, garnish or latte art"
+    ],
+    "serving_state": {
+      "schema_version": "1.0.0",
+      "temperature": "hot",
+      "ice_presence": "absent",
+      "straw_requirement": "none",
+      "topping_requirement": "none",
+      "side_visibility_requirement": "required",
+      "confidence": 0.98,
+      "evidence": [
+        "open hot coffee surface is visible",
+        "thin crema follows the metal rim",
+        "no ice, straw or cold-service lid is present"
+      ]
+    }
+  },
+  "geometry": {
+    "container_bbox": {
+      "left": 0.33,
+      "top": 0.45,
+      "right": 0.75,
+      "bottom": 0.66,
+      "confidence": 0.97
+    },
+    "subject_bbox": {
+      "left": 0.23,
+      "top": 0.43,
+      "right": 0.77,
+      "bottom": 0.71,
+      "confidence": 0.96
+    },
+    "beverage_bbox": {
+      "left": 0.36,
+      "top": 0.46,
+      "right": 0.65,
+      "bottom": 0.52,
+      "confidence": 0.95
+    },
+    "straw": {
+      "present": false,
+      "bbox": null,
+      "centerline": null,
+      "emergence_point": null,
+      "angle_degrees": null
+    },
+    "interaction_bbox": null
+  },
+  "visual_anchor": {
+    "feature": "rounded ceramic rim, two curved black stripes, right loop handle, small curved CAPPUCCINO typography and natural crema",
+    "emphasis_method": "preserve cup proportions, glaze and printed design while rebuilding them under the preset's cloudy window and hand-held high-oblique camera",
+    "do_not_exaggerate": [
+      "ceramic gloss",
+      "crema thickness",
+      "handle size",
+      "rim brightness",
+      "cup height",
+      "printed text size"
+    ]
+  },
+  "adaptable": [
+    "source saucer",
+    "source background",
+    "source camera crop",
+    "source hand and sleeve",
+    "source light and shadow"
+  ],
+  "discarded_source_context": [
+    "matching striped ceramic saucer",
+    "source hand and striped sleeve",
+    "white wall and table",
+    "source lighting and shadow"
+  ],
+  "source_capture_assessment": {
+    "issues": [
+      "source is a vertical close crop with a tall vessel and a large neutral tabletop field",
+      "source light is warmer and more frontal than the approved white close-up scene"
+    ],
+    "evidence": [
+      "ice, milk and matcha layers remain readable",
+      "the glass wall and lower contact area are visible"
+    ]
+  },
+  "presentation_correction": {
+    "enabled": true,
+    "intent": "reconstruct the exact hot cappuccino and striped ceramic handled cup in the lower left-hand slot without the source saucer",
+    "preferred_capture": {
+      "focal_length_mm": [
+        45,
+        52
+      ],
+      "camera_distance": "high-oblique two-person cafe distance",
+      "camera_height": "58-64 degree downward window-side observation",
+      "rotation": "rotate the cup in real 3D so the loop handle stays fully visible on image-right; keep the axis nearly neutral with only a 4-6 degree lean toward image 7-8 o'clock"
+    },
+    "allowed": [
+      "re-light ceramic and cappuccino under target window light",
+      "remove the source saucer",
+      "reconstruct a natural left-hand grip",
+      "keep the source cup handle on image-right",
+      "adjust scale within the held-slot corridor"
+    ],
+    "forbidden": [
+      "replace the source ceramic cup with metal, glass or plain unprinted ceramic",
+      "retain the source saucer, hand, sleeve or wall",
+      "omit or straighten the two curved rim stripes and source cup typography",
+      "invent ice, straw, lid, extra logo, text, garnish or latte art",
+      "flatten the cup to a top-only view",
+      "place the target handle on image-left or hide it behind the hand",
+      "tilt the cup axis toward image-right or upper-right"
+    ]
+  }
+}

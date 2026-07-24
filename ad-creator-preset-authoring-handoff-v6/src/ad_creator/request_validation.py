@@ -21,10 +21,11 @@ from .prompt_limits import resolve_prompt_limit_policy
 from .serving_contracts import require_serving_compatibility_ready
 
 
-DEFAULT_MODEL_ALLOWLIST = {"gpt_image_2", "gpt-image-1-mini"}
+DEFAULT_MODEL_ALLOWLIST = {"gpt_image_2", "gpt-image-1-mini", "gpt-image-2"}
 MODEL_PROVIDERS = {
     "gpt_image_2": "higgsfield_cli",
     "gpt-image-1-mini": "openai_images_api",
+    "gpt-image-2": "openai_images_api",
 }
 
 

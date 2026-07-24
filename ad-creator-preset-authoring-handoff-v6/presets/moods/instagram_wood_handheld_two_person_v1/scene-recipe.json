@@ -1,0 +1,145 @@
+{
+  "$schema": "../../../schemas/scene-recipe.schema.json",
+  "schema_version": "1.0.0",
+  "recipe_id": "instagram_wood_handheld_two_person_v1",
+  "display_name": "우드 손잡이 투컵 샷",
+  "compatible_presets": [
+    "instagram_wood_handheld_two_person_v1"
+  ],
+  "generation_policy": {
+    "normal_paid_generations": 1,
+    "runtime_reference_image": false,
+    "traditional_compositing": false
+  },
+  "composition": {
+    "inherit_preset_bbox": true,
+    "subject_anchor_priority": "lower primary held-product bbox (0.310,0.420)-(0.600,0.790), upper companion held-cup bbox (0.310,0.340)-(0.570,0.560), and right-side contextual prop clusters are hard locks",
+    "asymmetry_sources": [
+      "two staggered hands",
+      "unequal held cup scale",
+      "upper-right window counter",
+      "partial pastry and magazine/saucer context"
+    ]
+  },
+  "environment": {
+    "background_plane": "pale oak window counter, white-gray sill and restrained exterior band with cropped pastry, magazine and saucers",
+    "surface_character": "matte pale oak with long natural grain, real pores and local warmth only",
+    "sun_patch_shape": "none; one broad diffuse field without stripes or gobo"
+  },
+  "lighting": {
+    "source": "one very large diffuse upper-right rear window with quiet room return",
+    "direction": "azimuth 36-58 degrees, elevation 38-52 degrees, broad shadows toward lower-left",
+    "shadow_description": "compact finger and cup occlusion, then broad soft lower-left counter/lap penumbrae",
+    "light_softness": [
+      0.78,
+      0.88
+    ],
+    "subject_to_wall_distance_cm": [
+      65,
+      115
+    ],
+    "shadow_density": [
+      0.2,
+      0.34
+    ],
+    "global_contrast": [
+      0.34,
+      0.46
+    ],
+    "background_lightness": [
+      0.52,
+      0.73
+    ],
+    "ambient_fill": "neutral sill and room bounce retain ceramic, skin, leather, ice and wood separation without flattening contacts",
+    "exposure_compensation_ev": [
+      -0.28,
+      -0.08
+    ],
+    "sun_patch_coverage": [
+      0.0,
+      0.0
+    ],
+    "highlight_behavior": "protected window, ceramic and finite transparent drink highlights with no clipped white glow",
+    "shadow_temperature": "neutral charcoal with faint cool window influence and no amber veil"
+  },
+  "capture": {
+    "rendering_pipeline": "natural social capture with one coherent exposure and finite hand-held camera acuity",
+    "shadow_processing": "keep finger occlusion and broad penumbrae; never lift dark clothing with HDR",
+    "local_texture": "preserve user beverage identity, layers, sidewall, ice, cup thickness and hand contact while rebuilding them under the target window light; lower only the liquid-and-ice local edge acuity about 5-7 percent so the drink does not look separately sharpened",
+    "forbidden_processing": [
+      "phone HDR",
+      "uniform hyper-sharpness",
+      "orange filter",
+      "AI-clean smoothing",
+      "beauty retouching",
+      "portrait blur",
+      "cutout edge enhancement"
+    ]
+  },
+  "human_rendering": {
+    "skin_texture": "exactly two anonymous adult hands with natural joint compression, pores and unobtrusive short nails; no faces",
+    "light_response": "both hands, black leather, dark lap fabric and user drink share the same upper-right diffuse window source",
+    "forbidden": [
+      "third person",
+      "extra fingers",
+      "fused hand",
+      "white shirt",
+      "decorative sleeve",
+      "beauty-smoothed skin",
+      "fashion branding"
+    ]
+  },
+  "material_rules": {
+    "glass": "transparent source cups retain finite rim/base thickness, irregular ice, refraction, liquid transmission and attached hand shadow",
+    "plastic": "source-preserved clear plastic remains distinct from glass and paper through thin highlight continuity and real condensation",
+    "ceramic": "generic companion cup and saucers retain matte glazed edge rolloff, not plastic white glow",
+    "wood": "pale oak keeps long grain and pores with local warmth; no gloss, orange filter or copied knot topology"
+  },
+  "coupling_rules": [
+    "Image 2 is mandatory static relational authority for two hand poses, clothing cues, cup hierarchy, prop placement, counter/window geometry and diffuse light topology.",
+    "Exactly one Image 1 product replaces the lower primary hot-cup placeholder while preserving its complete user cup and visible iced sidewall.",
+    "Exactly one smaller generic hot ceramic companion remains held at upper-left by the leather-sleeved hand.",
+    "Exactly two hands are visible; the lower target is in the lower person's left hand. Exactly two separately readable thighs and knees connect naturally to that seated person; no fused or missing leg, face, third person, extra arm or extra drink is allowed.",
+    "Pastry plate, magazine/saucer cluster and upper window remain physically on the pale oak counter, and their text is never transferred.",
+    "All materials share a 5400-5750K cloudy neutral-gray upper-right window exposure, faded low-saturation film shoulder and lower-left shadow falloff."
+  ],
+  "forbidden": [
+    "top-only primary cup",
+    "missing hand",
+    "extra hand",
+    "third drink",
+    "white shirt",
+    "direct sunlight",
+    "window-bar gobo",
+    "spotlight",
+    "multiple light sources",
+    "portrait bokeh",
+    "glossy orange wood",
+    "global amber wash",
+    "floating contact",
+    "readable magazine text",
+    "unauthorized logo"
+  ],
+  "quality_gate": {
+    "hard_fail": [
+      "the lower-centre exact user drink is not held by one credible 6 o'clock hand with a visible sidewall",
+      "the smaller upper-left hot ceramic companion or leather-sleeved hand is missing",
+      "there are not exactly two hands and two cups, or a face/third person appears",
+      "the lower seated person does not have exactly two separately readable, anatomically connected thighs and knees, or the dark clothing merges into a one-leg silhouette",
+      "the target drink is held by the lower person's right hand instead of the left hand",
+      "the upper-right window, partial pastry plate or right-side magazine/saucer context is absent or materially rearranged",
+      "direct sun, gobo, spotlight, conflicting source or hard synthetic shadow appears",
+      "5000-5250K local-wood warmth and neutral ceramic/window separation fails",
+      "the user drink, hand, counter and shadows read as pasted, floating, over-smoothed or physically disconnected",
+      "reference magazine text, logo, watermark, face identity or exact source pixels leak into output"
+    ],
+    "weights": {
+      "camera_geometry": 0.16,
+      "composition_rhythm": 0.24,
+      "color_and_tone": 0.12,
+      "lighting_space": 0.2,
+      "product_identity": 0.24,
+      "brand_integrity": 0.04
+    }
+  }
+}

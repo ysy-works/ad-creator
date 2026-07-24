@@ -1,0 +1,279 @@
+{
+  "$schema": "../../../schemas/reference-preset.schema.json",
+  "schema_version": "2.0.0",
+  "preset_id": "instagram_wood_handheld_two_person_v1",
+  "display_name": "우드 저채도 투인 핸드헬드",
+  "concept": "two_seated_cafe_goers_holding_two_drinks_beneath_a_pale_wood_window_counter",
+  "source": {
+    "reference_image": "comfyui-inputs/ad_creator_reference_wood_handheld_two_person_v2.png",
+    "width_px": 1125,
+    "height_px": 1500,
+    "supporting_group": "user_approved/wood/handheld/two_person/v2"
+  },
+  "runtime_input_policy": {
+    "default_generation_mode": "user_image_plus_static_relational_scene_hint",
+    "generation_inputs": [
+      "user_product_identity",
+      "static_relational_scene_hint"
+    ],
+    "reference_usage": "offline_feature_extraction_only",
+    "copyright_rule": "Image 1 exclusively supplies the exact user beverage and complete user cup. Image 2 is a fixed spatial-and-hand-pose hint: it controls the crop topology, lower bare-wrist grip, upper-left leather-sleeved grip, two cup positions, counter/window/prop geometry and diffuse photometric field. Reconstruct a new photograph; do not transfer readable magazine text, a logo, source latte art, exact pixels or identities."
+  },
+  "style_abstraction": {
+    "runtime_reference_image": false,
+    "novel_scene_required": true,
+    "allowed_style_features": [
+      "one exact iced user beverage held lower-centre at 20-22 percent of frame width and 26-29 percent of frame height, with a natural tilted open-top and visible-sidewall view",
+      "one smaller generic hot ceramic companion cup held by the upper-left seated companion",
+      "two anonymous adult hands and two clothing cues only: dark leather at upper-left and a bare lower left wrist above two separately readable dark-clothed thighs",
+      "pale matte oak window counter, broad white-gray window ledge, partial pastry plate, neutral magazine and white saucer context",
+      "one cloud-filtered upper-right rear window source with soft lower-left shadow falloff and faded low-saturation afternoon-film response"
+    ],
+    "forbidden_copy_features": [
+      "faces, identities, nails, jewelry or fashion branding",
+      "readable magazine lettering, book title, logo or watermark",
+      "exact latte art, crema pattern or source beverage recipe",
+      "exact wood knots, exterior pixels, reflections, crop pixels or hand skin identity",
+      "a third person, additional hands, additional drinks or a cluttered tabletop"
+    ]
+  },
+  "sampling_ranges": {
+    "pov_modes": [
+      "high-oblique seated window-side cafe observation"
+    ],
+    "subject_center_x": [
+      0.43,
+      0.48
+    ],
+    "subject_center_y": [
+      0.62,
+      0.68
+    ],
+    "subject_width_ratio": [
+      0.2,
+      0.22
+    ],
+    "subject_height_ratio": [
+      0.26,
+      0.29
+    ],
+    "negative_space_ratio": [
+      0.18,
+      0.25
+    ],
+    "focal_length_mm": [
+      45,
+      52
+    ],
+    "camera_pitch_degrees": [
+      48,
+      56
+    ],
+    "light_softness": [
+      0.84,
+      0.92
+    ],
+    "prop_count": [
+      2,
+      2
+    ],
+    "asymmetry_probability": 1.0,
+    "asymmetry_sources": [
+      "two hands at staggered heights",
+      "held primary beneath smaller held companion",
+      "window counter receding to the upper-right",
+      "cropped pastry and magazine context on the right"
+    ],
+    "micro_moments": [
+      "two friends quietly holding drinks beside a pale wood cafe window"
+    ]
+  },
+  "tone_contract": {
+    "background_plane": "pale oak counter and white-gray window ledge recede above the two held drinks",
+    "background_lightness": [
+      0.52,
+      0.73
+    ],
+    "background_saturation": [
+      0.04,
+      0.13
+    ],
+    "global_contrast": [
+      0.34,
+      0.46
+    ],
+    "shadow_density": [
+      0.2,
+      0.34
+    ],
+    "color_bias": "cloudy neutral-gray afternoon daylight; pale oak is locally faded beige, while ceramics/window lean cool-neutral and clothing falls to charcoal without crushing texture",
+    "highlight_behavior": "broad muted ceramic and ice highlights with a soft film shoulder; never clipped white plates, paper-white milk or glossy CGI skin",
+    "forbidden_surface_reading": [
+      "orange or yellow filter",
+      "plastic wood",
+      "flat skin",
+      "black-clipped clothing",
+      "neon beverage",
+      "AI-clean global smoothing"
+    ]
+  },
+  "output": {
+    "preferred_aspect_ratio": "3:4",
+    "compatible_aspect_ratios": [
+      "3:4",
+      "4:5"
+    ]
+  },
+  "subject_layout": {
+    "main_subject": {
+      "role": "one exact user beverage held lower-centre by the 6 o'clock hand, shown with a credible visible sidewall",
+      "center": {
+        "x_ratio": 0.455,
+        "y_ratio": 0.605
+      },
+      "bbox": {
+        "x_ratio": 0.348,
+        "y_ratio": 0.458,
+        "width_ratio": 0.214,
+        "height_ratio": 0.282
+      },
+      "area_ratio": 0.06,
+      "height_ratio": 0.282
+    },
+    "secondary_subjects": [
+      {
+        "role": "one generic small hot ceramic companion cup held at upper-left",
+        "center": {
+          "x_ratio": 0.44,
+          "y_ratio": 0.46
+        },
+        "bbox": {
+          "x_ratio": 0.32,
+          "y_ratio": 0.34,
+          "width_ratio": 0.25,
+          "height_ratio": 0.22
+        },
+        "area_ratio": 0.055,
+        "height_ratio": 0.22
+      }
+    ],
+    "negative_space": {
+      "top_ratio": 0.1,
+      "left_ratio": 0.03,
+      "right_ratio": 0.02,
+      "bottom_ratio": 0.03
+    }
+  },
+  "composition": {
+    "shot_type": "high-oblique intimate two-person cafe observation, with both hands and cups visible but faces absent",
+    "camera_angle": "48-56 degree downward pitch across the lower hand toward the upper-right window counter",
+    "camera_height": "approximately 125-145 centimetres above the held lower drink",
+    "focal_length_equivalent_mm": 49,
+    "horizon_visibility": "only the pale window ledge and exterior gray band remain readable along the upper edge",
+    "depth_of_field": "both held cups, hands, pastry edge and magazine/saucer cluster resolve; exterior microtexture alone may soften",
+    "alignment": "lower-centre exact user cup remains hand-held below the smaller upper-left ceramic companion; right-side props remain cropped environmental evidence"
+  },
+  "lighting": {
+    "type": "one large diffuse upper-right rear window source plus subdued room bounce",
+    "direction": "upper-right window counter toward the lower-left hands and laps",
+    "azimuth_degrees": 48,
+    "elevation_degrees": 44,
+    "softness": 0.84,
+    "intensity": "cloud-filtered protected afternoon daylight at minus 0.34 to minus 0.16 EV, never a sunny or golden-hour beam",
+    "contrast": "faded low-to-moderate directional contrast with dark but textured clothing, a gentle film shoulder and broad penumbrae",
+    "shadow": "compact occlusion at fingers and cup bases, then broad soft lower-left falloff along the counter and laps",
+    "highlight_control": "window whites, saucers, ceramic rims and ice retain finite rolloff below clipping"
+  },
+  "color": {
+    "temperature": "5400-5750K cloudy neutral-gray afternoon daylight; warmth remains local to faded oak and coffee, never a yellow or sunset wash",
+    "white_balance_kelvin": 5580,
+    "saturation": "6-10 percent faded natural color density; protect user beverage layer order without neon green, golden wood or isolated milky-white lift",
+    "contrast": "soft compressed highlight shoulder and a gently opened film toe, while charcoal fabric texture and attached contact shadows remain visible",
+    "palette_hex": [
+      "#B8AA92",
+      "#938879",
+      "#39393A",
+      "#D9DBD9",
+      "#AAB1B2"
+    ],
+    "black_point": "soft neutral charcoal with leather grain, trouser folds and hand separation visible; no crushed void and no gray haze"
+  },
+  "scene": {
+    "surface": "pale matte oak window counter with real long grain and small natural tonal variation; retain its diagonal recession but invent a new grain phase",
+    "background": "white-gray window ledge and a restrained exterior band above the counter",
+    "background_complexity": 0.28,
+    "props": [
+      "one partial white pastry plate with one croissant at upper-right",
+      "one neutral magazine partly occupied by a white saucer plus one small empty saucer near the upper centre"
+    ],
+    "max_prop_count": 2,
+    "texture": "pale oak pores, matte ceramic, leather grain, natural skin texture and credible ice/layer refraction; no plastic table or airbrushed liquid"
+  },
+  "capture": {
+    "look": "quiet candid cafe phone photograph with natural hand-held asymmetry and finite social-photo acuity",
+    "realism": "one camera, one exposure and one window system must physically join both hands, both drinks, ceramics, counter and props",
+    "grain": "faint low-contrast sensor texture; preserve real materials rather than digitally sharpened edges",
+    "imperfections": [
+      "imperfect crema and foam on the generic companion",
+      "irregular clear ice and layered beverage transmission on the exact user drink",
+      "small natural creases in dark leather and dark lap fabric",
+      "subtle hand skin variation without beauty retouching"
+    ]
+  },
+  "preservation_policy": {
+    "hard_lock": [
+      "exactly one user product held in the lower-centre primary hand slot with its sidewall, ice and layers physically visible",
+      "exactly one smaller generic hot ceramic companion cup held at upper-left",
+      "exactly two adult hands locked to Image 2 pose topology: upper-left black leather only, lower person's left hand with bare wrist and slim black hair tie over two distinct dark-clothed thighs and zero lower sleeve",
+      "pale oak window counter, white-gray window ledge, upper-right pastry plate, right-side neutral magazine/saucer cluster and small upper-centre saucer",
+      "one cloud-filtered upper-right rear diffuse window source at 5400-5750K with lower-left soft falloff, faded film shoulder and no sunset warmth"
+    ],
+    "editable": [
+      "the exact user beverage and source container under preserve-source mode",
+      "generic companion crema pattern and cup handle micro-angle",
+      "new oak grain phase, exterior microtexture and slight crop breathing",
+      "non-identifying skin microtexture and minor finger pressure"
+    ],
+    "reference_exclusions": [
+      "faces, identities, source hand pixels and fashion labels",
+      "readable magazine title or publisher text",
+      "exact latte art, cup mark, pastry crumbs, window reflection or source wood knots",
+      "any scene text, logo or watermark"
+    ]
+  },
+  "prompt_blocks": {
+    "input_roles": "Image 1 owns the full exact user beverage and source cup. Image 2 is a submitted spatial hand-pose reference: follow its 3:4 crop topology, both grip silhouettes, exclusive upper leather/lower bare-wrist clothing boundary, cup size hierarchy, counter/window/prop coordinates and cloudy afternoon light distribution. Never copy Image 2 pixels, text or identities.",
+    "composition": "Hold the lower-centre user drink in the 6 o'clock person's bare left hand at 20-22 percent of frame width and 26-29 percent of frame height. Match approved B: the cup top leans camera-ward and toward the bottom of frame while its base shifts oppositely toward the upper-right window; use 9-12 degrees without a pouring pose. Keep the liquid surface gravity-level, the upper-left companion, and the cropped right-side context.",
+    "look": "A calm low-saturation wood cafe snapshot: real 49mm-equivalent high-oblique perspective, faded beige oak, cool-neutral ceramics/window, textured charcoal clothing and a slightly faded cloudy-afternoon film response under one subdued diffuse window.",
+    "preservation": "Rebuild the whole frame in one exposure. The user drink, hand occlusion, cup wall, ice, counter contact, ceramic shadows, off-frame room occlusion and room bounce must meet physically; preserve no source background, reference text or exact reference pixels.",
+    "negative": "No faces, third person, extra fingers, empty hand, duplicated cup, direct sun, HDR, orange wash, plastic wood, copied magazine words, wide-angle distortion, beauty retouching, floating beverage or AI bokeh."
+  },
+  "quality_gates": {
+    "logo_text": "no readable magazine, cup or clothing text; preserve source branding only if the user product itself is verified branded",
+    "product_identity": "one exact iced user beverage retains its layer order, ice, opacity and cup construction in a credible visible-sidewall hand-held view",
+    "preset_adherence": "two hands/two cups, upper-left leather companion, lower-centre user hand, pale oak counter, window, pastry, magazine/saucer and one diffuse upper-right window light pass together",
+    "artifact_policy": "reject missing hand, duplicate hand/cup, top-only primary cup, sidewall-hidden iced beverage, absent pastry/magazine/window, source clone, source text, rigid fingers, flat crema, pasted drink, inconsistent shadows or artificial skin"
+  },
+  "failure_recovery": [
+    "restore lower-centre hand-held primary sidewall before changing color or props",
+    "restore the second upper-left hand-held companion cup before adding depth blur",
+    "restore the upper-right window, pastry and right-side magazine/saucer context before adding new props",
+    "restore one diffuse upper-right window and lower-left penumbrae before grading",
+    "remove all reference text and rejoin the user product, hand and counter into one exposure"
+  ],
+  "human_presence": {
+    "required": true,
+    "hand_style": "two anonymous adult feminine hands only, naturally proportioned and visible from wrist to fingers; Image 2 explicitly anchors both grip silhouettes, wrist lengths, finger spacing and staggered heights; no face or full body",
+    "grip": "the lower 6 o'clock person's left hand supports the smaller exact user drink from below and around its side without hiding the visible layers; the upper-left hand naturally supports the smaller companion ceramic cup",
+    "wrist_and_clothing": "discard source-product hand/clothing. Rebuild Image 2's lower bare left wrist, slim black hair tie and two separately readable dark-clothed thighs: retain a shallow central V seam and natural folds so the legs never fuse into one mass. No black cuff, leather sleeve or any sleeve may enter the lower hand zone. Charcoal-black matte leather belongs exclusively to the upper-left companion arm.",
+    "nails": "short natural muted nails; no distinctive manicure, rings, watch or branded accessory",
+    "forbidden": [
+      "face",
+      "third person",
+      "extra hand",
+      "fused fingers",
+      "posed catalogue grip",
+      "beauty-smoothed skin"
+    ]
+  }
+}
