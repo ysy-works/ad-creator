@@ -1,5 +1,22 @@
 # Backend handoff: ComfyUI Gateway v1
 
+## 2026-07-24 공용 런타임 전환
+
+백엔드는 다음 환경변수만 변경합니다.
+
+```env
+COMFYUI_WORKFLOW_ID=gpt-image-2-v1
+```
+
+- `quality`는 전송하지 않습니다. 서버 기본값 `medium`을 사용합니다.
+- `container_mode`는 사용자가 고른 `reconstruct_source` 또는 `adopt_reference`를 그대로 전송합니다.
+- `serving_temperature`는 별도 선택이 없으면 `auto`를 전송합니다.
+- `aspect_ratio`는 `4:5` 또는 `1:1`을 전송합니다. 결과 크기는 각각 `1024x1280`, `1024x1024`입니다.
+- registry는 12개 서비스 슬롯을 유지하지만 제작 중인 `wood__handheld_lifestyle`은 비활성입니다. 활성 목록은 `comfyui/presets/registry.json`이 단일 권위입니다.
+- 프론트엔드와 백엔드에서 품질 선택 UI·필드를 추가하지 않습니다.
+
+기존 `openai-gpt-image-2-low-v1`과 `model-c-v1`은 롤백 경로로만 유지합니다.
+
 > OpenAI GPT Image 2 low 두-프리셋 파일럿은
 > `OPENAI_GPT_IMAGE_2_PILOT_HANDOFF_KO.md`의 계약을 우선합니다.
 > 이 문서 아래의 `model-c-v1` 계약은 롤백 호환을 위해 유지됩니다.

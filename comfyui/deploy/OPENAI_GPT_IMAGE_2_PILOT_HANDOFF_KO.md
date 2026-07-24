@@ -157,7 +157,7 @@ Gateway의 `202 Accepted`, 상태 폴링, 결과 다운로드 계약은 기존�
 권장 전환 방식은 다음과 같습니다.
 
 ```env
-COMFYUI_WORKFLOW_ID=openai-gpt-image-2-low-v1
+COMFYUI_WORKFLOW_ID=gpt-image-2-v1
 ```
 
 프론트가 임의의 workflow ID를 보내 provider를 선택하게 만들지 않습니다.
@@ -189,10 +189,10 @@ COMFYUI_WORKFLOW_ID=openai-gpt-image-2-low-v1
 | GCP Gateway | `AD_CREATOR_GENERATION_SIGNING_KEY` | API 키와 다른 값 유지 |
 | GCP Gateway | `AD_CREATOR_GATEWAY_DB` | 기존 영속 SQLite 경로 유지 |
 | GCP Gateway | `AD_CREATOR_MAX_QUEUED` | 기존 큐 제한 유지 |
-| GCP Gateway | `AD_CREATOR_HEALTH_WORKFLOW_ID` | 전환 전 `model-c-v1`, 파일럿 전환 시 `openai-gpt-image-2-low-v1` |
+| GCP Gateway | `AD_CREATOR_HEALTH_WORKFLOW_ID` | 공용 런타임 `gpt-image-2-v1` |
 | Render 백엔드 | `COMFYUI_GATEWAY_BASE_URL` | HTTPS Gateway URL |
 | Render 백엔드 | `COMFYUI_GATEWAY_API_KEY` | 서버 환경변수에만 저장 |
-| Render 백엔드 | `COMFYUI_WORKFLOW_ID` | 파일럿 활성 시 `openai-gpt-image-2-low-v1` |
+| Render 백엔드 | `COMFYUI_WORKFLOW_ID` | 공용 런타임 활성 시 `gpt-image-2-v1` |
 
 `OPENAI_API_KEY`는 프론트, Render 백엔드, Git, workflow JSON, 로그에 넣지 않습니다. 이번 파일럿에는 `GEMINI_API_KEY`가 필요하지 않습니다.
 
@@ -240,7 +240,7 @@ OpenAI provider profile의 `automatic_retries`는 파일럿에서 `0`입니다. 
 8. 내부 테스트 계정으로 화이트 1회, 우드 1회 실제 `low` 생성 테스트를 수행합니다. 결과 파일은 각각 따로 저장합니다.
 9. Gateway DB의 job ID·ComfyUI prompt ID와 audit manifest의 `run_id`, OpenAI `request_id`, `client_request_id`, usage, elapsed time, provider 원본 파일이 한 실행으로 연결되는지 확인합니다.
 10. 출력 크기, 단일 제품 수, 잘림, 핵심 로고/라벨, 프리셋 구도·조명을 수동 확인합니다.
-11. 통과 후에만 Gateway의 `AD_CREATOR_HEALTH_WORKFLOW_ID`와 Render의 `COMFYUI_WORKFLOW_ID`를 각각 `openai-gpt-image-2-low-v1`로 바꾸고 두 서비스를 재시작합니다.
+11. 통과 후에만 Gateway의 `AD_CREATOR_HEALTH_WORKFLOW_ID`와 Render의 `COMFYUI_WORKFLOW_ID`를 각각 `gpt-image-2-v1`로 바꾸고 두 서비스를 재시작합니다. 품질 필드는 전송하지 않으며 서버 기본값 `medium`을 사용합니다.
 
 ## 11. 롤백
 
