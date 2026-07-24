@@ -158,20 +158,20 @@
   },
   "lighting": {
     "type": "single soft natural daylight source, window-diffused, no visible fixture -- from a time of day when the sun is gentle and the room reads dim and moody: early morning, late afternoon, or an overcast/cloudy moment, NEVER a bright high midday sun and never an airy bright exposure",
-    "direction": "upper-left raking across the wall and counter at a shallow angle",
+    "direction": "upper-left, shallow angle across the wall and counter",
     "azimuth_degrees": 300,
     "elevation_degrees": 35,
     "intensity": "extremely low, very deeply dim and moody -- roughly HALF as bright as the already-dim exposure used previously (so about a quarter of a normal soft-light exposure overall), a heavily underexposed, almost silhouette-leaning look across the whole frame, with just enough light to make out shapes and textures -- not a bright airy look under any circumstance",
     "contrast": "medium: the wall texture reads clearly but shadow edges stay soft, never a hard sharp sun-shadow",
     "softness": 0.66,
-    "shadow": "one soft, short contact shadow beneath the cup, edges gently diffused",
-    "highlight_control": "protect the beverage's own tonal identity with a soft rim highlight; never let the wall clip to white"
+    "shadow": "one soft short contact shadow beneath the cup, edges diffused",
+    "highlight_control": "soft rim highlight on the cup only; never let the wall clip to white"
   },
   "color": {
     "temperature": "cool-neutral daylight, no warm filter",
     "white_balance_kelvin": 5600,
     "black_point": "deep neutral charcoal with visible concrete grain, never a crushed pure black",
-    "contrast": "weighted lower-mid shadow falloff with a soft highlight shoulder on the cup and black ceramic plate",
+    "contrast": "weighted lower-mid shadow falloff, soft highlight shoulder on cup and plate",
     "saturation": "near-monochrome room and surfaces; the exact user beverage is the only saturated color note from the product itself. EXCEPTION: any potted plant's leaves in the scene keep a vivid, healthy, natural green saturation -- do NOT desaturate the plant's foliage to match the muted palette; the leaves should look alive and richly green, not faded, dusty, or grey-green.",
     "palette_hex": [
       "#4A4B4D",
@@ -185,7 +185,7 @@
     "surface": "no metal tray anywhere -- the beverage stands directly on a coarse dark-grey stone/concrete counter (or, per shot-specific overrides, a black window table or black bistro table). Any food prop sits separately, plated on a small black ceramic plate.",
     "background": "an interior cafe corner: a tall, bare, rough-troweled dark-grey concrete or lime-plaster wall with fine aggregate speckle, occasional small pitting, faint vertical water-stain streaks and one faint natural moisture mark for authenticity, meeting a coarser dark-grey stone/concrete counter below. This is unmistakably an indoor cafe environment, never an outdoor street, sidewalk, pavement, curb, parking lot or exterior wall.",
     "background_complexity": 0.3,
-    "texture": "directional hand-trowelled concrete grain on the wall, a coarser pitted stone grain on the counter, matte ceramic on the cup and on the black plate, and finite social-photo acuity",
+    "texture": "hand-trowelled concrete grain (wall), coarser pitted stone grain (counter), matte ceramic (cup, plate), finite social-photo acuity throughout",
     "max_prop_count": 2,
     "props": [
       "one small matte black ceramic plate holding one croissant-type pastry or cake plus a simple fork and knife (handles toward the viewer, never hidden under the pastry)",
@@ -196,31 +196,27 @@
   "capture": {
     "grain": "faint low-contrast luminance texture with finite twelve-to-sixteen-megapixel acuity",
     "look": "quiet, moody, industrial-editorial cafe photograph; considered but not overly art-directed",
-    "realism": "one camera, one exposure and one physical light system connect wall, counter, plate and vessel",
+    "realism": "one camera, one exposure, one light system connects wall, counter, plate and vessel",
     "imperfections": [
-      "subtle concrete aggregate speckle variation",
-      "one faint water-mark or moisture variation on the wall",
+      "subtle concrete speckle variation",
+      "one faint water-mark on the wall",
       "slightly unequal plate-to-cup spacing",
       "gentle far-corner microcontrast loss",
-      "CRITICAL: at the exact point where the glass or mug base touches the table/counter surface, there must be NO bright, white, or transparent gap-line separating the vessel from the surface -- light must not leak in under the base. The contact shadow there should be tight, dark, and continuous, so the vessel reads as physically resting on the surface, never as floating or cut out and pasted on top of it."
+      "CRITICAL: no bright/white/transparent gap-line where the vessel base touches the surface -- the contact shadow is tight and dark, the vessel reads as resting on it, never floating or pasted."
     ]
   },
   "preservation_policy": {
     "hard_lock": [
       "exact user product count one",
-      "user beverage recipe, color, temperature and serving state exactly as shown in the product photo (ice level and no-straw rule if the beverage is iced; foam/latte-art and steam-appropriate look if the beverage is hot -- never invent the opposite temperature's traits)",
+      "beverage recipe/color/temperature/serving state exactly as in the product photo (ice+no-straw if iced; foam/latte-art if hot -- never invent the opposite temperature)",
       "source cup semantics reconstructed natively, never pasted or traced from any reference",
       "the beverage stands directly on the surface -- no metal tray and no saucer/coaster beneath it, in every shot",
       "target brand contract",
       "product width 0.30-0.40 and height 0.16-0.22 of frame",
-      "NEVER generate, invent, or design a new logo, wordmark, or brand mark of any kind, for either a hot or an iced beverage. The ONLY logo allowed anywhere on the cup is the exact logo that is already visibly present on the cup in the user's uploaded product photo -- reproduce it clearly and legibly on the new vessel shape (mug or glass) exactly as it appears in that photo, with no alterations. If the user's uploaded product photo shows NO logo at all, then the generated cup must also show NO logo -- do not add one. The cup's physical vessel shape may still be adapted (mug for hot / glass for iced) to match the new scene's mood, but the logo content itself is never invented, never modified, and never added where none existed."
+      "never invent a logo, for hot or iced. Only reproduce the exact logo visible in the user's photo, legibly, on the new vessel; if the photo shows no logo, show none. Vessel shape may adapt (mug/glass) but logo content is never invented, altered, or added."
     ],
     "editable": [
-      "every output pixel",
-      "physically consistent perspective, refraction, contact and shadow",
-      "minor product x/y position on the surface",
-      "concrete speckle phase, moisture-mark position and prop choice",
-      "the cup/vessel's physical shape and material (mug vs. glass) to match the scene's mood and the beverage's temperature, while keeping any existing logo/wordmark intact and legible"
+      "every output pixel; physically consistent perspective, refraction, contact and shadow; minor product x/y position; concrete speckle phase, moisture-mark position and prop choice; cup/vessel shape and material to match scene mood and temperature, keeping any logo intact and legible"
     ],
     "reference_exclusions": [
       "reference cup/tumbler identity and exact object pixels",
@@ -233,15 +229,15 @@
   "prompt_blocks": {
     "look": "Natural but art-directed Instagram cafe observation in a dark, moody industrial register: matte cool-grey concrete, brushed steel, restrained daylight, finite acuity.",
     "composition": "Keep exactly one exact user beverage small, standing directly on the surface (no tray, no saucer/coaster) in the lower-right two-thirds of frame. Leave a tall, bare, quiet wall or background plane upper-left as negative space, keeping the composition airy and quiet, Instagram-editorial rather than catalog-centered.",
-    "input_roles": "Image one supplies exact product identity. Any additional reference imagery supplies only abstracted wall/background texture, camera framing and light distribution -- never literal object pixels, and never a metal tray. The generated environment (wall, counter, tray, and where applicable table/chairs) must stay the SAME indoor cafe corner described in this preset across every shot type; only the camera framing and prop arrangement change between shot types.",
+    "input_roles": "Image one gives product identity. Any other reference supplies only abstracted framing/texture/light -- never literal pixels or a metal tray. The same indoor environment persists across all four shots; only camera framing and props differ.",
     "preservation": "Reconstruct the user's cup/container design natively for the new camera and light; never paste, trace or preserve any source boundary. Preserve beverage and serving semantics and obey only the target brand contract. CRITICAL, anti-composite rule: the beverage's surface highlights, reflections, and any visible sheen on the glass or ceramic must be re-rendered as if lit by THIS scene's own light source (the dim, moody interior light or the evening window light described above) -- do NOT copy over the bright, even, studio-style highlights or reflections from the user's original product photo. If the original photo's lighting looks brighter or more evenly lit than this scene, the beverage's highlights must be dimmed and reshaped to match this scene's darker, more directional light, so the drink and its environment read as one single continuous photograph under one light source, never as a brighter object pasted onto a darker background.",
-    "negative": "No extra beverage, no metal tray of any kind anywhere, no saucer/coaster under an iced beverage, no glossy or brightly lit wall, no warm beige cast, no legible card or window text, no busy or sharp background furniture, no oversized product, no crushed blacks or blown highlights, no invented logos, no cookies or biscuits as the food prop (croissant-type pastry or cake only). CRITICAL: this is an INDOOR cafe corner, never an outdoor scene -- no street pavement, no sidewalk tile, no exterior curb, no parking lot asphalt, no visible sky (except the blurred evening cityscape specifically described for the medium shot), no daylight horizon, no outdoor foliage or building facades up close. The wall must read as the described rough dark-grey interior concrete/plaster (or the medium shot's glass wall), not a smooth painted exterior wall or a different color/texture entirely."
+    "negative": "No extra beverage, no metal tray or napkin, no saucer/coaster under an iced drink, no glossy/bright wall, no warm-beige cast, no legible card/window/signage text, no busy sharp background furniture, no oversized product, no crushed blacks or blown highlights, no invented logo, no cookie as the food prop. This is an INDOOR cafe corner (or the medium shot's glass wall) -- never outdoor pavement, curb, parking lot, sky, or building facades; the wall must read as the specified rough dark-grey concrete or glass, not a different material or exterior surface."
   },
   "quality_gates": {
-    "preset_adherence": "35-50mm lens, 15-35 degree pitch, no-tray direct-surface placement, small-product bounds and cool-grey concrete tone agree",
-    "product_identity": "exactly one beverage keeps its recipe and serving state while its cup is physically reconstructed",
-    "logo_text": "no visible logo or legible text unless an explicit target brand contract separately authorizes it",
-    "artifact_policy": "reject extra beverages, any metal tray, any saucer/coaster under an iced beverage, glossy/mirror-finish surfaces, warm-cast wall, product enlargement, pasted edges, wrong serving state, uniform flat lighting, copied reference props, or cookies used as the food prop"
+    "preset_adherence": "lens/pitch/surface/tone match this shot's spec above",
+    "product_identity": "one beverage, recipe/serving state and cup reconstruction match the rules above",
+    "logo_text": "no unauthorized logo/text",
+    "artifact_policy": "no violations of the WHAT TO AVOID list above"
   },
   "failure_recovery": [
     "restore one exact product standing directly on the surface with no metal tray and no saucer/coaster beneath it",
@@ -258,7 +254,7 @@
       "camera": "35-50mm equivalent, 15-35 degrees downward, camera at seated bar-stool eye height (~110-130cm).",
       "framing": "The product occupies roughly 30-40% of frame width in the lower-right area, standing directly on the black bar counter with nothing beneath it. Following the glass_background sample's ratio, the black bar counter/tabletop fills roughly the lower 35-45% of the frame, and the glass wall with its soft-focus exterior view fills the remaining upper 55-65% as quiet negative space.",
       "environment_override": {
-        "wall_or_background": "A full glass wall/window divided into slim black metal mullions, at ground-floor street level (not a high-rise). Beyond the glass, a softly out-of-focus DAYTIME street-level scene is visible -- light stone or concrete paving, indistinct blurred building facades in muted warm-neutral tones, perhaps a hint of an outdoor bistro table or stool -- suggesting a real ground-floor street view in daylight, not sharp or legible. No legible text, signage, lettering or readable words appear anywhere on the glass. No interior pendant lamp, hanging bulb, or wire cage light fixture of any kind is visible anywhere in this frame. CRITICAL: the interior brightness in this shot must MATCH the same natural-light exposure level used in the other three shots (close_up, aerial, handheld) -- not darker, not dimmer than them. The bar counter, plate, and beverage must be clearly and evenly lit, so the space reads as an open, currently-lit cafe -- never as a closed, unlit, or after-hours-looking store.",
+        "wall_or_background": "A full glass wall/window with slim black mullions, at ground-floor street level (not a high-rise). Beyond it: a soft-focus DAYTIME street scene -- light paving, blurred building facades in muted warm-neutral tones, maybe an outdoor bistro table/stool -- never sharp or legible. No text/signage on the glass. No interior pendant/lamp/bulb/wire-cage fixture visible anywhere. CRITICAL: brightness here must MATCH the other three shots (close_up, aerial, handheld) -- not darker; the space reads as an open, currently-lit cafe, never closed/unlit.",
         "surface": "a black-stained wood bar-height counter/table running along the base of the glass wall, narrower than a full windowsill -- the kind of counter with bar stools where a single person sits facing the window."
       },
       "props": [
@@ -266,7 +262,7 @@
         "optional one folded-open magazine or notebook, referencing the glass_background sample -- the magazine/notebook page itself must be completely bare, with NOTHING resting on top of it (no spoon, no utensil, no other object)",
         "optional one small potted plant with large, broad leaves (e.g. a rubber-plant/peperomia type, per the pot sample photo), softly out of focus, at the far edge of frame"
       ],
-      "negative_extra": "No rough grey concrete wall in this shot -- the background must be the ground-floor glass wall described above. No night skyline or city lights -- this must read as DAYTIME. No legible window signage or text. No harsh direct sunlight anywhere in this shot. CRITICAL: no interior artificial light source of any kind (no lamp, pendant, bulb, or wire cage fixture) -- the only light in this scene is natural daylight passing through the glass. No metal tray. No cookie as the food prop. CRITICAL: do not underexpose this shot relative to the other three -- match their brightness, this must not look like a closed/unlit store. CRITICAL: at the exact point where the glass or mug base touches the bar counter, there must be NO bright, white, or transparent gap-line -- the vessel must read as physically resting on the counter, never floating or pasted on top of it.",
+      "negative_extra": "No rough grey concrete wall here -- background is the glass wall above. No night skyline or city lights -- must read as DAYTIME. No harsh direct sunlight. No metal tray. No cookie as the food prop.",
       "uses_shared_layout": false
     },
     "close_up": {
@@ -281,9 +277,9 @@
     },
     "aerial": {
       "display_name": "항공샷 (완전 수직, 음료·빵 윗면만)",
-      "description": "A strict, perfectly vertical (90-degree) top-down view directly above a black round table, framed so that ONLY the top surfaces of the beverage and the food prop are visible -- the camera looks straight down the mouth of the glass/cup and straight down onto the top of the pastry, with no side profile of either visible. No metal tray anywhere -- both items stand directly on the black table. At the center of the table, referencing the pot sample photo, sits one small potted plant with a round candle (about one-third the size of the pot) beside it, the candle enclosed in a clear transparent case/holder for safety.",
-      "camera": "strictly vertical overhead, exactly 90 degrees from horizontal (camera pointing straight down, shooting directly into the mouth of the glass from directly above it) -- positioned so that ONLY the top surface of the beverage (its rim, ice, and surface garnish, looking straight down into the drink) and the top surface of the food prop are visible. No side profile of the glass body, no side profile of the pastry, no wall, no glass wall -- a true straight-down camera angle for every element on the table.",
-      "framing": "Follow the layout_sample photo's exact arrangement, a loose DIAMOND shape on the black table (not a straight line, not a simple triangle): (1) the potted plant sits upper-center-left; (2) the candle (in its clear transparent case) sits to the plant's right, at roughly the same height or very slightly lower; (3) the beverage (seen only from directly above -- its rim and surface) sits lower-left, below and slightly left of the plant, at a clearly lower position on the table than the plant/candle pair; (4) the food plate (croissant-type pastry or cake with fork and knife laid fully visible beside it, handles toward the viewer) sits lower-right, below and slightly right of the candle, roughly at the same height as the beverage but offset to the right -- larger in footprint than the cup, with nothing underneath the plate. Together the four elements form a diamond/quadrant layout: plant+candle occupy the upper pair, beverage+plate occupy the lower pair, with clear left-right offset AND up-down offset between every element -- never a single row or column. All four elements together occupy a MINORITY of the frame (roughly 35-45% of total frame area), with the plain black table filling a clearly larger background proportion around and between them.",
+      "description": "Strict perfectly-vertical (90-degree) top-down view above a black round table: only top surfaces of beverage and food prop are visible, no side profile of either. No metal tray -- both stand directly on the table. Center: a small potted plant (per the pot reference) with a round candle (~1/3 the pot's size) beside it in a clear transparent case, for safety.",
+      "camera": "Exactly 90 degrees from horizontal, camera pointing straight down into the mouth of the glass/cup from directly above -- only the top surface (rim, ice, garnish) of the beverage and the top of the food prop are visible. No side profile of the glass, pastry, or any wall.",
+      "framing": "Follow the layout_sample photo's DIAMOND arrangement on the black table (never a straight line): (1) potted plant upper-center-left; (2) candle (clear case) to the plant's right, similar height; (3) beverage (top view only) lower-left, clearly below the plant; (4) food plate (pastry+fork+knife, handles toward viewer, nothing underneath) lower-right, similar height to the beverage but offset right, larger footprint than the cup. Plant+candle = upper pair, beverage+plate = lower pair; every element offset from every other on both axes. All four together occupy a MINORITY (roughly 35-45%) of the frame, with the bare black table filling clearly more of the background.",
       "environment_override": {
         "wall_or_background": "no wall is visible at all in this strict vertical overhead angle -- only the plain black round table fills the frame, with perhaps the faintest soft-focus hint of a dark chair leg or floor right at the extreme edge of frame.",
         "surface": "a black round bistro table (or the visible portion of one), matte finish, filling most of the frame with generous bare table space around the beverage and plate."
@@ -294,7 +290,7 @@
         "one small potted plant at the table center (top view), referencing the pot sample photo",
         "one round pillar candle (about 1/3 the size of the pot) beside the plant, fully enclosed in a clear transparent case/holder -- no exposed flame"
       ],
-      "negative_extra": "No marble or white/light stone surface. No metal tray anywhere. No cookie or biscuit as the food prop -- it must be one croissant-type pastry or cake, top view only. No side profile of the cup, the glass body, or the pastry -- strictly top-down/straight-down for every element. No tight crop -- the black table background must occupy a clearly larger share of the frame than the combined props. No branded object, no cosmetic-looking prop, no reference-photo text or logo other than the user's own beverage cup logo. CRITICAL: the candle must NEVER show an open/exposed flame or bare wick -- it must always be shown fully enclosed in a clear transparent case/holder for safety. No bright, airy, or well-lit look on the table itself -- keep the tabletop dark and low-key. CRITICAL LAYOUT RULE: follow the diamond/quadrant arrangement above exactly -- plant+candle as the upper pair, beverage+plate as the lower pair, each of the four elements offset from every other element on both axes. Never arrange all four in a single straight line or column.",
+      "negative_extra": "No marble or white/light stone surface. No cosmetic-looking or reference-photo prop/text/logo besides the user's own cup logo. CRITICAL: the candle must NEVER show an open/exposed flame or bare wick -- always fully enclosed in its clear case. No bright/airy/well-lit tabletop -- keep it dark and low-key.",
       "uses_shared_layout": false
     },
     "handheld": {
@@ -325,19 +321,19 @@
   "cup_shapes": {
     "hot": {
       "display_name": "따뜻한 음료 - 손잡이 있는 다크그레이 머그컵 + 잔받침",
-      "vessel": "a matte ceramic mug WITH a handle: a simple curved loop handle on one side, straight or gently tapered cylindrical body, thick smooth ceramic walls, medium height, sitting on a saucer beneath it -- a saucer/coaster is ALWAYS present under a hot beverage, in every single shot type (medium, close_up, aerial, and handheld alike), with NO exceptions. The mug and its saucer are always a MATCHING SET -- same exact color tone and same matte ceramic material as each other, never mismatched. SCOPE-LIMITED RULE: the mug+saucer ceramic color must be BLACK or DARK CHARCOAL-GREY ONLY, in every one of the four shot types without exception, regardless of what color the cup happens to be in the user's original uploaded product photo -- white is explicitly banned as a mug/saucer color anywhere in this preset. This white-ban applies ONLY to the mug and saucer ceramic material itself. It does NOT apply to anything else in the scene: the candle's wax may still be its natural white/ivory color, the potted plant and its pot may still be their natural light/grey/ivory tones, the beverage's own milk or cream color stays whatever it naturally is, and any naturally light-toned patch of the concrete wall or counter is unaffected -- only the mug and saucer are restricted to black/dark-grey.",
+      "vessel": "A matte ceramic mug WITH a handle (simple loop, one side), straight/tapered body, thick walls, on a matching saucer (always present, every shot, no exceptions). Mug+saucer are one matching-color set, BLACK or DARK CHARCOAL-GREY ONLY in all 4 shots regardless of the original photo's cup color -- white is banned for the mug/saucer specifically (candle wax, plant, napkin-free scene, wall highlights and the beverage's own milk/cream color are unaffected by this ban).",
       "reference_note": "dark-grey handled mug + saucer, fixed by explicit user instruction (overrides the earlier plain white handleless 'hot_mug' reference)."
     },
     "ice": {
       "display_name": "아이스 음료 - 유리컵",
-      "vessel": "a clear DOUBLE-WALL glass tumbler (two layers of glass with a visible air gap between them, exactly like the ice_glass reference photo) -- this double-wall structure is REQUIRED, not optional, and is the cup's defining, distinguishing feature versus any ordinary single-wall glass. The glass body must be THICK and SUBSTANTIAL, not thin or slender -- a sturdy, chunky double-wall tumbler with real visible wall thickness, not a delicate narrow glass. The rim and every double-wall edge line must be CRISP, SHARP, and clearly defined, with real glass reflections and highlights along the rim -- never soft, blurred, or low-contrast in a way that makes the glass look like it's covered by an invisible protective film; it must read unmistakably as real, clear glass. The beverage's color layers, condensation, and ice cubes are visible through the inner glass wall, with the outer wall's air gap creating a subtle but clearly visible separation line around the glass. Straight or gently tapered cylindrical shape, no handle.",
+      "vessel": "A clear DOUBLE-WALL glass tumbler (visible air gap, per the ice_glass reference) -- required, not optional; this is the cup's defining feature vs. an ordinary single-wall glass. Body is thick and substantial, not slender. Rim and double-wall edges are crisp and sharp with real glass reflections/highlights -- never soft or film-like. Beverage color/condensation/ice show through the inner wall. Straight/tapered, no handle.",
       "reference_note": "shape derived from the 'ice_glass' reference photo: a clear double-wall glass tumbler where the double-wall air gap is clearly visible, showing swirled color layers and ice cubes through the inner glass.",
       "no_straw": true,
       "no_saucer": true
     }
   },
   "prop_plating": {
-    "rule": "There is NO metal tray in any shot, and NO napkin of any kind in any shot -- napkins are removed from this preset entirely. The food prop -- always one croissant-type pastry or one small cake, never a cookie or biscuit -- is plated together with a simple fork and knife directly on one small plate, with nothing underneath the plate. The plate must be PORCELAIN or CERAMIC ONLY -- plastic, melamine, or any synthetic plate material is STRICTLY FORBIDDEN. The plate's color must be BLACK or DARK CHARCOAL-GREY (matte, unbranded, simple round or gently rectangular shape). When the beverage is HOT, the plate's color must be the OPPOSITE choice from whichever color the mug+saucer set ends up being in that shot -- if the mug+saucer are black, the plate must be dark charcoal-grey, and if the mug+saucer are dark charcoal-grey, the plate must be black -- so the plate never matches the mug+saucer set. When the beverage is ICED, either black or dark-grey is fine for the plate with no such matching constraint. FORK AND KNIFE PLACEMENT (critical): the fork and knife must lie fully visible on the plate, beside the pastry -- NEVER underneath the pastry, NEVER partially hidden or covered by it. Their handles must generally point toward the camera/viewer (the near edge of the frame), with the tines and blade end pointing away from the viewer, toward the far side of the plate. NATURAL PLACEMENT: the fork and knife must NOT lie perfectly parallel to each other like two rigid straight lines (avoid a stiff, robotic '11'-shaped alignment) -- give them a slight natural angle or crossing offset relative to each other, as if casually set down by hand, while still keeping both handles generally toward the viewer. EXTENT ON THE PLATE: at least the head (tines/blade) AND roughly the first half of the handle must rest on top of the plate -- not just the head. The remaining (far) half of the handle may extend past the plate's rim toward the viewer, but NO MORE than half of the handle's total length may hang off the plate -- the fork and knife must never dangle mostly off the edge, and never rest with only their very tip touching the plate."
+    "rule": "No metal tray, no napkin, anywhere. Food prop (croissant-type pastry/cake only, never cookie) sits with a fork+knife on one small plate, nothing underneath. Plate: porcelain/ceramic only (plastic forbidden), black or dark charcoal-grey. Hot beverage: plate color is the OPPOSITE of the mug+saucer color (never matching). Iced: either plate color is fine. Fork+knife: fully visible beside the pastry (never under it), handles toward viewer, tines/blade away, NOT rigidly parallel (avoid a stiff '11' look) -- head plus roughly half the handle rests on the plate, at most the far half may extend past the rim."
   },
   "beverage_rules": {
     "no_straw_for_ice": "CRITICAL, applies to every shot type: an iced beverage must NEVER include a straw of any kind -- no straw, no lid with a straw hole, no straw wrapper. The drink is sipped directly from the glass rim.",
@@ -346,14 +342,14 @@
   "container_modes": {
     "reference_cup": {
       "display_name": "레퍼런스 컵 버전",
-      "description": "The cup/vessel's shape, material, color, handle, and lid design ALWAYS follow this preset's own cup_shapes definition (selected by beverage_temp), never the user's original cup. Only the beverage's own visual content -- its color, ice, foam, layering -- comes from the user's photo. ONE input photo is used for all four shot types (medium, close_up, aerial, handheld) -- ideally cropped or framed so the cup's own body/logo is not too dominant in the frame, so the model has minimal cup-shape signal to anchor on. The output camera angle for each shot (including aerial's strict vertical, top-surface-only framing) is fully controlled by that shot's own text prompt and does not depend on the input photo's angle.",
+      "description": "Cup shape/material/color/handle/lid always follow this preset's own cup_shapes (by beverage_temp), never the user's cup. Only the beverage's own color/ice/foam comes from the user's photo. One input photo is used for all 4 shots; crop out the cup body/logo where practical so the model anchors less on it. Each shot's own camera angle (incl. aerial's strict vertical) is fully text-driven, independent of the input photo's angle.",
       "logo_policy": "no logo is expected or added -- the cropped input shows no cup, so the reference cup renders with no logo unless the target brand contract separately specifies one."
     },
     "user_cup": {
       "display_name": "사용자 컵 버전",
-      "description": "The ENTIRE original uploaded photo (cup and beverage together) is sent to the model. The cup's shape, material, color, handle/lid design, and any logo are reconstructed faithfully from the user's own photo -- this preset's cup_shapes definitions (mug/glass rules, black/dark-grey color rule, saucer rule, etc.) do NOT apply in this mode, since the user's own cup design is the source of truth.",
+      "description": "The full original photo (cup + beverage) is sent. Cup shape/material/color/handle/lid/logo are reconstructed faithfully from the user's own photo -- this preset's cup_shapes color/handle/saucer rules do NOT apply in this mode; the user's own cup is the source of truth.",
       "logo_policy": "preserve any real logo/wordmark exactly as it appears in the user's uploaded photo; never invent a new one."
     },
-    "shared_rule": "Regardless of which container_mode is selected, the beverage's own type and temperature (hot vs iced, and its recipe/color/ice-or-foam state) ALWAYS come from the user's own uploaded content, never from any reference photo or preset assumption. A reference cup's own original beverage or hot/iced state (if the reference happened to depict one) is never followed."
+    "shared_rule": "Regardless of container_mode, beverage type/temperature/recipe/ice-or-foam state always comes from the user's own photo, never from any reference photo or preset assumption."
   }
 }

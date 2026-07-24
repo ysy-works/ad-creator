@@ -56,7 +56,7 @@
   },
   "prompt_template": {
     "path": "prompt-template-reconstruct-source.txt",
-    "sha256": "ffa952d93cab1517062bd4eefda507bfcdcaed1ed3c96d89ad7c1a1fbc8da315"
+    "sha256": "5dd069167194b9413c41286605567208ad474fa00c45f20ad4a61cf8d538f311"
   },
   "lighting_sheet": {
     "path": "lighting-sheet.json",
@@ -70,11 +70,11 @@
   "contract_assets": {
     "team_source_contract": {
       "path": "../dark_grey/preset.json",
-      "sha256": "b54e7bf1e59d57dabc15efd1d8b60bdb93771edfa1e27bfad0d48322b2ac488e"
+      "sha256": "82809b3688f38a4ce304edf3dc7f0aab404ba1bd8937171ae5cbf6a992681436"
     },
     "team_prompt_archive": {
       "path": "../dark_grey/prompt.md",
-      "sha256": "1c576427ebb9c20126ec8a68f7fde3df39dc7f6d5ab2c9c8966a202a7c268292"
+      "sha256": "0c045e8c237ee45eea3c3310170dfa1347ab032d1f39e98ee7ebd9c7560bfdf0"
     },
     "team_hint_manifest": {
       "path": "../dark_grey/source-hints-manifest.json",
@@ -132,7 +132,7 @@
       "container_identity_scope": "source_container_class_material_silhouette_handle_lid_and_visible_branding",
       "prompt_template": {
         "path": "prompt-template-reconstruct-source.txt",
-        "sha256": "ffa952d93cab1517062bd4eefda507bfcdcaed1ed3c96d89ad7c1a1fbc8da315"
+        "sha256": "5dd069167194b9413c41286605567208ad474fa00c45f20ad4a61cf8d538f311"
       },
       "preserve": [
         "source beverage identity and serving state",
@@ -149,7 +149,7 @@
       "container_identity_scope": "published_dark_grey_temperature_compatible_container",
       "prompt_template": {
         "path": "prompt-template-adopt-reference.txt",
-        "sha256": "0ee357f1e48517f491d883728b519c9a036ce12c9695645f167410f7af35f8ae"
+        "sha256": "f67928700c77b5ff7563e1f1383ffcf6757f0cfe18645198c51cb875cf2af7ae"
       },
       "preserve": [
         "source beverage identity and serving state",
