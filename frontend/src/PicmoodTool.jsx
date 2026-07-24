@@ -106,6 +106,10 @@ const T = {
     genericError: "오류가 발생했습니다.",
     aspectRatioLabel: "결과 비율",
     selectRatioFirst: "결과 비율(4:5 또는 1:1)을 선택해주세요.",
+    cupSourceLabel: "컵",
+    cupSourceUploaded: "내가 찍은 컵",
+    cupSourceModel: "예쁜 컵으로",
+    selectCupSourceFirst: "컵을 어떻게 할지 선택해주세요.",
     resultTitle: "완성된 한 컷",
     resultAlt: "생성 결과",
     downloadImage: "이미지 다운로드",
@@ -146,6 +150,10 @@ const T = {
     genericError: "Something went wrong.",
     aspectRatioLabel: "Result ratio",
     selectRatioFirst: "Please choose a result ratio (4:5 or 1:1).",
+    cupSourceLabel: "Cup",
+    cupSourceUploaded: "My cup",
+    cupSourceModel: "Styled cup",
+    selectCupSourceFirst: "Please choose which cup to use.",
     resultTitle: "Your finished shot",
     resultAlt: "Generated result",
     downloadImage: "Download image",
@@ -376,6 +384,9 @@ function App({ lang = "ko", setLang }) {
   // 실제로 지원되며, 사용자가 반드시 하나를 선택해야만 생성 가능 — 그래서
   // 기본값을 미리 골라두지 않고 null로 시작한다.
   const [aspectRatio, setAspectRatio] = useState(null);
+  // 업로드한 컵 그대로 vs 모델이 준비한 컵으로 교체. 2026-07-24 소연님 회의
+  // 요청사항 — 4:5/1:1과 동일하게 반드시 선택해야 생성 가능하도록 처리.
+  const [cupSource, setCupSource] = useState(null);
 
   // 캡션 품질 향상을 위한 최소 질문 (둘 다 선택 입력)
   const [menuName, setMenuName] = useState("");
@@ -456,6 +467,10 @@ function App({ lang = "ko", setLang }) {
       setError(t.selectRatioFirst);
       return;
     }
+    if (!cupSource) {
+      setError(t.selectCupSourceFirst);
+      return;
+    }
     setError("");
     setLoading(true);
     setResultImage(null);
@@ -470,6 +485,7 @@ function App({ lang = "ko", setLang }) {
       formData.append("product_image", productFile);
       formData.append("reference_id", selectedReferenceId);
       formData.append("aspect_ratio", aspectRatio);
+      formData.append("cup_source", cupSource);
 
       const response = await fetch(`${API_BASE}/generate`, {
         method: "POST",
@@ -1144,26 +1160,6 @@ function App({ lang = "ko", setLang }) {
             <p className="upload-hint">{t.selectStyleFirst}</p>
           )}
 
-          {selectedReference && (
-            <div className="ratio-toggle" role="group" aria-label={t.aspectRatioLabel}>
-              <span className="ratio-toggle__label">{t.aspectRatioLabel}</span>
-              <button
-                type="button"
-                className={`ratio-toggle__btn${aspectRatio === "4:5" ? " is-active" : ""}`}
-                onClick={() => setAspectRatio("4:5")}
-              >
-                4:5
-              </button>
-              <button
-                type="button"
-                className={`ratio-toggle__btn${aspectRatio === "1:1" ? " is-active" : ""}`}
-                onClick={() => setAspectRatio("1:1")}
-              >
-                1:1
-              </button>
-            </div>
-          )}
-
           <div className="file-input-wrap">
             <input
               ref={fileInputRef}
@@ -1188,6 +1184,51 @@ function App({ lang = "ko", setLang }) {
           {productPreviewUrl && (
             <div className="preview-thumb">
               <img src={productPreviewUrl} alt={t.previewAlt} />
+            </div>
+          )}
+
+          {selectedReference && productPreviewUrl && (
+            <div className="ratio-toggle" role="group" aria-label={t.aspectRatioLabel}>
+              <span className="ratio-toggle__label">{t.aspectRatioLabel}</span>
+              <button
+                type="button"
+                className={`ratio-toggle__btn${aspectRatio === "4:5" ? " is-active" : ""}`}
+                onClick={() => setAspectRatio("4:5")}
+              >
+                4:5
+              </button>
+              <button
+                type="button"
+                className={`ratio-toggle__btn${aspectRatio === "1:1" ? " is-active" : ""}`}
+                onClick={() => setAspectRatio("1:1")}
+              >
+                1:1
+              </button>
+            </div>
+          )}
+
+          {/* 컵(용기) 소스 선택 — 소연님 회의 요청사항(2026-07-24). 사용자가 찍은 컵이
+              마음에 안 들 수 있어서, 실제 업로드한 컵 그대로 쓸지 / 모델이 준비한
+              예쁜 컵으로 바꿔서 생성할지 선택. 스타일별 지원 여부는 아직 소연님
+              확답 전이라, 우선 모든 활성 스타일에 노출하고 둘 다 필수 선택으로
+              둠 — 나중에 스타일별 제약 오면 references.json에 플래그만 추가하면 됨. */}
+          {selectedReference && productPreviewUrl && (
+            <div className="ratio-toggle" role="group" aria-label={t.cupSourceLabel}>
+              <span className="ratio-toggle__label">{t.cupSourceLabel}</span>
+              <button
+                type="button"
+                className={`ratio-toggle__btn${cupSource === "uploaded" ? " is-active" : ""}`}
+                onClick={() => setCupSource("uploaded")}
+              >
+                {t.cupSourceUploaded}
+              </button>
+              <button
+                type="button"
+                className={`ratio-toggle__btn${cupSource === "model" ? " is-active" : ""}`}
+                onClick={() => setCupSource("model")}
+              >
+                {t.cupSourceModel}
+              </button>
             </div>
           )}
         </div>
