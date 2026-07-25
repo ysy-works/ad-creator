@@ -78,34 +78,56 @@
     },
     "team_hint_manifest": {
       "path": "../dark_grey/source-hints-manifest.json",
-      "sha256": "ad20e9a6ff3287899540e344e80058a90717541f09bf305eafcad65254421df3"
+      "sha256": "5e5ef4a17091c327f385ad53792b64b142e43a5ea87e442a34153e47b3f7fbd6"
     }
   },
   "provider_reference_policy": {
     "maximum_images": 2,
     "required_roles": [
       "user_product",
-      "raw_dark_grey_handheld_pose_reference"
+      "container_mode_scene_hint"
     ],
-    "risk_acceptance": "Raw team hint is sent by explicit product-owner decision; sanitize in a later revision."
+    "risk_acceptance": "Handheld hints are sanitized and selected by container mode."
   },
   "hint_images": [
     {
-      "role": "raw_dark_grey_handheld_pose_reference",
-      "path": "../dark_grey/source-hints/ice_handheld.jpg",
-      "sha256": "5bac69cd2e2ad0bca3d0b6444aa805ed51a4b8c1d1e5ddda5fb6d142123d4367",
-      "width": 1080,
-      "height": 1350,
+      "role": "dark_grey_handheld_user_pose_only",
+      "path": "../dark_grey/source-hints/ice_handheld_user_pose_only.png",
+      "sha256": "fa5dbb0ef5f4468bf88708109533aebb6f4c12c3945c2072430936e968c78c8a",
+      "width": 1122,
+      "height": 1402,
       "send_to_provider": true,
       "container_mode_scope": [
-        "adopt_reference",
         "reconstruct_source"
       ],
       "allowed_transfer": [
         "declared shot topology",
         "camera relationship",
-        "broad dark-grey material family",
-        "broad light distribution"
+        "hand, sleeve and broad light distribution",
+        "container geometry only when adopt_reference is selected"
+      ],
+      "forbidden_transfer": [
+        "reference beverage identity",
+        "reference serving state",
+        "reference logo or text",
+        "exact person identity"
+      ]
+    },
+    {
+      "role": "dark_grey_handheld_double_wall_reference",
+      "path": "../dark_grey/source-hints/ice_handheld_reference_double_wall.png",
+      "sha256": "39e53d1a2e8aa25a1c6fe1f24820dffd812feb24a85b7406d7a92d472bd46898",
+      "width": 1122,
+      "height": 1402,
+      "send_to_provider": true,
+      "container_mode_scope": [
+        "adopt_reference"
+      ],
+      "allowed_transfer": [
+        "declared shot topology",
+        "camera relationship",
+        "hand, sleeve and broad light distribution",
+        "container geometry only when adopt_reference is selected"
       ],
       "forbidden_transfer": [
         "reference beverage identity",
@@ -129,6 +151,7 @@
   "default_container_mode": "reconstruct_source",
   "container_modes": {
     "reconstruct_source": {
+      "provider_hint_role": "dark_grey_handheld_user_pose_only",
       "container_identity_scope": "source_container_class_material_silhouette_handle_lid_and_visible_branding",
       "prompt_template": {
         "path": "prompt-template-reconstruct-source.txt",
@@ -146,6 +169,7 @@
       ]
     },
     "adopt_reference": {
+      "provider_hint_role": "dark_grey_handheld_double_wall_reference",
       "container_identity_scope": "published_dark_grey_temperature_compatible_container",
       "prompt_template": {
         "path": "prompt-template-adopt-reference.txt",
@@ -222,7 +246,7 @@
       "brand_ocr",
       "crop"
     ],
-    "known_release_risk": "Raw provider hints are not sanitized in this revision.",
+    "known_release_risk": "Handheld mode hints are sanitized and separated by container mode.",
     "comparative_scores": [
       "naturalness",
       "mood_adherence",

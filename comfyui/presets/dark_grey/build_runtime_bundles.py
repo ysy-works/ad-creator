@@ -82,8 +82,16 @@ SLOTS = {
         "shot_variant": "handheld",
         "composition": "handheld",
         "preset_id": "instagram_dark_grey_handheld_v1",
-        "hint": "ice_handheld.jpg",
-        "hint_role": "raw_dark_grey_handheld_pose_reference",
+        "mode_hints": {
+            "reconstruct_source": {
+                "hint": "ice_handheld_user_pose_only.png",
+                "role": "dark_grey_handheld_user_pose_only",
+            },
+            "adopt_reference": {
+                "hint": "ice_handheld_reference_double_wall.png",
+                "role": "dark_grey_handheld_double_wall_reference",
+            },
+        },
         "companion_policy": "none",
         "aspect_4x5": (
             "Generate the exact final 4:5 canvas at 1024x1280. Keep one complete "
@@ -217,7 +225,14 @@ def bbox_contract(shot_variant: str, square: bool) -> dict:
 
 
 def hint_manifest() -> dict:
-    runtime_hints = {value["hint"] for value in SLOTS.values()}
+    runtime_hints = set()
+    for value in SLOTS.values():
+        if "mode_hints" in value:
+            runtime_hints.update(
+                hint["hint"] for hint in value["mode_hints"].values()
+            )
+        else:
+            runtime_hints.add(value["hint"])
     assets = []
     for path in sorted(HINT_ROOT.iterdir()):
         if not path.is_file():
@@ -262,9 +277,53 @@ def build_bundle(slot_id: str, config: dict, source: dict) -> None:
     write_json(lighting_path, lighting_sheet(slot_id, config["shot_variant"]))
     write_json(grade_path, grade_profile(slot_id))
 
-    hint_path = HINT_ROOT / config["hint"]
-    with Image.open(hint_path) as image:
-        hint_width, hint_height = image.size
+    split_mode_hints = "mode_hints" in config
+    if split_mode_hints:
+        mode_hints = config["mode_hints"]
+        hint_items = [
+            (mode, hint_config, [mode])
+            for mode, hint_config in mode_hints.items()
+        ]
+    else:
+        shared_hint = {"hint": config["hint"], "role": config["hint_role"]}
+        mode_hints = {
+            mode: shared_hint for mode in ("reconstruct_source", "adopt_reference")
+        }
+        hint_items = [
+            (
+                "shared",
+                shared_hint,
+                ["adopt_reference", "reconstruct_source"],
+            )
+        ]
+    hint_images = []
+    for mode, hint_config, mode_scope in hint_items:
+        hint_path = HINT_ROOT / hint_config["hint"]
+        with Image.open(hint_path) as image:
+            hint_width, hint_height = image.size
+        hint_images.append(
+            {
+                "role": hint_config["role"],
+                "path": f"../dark_grey/source-hints/{hint_path.name}",
+                "sha256": sha256(hint_path),
+                "width": hint_width,
+                "height": hint_height,
+                "send_to_provider": True,
+                "container_mode_scope": mode_scope,
+                "allowed_transfer": [
+                    "declared shot topology",
+                    "camera relationship",
+                    "hand, sleeve and broad light distribution",
+                    "container geometry only when adopt_reference is selected",
+                ],
+                "forbidden_transfer": [
+                    "reference beverage identity",
+                    "reference serving state",
+                    "reference logo or text",
+                    "exact person identity",
+                ],
+            }
+        )
 
     bundle = {
         "schema_version": 1,
@@ -338,32 +397,14 @@ def build_bundle(slot_id: str, config: dict, source: dict) -> None:
         },
         "provider_reference_policy": {
             "maximum_images": 2,
-            "required_roles": ["user_product", config["hint_role"]],
-            "risk_acceptance": "Raw team hint is sent by explicit product-owner decision; sanitize in a later revision.",
+            "required_roles": ["user_product", "container_mode_scene_hint"],
+            "risk_acceptance": (
+                "Handheld hints are sanitized and selected by container mode."
+                if "mode_hints" in config
+                else "Raw team hint is sent by explicit product-owner decision; sanitize in a later revision."
+            ),
         },
-        "hint_images": [
-            {
-                "role": config["hint_role"],
-                "path": f"../dark_grey/source-hints/{hint_path.name}",
-                "sha256": sha256(hint_path),
-                "width": hint_width,
-                "height": hint_height,
-                "send_to_provider": True,
-                "container_mode_scope": ["adopt_reference", "reconstruct_source"],
-                "allowed_transfer": [
-                    "declared shot topology",
-                    "camera relationship",
-                    "broad dark-grey material family",
-                    "broad light distribution",
-                ],
-                "forbidden_transfer": [
-                    "reference beverage identity",
-                    "reference serving state",
-                    "reference logo or text",
-                    "exact person identity",
-                ],
-            }
-        ],
+        "hint_images": hint_images,
         "transforms": [
             {"type": "normalize_product_source"},
             {"type": "select_hint_by_container_mode"},
@@ -372,6 +413,7 @@ def build_bundle(slot_id: str, config: dict, source: dict) -> None:
         "default_container_mode": "reconstruct_source",
         "container_modes": {
             "reconstruct_source": {
+                "provider_hint_role": mode_hints["reconstruct_source"]["role"],
                 "container_identity_scope": "source_container_class_material_silhouette_handle_lid_and_visible_branding",
                 "prompt_template": {
                     "path": user_prompt.name,
@@ -385,6 +427,7 @@ def build_bundle(slot_id: str, config: dict, source: dict) -> None:
                 "discard": ["source camera pose", "source background", "source lighting and shadows"],
             },
             "adopt_reference": {
+                "provider_hint_role": mode_hints["adopt_reference"]["role"],
                 "container_identity_scope": "published_dark_grey_temperature_compatible_container",
                 "prompt_template": {
                     "path": reference_prompt.name,
@@ -437,7 +480,11 @@ def build_bundle(slot_id: str, config: dict, source: dict) -> None:
                 "brand_ocr",
                 "crop",
             ],
-            "known_release_risk": "Raw provider hints are not sanitized in this revision.",
+            "known_release_risk": (
+                "Handheld mode hints are sanitized and separated by container mode."
+                if "mode_hints" in config
+                else "Raw provider hints are not sanitized in this revision."
+            ),
             "comparative_scores": [
                 "naturalness",
                 "mood_adherence",

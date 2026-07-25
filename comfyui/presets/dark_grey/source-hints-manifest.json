@@ -43,6 +43,20 @@
       "sha256": "5bac69cd2e2ad0bca3d0b6444aa805ed51a4b8c1d1e5ddda5fb6d142123d4367",
       "width": 1080,
       "height": 1350,
+      "runtime_provider_input": false
+    },
+    {
+      "path": "source-hints/ice_handheld_reference_double_wall.png",
+      "sha256": "39e53d1a2e8aa25a1c6fe1f24820dffd812feb24a85b7406d7a92d472bd46898",
+      "width": 1122,
+      "height": 1402,
+      "runtime_provider_input": true
+    },
+    {
+      "path": "source-hints/ice_handheld_user_pose_only.png",
+      "sha256": "fa5dbb0ef5f4468bf88708109533aebb6f4c12c3945c2072430936e968c78c8a",
+      "width": 1122,
+      "height": 1402,
       "runtime_provider_input": true
     },
     {

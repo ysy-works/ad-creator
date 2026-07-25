@@ -78,14 +78,14 @@
     },
     "team_hint_manifest": {
       "path": "../dark_grey/source-hints-manifest.json",
-      "sha256": "ad20e9a6ff3287899540e344e80058a90717541f09bf305eafcad65254421df3"
+      "sha256": "5e5ef4a17091c327f385ad53792b64b142e43a5ea87e442a34153e47b3f7fbd6"
     }
   },
   "provider_reference_policy": {
     "maximum_images": 2,
     "required_roles": [
       "user_product",
-      "raw_dark_grey_glass_wall_reference"
+      "container_mode_scene_hint"
     ],
     "risk_acceptance": "Raw team hint is sent by explicit product-owner decision; sanitize in a later revision."
   },
@@ -104,8 +104,8 @@
       "allowed_transfer": [
         "declared shot topology",
         "camera relationship",
-        "broad dark-grey material family",
-        "broad light distribution"
+        "hand, sleeve and broad light distribution",
+        "container geometry only when adopt_reference is selected"
       ],
       "forbidden_transfer": [
         "reference beverage identity",
@@ -129,6 +129,7 @@
   "default_container_mode": "reconstruct_source",
   "container_modes": {
     "reconstruct_source": {
+      "provider_hint_role": "raw_dark_grey_glass_wall_reference",
       "container_identity_scope": "source_container_class_material_silhouette_handle_lid_and_visible_branding",
       "prompt_template": {
         "path": "prompt-template-reconstruct-source.txt",
@@ -146,6 +147,7 @@
       ]
     },
     "adopt_reference": {
+      "provider_hint_role": "raw_dark_grey_glass_wall_reference",
       "container_identity_scope": "published_dark_grey_temperature_compatible_container",
       "prompt_template": {
         "path": "prompt-template-adopt-reference.txt",

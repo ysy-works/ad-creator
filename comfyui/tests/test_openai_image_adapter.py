@@ -222,6 +222,28 @@ class PublishedPresetTest(unittest.TestCase):
         self.assertIn("5–7%", reconstructed.prompt)
         self.assertEqual(reconstructed.serving_temperature, "source_authoritative")
 
+    def test_dark_grey_handheld_separates_user_and_reference_hints(self):
+        adopted = load_published_preset(
+            "vivid__handheld_lifestyle",
+            container_mode="adopt_reference",
+            serving_temperature="auto",
+        )
+        reconstructed = load_published_preset(
+            "vivid__handheld_lifestyle",
+            container_mode="reconstruct_source",
+            serving_temperature="auto",
+        )
+        self.assertEqual(
+            adopted.provider_image_roles,
+            ("dark_grey_handheld_double_wall_reference",),
+        )
+        self.assertEqual(
+            reconstructed.provider_image_roles,
+            ("dark_grey_handheld_user_pose_only",),
+        )
+        self.assertEqual(adopted.serving_temperature, "source_authoritative")
+        self.assertEqual(reconstructed.serving_temperature, "source_authoritative")
+
     def test_white_handheld_resolves_its_two_declared_cup_policies(self):
         adopted = load_published_preset(
             "natural_white__handheld_lifestyle",
