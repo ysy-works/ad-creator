@@ -37,7 +37,7 @@ systemctl status ad-creator-comfyui ad-creator-gateway --no-pager || true
 PACKAGE_COMMIT=COMFYUI_PACKAGE_COMMIT
 test -d /opt/ad-creator/.git
 test -z "$(sudo -u spai0813 -H git -C /opt/ad-creator status --porcelain)"
-sudo -u spai0813 -H git -C /opt/ad-creator fetch origin comfyui
+sudo -u spai0813 -H git -C /opt/ad-creator fetch origin presets
 sudo -u spai0813 -H git -C /opt/ad-creator checkout --detach "$PACKAGE_COMMIT"
 test "$(sudo -u spai0813 -H git -C /opt/ad-creator rev-parse HEAD)" = "$PACKAGE_COMMIT"
 ```
@@ -106,7 +106,7 @@ sudo bash -c '
     "AD_CREATOR_GENERATION_SIGNING_KEY=$signing_key" \
     "AD_CREATOR_GATEWAY_DB=/var/lib/ad-creator-gateway/gateway.sqlite3" \
     "AD_CREATOR_MAX_QUEUED=3" \
-    "AD_CREATOR_HEALTH_WORKFLOW_ID=model-c-v1" > /etc/ad-creator/gateway.env
+    "AD_CREATOR_HEALTH_WORKFLOW_ID=gpt-image-2-v1" > /etc/ad-creator/gateway.env
   printf "%s\n" \
     "AD_CREATOR_MODEL_C_URL=http://127.0.0.1:8001" \
     "AD_CREATOR_MODEL_C_TIMEOUT_SECONDS=420" \
@@ -134,12 +134,51 @@ API 인증키와 generation 서명키는 서로 다른 값으로 서버에서 �
 ```bash
 systemctl is-active ad-creator-comfyui ad-creator-gateway
 curl --fail http://127.0.0.1:8188/system_stats
-curl --fail http://127.0.0.1:8188/object_info/AdCreatorModelCGenerate
+curl --fail http://127.0.0.1:8188/object_info/AdCreatorOpenAIImageGenerate
 curl --fail http://127.0.0.1:8002/health
 curl -i http://127.0.0.1:8002/v1/generations/not-a-token
 ```
 
 마지막 요청은 `401 Unauthorized`가 정상입니다. 서비스는 Gateway worker 1개를 유지합니다. 프로세스를 여러 개로 늘리면 현재 process-local queue lock이 공유되지 않으므로 먼저 분산 락으로 바꿔야 합니다.
+
+### 기존 GCP 런타임 업데이트
+
+`presets`의 승인된 커밋을 배포할 때만 실행합니다. 작업 트리가 더럽거나 커밋 검증이 끝나지 않았으면 중단합니다.
+
+```bash
+PACKAGE_COMMIT=승인된_presets_커밋_SHA
+test -z "$(sudo -u spai0813 -H git -C /opt/ad-creator status --porcelain)"
+sudo -u spai0813 -H git -C /opt/ad-creator fetch origin presets
+sudo -u spai0813 -H git -C /opt/ad-creator checkout --detach "$PACKAGE_COMMIT"
+test "$(sudo -u spai0813 -H git -C /opt/ad-creator rev-parse HEAD)" = "$PACKAGE_COMMIT"
+
+sudo -u spai0813 -H /opt/venv/comfyui/bin/python \
+  /opt/ad-creator/comfyui/scripts/validate_workflows.py
+sudo -u spai0813 -H /opt/venv/comfyui/bin/python \
+  /opt/ad-creator/comfyui/scripts/validate_presets.py
+sudo systemctl restart ad-creator-comfyui ad-creator-gateway
+systemctl is-active ad-creator-comfyui ad-creator-gateway
+curl --fail http://127.0.0.1:8002/health
+```
+
+실패하면 새 호출을 중단하고 직전 승인 커밋으로 detached checkout한 뒤 두 서비스만 재시작합니다. `model-c` 서비스는 재시작하지 않습니다.
+
+### 로컬 브라우저에서 ComfyUI 열기
+
+8188을 외부 방화벽에 공개하지 않고 SSH 터널을 사용합니다. PowerShell에서 서버 주소만 실제 값으로 바꿉니다.
+
+```powershell
+ssh -i "C:\Users\yoosy\Documents\ad-creator\ssh-key\soyeon_key" `
+  -L 8188:127.0.0.1:8188 soyeon@GCP_HOST
+```
+
+터미널을 연 상태로 `http://127.0.0.1:8188`에 접속합니다. 화면이 비어 있으면 `워크플로 열기`에서 다음 UI 파일을 선택합니다.
+
+```text
+/opt/ad-creator/comfyui/workflows/gpt-image-2-v1.ui.json
+```
+
+브라우저 파일 선택창은 로컬 파일만 읽을 수 있으므로 필요하면 같은 커밋의 로컬 파일 `comfyui/workflows/gpt-image-2-v1.ui.json`을 선택합니다. API 실행용 `*.api.json`을 UI에서 열지 않습니다.
 
 ### 6. HTTPS
 
@@ -194,7 +233,7 @@ sudo bash -c '
     printf "%s\n" "COMFYUI_GATEWAY_BASE_URL=https://GATEWAY_HOSTNAME"
     sed -n "s/^AD_CREATOR_GATEWAY_API_KEY=/COMFYUI_GATEWAY_API_KEY=/p" \
       /etc/ad-creator/gateway.env
-    printf "%s\n" "COMFYUI_WORKFLOW_ID=model-c-v1"
+    printf "%s\n" "COMFYUI_WORKFLOW_ID=gpt-image-2-v1"
   } > /home/soyeon/ad-creator-gateway-handoff.env
   chown soyeon:soyeon /home/soyeon/ad-creator-gateway-handoff.env
 '

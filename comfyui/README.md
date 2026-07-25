@@ -2,7 +2,7 @@
 
 여러 이미지 생성 파이프라인을 `workflow_id`로 선택해 실행하기 위한 ComfyUI 계층입니다.
 
-> `model-c`의 기존 코드·문서·브랜치·이름은 수정하지 않습니다. 이 패키지의 변경 범위는 `comfyui/`뿐입니다.
+> `model-c`의 기존 코드·문서·브랜치·이름은 수정하지 않습니다. 프리셋 작업은 `presets` 브랜치에서 관리한 뒤 `deploy`에서 통합 검증합니다.
 
 ## 실행 구조
 
@@ -24,7 +24,7 @@ ComfyUI와 `model-c`는 **별도 프로세스·별도 Python 환경**으로 실�
 
 ```text
 model-c ──────────────┐
-comfyui ──────────────┤
+presets ──────────────┤
 backend ──────────────┼─> deploy ─> main
 frontend ─────────────┘
 ```
@@ -35,7 +35,7 @@ frontend ─────────────┘
 | `backend` | 생성 API, `workflow_id` 전달, 결과 응답 |
 | `model-c` | 기존 FLUX.1 Kontext 모델 파이프라인 개발 원본 |
 | `serving` | 기존 백엔드·모델 서빙 연동 |
-| `comfyui` | 워크플로, 레지스트리, 커스텀 노드, 호출 어댑터 |
+| `presets` | ComfyUI 공용 런타임, 워크플로, 프리셋, 힌트 자산과 검증 |
 | `deploy` | 프론트·백엔드·ComfyUI·모델 통합 검증 |
 | `main` | 검증 완료된 안정 버전 |
 
@@ -55,10 +55,11 @@ comfyui/
     openai-gpt-image-2-low-v1.ui.json
   presets/
     registry.json
-    natural_white__product_center/
-    natural_white__handheld_lifestyle/
-    wood__product_center/
-    wood__product_center_a6/
+    README.md
+    assets/
+    natural_white__*/
+    wood__*/
+    vivid__*/
   custom_nodes/ad_creator/
     nodes/model_c.py
     nodes/openai_image.py
@@ -75,6 +76,8 @@ comfyui/
 - `nodes/model_c.py`: ComfyUI IMAGE와 model-c HTTP 응답 이미지 간 변환
 - `adapters/model_c.py`: 기존 `/generate`, `/outputs/{filename}` 계약 호출
 - `workflow_router.py`: `workflow_id` 검증, 입력 치환, ComfyUI 제출
+
+프리셋 bundle 구성, 12개 슬롯, 컵 모드와 수정 절차는 `presets/README.md`를 따릅니다.
 
 ## 현재 model-c-v1 계약
 
@@ -264,14 +267,15 @@ python comfyui/scripts/validate_presets.py
 python -B -m unittest discover -s comfyui/tests -v
 ```
 
-GCP GPU 환경에서는 다음 순서로 확인합니다.
+GCP 환경에서는 다음 순서로 확인합니다.
 
 ```text
-model-c GET /health
--> ComfyUI custom node 등록 확인
--> GET /object_info/AdCreatorModelCGenerate
--> model-c-v1 이미지 1장 smoke test
--> Backend workflow_id=model-c-v1 통합 테스트
+ComfyUI GET /system_stats
+-> OpenAI custom node 등록 확인
+-> GET /object_info/AdCreatorOpenAIImageGenerate
+-> Gateway GET /health에서 gpt-image-2-v1 확인
+-> 승인된 프리셋 일부만 smoke test
+-> Backend workflow_id=gpt-image-2-v1 통합 테스트
 -> deploy 브랜치에서 전체 E2E 검증
 ```
 

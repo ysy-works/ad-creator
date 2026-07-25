@@ -76,38 +76,62 @@
   },
   "provider_reference_policy": {
     "maximum_images": 2,
-    "required_roles": ["user_product", "integrated_scene_hint"],
-    "cost_control": "Submit one user-product image and one integrated scene hint only. Do not split the mug, dessert, magazine, tabletop or lighting into additional provider images."
+    "required_roles": ["user_product", "container_mode_scene_hint"],
+    "cost_control": "Submit one user-product image and exactly one mode-specific evidence board. Do not send both evidence boards in the same request."
   },
   "hint_images": [
     {
-      "role": "reference_container_and_companion_scene",
-      "path": "../assets/white-overhead-reference-with-basque-cheesecake-and-magazine-clean-table-v3.png",
-      "sha256": "6f61d2e807c50a9e60538e629f11acba8875792553ef2d93886dd3d733b799b0",
+      "role": "reference_cup_geometry_and_companion_scene_evidence",
+      "path": "../assets/white-overhead-reference-cup-evidence-board-v4.png",
+      "sha256": "008fb0d58b04dc8b456716ebc50e12052a58d828f9b31b38f59319eebe6c9e3a",
       "width": 1024,
       "height": 1536,
       "send_to_provider": true,
-      "container_mode_scope": ["reconstruct_source", "adopt_reference"],
+      "container_mode_scope": ["adopt_reference"],
       "transfer_scope": [
+        "plain white glazed-ceramic mug exterior, circular rim, body proportion and handle direction",
         "Basque cheesecake, warm-white plate and fork arrangement",
         "partially cropped BAUHAUS magazine design and placement",
         "clean plain warm-neutral white matte tabletop finish without marble-like material pattern",
-        "relative scene layout, scale, perspective and contact-shadow behavior"
+        "relative placement, scale, perspective, light direction and contact-shadow behavior"
       ],
-      "container_transfer_by_mode": {
-        "reconstruct_source": "Do not transfer the reference mug. Preserve only the user's broad container family, transparent material, rim and simple structural design under the preset overhead camera.",
-        "adopt_reference": "Transfer the plain white glazed-ceramic mug design and handle direction from the integrated scene hint."
-      },
       "excluded_transfer": [
-        "reference coffee, crema, latte art, bubbles and beverage recipe",
+        "any beverage, coffee color, crema, latte art, bubbles and recipe",
+        "contact-sheet panel boundaries and gutters",
         "exact environmental shadow silhouette and pixel layout"
       ],
-      "reason": "Provider reference input for adopt-reference mode. It supplies the declared mug and companion-scene design while the user image remains the sole beverage-identity authority."
+      "reason": "Mode-specific evidence board for adopt-reference routing. It supplies cup geometry and companion-scene evidence without exposing the complete approved reference composition."
+    },
+    {
+      "role": "user_cup_placement_and_companion_scene_evidence",
+      "path": "../assets/white-overhead-source-cup-evidence-board-v4.png",
+      "sha256": "165d289a68c6d0843d2e40fd333409cb8ed9e46ca0e098ed7bc8d79236d28ed9",
+      "width": 1024,
+      "height": 1536,
+      "send_to_provider": true,
+      "container_mode_scope": ["reconstruct_source"],
+      "transfer_scope": [
+        "large naturally empty warm-white tabletop zone as the primary user-cup placement area",
+        "Basque cheesecake, warm-white plate and fork arrangement",
+        "partially cropped BAUHAUS magazine design and placement",
+        "clean plain warm-neutral white matte tabletop finish without marble-like material pattern",
+        "curved table edge, neutral gray surrounding field, light direction and contact-shadow behavior"
+      ],
+      "excluded_transfer": [
+        "any reference cup, handle, rim, vessel material or vessel geometry",
+        "any beverage, coffee color, crema, latte art, bubbles and recipe",
+        "contact-sheet panel boundaries and gutters",
+        "exact environmental shadow silhouette and pixel layout"
+      ],
+      "reason": "Mode-specific evidence board for reconstruct-source routing. The empty tabletop panel defines the placement zone while Image 1 remains the sole cup and beverage authority."
     }
   ],
   "scene_props_contract": {
-    "enabled_container_modes": ["adopt_reference"],
-    "reference_image_role": "reference_container_and_companion_scene",
+    "enabled_container_modes": ["reconstruct_source", "adopt_reference"],
+    "reference_image_role_by_container_mode": {
+      "reconstruct_source": "user_cup_placement_and_companion_scene_evidence",
+      "adopt_reference": "reference_cup_geometry_and_companion_scene_evidence"
+    },
     "relative_to_primary_beverage": true,
     "declared_companion_groups": 2,
     "dessert_group": {
@@ -150,6 +174,7 @@
   "default_container_mode": "adopt_reference",
   "container_modes": {
     "reconstruct_source": {
+      "provider_hint_role": "user_cup_placement_and_companion_scene_evidence",
       "container_identity_scope": "source_family_and_material_only",
       "prompt_template": {
         "path": "prompt-template-preserve-source.txt",
@@ -179,6 +204,7 @@
       "prompt_addendum": "Rebuild a simple container in the same broad source family and material under the preset camera. When the source cup is visibly paired with a cup saucer or support plate and spoon, preserve their design, material, color, count and cup-relative arrangement while adapting their projection to the overhead camera. Do not invent missing serviceware. Exact source height, taper, sidewall geometry, decoration and branding are not invariants. Never tilt or rotate the container to reveal branding; omit sidewall branding when it is not naturally visible and invent no replacement."
     },
     "adopt_reference": {
+      "provider_hint_role": "reference_cup_geometry_and_companion_scene_evidence",
       "container_identity_scope": "discard_source_container",
       "container_design_path": "container-design.json",
       "preserve": [

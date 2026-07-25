@@ -290,6 +290,14 @@ class PublishedPresetTest(unittest.TestCase):
         )
         self.assertEqual(white_reference.container_mode, "adopt_reference")
         self.assertEqual(white_source.container_mode, "reconstruct_source")
+        self.assertEqual(
+            white_reference.provider_image_roles,
+            ("reference_cup_geometry_and_companion_scene_evidence",),
+        )
+        self.assertEqual(
+            white_source.provider_image_roles,
+            ("user_cup_placement_and_companion_scene_evidence",),
+        )
         self.assertEqual(white_closeup.container_mode, "adopt_reference")
         self.assertEqual(white_closeup.serving_temperature, "cold")
         self.assertEqual(white_closeup.aspect_ratio, "4:5")
