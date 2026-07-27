@@ -189,7 +189,7 @@
   "aspect_ratio_contracts": {
     "4:5": {
       "status": "published",
-      "visual_review_status": "representative_matrix_pending",
+      "visual_review_status": "passed_by_user_review",
       "prompt_addendum": "Generate the exact final 4:5 canvas at 1024x1280. Keep one complete hand-beverage unit uncropped. For an iced source, hold the upright cup against the dark-grey wall; for a hot source, keep the mug base on the black table with the hand resting on or beside it.",
       "generation_size": "1024x1280",
       "safe_crop": "none_exact_4x5",
@@ -212,7 +212,7 @@
     },
     "1:1": {
       "status": "published",
-      "visual_review_status": "representative_matrix_pending",
+      "visual_review_status": "passed_by_user_review",
       "prompt_addendum": "Generate the exact final 1:1 canvas at 1024x1024 from the start. Keep one complete hand-beverage unit and preserve the source-temperature branch without cropping the hand, wrist, cup rim or base.",
       "generation_size": "1024x1024",
       "safe_crop": "none_exact_1x1",
@@ -235,7 +235,7 @@
     }
   },
   "qa_contract": {
-    "phase": "representative_paid_visual_review_pending",
+    "phase": "passed_by_user_review",
     "hard_gates": [
       "beverage_identity",
       "container_mode",

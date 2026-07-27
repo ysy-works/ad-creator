@@ -22,6 +22,9 @@
     "brand_input_policy": {
       "enabled": false,
       "default_mode": "none",
+      "source_visible_branding_modes": [
+        "reconstruct_source"
+      ],
       "activation_requirement": "frontend_and_api_brand_asset_flow"
     },
     "temperature_policy": {
@@ -56,7 +59,7 @@
   },
   "prompt_template": {
     "path": "prompt-template-reconstruct-source.txt",
-    "sha256": "ca52daff138d894ad2cadaca05e51a16f83ca64d4cfe817c23615a853b50cfe9"
+    "sha256": "75f2bfe26478ba6733032e35bab0a4928d38ae3c197432a301c6a00ba16b11d6"
   },
   "lighting_sheet": {
     "path": "lighting-sheet.json",
@@ -130,14 +133,14 @@
   "container_modes": {
     "reconstruct_source": {
       "provider_hint_role": "raw_dark_grey_closeup_reference",
-      "container_identity_scope": "source_container_class_material_silhouette_handle_lid_and_visible_branding",
+      "container_identity_scope": "source_container_class_material_silhouette_handle_lid_straw_and_visible_branding",
       "prompt_template": {
         "path": "prompt-template-reconstruct-source.txt",
-        "sha256": "ca52daff138d894ad2cadaca05e51a16f83ca64d4cfe817c23615a853b50cfe9"
+        "sha256": "75f2bfe26478ba6733032e35bab0a4928d38ae3c197432a301c6a00ba16b11d6"
       },
       "preserve": [
         "source beverage identity and serving state",
-        "source cup material, silhouette, handle and lid",
+        "source cup material, silhouette, handle, lid and source-visible straw state",
         "authorized visible source branding"
       ],
       "discard": [
@@ -167,7 +170,7 @@
   "aspect_ratio_contracts": {
     "4:5": {
       "status": "published",
-      "visual_review_status": "representative_matrix_pending",
+      "visual_review_status": "passed_by_user_review",
       "prompt_addendum": "Generate the exact final 4:5 canvas at 1024x1280. Keep the complete beverage dominant but uncropped at 0.55-0.70 frame width, with only narrow soft-focus dark-grey wall and counter context at the edges.",
       "generation_size": "1024x1280",
       "safe_crop": "none_exact_4x5",
@@ -190,7 +193,7 @@
     },
     "1:1": {
       "status": "published",
-      "visual_review_status": "representative_matrix_pending",
+      "visual_review_status": "passed_by_user_review",
       "prompt_addendum": "Generate the exact final 1:1 canvas at 1024x1024 from the start. Recompose the complete beverage at 0.50-0.64 frame width with no crop and retain restrained dark-grey counter context around it.",
       "generation_size": "1024x1024",
       "safe_crop": "none_exact_1x1",
@@ -213,7 +216,7 @@
     }
   },
   "qa_contract": {
-    "phase": "representative_paid_visual_review_pending",
+    "phase": "passed_by_user_review",
     "hard_gates": [
       "beverage_identity",
       "container_mode",

@@ -167,7 +167,7 @@
   "aspect_ratio_contracts": {
     "4:5": {
       "status": "published",
-      "visual_review_status": "representative_matrix_pending",
+      "visual_review_status": "passed_by_user_review",
       "prompt_addendum": "Generate the exact final 4:5 canvas at 1024x1280 from a strict 90-degree vertical camera. Show only top surfaces. Keep the plant and covered candle as the upper pair and beverage and pastry plate as the lower pair in a loose diamond occupying 35-45 percent of the frame.",
       "generation_size": "1024x1280",
       "safe_crop": "none_exact_4x5",
@@ -190,7 +190,7 @@
     },
     "1:1": {
       "status": "published",
-      "visual_review_status": "representative_matrix_pending",
+      "visual_review_status": "passed_by_user_review",
       "prompt_addendum": "Generate the exact final 1:1 canvas at 1024x1024 from a strict 90-degree vertical camera. Preserve the four-part diamond layout and generous bare black round-table area; show no vessel sidewalls.",
       "generation_size": "1024x1024",
       "safe_crop": "none_exact_1x1",
@@ -213,7 +213,7 @@
     }
   },
   "qa_contract": {
-    "phase": "representative_paid_visual_review_pending",
+    "phase": "passed_by_user_review",
     "hard_gates": [
       "beverage_identity",
       "container_mode",

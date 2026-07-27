@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import secrets
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
@@ -223,6 +224,18 @@ def _runtime_policy(bundle: dict[str, Any]) -> dict[str, Any]:
             "INVALID_PRESET_CONFIGURATION",
             "brand_input_policy default_mode is invalid.",
         )
+    source_visible_branding_modes = brand.get("source_visible_branding_modes", [])
+    if (
+        not isinstance(source_visible_branding_modes, list)
+        or any(
+            mode not in SUPPORTED_CONTAINER_MODES
+            for mode in source_visible_branding_modes
+        )
+    ):
+        raise PresetRuntimeError(
+            "INVALID_PRESET_CONFIGURATION",
+            "source_visible_branding_modes must contain supported container modes.",
+        )
     typography = brand.get("preset_typography", [])
     if not isinstance(typography, list) or any(
         not isinstance(item, dict) for item in typography
@@ -413,6 +426,7 @@ def _selected_hints(
     )
     paths: list[Path] = []
     roles: list[str] = []
+    random_variant_groups: dict[str, list[tuple[Path, str]]] = {}
     for item in hints:
         if not isinstance(item, dict) or not isinstance(item.get("role"), str):
             raise PresetRuntimeError(
@@ -448,8 +462,27 @@ def _selected_hints(
         if selected_role is not None:
             sent = item["role"] == selected_role
         if sent:
-            paths.append(path)
-            roles.append(item["role"])
+            variant_group = item.get("random_variant_group")
+            if variant_group is None:
+                paths.append(path)
+                roles.append(item["role"])
+            else:
+                if (
+                    not isinstance(variant_group, str)
+                    or not variant_group.strip()
+                    or item.get("selection_policy") != "random_one"
+                ):
+                    raise PresetRuntimeError(
+                        "INVALID_PRESET_CONFIGURATION",
+                        "Random hint variants require a non-empty group and random_one policy.",
+                    )
+                random_variant_groups.setdefault(variant_group, []).append(
+                    (path, item["role"])
+                )
+    for candidates in random_variant_groups.values():
+        selected_path, selected_variant_role = secrets.choice(candidates)
+        paths.append(selected_path)
+        roles.append(selected_variant_role)
     if selected_role is not None and selected_role not in roles:
         raise PresetRuntimeError(
             "INVALID_PRESET_CONFIGURATION",
@@ -508,7 +541,19 @@ def _runtime_prompt_clause(
     )
     brand = policy["brand_input_policy"]
     brand_mode = str(brand["default_mode"])
-    if brand_mode == "preset_typography":
+    source_visible_branding_modes = brand.get("source_visible_branding_modes", [])
+    if container_mode in source_visible_branding_modes:
+        brand_clause = (
+            "Brand input is disabled for this execution as a separate brand asset, but Image 1 "
+            "remains authoritative for existing product-surface identity in reconstruct_source mode. "
+            "Reconstruct the exact source cup together with every physically attached sleeve "
+            "or wrap, and reproduce only the real source logo, wordmark or label that is "
+            "actually visible on that same cup surface, with matching placement, scale and "
+            "orientation. If a sleeve or branding is not visible in Image 1, add none. Never "
+            "copy reference-image text or logos, invent lettering, detach the sleeve, replace "
+            "it with a plain generic sleeve, or remove visible authorized source branding."
+        )
+    elif brand_mode == "preset_typography":
         declarations = "; ".join(
             f'exact text "{_compact(item["text"], 80)}" on {_compact(item["target_surface"], 120)}'
             for item in brand["preset_typography"]
