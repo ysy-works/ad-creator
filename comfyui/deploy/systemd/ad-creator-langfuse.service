@@ -12,6 +12,7 @@ EnvironmentFile=/etc/ad-creator/observability.env
 ExecStart=/opt/venv/observability/bin/python -B -m comfyui.observability.collector
 StateDirectory=ad-creator-observability
 StateDirectoryMode=0700
+ReadWritePaths=/var/lib/ad-creator-observability
 UMask=0077
 NoNewPrivileges=true
 PrivateTmp=true
@@ -24,4 +25,3 @@ RestrictSUIDSGID=true
 LockPersonality=true
 MemoryDenyWriteExecute=true
 TimeoutStartSec=90
-
