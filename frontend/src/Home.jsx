@@ -349,13 +349,13 @@ function Home({ onStart, lang = "ko", setLang }) {
         .home-ba { background: var(--accent-2); color: var(--surface); }
         .home-ba .home-kicker { color: #E3EAD5; }
         .home-ba .home-section-head p { color: #E3EAD5; }
-        .home-ba-grid { display: grid; grid-template-columns: 1fr 1fr; max-width: 760px; margin: 0 auto; border-radius: 16px; overflow: hidden; box-shadow: 0 24px 56px rgba(0,0,0,0.28); }
-        .home-ba-col { position: relative; aspect-ratio: 4/5; display: flex; align-items: center; justify-content: center; }
+        .home-ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-width: 760px; margin: 0 auto; }
+        .home-ba-col { position: relative; aspect-ratio: 4/5; display: flex; align-items: center; justify-content: center; border-radius: 16px; overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.24); }
         .home-ba-col.before { background: #46503C; }
         .home-ba-col img { width: 100%; height: 100%; object-fit: cover; }
-        .home-ba-tag { position: absolute; top: 14px; left: 14px; font-size: 12px; padding: 5px 13px; border-radius: 999px; font-weight: 700; }
-        .home-ba-col.before .home-ba-tag { background: rgba(255,255,255,0.18); color: #F5F2EA; }
-        .home-ba-col.after .home-ba-tag { background: var(--accent); color: #fff; z-index: 2; }
+        .home-ba-tag { position: absolute; top: 14px; left: 14px; font-size: 12px; padding: 5px 13px; border-radius: 999px; font-weight: 700; z-index: 2; }
+        .home-ba-col.before .home-ba-tag { background: var(--accent-2); color: #fff; }
+        .home-ba-col.after .home-ba-tag { background: var(--accent); color: #fff; }
 
         .home-gallery { max-width: 1180px; margin: 0 auto; display: flex; gap: 20px; }
         .home-gallery-col { flex: 1; display: flex; flex-direction: column; gap: 20px; }
