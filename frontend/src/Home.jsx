@@ -352,7 +352,7 @@ function Home({ onStart, lang = "ko", setLang }) {
         .home-ba-grid { display: grid; grid-template-columns: 1fr 1fr; max-width: 760px; margin: 0 auto; border-radius: 16px; overflow: hidden; box-shadow: 0 24px 56px rgba(0,0,0,0.28); }
         .home-ba-col { position: relative; aspect-ratio: 4/5; display: flex; align-items: center; justify-content: center; }
         .home-ba-col.before { background: #46503C; }
-        .home-ba-col.after img { width: 100%; height: 100%; object-fit: cover; }
+        .home-ba-col img { width: 100%; height: 100%; object-fit: cover; }
         .home-ba-tag { position: absolute; top: 14px; left: 14px; font-size: 12px; padding: 5px 13px; border-radius: 999px; font-weight: 700; }
         .home-ba-col.before .home-ba-tag { background: rgba(255,255,255,0.18); color: #F5F2EA; }
         .home-ba-col.after .home-ba-tag { background: var(--accent); color: #fff; z-index: 2; }
@@ -518,10 +518,13 @@ function Home({ onStart, lang = "ko", setLang }) {
           <p>{t.baSub}</p>
         </div>
         <div className="home-ba-grid">
-          <div className="home-ba-col before"><span className="home-ba-tag">{t.baBefore}</span></div>
+          <div className="home-ba-col before">
+            <span className="home-ba-tag">{t.baBefore}</span>
+            <img src="/references/showcase_before.webp" alt={t.baBefore} />
+          </div>
           <div className="home-ba-col after">
             <span className="home-ba-tag">{t.baAfter}</span>
-            {galleryItems[0] && <img src={galleryItems[0].thumbnail_url} alt={t.baAfter} />}
+            <img src="/references/natural_white__product_large.webp" alt={t.baAfter} />
           </div>
         </div>
       </section>
