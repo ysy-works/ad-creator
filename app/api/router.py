@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from typing import Optional
 
-from fastapi import APIRouter, UploadFile, File, Form
+from fastapi import APIRouter, UploadFile, File, Form, Header
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from PIL import Image
@@ -85,6 +85,7 @@ async def generate(
     workflow_id: Optional[str] = Form(None),
     aspect_ratio: Optional[str] = Form(None),
     cup_source: Optional[str] = Form(None),
+    x_session_id: Optional[str] = Header(None, alias="X-Session-ID"),
 ):
     """
     사용자가 올린 사진 + 고른 레퍼런스(reference_id) + (선택) workflow_id를 기반으로
@@ -102,6 +103,11 @@ async def generate(
     없거나 잘못된 값이면 model.py에서 ValueError로 400 처리됨. 프론트가 사용자
     선택을 강제하므로 정상 흐름에서는 항상 채워져서 옴. model-c-v1은 이 값을
     그냥 무시함(레거시라 비율 선택 개념 자체가 없음).
+
+    x_session_id: 2026-07-27 소연님 Langfuse 연동 요청사항. 프론트가 만든
+    익명 세션 UUID를 그대로 받아 Gateway까지 전달한다(선택값 — 없어도 기존처럼
+    정상 생성됨). 형식 검증은 우리 쪽에서 하지 않고 Gateway가 그대로 판단하며,
+    이 값은 어디에도 로그로 남기지 않는다.
     """
     reference = _find_reference(reference_id)
     if reference is None:
@@ -111,7 +117,10 @@ async def generate(
     pil_image = Image.open(io.BytesIO(image_data)).convert("RGB")
 
     try:
-        result_image = generate_styled_image(pil_image, reference, workflow_id=workflow_id, aspect_ratio=aspect_ratio, cup_source=cup_source)
+        result_image = generate_styled_image(
+            pil_image, reference, workflow_id=workflow_id, aspect_ratio=aspect_ratio,
+            cup_source=cup_source, session_id=x_session_id,
+        )
     except ValueError as e:
         return JSONResponse(status_code=400, content={"error": str(e)})
     except Exception as e:

@@ -143,7 +143,27 @@ def _wait_until_done(status_url: str, headers: dict, max_wait_seconds: int = 420
     raise RuntimeError("이미지 생성이 제한 시간 내에 끝나지 않았습니다.")
 
 
-def _generate_with_model_c_v1(product_image: Image.Image, reference: dict, aspect_ratio: str = None, cup_source: str = None) -> Image.Image:
+def _build_gateway_headers(idempotency_key: str, session_id: str = None) -> dict:
+    """
+    Gateway 요청에 공통으로 쓰는 헤더를 만든다.
+
+    2026-07-27 소연님 Langfuse 연동 요청사항: session_id가 있으면(프론트가
+    보낸 X-Session-ID를 router.py가 그대로 넘겨줌) Gateway 요청에도
+    X-Session-ID로 실어 보낸다 — Langfuse Sessions에서 같은 사용자의 여러
+    생성이 묶여 보이게 하기 위함. 형식 검증은 여기서 하지 않고 Gateway가
+    판단한다(예: 공백 포함 시 Gateway가 400). 이 값은 절대 로그로 남기지 않음.
+    Authorization·Idempotency-Key 등 기존 헤더/재시도·폴링 로직은 그대로 유지.
+    """
+    headers = {
+        "Authorization": f"Bearer {GATEWAY_API_KEY}",
+        "Idempotency-Key": idempotency_key,
+    }
+    if session_id:
+        headers["X-Session-ID"] = session_id
+    return headers
+
+
+def _generate_with_model_c_v1(product_image: Image.Image, reference: dict, aspect_ratio: str = None, cup_source: str = None, session_id: str = None) -> Image.Image:
     """
     model-c-v1 워크플로 — ComfyUI Gateway 경유 (팀장 제공 BACKEND_HANDOFF.md 스펙).
 
@@ -169,10 +189,7 @@ def _generate_with_model_c_v1(product_image: Image.Image, reference: dict, aspec
     # 아래 _submit_generation 안에서 벌어지는 재시도는 전부 이 같은 키를 재사용한다
     # (같은 논리 요청의 재시도이지, 새 생성 요청이 아니므로).
     idempotency_key = str(uuid.uuid4())
-    headers = {
-        "Authorization": f"Bearer {GATEWAY_API_KEY}",
-        "Idempotency-Key": idempotency_key,
-    }
+    headers = _build_gateway_headers(idempotency_key, session_id=session_id)
     files = {"image": ("product.png", buffer, "image/png")}
     data = {
         "workflow_id": MODEL_C_WORKFLOW_ID,
@@ -237,7 +254,7 @@ def _generate_with_model_c_v1_legacy_direct(product_image: Image.Image, referenc
 VALID_ASPECT_RATIOS = {"4:5", "1:1"}
 
 
-def _generate_with_gpt_image_2(product_image: Image.Image, reference: dict, aspect_ratio: str = None, cup_source: str = None) -> Image.Image:
+def _generate_with_gpt_image_2(product_image: Image.Image, reference: dict, aspect_ratio: str = None, cup_source: str = None, session_id: str = None) -> Image.Image:
     """
     gpt-image-2-v1 워크플로 (2026-07-24 소연님 안내로 이름 확정, 구 이름 openai-gpt-image-2-low-v1).
 
@@ -259,6 +276,9 @@ def _generate_with_gpt_image_2(product_image: Image.Image, reference: dict, aspe
     파라미터명·스타일별 지원 여부가 아직 확정 전이라 값이 있으면 그대로
     실어 보내기만 하고 검증은 하지 않는다. 계약 확정되면 OPENAI_ACTIVE_PRESET_IDS
     처럼 preset_id별 유효성 검증을 추가할 예정.
+
+    session_id는 2026-07-27 소연님 Langfuse 연동 요청사항 — _build_gateway_headers
+    참고. 마찬가지로 값이 있을 때만 헤더에 실어 보내고, 값 자체는 검증·로깅하지 않는다.
     """
     if not GATEWAY_BASE_URL or not GATEWAY_API_KEY:
         raise RuntimeError(
@@ -279,10 +299,7 @@ def _generate_with_gpt_image_2(product_image: Image.Image, reference: dict, aspe
 
     # 사용자가 "이미지 생성"을 누른 이 동작 하나당 새 Idempotency-Key 하나 (기존과 동일 원칙).
     idempotency_key = str(uuid.uuid4())
-    headers = {
-        "Authorization": f"Bearer {GATEWAY_API_KEY}",
-        "Idempotency-Key": idempotency_key,
-    }
+    headers = _build_gateway_headers(idempotency_key, session_id=session_id)
     files = {"image": ("product.png", buffer, "image/png")}
     data = {
         "workflow_id": OPENAI_WORKFLOW_ID,
@@ -317,7 +334,7 @@ def resolve_workflow_id(workflow_id: str = None) -> str:
     return workflow_id or DEFAULT_WORKFLOW_ID
 
 
-def generate_styled_image(product_image: Image.Image, reference: dict, workflow_id: str = None, aspect_ratio: str = None, cup_source: str = None) -> Image.Image:
+def generate_styled_image(product_image: Image.Image, reference: dict, workflow_id: str = None, aspect_ratio: str = None, cup_source: str = None, session_id: str = None) -> Image.Image:
     """
     입력:
       - product_image: 사용자가 업로드한 원본 사진
@@ -328,9 +345,12 @@ def generate_styled_image(product_image: Image.Image, reference: dict, workflow_
         model-c-v1은 이 값을 그냥 무시함(레거시 워크플로라 비율 선택 개념이 없음).
       - cup_source: "uploaded" 또는 "model". 2026-07-24 소연님 요청사항이며
         계약 미확정 상태라 있으면 전달만 하고 검증은 안 함.
+      - session_id: Langfuse 세션 추적용 익명 UUID(2026-07-27 소연님 요청사항).
+        있으면 Gateway 요청 헤더(X-Session-ID)에 그대로 실어 보내고, 없으면
+        기존과 동일하게 동작. 로그에는 절대 남기지 않음.
     """
     workflow_id = resolve_workflow_id(workflow_id)
     handler = WORKFLOW_REGISTRY.get(workflow_id)
     if handler is None:
         raise ValueError(f"알 수 없는 workflow_id입니다: {workflow_id}")
-    return handler(product_image, reference, aspect_ratio=aspect_ratio, cup_source=cup_source)
+    return handler(product_image, reference, aspect_ratio=aspect_ratio, cup_source=cup_source, session_id=session_id)
