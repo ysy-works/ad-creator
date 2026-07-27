@@ -180,7 +180,7 @@ class PublishedPresetTest(unittest.TestCase):
         )
         self.assertIn("short straight-sided clear glass tumbler", white_reference.prompt)
         self.assertIn(
-            "Ignore Image 2's product scale, position, framing, background, lighting and shadow",
+            "Use the right-panel cup only for scale, position, perspective and contact",
             white_reference.prompt,
         )
         self.assertEqual(
@@ -198,6 +198,76 @@ class PublishedPresetTest(unittest.TestCase):
                 contract.temperature_resolution_source,
                 "user_product_image",
             )
+
+    def test_white_medium_random_control_group_sends_exactly_one_board(self):
+        with patch(
+            "ad_creator.runtime.preset_contract.secrets.choice",
+            side_effect=lambda candidates: candidates[0],
+        ):
+            first = load_published_preset(
+                "natural_white__product_center",
+                container_mode="adopt_reference",
+                serving_temperature="auto",
+            )
+        with patch(
+            "ad_creator.runtime.preset_contract.secrets.choice",
+            side_effect=lambda candidates: candidates[-1],
+        ):
+            last = load_published_preset(
+                "natural_white__product_center",
+                container_mode="adopt_reference",
+                serving_temperature="auto",
+            )
+
+        self.assertEqual(
+            first.provider_image_roles,
+            ("white_medium_reference_cup_hint",),
+        )
+        self.assertEqual(len(first.provider_image_paths), 1)
+        self.assertEqual(
+            first.provider_image_paths[0].name,
+            "white-medium-control-distant-v2.png",
+        )
+        self.assertEqual(
+            last.provider_image_paths[0].name,
+            "white-medium-control-diagonal-table-v2.png",
+        )
+
+    def test_closeup_source_cup_mode_preserves_visible_sleeve_and_branding_only(self):
+        for slot_id in ("natural_white__product_large", "vivid__product_large"):
+            source_cup = load_published_preset(
+                slot_id,
+                container_mode="reconstruct_source",
+                serving_temperature="auto",
+            )
+            reference_cup = load_published_preset(
+                slot_id,
+                container_mode="adopt_reference",
+                serving_temperature="cold",
+            )
+
+            self.assertIn("every physically attached sleeve", source_cup.prompt)
+            self.assertIn("real source logo, wordmark or label", source_cup.prompt)
+            self.assertIn(
+                "replace it with a plain generic sleeve",
+                source_cup.prompt.lower(),
+            )
+            self.assertNotIn("every physically attached sleeve", reference_cup.prompt)
+            self.assertIn("without a logo, wordmark", reference_cup.prompt)
+
+        dark_source = load_published_preset(
+            "vivid__product_large",
+            container_mode="reconstruct_source",
+            serving_temperature="auto",
+        )
+        self.assertIn(
+            "preserve the source-visible straw and lid state exactly",
+            dark_source.prompt,
+        )
+        self.assertNotIn(
+            "an iced beverage must NEVER include a straw",
+            dark_source.prompt,
+        )
 
     def test_wood_handheld_resolves_final_mode_specific_hints(self):
         adopted = load_published_preset(

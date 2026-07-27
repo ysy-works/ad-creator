@@ -108,7 +108,7 @@ def main() -> int:
         container_mode=args.container_mode,
         serving_temperature=args.serving_temperature,
         registry_path=COMFYUI_DIR / "presets" / "registry.json",
-        allowed_statuses=("validated",),
+        allowed_statuses=("published", "validated"),
     )
     output_dir = args.output_dir.resolve()
     output_dir.mkdir(parents=True, exist_ok=True)

@@ -16,7 +16,12 @@
     "default_container_mode": "adopt_reference",
     "supported_container_modes": ["adopt_reference", "reconstruct_source"],
     "companion_policy": "reference_relational",
-    "brand_input_policy": {"enabled": false, "default_mode": "none", "activation_requirement": "frontend_and_api_brand_asset_flow"},
+    "brand_input_policy": {
+      "enabled": false,
+      "default_mode": "none",
+      "source_visible_branding_modes": ["reconstruct_source"],
+      "activation_requirement": "frontend_and_api_brand_asset_flow"
+    },
     "temperature_policy": {
       "mode": "preset_primary",
       "container_mode_rules": {
@@ -32,7 +37,7 @@
     {"type": "select_hint_by_container_mode"},
     {"type": "sanitize_reference_control"}
   ],
-  "prompt_template": {"path": "prompt-template.txt", "sha256": "5fd004a036c3fa1b0f0312528448dd33db78e966d57a8823795701f4cfeee4de"},
+  "prompt_template": {"path": "prompt-template.txt", "sha256": "ae0c9255f54a952df863ef796f6f232d607d80218f0fcbc9ecf0ab6b15664240"},
   "lighting_sheet": {"path": "lighting-sheet.json", "sha256": "8be06ed1a6ece045455aae404e4286f9a9674a87b25af990192db0a3971c95ad"},
   "grade_profile": {"path": "grade-profile.json", "sha256": "ccb5ef1df3ee76c76ee0320dfdd5dd6bae414cbf5659c2e51a3ac55efe846b51", "apply_in_pilot": false},
   "contract_assets": {
