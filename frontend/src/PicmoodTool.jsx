@@ -195,6 +195,26 @@ const API_BASE = isLocalDev
   ? `http://${window.location.hostname}:8000`
   : RENDER_BACKEND;
 
+// Langfuse 런타임 지표(비용·소요시간) 추적용 익명 세션 ID.
+// 2026-07-27 소연님 요청사항 — 이메일/닉네임/파일명 등 사용자를 특정할 수 있는
+// 값은 절대 쓰지 않고, crypto.randomUUID()로 만든 순수 익명 UUID만 사용한다.
+// 최초 접속 시 한 번 생성해서 localStorage에 저장해두고, 이후로는 계속 재사용
+// (같은 사용자의 여러 생성 요청이 Langfuse Sessions에서 하나로 묶이도록).
+const SESSION_ID_STORAGE_KEY = "picmood_session_id";
+
+const getOrCreateSessionId = () => {
+  try {
+    const existing = window.localStorage.getItem(SESSION_ID_STORAGE_KEY);
+    if (existing) return existing;
+    const fresh = crypto.randomUUID();
+    window.localStorage.setItem(SESSION_ID_STORAGE_KEY, fresh);
+    return fresh;
+  } catch (_) {
+    // localStorage를 못 쓰는 환경(프라이빗 모드 등)이면 이번 세션에서만 쓰고 저장은 포기.
+    return crypto.randomUUID();
+  }
+};
+
 const seededLikeCount = (id) => {
   let hash = 0;
   for (let i = 0; i < id.length; i++) {
@@ -489,6 +509,7 @@ function App({ lang = "ko", setLang }) {
 
       const response = await fetch(`${API_BASE}/generate`, {
         method: "POST",
+        headers: { "X-Session-ID": getOrCreateSessionId() },
         body: formData,
       });
 
