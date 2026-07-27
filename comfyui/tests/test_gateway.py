@@ -1,3 +1,4 @@
+import importlib
 import io
 import os
 import sqlite3
@@ -38,6 +39,9 @@ from comfyui.gateway.app import (
     encode_generation_id,
 )
 from comfyui.orchestrator import PresetRegistryConfigurationError
+
+
+gateway_app_module = importlib.import_module("comfyui.gateway.app")
 
 
 API_KEY = "test-key-" + "x" * 40
@@ -313,7 +317,7 @@ class GatewayApiTest(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 400)
 
-    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    @patch.object(gateway_app_module, "_submit_generation", new_callable=AsyncMock)
     def test_session_id_is_persisted_without_being_exposed(
         self, submit_generation
     ):
@@ -336,7 +340,7 @@ class GatewayApiTest(unittest.TestCase):
         self.assertIsNotNone(record["created_at_ms"])
         self.assertNotIn("session_id", response.json())
 
-    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    @patch.object(gateway_app_module, "_submit_generation", new_callable=AsyncMock)
     def test_invalid_session_id_is_rejected_before_submission(
         self, submit_generation
     ):
@@ -361,7 +365,7 @@ class GatewayApiTest(unittest.TestCase):
             response.json(), {"ok": False, "gateway": "misconfigured"}
         )
 
-    @patch("comfyui.gateway.app._json_request", new_callable=AsyncMock)
+    @patch.object(gateway_app_module, "_json_request", new_callable=AsyncMock)
     def test_openai_health_does_not_require_model_c(self, json_request):
         async def response_for(method, url, **kwargs):
             if "/object_info/" in url:
@@ -388,7 +392,7 @@ class GatewayApiTest(unittest.TestCase):
         self.assertNotIn("model_c", payload)
         self.assertEqual(json_request.await_count, 2)
 
-    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    @patch.object(gateway_app_module, "_submit_generation", new_callable=AsyncMock)
     def test_submits_generation_and_returns_signed_job(self, submit_generation):
         prompt_id = str(uuid.uuid4())
         submit_generation.return_value = (
@@ -427,7 +431,7 @@ class GatewayApiTest(unittest.TestCase):
             submit_generation.await_args.kwargs["request_id"], record["job_id"]
         )
 
-    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    @patch.object(gateway_app_module, "_submit_generation", new_callable=AsyncMock)
     def test_explicit_preset_id_selects_published_wood_preset(self, submit_generation):
         submit_generation.return_value = (
             str(uuid.uuid4()),
@@ -459,7 +463,7 @@ class GatewayApiTest(unittest.TestCase):
             submit_generation.await_args.kwargs["serving_temperature"], "cold"
         )
 
-    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    @patch.object(gateway_app_module, "_submit_generation", new_callable=AsyncMock)
     def test_unknown_preset_is_rejected_before_submission(self, submit_generation):
         response = self.client.post(
             "/v1/generations",
@@ -473,8 +477,8 @@ class GatewayApiTest(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         submit_generation.assert_not_awaited()
 
-    @patch("comfyui.gateway.app.resolve_published_preset")
-    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    @patch.object(gateway_app_module, "resolve_published_preset")
+    @patch.object(gateway_app_module, "_submit_generation", new_callable=AsyncMock)
     def test_broken_preset_registry_is_service_unavailable(
         self, submit_generation, resolve_preset
     ):
@@ -489,7 +493,7 @@ class GatewayApiTest(unittest.TestCase):
         self.assertEqual(response.json()["detail"], "Preset registry is unavailable.")
         submit_generation.assert_not_awaited()
 
-    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    @patch.object(gateway_app_module, "_submit_generation", new_callable=AsyncMock)
     def test_openai_idempotency_ignores_legacy_fields(self, submit_generation):
         submit_generation.return_value = (
             str(uuid.uuid4()),
@@ -524,7 +528,7 @@ class GatewayApiTest(unittest.TestCase):
         self.assertEqual(first.json()["generation_id"], second.json()["generation_id"])
         self.assertEqual(submit_generation.await_count, 1)
 
-    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    @patch.object(gateway_app_module, "_submit_generation", new_callable=AsyncMock)
     def test_openai_idempotency_distinguishes_aspect_ratio(self, submit_generation):
         submit_generation.return_value = (
             str(uuid.uuid4()),
@@ -558,7 +562,7 @@ class GatewayApiTest(unittest.TestCase):
         self.assertEqual(square.status_code, 409)
         self.assertEqual(submit_generation.await_count, 1)
 
-    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    @patch.object(gateway_app_module, "_submit_generation", new_callable=AsyncMock)
     def test_openai_idempotency_distinguishes_runtime_policy(self, submit_generation):
         submit_generation.return_value = (
             str(uuid.uuid4()),
@@ -594,7 +598,7 @@ class GatewayApiTest(unittest.TestCase):
         self.assertEqual(hot.status_code, 409)
         self.assertEqual(submit_generation.await_count, 1)
 
-    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    @patch.object(gateway_app_module, "_submit_generation", new_callable=AsyncMock)
     def test_same_idempotent_request_is_submitted_once(self, submit_generation):
         submit_generation.return_value = (str(uuid.uuid4()), "model-c-v1", "3")
         request = {
@@ -611,7 +615,7 @@ class GatewayApiTest(unittest.TestCase):
         )
         self.assertEqual(submit_generation.await_count, 1)
 
-    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    @patch.object(gateway_app_module, "_submit_generation", new_callable=AsyncMock)
     def test_in_flight_duplicate_cannot_invalidate_original_reservation(
         self, submit_generation
     ):
@@ -662,7 +666,7 @@ class GatewayApiTest(unittest.TestCase):
         _delete_unsubmitted_generation(generation_id, settings)
         self.assertIsNone(_generation_record(generation_id, settings))
 
-    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    @patch.object(gateway_app_module, "_submit_generation", new_callable=AsyncMock)
     def test_stale_submission_becomes_unknown_without_resubmission(
         self, submit_generation
     ):
@@ -708,7 +712,7 @@ class GatewayApiTest(unittest.TestCase):
         self.assertEqual(response.json()["status"], "unknown")
         submit_generation.assert_not_awaited()
 
-    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    @patch.object(gateway_app_module, "_submit_generation", new_callable=AsyncMock)
     def test_reused_key_with_different_request_is_rejected(self, submit_generation):
         submit_generation.return_value = (str(uuid.uuid4()), "model-c-v1", "3")
         headers = _request_headers("conflicting-request-key")
@@ -726,7 +730,7 @@ class GatewayApiTest(unittest.TestCase):
         self.assertEqual(second.status_code, 409)
         self.assertEqual(submit_generation.await_count, 1)
 
-    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    @patch.object(gateway_app_module, "_submit_generation", new_callable=AsyncMock)
     def test_pre_submit_rejection_does_not_consume_idempotency_key(
         self, submit_generation
     ):
@@ -748,7 +752,7 @@ class GatewayApiTest(unittest.TestCase):
         self.assertEqual(second.status_code, 202)
         self.assertEqual(submit_generation.await_count, 2)
 
-    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    @patch.object(gateway_app_module, "_submit_generation", new_callable=AsyncMock)
     def test_uncertain_prompt_submission_is_not_automatically_repeated(
         self, submit_generation
     ):
@@ -769,7 +773,7 @@ class GatewayApiTest(unittest.TestCase):
         self.assertEqual(retry.json()["status"], "unknown")
         self.assertEqual(submit_generation.await_count, 1)
 
-    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    @patch.object(gateway_app_module, "_submit_generation", new_callable=AsyncMock)
     def test_completed_status_is_loaded_from_sqlite_after_refresh(
         self, submit_generation
     ):
@@ -787,8 +791,9 @@ class GatewayApiTest(unittest.TestCase):
             "type": "output",
         }
 
-        with patch(
-            "comfyui.gateway.app._generation_state",
+        with patch.object(
+            gateway_app_module,
+            "_generation_state",
             new=AsyncMock(return_value=("succeeded", result_image, None)),
         ) as generation_state:
             completed = self.client.get(
@@ -798,8 +803,8 @@ class GatewayApiTest(unittest.TestCase):
             self.assertEqual(completed.json()["status"], "succeeded")
             generation_state.assert_awaited_once()
 
-        with patch(
-            "comfyui.gateway.app._generation_state", new=AsyncMock()
+        with patch.object(
+            gateway_app_module, "_generation_state", new=AsyncMock()
         ) as generation_state:
             persisted = self.client.get(
                 f"/v1/generations/{generation_id}", headers=AUTH_HEADERS
@@ -810,8 +815,8 @@ class GatewayApiTest(unittest.TestCase):
     def test_generation_without_prompt_is_reported_unknown(self):
         settings = Settings.from_env()
         generation_id, _ = _reserve_test_generation(settings)
-        with patch(
-            "comfyui.gateway.app._generation_state", new=AsyncMock()
+        with patch.object(
+            gateway_app_module, "_generation_state", new=AsyncMock()
         ) as generation_state:
             response = self.client.get(
                 f"/v1/generations/{generation_id}", headers=AUTH_HEADERS
@@ -862,8 +867,9 @@ class GatewayQueueTest(unittest.IsolatedAsyncioTestCase):
                 },
                 clear=False,
             ):
-                with patch(
-                    "comfyui.gateway.app._json_request",
+                with patch.object(
+                    gateway_app_module,
+                    "_json_request",
                     new=AsyncMock(
                         return_value={
                             "queue_running": [[1, str(uuid.uuid4())]]
