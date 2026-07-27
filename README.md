@@ -44,11 +44,13 @@ Frontend
 
 ```text
 presets -> deploy -> main
+langfuse -> deploy -> main
 ```
 
 - `presets`: ComfyUI 공용 런타임, 프리셋, 힌트 이미지, 관련 검증과 문서
 - `backend`, `frontend`, `serving`, `model-b`: 각 담당자 작업선
 - `model-c`: 레거시 롤백 작업선
+- `langfuse`: Gateway 생성 시간·세션 저장과 Langfuse 비용/성능 관측
 - `deploy`: 담당 브랜치를 모아 최종 E2E 검증
 - `main`: 검증 완료본
 
@@ -64,6 +66,7 @@ comfyui/
   custom_nodes/ad_creator/          # ComfyUI node, 공용 resolver, OpenAI adapter
   orchestrator/                     # workflow·preset routing
   gateway/                          # 제출·상태·결과 API
+  observability/                    # Langfuse 수집기와 비용 정규화
   deploy/                           # GCP 배포와 담당자 인계 문서
   scripts/                          # 정적 validator와 smoke 도구
   tests/                            # 런타임·Gateway 회귀 테스트
@@ -89,3 +92,4 @@ python -m unittest discover -s comfyui/tests -v
 - GCP 배포와 ComfyUI 접속: [`comfyui/deploy/README.md`](comfyui/deploy/README.md)
 - 백엔드 계약: [`comfyui/deploy/BACKEND_HANDOFF.md`](comfyui/deploy/BACKEND_HANDOFF.md)
 - 공용 런타임 검증 기록: [`comfyui/deploy/OPENAI_COMMON_RUNTIME_VALIDATION_20260724_KO.md`](comfyui/deploy/OPENAI_COMMON_RUNTIME_VALIDATION_20260724_KO.md)
+- Langfuse 설치·팀 전달: [`comfyui/deploy/LANGFUSE_OBSERVABILITY_HANDOFF_KO.md`](comfyui/deploy/LANGFUSE_OBSERVABILITY_HANDOFF_KO.md)

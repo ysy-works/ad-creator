@@ -22,6 +22,7 @@ from comfyui.gateway.app import (
     Settings,
     _PromptSubmissionUncertain,
     _attach_prompt,
+    _database,
     _delete_unsubmitted_generation,
     _failure_message,
     _generation_record,
@@ -189,6 +190,89 @@ class GatewayHelpersTest(unittest.TestCase):
                 record = _generation_record(generation_id, settings)
                 self.assertEqual(record["state"], "succeeded")
                 self.assertEqual(_recorded_image(record), expected)
+                self.assertIsNotNone(record["completed_at_ms"])
+                completed_at_ms = record["completed_at_ms"]
+                _update_generation_record(
+                    generation_id,
+                    state="running",
+                    settings=settings,
+                )
+                record = _generation_record(generation_id, settings)
+                self.assertEqual(record["completed_at_ms"], completed_at_ms)
+
+    def test_legacy_database_receives_additive_observability_columns(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            database_path = Path(temp_dir) / "gateway.sqlite3"
+            with closing(sqlite3.connect(database_path)) as connection:
+                connection.execute(
+                    """
+                    CREATE TABLE generations (
+                        generation_id TEXT PRIMARY KEY,
+                        job_id TEXT NOT NULL UNIQUE,
+                        idempotency_key TEXT NOT NULL UNIQUE,
+                        request_hash TEXT NOT NULL,
+                        prompt_id TEXT UNIQUE,
+                        workflow_id TEXT NOT NULL,
+                        output_node_id TEXT NOT NULL,
+                        state TEXT NOT NULL,
+                        filename TEXT,
+                        subfolder TEXT,
+                        output_type TEXT,
+                        error TEXT,
+                        created_at INTEGER NOT NULL,
+                        updated_at INTEGER NOT NULL
+                    )
+                    """
+                )
+                connection.execute(
+                    """
+                    INSERT INTO generations (
+                        generation_id, job_id, idempotency_key, request_hash,
+                        prompt_id, workflow_id, output_node_id, state,
+                        created_at, updated_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        "legacy-generation",
+                        "legacy-job",
+                        "legacy-key",
+                        "legacy-hash",
+                        "legacy-prompt",
+                        "model-c-v1",
+                        "3",
+                        "failed",
+                        100,
+                        120,
+                    ),
+                )
+                connection.commit()
+            with patch.dict(
+                os.environ,
+                {
+                    "AD_CREATOR_GATEWAY_API_KEY": API_KEY,
+                    "AD_CREATOR_GENERATION_SIGNING_KEY": SIGNING_KEY,
+                    "AD_CREATOR_GATEWAY_DB": str(database_path),
+                },
+                clear=False,
+            ):
+                settings = Settings.from_env()
+                with _database(settings) as connection:
+                    columns = {
+                        str(row[1])
+                        for row in connection.execute(
+                            "PRAGMA table_info(generations)"
+                        ).fetchall()
+                    }
+                    row = connection.execute(
+                        "SELECT * FROM generations WHERE job_id = 'legacy-job'"
+                    ).fetchone()
+            self.assertTrue(
+                {"session_id", "created_at_ms", "completed_at_ms"}.issubset(
+                    columns
+                )
+            )
+            self.assertEqual(row["created_at_ms"], 100_000)
+            self.assertEqual(row["completed_at_ms"], 120_000)
 
 
 class GatewayApiTest(unittest.TestCase):
@@ -228,6 +312,44 @@ class GatewayApiTest(unittest.TestCase):
             files={"image": ("input.png", _png(), "image/png")},
         )
         self.assertEqual(response.status_code, 400)
+
+    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    def test_session_id_is_persisted_without_being_exposed(
+        self, submit_generation
+    ):
+        submit_generation.return_value = (str(uuid.uuid4()), "model-c-v1", "3")
+        response = self.client.post(
+            "/v1/generations",
+            headers={
+                **_request_headers("session-request-key"),
+                "X-Session-ID": "7d458bed-96ed-4b70-b90e-096db76ae153",
+            },
+            files={"image": ("input.png", _png(), "image/png")},
+        )
+        self.assertEqual(response.status_code, 202)
+        record = _generation_record(
+            response.json()["generation_id"], Settings.from_env()
+        )
+        self.assertEqual(
+            record["session_id"], "7d458bed-96ed-4b70-b90e-096db76ae153"
+        )
+        self.assertIsNotNone(record["created_at_ms"])
+        self.assertNotIn("session_id", response.json())
+
+    @patch("comfyui.gateway.app._submit_generation", new_callable=AsyncMock)
+    def test_invalid_session_id_is_rejected_before_submission(
+        self, submit_generation
+    ):
+        response = self.client.post(
+            "/v1/generations",
+            headers={
+                **_request_headers("invalid-session-key"),
+                "X-Session-ID": "contains spaces",
+            },
+            files={"image": ("input.png", _png(), "image/png")},
+        )
+        self.assertEqual(response.status_code, 400)
+        submit_generation.assert_not_awaited()
 
     def test_health_reports_misconfigured_gateway(self):
         with patch.dict(

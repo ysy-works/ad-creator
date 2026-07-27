@@ -249,6 +249,8 @@ Internet :443
 /etc/ad-creator/comfyui.env     내부 모델 주소
 /etc/ad-creator/gateway.env     Gateway 주소와 비밀키
 /var/lib/ad-creator-gateway/    작업 상태 SQLite
+/etc/ad-creator/observability.env            Langfuse 키와 수집 설정
+/var/lib/ad-creator-observability/           전송 완료 상태 SQLite
 ```
 
 - `model-c` 코드, 가상환경, 실행 사용자와 포트는 변경하지 않습니다.
@@ -259,12 +261,36 @@ Internet :443
 - `input/ad_creator`는 1일, `output/ad_creator`는 7일 기준으로 systemd-tmpfiles가 정리합니다.
 - 서비스 템플릿과 환경변수 예시는 `comfyui/deploy/`에 있습니다.
 
+## Langfuse 관측
+
+생성 경로와 분리된 1분 주기 Collector가 완료 작업만 읽어 Langfuse로 보냅니다.
+Langfuse 장애가 이미지 생성 성공 여부나 응답 시간에 영향을 주지 않습니다.
+
+```text
+Gateway SQLite + OpenAI audit manifest
+  -> read-only Collector
+    -> Langfuse v4 OTLP/HTTP
+```
+
+- 수집: workflow, 성공/실패, 익명 세션, Gateway 시간, 모델 호출 시간, 토큰, USD 비용
+- 미수집: 이미지, 원문 프롬프트, 파일 경로, 이메일, 이름, IP, API 키
+- 비용: OpenAI 응답 usage를 텍스트 입력·이미지 입력·이미지 출력으로 분리하고
+  프로젝트에 고정한 공식 단가 파일로 계산합니다.
+- 불완전한 usage는 총비용을 추정하지 않고 `cost_complete=false`로 남깁니다.
+- 설치·검증·프론트/백엔드 전달사항:
+  `deploy/LANGFUSE_OBSERVABILITY_HANDOFF_KO.md`
+
+참고: [Langfuse OpenTelemetry](https://langfuse.com/integrations/native/opentelemetry),
+[Langfuse Token & Cost Tracking](https://langfuse.com/docs/observability/features/token-and-cost-tracking),
+[GPT Image 2](https://developers.openai.com/api/docs/models/gpt-image-2)
+
 ## 검증
 
 ```bash
 python comfyui/scripts/validate_workflows.py
 python comfyui/scripts/validate_presets.py
 python -B -m unittest discover -s comfyui/tests -v
+python -B -m comfyui.observability.collector --dry-run
 ```
 
 GCP 환경에서는 다음 순서로 확인합니다.

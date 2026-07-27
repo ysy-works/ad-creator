@@ -108,6 +108,9 @@ _REQUIRED_GENERATION_COLUMNS = {
     "error",
     "created_at",
     "updated_at",
+    "session_id",
+    "created_at_ms",
+    "completed_at_ms",
 }
 
 
@@ -141,13 +144,42 @@ def _database(settings: Settings):
                 output_type TEXT,
                 error TEXT,
                 created_at INTEGER NOT NULL,
-                updated_at INTEGER NOT NULL
+                updated_at INTEGER NOT NULL,
+                session_id TEXT,
+                created_at_ms INTEGER,
+                completed_at_ms INTEGER
             )
             """
         )
         columns = {
             str(row[1]) for row in connection.execute("PRAGMA table_info(generations)").fetchall()
         }
+        additive_columns = {
+            "session_id": "TEXT",
+            "created_at_ms": "INTEGER",
+            "completed_at_ms": "INTEGER",
+        }
+        for name, column_type in additive_columns.items():
+            if name not in columns:
+                connection.execute(
+                    f"ALTER TABLE generations ADD COLUMN {name} {column_type}"
+                )
+                columns.add(name)
+        connection.execute(
+            """
+            UPDATE generations
+            SET created_at_ms = created_at * 1000
+            WHERE created_at_ms IS NULL
+            """
+        )
+        connection.execute(
+            """
+            UPDATE generations
+            SET completed_at_ms = updated_at * 1000
+            WHERE completed_at_ms IS NULL
+              AND state IN ('succeeded', 'failed', 'expired')
+            """
+        )
         if not _REQUIRED_GENERATION_COLUMNS.issubset(columns):
             raise sqlite3.DatabaseError(
                 "Unsupported gateway database schema; start with a fresh gateway database."
@@ -167,9 +199,11 @@ def _reserve_generation(
     request_hash: str,
     workflow_id: str,
     output_node_id: str,
+    session_id: str | None = None,
     settings: Settings,
 ) -> tuple[dict[str, Any], bool]:
-    now = int(time.time())
+    now_ms = time.time_ns() // 1_000_000
+    now = now_ms // 1000
     with _database(settings) as connection:
         connection.execute("BEGIN IMMEDIATE")
         existing = connection.execute(
@@ -188,8 +222,8 @@ def _reserve_generation(
             INSERT INTO generations (
                 generation_id, job_id, idempotency_key, request_hash,
                 workflow_id, output_node_id,
-                state, created_at, updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, 'submitting', ?, ?)
+                state, created_at, updated_at, session_id, created_at_ms
+            ) VALUES (?, ?, ?, ?, ?, ?, 'submitting', ?, ?, ?, ?)
             """,
             (
                 generation_id,
@@ -200,6 +234,8 @@ def _reserve_generation(
                 output_node_id,
                 now,
                 now,
+                session_id,
+                now_ms,
             ),
         )
         record = connection.execute(
@@ -266,22 +302,25 @@ def _update_generation_record(
     error: str | None = None,
 ) -> None:
     with _database(settings) as connection:
-        now = int(time.time())
+        now_ms = time.time_ns() // 1_000_000
+        now = now_ms // 1000
         if state == "expired":
             connection.execute(
                 """
                 UPDATE generations
-                SET state = 'expired', error = ?, updated_at = ?
+                SET state = 'expired', error = ?, updated_at = ?,
+                    completed_at_ms = COALESCE(completed_at_ms, ?)
                 WHERE generation_id = ? AND state = 'succeeded'
                 """,
-                (error, now, generation_id),
+                (error, now, now_ms, generation_id),
             )
         elif state == "succeeded" and image is not None:
             connection.execute(
                 """
                 UPDATE generations
                 SET state = 'succeeded', filename = ?, subfolder = ?, output_type = ?,
-                    error = NULL, updated_at = ?
+                    error = NULL, updated_at = ?,
+                    completed_at_ms = COALESCE(completed_at_ms, ?)
                 WHERE generation_id = ?
                   AND state NOT IN ('succeeded', 'failed', 'expired')
                 """,
@@ -290,18 +329,21 @@ def _update_generation_record(
                     image.get("subfolder", ""),
                     image.get("type", "output"),
                     now,
+                    now_ms,
                     generation_id,
                 ),
             )
         else:
+            completed_at_ms = now_ms if state in _TERMINAL_STATES else None
             connection.execute(
                 """
                 UPDATE generations
-                SET state = ?, error = ?, updated_at = ?
+                SET state = ?, error = ?, updated_at = ?,
+                    completed_at_ms = COALESCE(completed_at_ms, ?)
                 WHERE generation_id = ?
                   AND state NOT IN ('succeeded', 'failed', 'expired')
                 """,
-                (state, error, now, generation_id),
+                (state, error, now, completed_at_ms, generation_id),
             )
 
 
@@ -427,6 +469,21 @@ def _idempotency_key(value: str | None) -> str:
             detail="Idempotency-Key must contain 8 to 128 non-whitespace characters.",
         )
     return key
+
+
+def _session_id(value: str | None) -> str | None:
+    session_id = (value or "").strip()
+    if not session_id:
+        return None
+    if re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._:-]{7,127}", session_id) is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=(
+                "X-Session-ID must contain 8 to 128 safe ASCII characters "
+                "(letters, digits, dot, underscore, colon, or hyphen)."
+            ),
+        )
+    return session_id
 
 
 def _public_status(record: dict[str, Any]) -> str:
@@ -870,6 +927,7 @@ async def create_generation(
         Literal["auto", "iced", "cold", "ambient", "hot"], Form()
     ] = "auto",
     idempotency_key: Annotated[str | None, Header(alias="Idempotency-Key")] = None,
+    session_id: Annotated[str | None, Header(alias="X-Session-ID")] = None,
     settings: Settings = Depends(require_api_key),
 ) -> dict[str, Any]:
     try:
@@ -882,6 +940,7 @@ async def create_generation(
         ) from exc
 
     request_key = _idempotency_key(idempotency_key)
+    resolved_session_id = _session_id(session_id)
     data = await image.read(MAX_IMAGE_BYTES + 1)
     content_type = image.content_type or "application/octet-stream"
     _validate_image(data, content_type)
@@ -918,6 +977,7 @@ async def create_generation(
             request_hash=request_hash,
             workflow_id=workflow_id,
             output_node_id="pending",
+            session_id=resolved_session_id,
             settings=settings,
         )
     except HTTPException:

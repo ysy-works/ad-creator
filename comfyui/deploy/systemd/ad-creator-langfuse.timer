@@ -1,0 +1,13 @@
+[Unit]
+Description=Export completed Ad Creator generations to Langfuse every minute
+
+[Timer]
+OnBootSec=60s
+OnUnitActiveSec=60s
+RandomizedDelaySec=5s
+AccuracySec=10s
+Persistent=true
+Unit=ad-creator-langfuse.service
+
+[Install]
+WantedBy=timers.target
