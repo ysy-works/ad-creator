@@ -92,8 +92,23 @@
       "height": 1448,
       "send_to_provider": true,
       "container_mode_scope": ["adopt_reference"],
+      "random_variant_group": "wood_medium_reference_container_v2",
+      "selection_policy": "random_one",
       "allowed_transfer": ["camera_distance", "compact_three_item_scale", "right_front_rounded_clear_glass_geometry", "right_front_plain_white_saucer_geometry", "round_dark_tray_relationships", "light_distribution", "restrained_palette", "material_response"],
       "forbidden_transfer": ["reference_beverage_identity", "reference_beverage_recipe", "reference_beverage_color", "reference_foam_or_layers", "text", "logo", "identifiable_room_objects", "exact_crop", "exact_shadow"]
+    },
+    {
+      "role": "wood_medium_reference_container_scene_hint",
+      "path": "../assets/wood-medium-reference-container-scene-hint-flat-glass-v2.png",
+      "sha256": "e348357dd7a1b175377af1db05f7d306750581f0f0d8eb9053ab4310f35b6f2a",
+      "width": 1536,
+      "height": 1024,
+      "send_to_provider": true,
+      "container_mode_scope": ["adopt_reference"],
+      "random_variant_group": "wood_medium_reference_container_v2",
+      "selection_policy": "random_one",
+      "allowed_transfer": ["left_panel_short_straight_clear_glass_geometry", "left_panel_thin_circular_rim", "left_panel_weighted_flat_base", "left_panel_plain_white_saucer_geometry", "left_panel_single_small_dark_wood_teaspoon_on_saucer_right", "right_panel_camera_distance", "right_panel_compact_three_item_scale", "right_panel_round_dark_tray_relationships", "right_panel_target_spoon_relationship", "right_panel_light_distribution", "restrained_palette", "material_response"],
+      "forbidden_transfer": ["two_panel_layout", "panel_gutter", "left_panel_product_scale_and_position", "reference_beverage_identity", "reference_beverage_recipe", "reference_beverage_color", "reference_foam_or_layers", "text", "logo", "identifiable_room_objects", "exact_crop", "exact_shadow"]
     }
   ],
   "container_modes": {
@@ -108,11 +123,20 @@
       "discard": ["source camera pose", "source background", "source lighting", "source shadows"]
     },
     "adopt_reference": {
-      "container_identity_scope": "published_right_front_rounded_clear_glass_and_plain_white_saucer",
+      "container_identity_scope": "randomly_selected_published_right_front_clear_glass_variant_and_plain_white_saucer",
       "provider_hint_role": "wood_medium_reference_container_scene_hint",
       "prompt_template": {
         "path": "prompt-template-adopt-reference.txt",
-        "sha256": "eee3b52c304471138a4020bdf27adfdf506056af3f8a69ae400849ee530603f2"
+        "sha256": "f316fa07388a8918c0a5192aff45ef3f155320507f6ae273b45ef6b2aab5568e"
+      },
+      "reference_container_selection": {
+        "policy": "selected_provider_hint_is_authoritative",
+        "allowed_variants": [
+          "compact rounded clear glass with narrower base and fuller upper body",
+          "short low straight-sided clear glass with thin rim, weighted flat base and one small dark wooden teaspoon on the right side of its saucer"
+        ],
+        "shared_serviceware": "one plain warm-white circular ceramic saucer; preserve the small dark wooden teaspoon only when it is present in the selected hint",
+        "exactly_one_variant": true
       },
       "preserve": ["source beverage identity", "source serving state", "source liquid layers, toppings and ice state"],
       "discard": ["source container geometry", "source container material", "source container branding", "reference beverage identity", "reference beverage color, foam and recipe"]

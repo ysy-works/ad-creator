@@ -43,11 +43,11 @@
   },
   "prompt_template": {
     "path": "prompt-template.txt",
-    "sha256": "72a93f18e9c97c915cc36e59ea96ec38d066d2d1dfed7863bb98665c2eea9b2a"
+    "sha256": "3952aa20004dde2118833e773255fe2d307efa935cce2aa32c8efc232423b979"
   },
   "lighting_sheet": {
     "path": "lighting-sheet.json",
-    "sha256": "75d62517964fdffe913bc30cbb0a4141795f57ac8183655a35c46ea8d3c52e91"
+    "sha256": "8a15d444b398d5d1905ab1cad3e7f98f97cd5a93db5dc15743f840835ac86388"
   },
   "grade_profile": {
     "path": "grade-profile.json",
@@ -55,9 +55,9 @@
     "apply_in_pilot": false
   },
   "contract_assets": {
-    "scene_recipe": {"path": "scene-recipe.json", "sha256": "3025535035d4d6ae277af204cdaaaddff6aa3fafb12f9c8f283f47ebab6010df"},
+    "scene_recipe": {"path": "scene-recipe.json", "sha256": "bf2ae4ea6ed5382db9cedfb4a794af952bfb6caf269c35cc73b1191e6643348b"},
     "scene_graph": {"path": "scene-graph.json", "sha256": "aa3d9315ac03ce033cb1986dc3bda331e74d2292f4ecdae56db60f4776ccd39a"},
-    "container_design": {"path": "container-design.json", "sha256": "797ad202466165d789f33950e2c9e1ff6e585b88502711b8c1bc915db3743040"},
+    "container_design": {"path": "container-design.json", "sha256": "9a871643b7dccc984978643a726f18f047dc7aa19b673da6f65ddb990be66850"},
     "photographic_style": {"path": "photographic-style-contract.json", "sha256": "546c1d56a7d2c21318c0c3a791232e679097603100abdbd59cf39eb1cc8668b0"}
   },
   "provider_reference_policy": {
@@ -68,10 +68,10 @@
   "hint_images": [
     {
       "role": "sanitized_wood_cane_brownie_control_board",
-      "path": "../assets/wood-overhead-sanitized-control-board-v3.png",
-      "sha256": "13e47e3854b1ea7ee531bd4aecb4a9d3775a3fa5083ddd0a542175f6d8b3f51f",
-      "width": 1122,
-      "height": 1402,
+      "path": "../assets/wood-overhead-sanitized-control-board-v4.png",
+      "sha256": "6937970370737b9c34946be2baa32f24cbfd3777c0e08ec1cb77dc56aaf199ac",
+      "width": 1003,
+      "height": 1568,
       "send_to_provider": true,
       "container_mode_scope": ["reconstruct_source", "adopt_reference"],
       "transfer_scope": [
@@ -79,14 +79,15 @@
         "isolated dark warm-brown directional wood material family without exact grain pixels",
         "isolated natural cane-webbing and bentwood material family without exact chair geometry",
         "original-reference double-green-rim plate, dark rectangular moist brownie, generous melting white cream, uneven cocoa dust and approved reclaimed-wood teaspoon identity and relative arrangement",
+        "isolated empty short low clear-glass design with near-circular rim, weighted base and subtle lower horizontal ribs for iced-or-cold adopt-reference mode only",
         "upper-left key direction, broad partial product-crossing environmental shadow and elongated lower-right cast-shadow behavior",
-        "empty product-zone relationship only; never render the board's empty ring"
+        "open product-zone relationship only; the board contains no placement ring"
       ],
       "container_transfer_by_mode": {
         "reconstruct_source": "The board contains no source cup. Reconstruct the user's broad cup family, material, handle state and visible source serviceware.",
-        "adopt_reference": "Use the preset's declared plain unbranded warm-white matte paper-cup design; the board supplies no cup design or beverage."
+        "adopt_reference": "Preserve the user beverage serving state. For visibly iced or cold drinks use only the board's isolated empty short ribbed clear-glass design. For hot or ambient drinks ignore that glass panel and use the approved original-reference low wide warm-white glazed ceramic latte cup. The board supplies no beverage."
       },
-      "excluded_transfer": ["2x2 board layout", "panel borders", "empty placement ring", "complete scene", "exact table crop", "exact chair silhouette", "exact shadow silhouette", "exact wood-grain pixels", "exact cane-weave pixels", "text", "logo", "watermark"]
+      "excluded_transfer": ["five-panel board layout", "panel borders", "glass-panel background", "complete scene", "exact table crop", "exact chair silhouette", "exact shadow silhouette", "exact wood-grain pixels", "exact cane-weave pixels", "reference beverage", "bedding", "tray", "text", "logo", "watermark"]
     }
   ],
   "runtime_input_policy": {
@@ -117,11 +118,18 @@
       "pale_neutral_component_adaptation": "for every source-derived pale low-chroma beverage region, preserve its relative hierarchy while applying the scene's slightly underexposed warm-neutral diffuse pale-material response; it must read as white by contrast without exact pixel copying, pure-white clipping, brown contamination, flat grayness or a luminous cutout boundary"
     },
     "adopt_reference": {
-      "container_identity_scope": "discard_source_container",
+      "container_identity_scope": "discard_source_container_and_select_reference_variant_from_source_serving_state",
       "container_design_path": "container-design.json",
+      "reference_container_selection": {
+        "authority": "source_beverage_serving_state",
+        "iced_or_cold": "short low clear glass with weighted base and subtle lower horizontal ribs",
+        "hot_or_ambient": "approved low wide warm-white glazed ceramic latte cup with a thin rounded near-circular rim, gently rounded shallow wall, subtle foot and no visible handle in the final overhead view",
+        "exactly_one_variant": true,
+        "control_board_beverage_authority": "none"
+      },
       "preserve": ["beverage identity", "surface color and opacity", "ice, foam, cream, fruit and garnish", "approximate top-surface arrangement"],
       "discard": ["source container geometry", "source serviceware", "source camera pose", "source background and shadow"],
-      "wood_integration": "use warm reflected fill and attached shadow on paper while prohibiting wood grain or beverage color on the opaque exterior"
+      "wood_integration": "for ceramic use restrained glaze response, warm reflected fill and attached foot shadow while prohibiting wood grain or beverage color on the opaque exterior; for the cold glass use restrained local refraction, transmitted edge lift, dense base occlusion and the same attached lower-right shadow"
     }
   },
   "camera_contract": {
@@ -196,6 +204,7 @@
       "brownie, double-rim plate or wooden teaspoon is missing or replaced",
       "reconstruct-source primary cup exceeds 0.21 of final width, has an oblique elliptical opening or exposes excessive sidewall",
       "teaspoon bowl points upward instead of downward",
+      "adopt-reference mode uses the warm-white ceramic cup for a visibly iced or cold drink, uses the clear ribbed glass for a visibly hot or ambient drink, uses any paper cup, or blends both approved designs",
       "cookie, plastic packaging, undeclared prop, logo or text appears",
       "CGI, HDR, procedural wood, repeated cane texture or orange wash"
     ],
