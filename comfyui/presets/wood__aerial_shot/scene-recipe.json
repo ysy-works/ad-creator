@@ -14,7 +14,7 @@
     "product edges inherit local wood bounce, grain-scale acuity and sensor texture without color contamination"
   ],
   "container_modes": {
-    "adopt_reference": "use the declared unbranded warm-white paper cup; user beverage remains authoritative",
+    "adopt_reference": "select exactly one declared reference design from the source beverage serving state: short low ribbed clear glass for visibly iced or cold drinks, otherwise the approved low wide warm-white glazed ceramic latte cup; user beverage remains authoritative",
     "reconstruct_source": "reconstruct broad source cup family and material plus visible source serviceware; rebuild projection, light and shadow under the preset camera"
   },
   "forbidden": ["cookie", "plastic packaging", "fork", "napkin", "flower", "book", "phone", "extra beverage", "extra dessert", "logo", "text", "floating object", "detached shadow", "repeated cane texture"]

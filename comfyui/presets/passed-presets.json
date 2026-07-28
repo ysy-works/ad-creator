@@ -9,7 +9,7 @@
       "status": "published_default",
       "runtime_state": "routed",
       "bundle": "wood__product_center_a6/preset.json",
-      "bundle_sha256": "79331ce346dd17a94fdf4a3b9626dd1bb66927d8dc2337f0bc7b569e2df73f13"
+      "bundle_sha256": "72179a03dab968595e9e41ebba64eb45d4c21a009249e7ec87c2dfb9bf21e0e1"
     },
     {
       "preset_id": "instagram_white_diffuse_wall_table_v1",
@@ -58,14 +58,14 @@
       "status": "passed_by_user_review",
       "runtime_state": "published_non_default",
       "bundle": "wood__aerial_shot/preset.json",
-      "bundle_sha256": "782317e120250eb3a4e14c27b317a1da656964d3f74e6db01aaa571733964afb"
+      "bundle_sha256": "60e2831d1bd04439567080a6d0f862b0e5c4cba31840e945be0cec7f206329f1"
     },
     {
       "preset_id": "instagram_wood_handheld_two_person_v1",
       "status": "passed_by_user_review",
       "runtime_state": "published_non_default",
       "bundle": "wood__handheld_lifestyle/preset.json",
-      "bundle_sha256": "1ce2e98065c58589d18cb490dc27fba48c18182c9b3dbc99fc94a60fa8c74418"
+      "bundle_sha256": "dc1e2e7f93238a47daa77b882038138808c54e4bdbbe12e158e73e9e66f8e3ec"
     },
     {
       "preset_id": "instagram_dark_grey_closeup_v1",

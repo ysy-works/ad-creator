@@ -37,7 +37,7 @@
     "exposure_compensation_ev": [-0.92, -0.52],
     "white_balance_kelvin": [3800, 4450],
     "white_balance": "3800-4450K subdued warm-neutral window-sun with neutral brown shadow detail and no orange wash",
-    "texture": "finite phone-camera acuity, real dark wood pores, irregular cane depth, soft paper fibers and restrained sensor grain; never uniformly crisp",
+    "texture": "finite phone-camera acuity, real dark wood pores, irregular cane depth, restrained ceramic glaze or weighted-glass response and restrained sensor grain; never uniformly crisp",
     "hdr": "restrained single-exposure social photo; no tone-mapped halo",
     "highlight_protection": "milk, foam, ice, plate and pale floor retain texture; no glowing white beverage body",
     "black_detail": "wood pores and cane openings remain readable in shadow"
