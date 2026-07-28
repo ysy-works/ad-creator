@@ -80,7 +80,7 @@ const STR = {
     faqTitle: "궁금한 점이 있다면",
     faqItems: [
       { q: "어떤 사진을 올려도 되나요?", a: "휴대폰으로 찍은 음료 사진이면 충분해요. 별도의 촬영 장비나 조명은 필요 없어요." },
-      { q: "생성에 시간이 얼마나 걸리나요?", a: "보통 3~5분 정도 걸려요." },
+      { q: "생성에 시간이 얼마나 걸리나요?", a: "보통 1~2분 정도 걸려요." },
       { q: "결과 이미지를 상업적으로 써도 되나요?", a: "네, 인스타그램 게시물이나 매장 홍보용으로 자유롭게 사용하실 수 있어요." },
       { q: "캡션도 같이 만들어주나요?", a: "이미지 생성 후 메뉴명과 게시 목적을 입력하면, 캡션과 해시태그까지 함께 만들어드려요." },
     ],
@@ -124,7 +124,7 @@ const STR = {
     faqTitle: "Got questions?",
     faqItems: [
       { q: "What kind of photo can I upload?", a: "A phone photo of your drink is enough. No special equipment or lighting needed." },
-      { q: "How long does it take?", a: "It usually takes 3–5 minutes." },
+      { q: "How long does it take?", a: "It usually takes about 1–2 minutes." },
       { q: "Can I use the results commercially?", a: "Yes, feel free to use them for Instagram posts or store promotions." },
       { q: "Do you generate captions too?", a: "After the image is ready, add a menu name and purpose and we'll write a caption and hashtags." },
     ],
