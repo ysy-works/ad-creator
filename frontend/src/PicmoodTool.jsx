@@ -195,6 +195,22 @@ const API_BASE = isLocalDev
   ? `http://${window.location.hostname}:8000`
   : RENDER_BACKEND;
 
+// 이미지 생성 진행률(%) 시뮬레이션.
+// 백엔드 구조상 실제 생성 진행 상황을 폴링할 수 없어서, 실측 평균 소요시간
+// (약 100초) 기준으로 프론트에서만 그럴듯하게 채워주는 방식.
+// - 앞 40%(40초) 동안 0→70%까지 빠르게 올라가고
+// - 나머지 60%(60초) 동안 70→90%까지 천천히 올라간 뒤
+// - 평균 시간을 넘기면 90%에서 대기 (실제 응답이 오면 handleGenerate에서 100%로 채움)
+// 90%를 넘겨 100%까지 채워버리면 "거의 다 됐다"는 착각을 주기 쉬워서
+// 일부러 90%에서 멈춰두는 방식으로 구현.
+const AVG_GENERATE_MS = 100000;
+const simulateProgress = (elapsedMs) => {
+  const ratio = elapsedMs / AVG_GENERATE_MS;
+  if (ratio >= 1) return 90;
+  if (ratio < 0.4) return (ratio / 0.4) * 70;
+  return 70 + ((ratio - 0.4) / 0.6) * 20;
+};
+
 // Langfuse 런타임 지표(비용·소요시간) 추적용 익명 세션 ID.
 // 2026-07-27 소연님 요청사항 — 이메일/닉네임/파일명 등 사용자를 특정할 수 있는
 // 값은 절대 쓰지 않고, crypto.randomUUID()로 만든 순수 익명 UUID만 사용한다.
@@ -414,6 +430,8 @@ function App({ lang = "ko", setLang }) {
   const [purposeOther, setPurposeOther] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0); // 이미지 생성 중 시뮬레이션 진행률(%)
+  const progressIntervalRef = useRef(null); // 진행률 타이머 id (실패/언마운트 시 정리용)
   const [error, setError] = useState("");
   const [resultImage, setResultImage] = useState(null);
 
@@ -437,6 +455,15 @@ function App({ lang = "ko", setLang }) {
       .then((res) => res.json())
       .then((data) => setReferences(data))
       .catch(() => setError(t.loadReferencesError));
+  }, []);
+
+  // 컴포넌트가 사라질 때 진행률 타이머가 남아있으면 정리 (안전장치)
+  useEffect(() => {
+    return () => {
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
+    };
   }, []);
 
   // 업로드한 파일이 바뀌면 미리보기 URL 생성
@@ -500,6 +527,17 @@ function App({ lang = "ko", setLang }) {
     setStory(null);
     setCopied(false);
 
+    // 진행률 타이머 시작 — 평균 소요시간(약 100초) 기준으로 0%→90%까지
+    // 서서히 채워가다가 90%에서 대기. 실제 서버 진행 상황 조회는 아님.
+    setProgress(0);
+    const generateStartedAt = Date.now();
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+    }
+    progressIntervalRef.current = setInterval(() => {
+      setProgress(simulateProgress(Date.now() - generateStartedAt));
+    }, 250);
+
     try {
       const formData = new FormData();
       formData.append("product_image", productFile);
@@ -529,10 +567,32 @@ function App({ lang = "ko", setLang }) {
       }
 
       const data = await response.json();
+
+      // 실제 응답이 도착했으니 진행률 타이머를 멈추고 100%로 채운다.
+      // 350ms 정도 잠깐 보여준 뒤 로딩을 종료해서, 90%에서 갑자기 결과가
+      // 툭 튀어나오지 않고 "다 채워지고 끝났다"는 느낌을 준다.
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+        progressIntervalRef.current = null;
+      }
+      setProgress(100);
       setResultImage(data.result_image);
+      await new Promise((resolve) => setTimeout(resolve, 350));
     } catch (err) {
+      // 실패 시에도 타이머는 반드시 정리하고 진행률을 초기화한다.
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+        progressIntervalRef.current = null;
+      }
+      setProgress(0);
       setError(err.message || t.genericError);
     } finally {
+      // 위쪽에서 이미 정리되지만, throw 위치와 무관하게 항상 타이머가
+      // 남지 않도록 finally에서 한 번 더 안전하게 정리한다.
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+        progressIntervalRef.current = null;
+      }
       setLoading(false);
     }
   };
@@ -1256,7 +1316,7 @@ function App({ lang = "ko", setLang }) {
 
         {/* 3. 생성 버튼 (업로드 직후 바로 생성) */}
         <button className="generate-btn" onClick={handleGenerate} disabled={loading}>
-          {loading ? t.generating : t.generateImage}
+          {loading ? `${t.generating} ${Math.round(progress)}%` : t.generateImage}
         </button>
 
         {error && <p className="error-text">{error}</p>}
