@@ -4,6 +4,13 @@
 
 Pickmood는 단순히 보기 좋은 이미지를 새로 만드는 서비스가 아닙니다. 카페 운영자가 직접 촬영한 음료 사진에서 제품의 종류·색상·서빙 상태와 컵의 특징을 읽고, 미리 설계한 장면 규칙과 시각 힌트를 적용해 광고에 활용할 수 있는 라이프스타일 이미지로 변환합니다. 생성 결과와 함께 SNS 게시 문구도 제공합니다.
 
+## 프로젝트 산출물
+
+- [최종 보고서 PDF 다운로드](./Pickmood_REPORT.pdf)
+- [협업일지](https://docs.google.com/spreadsheets/d/1LIsT5yt4gG0rQubbrsNlXbZtpIVoe3cvaPBu6_kfPlU/)  
+  문서 하단의 탭을 선택하면 팀원별 협업일지를 조회할 수 있습니다.
+- [발표자료 PPT](https://docs.google.com/presentation/d/1TxUqSi-ZDf_O5U87WIIesu-YChhfhHB48nWH5gY5WiQ/edit?usp=drive_link)
+
 ## 핵심 차별점
 
 - 긴 프롬프트 없이 프리셋을 선택해 카메라·빛·구도·배치·재질 규칙을 적용합니다.
