@@ -11,6 +11,8 @@ from unittest.mock import patch
 
 from comfyui.observability.collector import (
     Settings,
+    _event_definition,
+    _event_rows,
     _export_observation,
     _export_trace,
     _trace_definition,
@@ -222,6 +224,67 @@ class UsageAndCostTest(unittest.TestCase):
 
 
 class CollectorTest(unittest.TestCase):
+    def test_frontend_completion_uses_browser_duration_in_same_trace(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            settings = _settings(root)
+            job_id = "af3eb4e9-d91f-4a83-980b-5f7c69dcb6fc"
+            _create_event_database(settings.gateway_database, job_id=job_id)
+            with closing(sqlite3.connect(settings.gateway_database)) as connection:
+                connection.execute(
+                    "ALTER TABLE generation_observability_events "
+                    "ADD COLUMN duration_ms INTEGER"
+                )
+                connection.execute(
+                    """
+                    INSERT INTO generation_observability_events (
+                        event_id, job_id, stage, state, workflow_id, session_id,
+                        occurred_at_ms, error, duration_ms
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        f"{job_id}:frontend_completed",
+                        job_id,
+                        "frontend_completed",
+                        "completed",
+                        "model-c-v1",
+                        "session-12345678",
+                        20_000,
+                        None,
+                        12_345,
+                    ),
+                )
+                connection.commit()
+
+            rows = _event_rows(settings.gateway_database)
+            row = next(
+                item
+                for item in rows
+                if item["stage"] == "frontend_completed"
+            )
+            definition = _event_definition(row, settings)
+
+            self.assertEqual(definition["name"], "frontend-completed")
+            self.assertEqual(
+                definition["trace_id"],
+                _event_definition(rows[0], settings)["trace_id"],
+            )
+            self.assertEqual(
+                definition["parent_observation_id"],
+                _event_definition(rows[0], settings)["observation_id"],
+            )
+            self.assertEqual(
+                definition["end_ns"] - definition["start_ns"],
+                12_345 * 1_000_000,
+            )
+            self.assertEqual(
+                definition["attributes"][
+                    "langfuse.observation.metadata."
+                    "frontend_end_to_end_duration_ms"
+                ],
+                12_345,
+            )
+
     def test_dry_run_reads_terminal_job_and_never_marks_it_exported(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)

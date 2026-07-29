@@ -19,6 +19,7 @@ import httpx
 from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadFile, status
 from fastapi.responses import JSONResponse, Response
 from PIL import Image, UnidentifiedImageError
+from pydantic import BaseModel, Field
 
 from comfyui.orchestrator import (
     PresetRegistryConfigurationError,
@@ -128,6 +129,10 @@ class _PromptSubmissionUncertain(Exception):
         self.error = error
 
 
+class FrontendCompletedObservation(BaseModel):
+    duration_ms: int = Field(ge=1, le=30 * 60 * 1000)
+
+
 @contextmanager
 def _database(settings: Settings):
     settings.database_path.parent.mkdir(parents=True, exist_ok=True)
@@ -170,10 +175,22 @@ def _database(settings: Settings):
                 session_id TEXT,
                 occurred_at_ms INTEGER NOT NULL,
                 error TEXT,
+                duration_ms INTEGER,
                 UNIQUE(job_id, stage)
             )
             """
         )
+        event_columns = {
+            str(row[1])
+            for row in connection.execute(
+                "PRAGMA table_info(generation_observability_events)"
+            ).fetchall()
+        }
+        if "duration_ms" not in event_columns:
+            connection.execute(
+                "ALTER TABLE generation_observability_events "
+                "ADD COLUMN duration_ms INTEGER"
+            )
         connection.execute(
             """
             CREATE INDEX IF NOT EXISTS
@@ -231,13 +248,14 @@ def _record_generation_event(
     state: str,
     occurred_at_ms: int,
     error: str | None = None,
+    duration_ms: int | None = None,
 ) -> None:
     connection.execute(
         """
         INSERT OR IGNORE INTO generation_observability_events (
             event_id, job_id, stage, state, workflow_id, session_id,
-            occurred_at_ms, error
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            occurred_at_ms, error, duration_ms
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         (
             f"{job_id}:{stage}",
@@ -248,6 +266,7 @@ def _record_generation_event(
             session_id,
             occurred_at_ms,
             error,
+            duration_ms,
         ),
     )
 
@@ -1223,6 +1242,42 @@ async def get_generation(
     token = decode_generation_id(generation_id, secret=settings.signing_key)
     record, _ = await _refresh_generation(generation_id, token=token, settings=settings)
     return _generation_response(record)
+
+
+@app.post(
+    "/v1/generations/{generation_id}/client-observations/frontend-completed",
+    status_code=status.HTTP_202_ACCEPTED,
+)
+async def record_frontend_completed(
+    generation_id: str,
+    payload: FrontendCompletedObservation,
+    settings: Settings = Depends(require_api_key),
+) -> dict[str, bool]:
+    token = decode_generation_id(generation_id, secret=settings.signing_key)
+    record = _generation_record(generation_id, settings)
+    if record is None or str(record["job_id"]) != token["j"]:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Generation not found.",
+        )
+    if str(record["state"]) != "succeeded":
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Frontend completion can only be recorded for a succeeded generation.",
+        )
+
+    with _database(settings) as connection:
+        _record_generation_event(
+            connection,
+            job_id=str(record["job_id"]),
+            workflow_id=str(record["workflow_id"]),
+            session_id=record.get("session_id"),
+            stage="frontend_completed",
+            state="completed",
+            occurred_at_ms=time.time_ns() // 1_000_000,
+            duration_ms=payload.duration_ms,
+        )
+    return {"accepted": True}
 
 
 @app.get("/v1/generations/{generation_id}/result")

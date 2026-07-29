@@ -309,11 +309,22 @@ def _event_rows(database_path: Path) -> list[dict[str, Any]]:
         ).fetchone()
         if table_exists is None:
             return []
+        event_columns = {
+            str(row[1])
+            for row in connection.execute(
+                "PRAGMA table_info(generation_observability_events)"
+            ).fetchall()
+        }
+        duration_column = (
+            "event.duration_ms"
+            if "duration_ms" in event_columns
+            else "NULL AS duration_ms"
+        )
         rows = connection.execute(
-            """
+            f"""
             SELECT event.event_id, event.job_id, event.stage, event.state,
                    event.workflow_id, event.session_id,
-                   event.occurred_at_ms, event.error,
+                   event.occurred_at_ms, event.error, {duration_column},
                    generation.created_at_ms, generation.completed_at_ms,
                    generation.updated_at
             FROM generation_observability_events AS event
@@ -574,6 +585,7 @@ def _event_definition(
         "failed": "generation-failed",
         "expired": "generation-expired",
         "submission_failed": "prompt-submission-failed",
+        "frontend_completed": "frontend-completed",
     }
     attributes: dict[str, Any] = {
         "langfuse.trace.name": "ad-creator.image-generation",
@@ -609,6 +621,24 @@ def _event_definition(
         attributes["langfuse.observation.status_message"] = str(
             row.get("error") or "Generation failed."
         )[:500]
+    duration_ms = row.get("duration_ms")
+    has_frontend_duration = (
+        stage == "frontend_completed"
+        and isinstance(duration_ms, int)
+        and 1 <= duration_ms <= 30 * 60 * 1000
+    )
+    if has_frontend_duration:
+        attributes[
+            "langfuse.observation.metadata.frontend_end_to_end_duration_ms"
+        ] = duration_ms
+        attributes[
+            "langfuse.observation.metadata.frontend_timing_definition"
+        ] = "generate button click to result image load"
+        attributes[
+            "langfuse.observation.metadata.frontend_timing_anchor"
+        ] = "gateway receipt time"
+    start_ms = occurred_at_ms - duration_ms if has_frontend_duration else occurred_at_ms
+    end_ms = occurred_at_ms if has_frontend_duration else occurred_at_ms + 1
     definition = {
         "event_id": event_id,
         "job_id": job_id,
@@ -620,8 +650,8 @@ def _event_definition(
             else _observation_id(f"{job_id}:accepted")
         ),
         "name": names.get(stage, f"generation-{stage}"),
-        "start_ns": occurred_at_ms * 1_000_000,
-        "end_ns": occurred_at_ms * 1_000_000 + 1_000_000,
+        "start_ns": start_ms * 1_000_000,
+        "end_ns": end_ms * 1_000_000,
         "attributes": attributes,
         "occurred_at_ms": occurred_at_ms,
     }

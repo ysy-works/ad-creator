@@ -267,6 +267,12 @@ class GatewayHelpersTest(unittest.TestCase):
                             "PRAGMA table_info(generations)"
                         ).fetchall()
                     }
+                    event_columns = {
+                        str(row[1])
+                        for row in connection.execute(
+                            "PRAGMA table_info(generation_observability_events)"
+                        ).fetchall()
+                    }
                     row = connection.execute(
                         "SELECT * FROM generations WHERE job_id = 'legacy-job'"
                     ).fetchone()
@@ -275,6 +281,7 @@ class GatewayHelpersTest(unittest.TestCase):
                     columns
                 )
             )
+            self.assertIn("duration_ms", event_columns)
             self.assertEqual(row["created_at_ms"], 100_000)
             self.assertEqual(row["completed_at_ms"], 120_000)
 
@@ -880,6 +887,52 @@ class GatewayApiTest(unittest.TestCase):
             )
             self.assertEqual(persisted.json()["status"], "succeeded")
             generation_state.assert_not_awaited()
+
+    def test_frontend_completion_is_recorded_once(self):
+        settings = Settings.from_env()
+        generation_id, job_id = _reserve_test_generation(settings)
+        _update_generation_record(
+            generation_id,
+            state="succeeded",
+            settings=settings,
+            image={
+                "filename": "result.png",
+                "subfolder": "ad_creator",
+                "type": "output",
+            },
+        )
+        url = (
+            f"/v1/generations/{generation_id}"
+            "/client-observations/frontend-completed"
+        )
+
+        first = self.client.post(
+            url,
+            headers=AUTH_HEADERS,
+            json={"duration_ms": 12_345},
+        )
+        duplicate = self.client.post(
+            url,
+            headers=AUTH_HEADERS,
+            json={"duration_ms": 99_999},
+        )
+
+        self.assertEqual(first.status_code, 202)
+        self.assertEqual(duplicate.status_code, 202)
+        with _database(settings) as connection:
+            rows = connection.execute(
+                """
+                SELECT stage, state, duration_ms
+                FROM generation_observability_events
+                WHERE job_id = ? AND stage = 'frontend_completed'
+                """,
+                (job_id,),
+            ).fetchall()
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(
+            tuple(rows[0]),
+            ("frontend_completed", "completed", 12_345),
+        )
 
     def test_generation_without_prompt_is_reported_unknown(self):
         settings = Settings.from_env()
