@@ -464,11 +464,11 @@ class CollectorTest(unittest.TestCase):
                 connection.execute(
                     """
                     UPDATE generations
-                    SET state = 'succeeded', completed_at_ms = 6_000,
-                        updated_at = 6
+                    SET state = 'succeeded', completed_at_ms = ?,
+                        updated_at = ?
                     WHERE job_id = ?
                     """,
-                    (job_id,),
+                    (6_000, 6, job_id),
                 )
                 connection.commit()
             counts = collect(settings=settings, dry_run=True)
