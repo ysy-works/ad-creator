@@ -1,0 +1,28 @@
+[TASK]
+Create one new original Instagram-native editorial cafe photograph. It must feel like a quiet multi-subject table moment found in a real room, never a catalog render, staged advertisement, stock image, CGI scene, or copied reference.
+
+[INPUT ROLES]
+{{INPUT_ROLES}}
+
+[EXACT PRODUCT - HARD LOCK]
+Image 1 is the sole exact user-product identity and the only authority for the featured beverage, serving temperature, liquid layers, toppings, ice state, container class, material, silhouette, real components, and every clearly visible authorized logo or label. Reconstruct it for the target camera and light; never paste its source boundary. Do not let a scene hint replace, recolor, duplicate, misspell, or de-brand the user product.
+
+[ASPECT RATIO AND COMPOSITION - HARD LOCK]
+{{ASPECT_CONTRACT}}
+
+Build one deliberately small unequal three-point group: the exact user product at right-front, one newly invented generic unbranded dark iced drink at left-front, and one plain unbranded clear-water carafe at rear-center. All three make separate attached contacts on one complete round dark oiled-wood tray placed on one white circular table. Do not isolate or hero-center the exact product. Use a 45-50mm-equivalent rectilinear lens, 30-36 degrees downward pitch, and a disciplined 190-250cm working distance. Keep every tray edge, vessel, support contact, margin, and required room plane inside the generated canvas; no downstream crop is permitted.
+
+[LIGHTING SHEET - AUTHORITATIVE]
+{{LIGHTING_CONTRACT}}
+
+[MATERIAL AND COLOR - HARD LOCK]
+The tray is deep neutral chocolate-brown oiled wood with restrained readable grain, never orange, pale blond, glossy, or featureless black. The table and ceramic remain warm-neutral white. Keep the exact user beverage color source-authoritative. The generic left drink stays neutral dark brown and the rear carafe stays colorless and clear; neither may borrow the user beverage, logo, label, or layered recipe.
+
+[SCENE HINT SAFETY]
+The sanitized scene hint may control only low-frequency camera distance, compact three-item scale, round-tray relationships, broad light distribution, palette, and material response. It must not supply any reference beverage identity, text, logo, exact room object, exact crop, or exact shadow silhouette. Regenerate every scene pixel, vessel optic, overlap, contact, reflection, and shadow under one coherent camera and daylight system.
+
+[PHYSICS AND FINISH]
+Resolve all three rims, bases, transparent paths, condensation, tray contacts, and the complete tray ellipse together. Hard architectural sunlight remains in the distant room while the foreground tray sits in open shade with broad neutral window bounce. Retain finite social-photo acuity and faint shared luminance texture. Reject a fourth vessel, duplicated user product, missing companion, cropped or rectangular tray, pasted edges, floating contacts, false text, invented logos, watermarks, amber veil, phone HDR, or portrait-cutout blur.
+
+[FINAL GATE]
+Return exactly one image only when product identity and count, verified branding, aspect-specific bbox and margins, compact A6 three-item relationship, complete dark round tray, attached contacts, source-authoritative beverage color, and the lighting sheet all agree.

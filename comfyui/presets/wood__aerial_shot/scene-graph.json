@@ -1,0 +1,50 @@
+{
+  "schema_version": "2.0.0",
+  "asset": {
+    "asset_id": "wood_overhead_cane_brownie_scene_hint_v1",
+    "relative_path": "presets/assets/wood-overhead-cane-brownie-scene-hint-v1.png",
+    "file_sha256": "b57b41aafdc3d2cc16bdf586620feaf9d656a7c4e3da270cd0d33729c9b6e3de",
+    "width_px": 1122,
+    "height_px": 1402,
+    "format": "PNG"
+  },
+  "scene_mode": "primary_with_declared_companions_and_furniture",
+  "objects": [
+    {"slot_id": "beverage_primary", "kind": "beverage", "role": "primary", "bbox": {"left": 0.53, "top": 0.58, "right": 0.78, "bottom": 0.78}, "replaceable": true, "support_surface_id": "round_dark_wood_table"},
+    {"slot_id": "brownie_plate", "kind": "plate", "role": "secondary_support", "bbox": {"left": 0.62, "top": 0.38, "right": 0.91, "bottom": 0.61}, "replaceable": false, "support_surface_id": "round_dark_wood_table"},
+    {"slot_id": "brownie", "kind": "dessert", "role": "secondary", "bbox": {"left": 0.69, "top": 0.41, "right": 0.84, "bottom": 0.57}, "replaceable": false, "support_surface_id": "brownie_plate"},
+    {"slot_id": "wood_teaspoon", "kind": "utensil", "role": "secondary", "bbox": {"left": 0.88, "top": 0.40, "right": 0.98, "bottom": 0.58}, "replaceable": false, "support_surface_id": "round_dark_wood_table"},
+    {"slot_id": "cane_chair", "kind": "furniture", "role": "environmental_anchor", "bbox": {"left": 0.0, "top": 0.0, "right": 0.69, "bottom": 0.88}, "replaceable": false, "support_surface_id": "floor"}
+  ],
+  "relations": [
+    {"subject": "beverage_primary", "predicate": "rests_on", "object": "round_dark_wood_table"},
+    {"subject": "brownie", "predicate": "rests_on", "object": "brownie_plate"},
+    {"subject": "brownie_plate", "predicate": "above_and_right_of", "object": "beverage_primary"},
+    {"subject": "wood_teaspoon", "predicate": "at_two_oclock_of", "object": "brownie_plate"},
+    {"subject": "cane_chair", "predicate": "enters_from_upper_left_beside", "object": "round_dark_wood_table"}
+  ],
+  "support_surfaces": [
+    {"surface_id": "round_dark_wood_table", "kind": "table", "bbox": {"left": 0.42, "top": 0.25, "right": 1.0, "bottom": 1.0}, "description": "raised circular dark warm-brown real-wood table with rounded rim, directional grain, pores, restrained reflection and local wear"},
+    {"surface_id": "floor", "kind": "floor_wall_context", "bbox": {"left": 0.0, "top": 0.0, "right": 0.58, "bottom": 1.0}, "description": "pale warm-neutral floor and wall planes with junction, sun patches and off-frame shadow evidence"}
+  ],
+  "composition": {
+    "camera_pitch_degrees": [72, 80],
+    "focal_length_equivalent_mm": [45, 55],
+    "flow": "upper-left cane chair to right-side round table to beverage and brownie",
+    "negative_space_ratio": [0.28, 0.42],
+    "crop_character": "exact 4:5 portrait generated from the start; furniture and table crop naturally at frame edges"
+  },
+  "lighting": {
+    "source": "upper-left directional window sun",
+    "shadow_vector_degrees": [122, 142],
+    "quality": "defined elongated attached shadows with restrained penumbra",
+    "off_frame_air": "partial window and furniture shadows imply unseen room geometry"
+  },
+  "runtime_policy": {
+    "scene_pixels_allowed": true,
+    "copy_exclusions": ["reference coffee", "reference latte art", "exact shadow silhouette", "exact wood-grain pixels", "exact cane weave pixels", "text", "logo", "watermark"],
+    "maximum_provider_images": 2,
+    "maximum_primary_products": 1,
+    "maximum_declared_props": 3
+  }
+}

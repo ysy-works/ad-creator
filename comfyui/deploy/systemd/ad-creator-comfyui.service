@@ -1,0 +1,21 @@
+[Unit]
+Description=Ad Creator ComfyUI worker
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=spai0813
+Group=spai0813
+WorkingDirectory=/opt/comfyui/ComfyUI
+EnvironmentFile=/etc/ad-creator/comfyui.env
+ExecStart=/opt/venv/comfyui/bin/python main.py --listen 127.0.0.1 --port 8188 --cpu --disable-auto-launch
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+NoNewPrivileges=true
+PrivateTmp=true
+UMask=0027
+
+[Install]
+WantedBy=multi-user.target

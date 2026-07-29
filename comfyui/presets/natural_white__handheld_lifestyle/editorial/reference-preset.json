@@ -1,0 +1,311 @@
+{
+  "$schema": "../../schemas/reference-preset.schema.json",
+  "capture": {
+    "grain": "subtle smartphone noise in shadow",
+    "imperfections": [
+      "slightly imperfect grip",
+      "minor cup condensation",
+      "off-center sun patch"
+    ],
+    "look": "natural social-feed smartphone lifestyle photograph with quiet art direction",
+    "realism": "natural hand anatomy, ordinary wall, believable sunlight"
+  },
+  "color": {
+    "black_point": "defined but not crushed",
+    "contrast": "restrained direct-sun contrast, only very slightly firmer than v3",
+    "palette_hex": [
+      "#F1EFE9",
+      "#DEDAD1",
+      "#AAA49B",
+      "#514C47"
+    ],
+    "saturation": "low-medium",
+    "temperature": "warm-neutral",
+    "white_balance_kelvin": 4600
+  },
+  "composition": {
+    "alignment": "one smaller held cup slightly off center, supported by a slender fine-boned hand against a distant wall",
+    "camera_angle": "eye-level to slightly-above, two-to-six degrees downward only",
+    "camera_height": "approximately one hundred thirty to one hundred sixty centimeters",
+    "depth_of_field": "cup and hand resolve in one near focal plane; the wall is physically distant and moderately softer with attenuated texture",
+    "focal_length_equivalent_mm": 50,
+    "horizon_visibility": "none",
+    "shot_type": "handheld_lifestyle"
+  },
+  "concept": "direct_sun_smaller_cup_refined_hand_and_neutral_clear_straw",
+  "display_name": "인스타 에디토리얼 · 화이트 직사광 핸드헬드 · 정제 비율 v5",
+  "failure_recovery": [
+    "return product width to 0.16-0.20 and height to 0.23-0.29",
+    "increase camera working distance to 105-145cm while preserving 45-55mm normal-lens geometry",
+    "rebuild one slender fine-boned hand with a narrower palm, tapered fingers and fine natural skin lines",
+    "if and only if the adopted container includes a straw, make it colorless optically clear plastic with neutral transmitted light; otherwise add no straw",
+    "keep camera pitch at 2-6 degrees downward and the wall 100-180cm behind",
+    "retain the reviewed 1.10 contrast without crushing skin, beverage or wall tone"
+  ],
+  "human_presence": {
+    "forbidden": [
+      "broad rugged palm or oversized hand",
+      "thick swollen fingers or coarse knuckles",
+      "hairy, callused or heavily weathered forearm",
+      "airbrushed or waxy skin",
+      "perfect symmetric fingers",
+      "beauty-light glow",
+      "holder, sleeve, wrap or cuff",
+      "jewelry or decorative manicure",
+      "two visible hands"
+    ],
+    "grip": "light plausible lower-side grip with small pressure changes and relaxed unequal finger spacing; palm width remains modest relative to the cup",
+    "hand_style": "one slender fine-boned adult hand with a narrower palm, naturally tapered fingers, subtle knuckle structure, fine skin lines and slight real color variation; refined proportions without beauty smoothing",
+    "nails": "short neat natural nails with thin ordinary edges, no polish and no rendered gloss",
+    "required": true,
+    "wrist_and_clothing": "only a very short bare wrist segment; no sleeve, cuff or long forearm"
+  },
+  "lighting": {
+    "azimuth_degrees": 45,
+    "contrast": "moderate direct-sun separation, only very slightly firmer than v3",
+    "direction": "upper-right to lower-left",
+    "elevation_degrees": 32,
+    "highlight_control": "preserve transparent cup detail and avoid blown wall highlights",
+    "intensity": "high but exposure-protected",
+    "shadow": "clearly defined diagonal hand and cup shadow falling lower-left",
+    "softness": 0.28,
+    "type": "direct late-afternoon window sunlight"
+  },
+  "output": {
+    "compatible_aspect_ratios": [
+      "1:1",
+      "4:5",
+      "9:16"
+    ],
+    "preferred_aspect_ratio": "1:1"
+  },
+  "preservation_policy": {
+    "editable": [
+      "every output pixel",
+      "camera-compatible cup optics",
+      "new hand identity and grip",
+      "wall, sun patch and connected shadow"
+    ],
+    "hard_lock": [
+      "exact product count one",
+      "beverage recipe, color, temperature and ice state",
+      "source cup design semantics reconstructed under the target sun and grip",
+      "target brand contract",
+      "one natural hand and short bare wrist"
+    ],
+    "reference_exclusions": [
+      "reference cup and branding",
+      "source street, hand, clothing and lighting",
+      "exact reference hand pose or sun patch"
+    ]
+  },
+  "preset_id": "instagram_white_direct_handheld_refined_v5",
+  "prompt_blocks": {
+    "composition": "Render one smaller handheld product at width 0.16-0.20 and height 0.23-0.29 with an eye-level to slightly-above camera pitched downward only 2-6 degrees. Support it with one slender fine-boned natural hand and short bare wrist. Keep the wall 100-180cm behind.",
+    "input_roles": "Image one supplies exact product identity. Image two is a sanitized sleeve-free scene hint supplying only hand-cup topology, scale, distant-wall depth and broad off-frame light map; it supplies no reference brand, beverage or exact hand pixels.",
+    "look": "Casual Instagram-native direct-window photograph with a smaller hand-cup unit, refined natural hand proportions, real optical depth, distant wall, broad off-frame shadows, finite phone texture and the reviewed +2 percent contrast.",
+    "negative": "No oversized cup, broad rugged hand, thick fingers, coarse knuckles, low or upward camera, visible cup underside, holder, sleeve, long forearm, waxy skin, sharp wall, colored or metallic straw, flat studio fill, pasted edge or invented text.",
+    "preservation": "Reconstruct the cup and beverage natively for the new grip, camera and direct light. Never paste, trace or preserve source pixels. Obey the serving and target brand contracts."
+  },
+  "quality_gates": {
+    "artifact_policy": "reject product enlargement, broad rugged palm, thick swollen fingers, coarse knuckles, colored/gray/green/metallic straw, invented straw when source policy says none, upward camera, holder, waxy skin, sharp close wall, clipped wall, pasted edge or wrong serving",
+    "logo_text": "only the target brand contract is authoritative; unbranded targets remain unbranded",
+    "preset_adherence": "one smaller product at width 0.16-0.20 and height 0.23-0.29, one slender fine-boned hand, 2-6 degree downward camera, neutral-clear conditional straw and distant wall agree",
+    "product_identity": "one beverage preserves recipe and serving state while cup optics are reconstructed"
+  },
+  "reference_analysis": {
+    "analysis_version": "1.0.0",
+    "capture_primitives": [
+      "casual smartphone main-camera perspective",
+      "entire cup and label sharp",
+      "natural skin texture and short bare wrist"
+    ],
+    "composition_primitives": [
+      "one held drink near frame center",
+      "hand enters only from the lower edge",
+      "large vertical white-wall field"
+    ],
+    "copy_exclusions": [
+      "acid. wordmark",
+      "disposable cup and sleeve design",
+      "straw angle",
+      "specific hand pose and sun-patch shape"
+    ],
+    "lighting_primitives": [
+      "single upper-right window sun direction",
+      "broad softened wall-shadow falloff separated from the near hand-cup plane",
+      "partial off-frame window and furniture tone variation with protected whites"
+    ],
+    "recommended_lighting_sheet_ids": [
+      "direct_window_sun_handheld_sheet_v2"
+    ],
+    "runtime_role": "offline composition and light extraction only"
+  },
+  "runtime_input_policy": {
+    "copyright_rule": "Generate an original handheld moment; never reproduce the source reference's cup, branding, hand pose or exact sun patch.",
+    "default_generation_mode": "user_image_plus_abstracted_preset",
+    "generation_inputs": [
+      "user_product_identity"
+    ],
+    "reference_usage": "offline_feature_extraction_only"
+  },
+  "sampling_ranges": {
+    "asymmetry_probability": 0.84,
+    "asymmetry_sources": [
+      "the hand entering from below",
+      "the diagonal cup-and-hand shadow",
+      "an off-center sunlight patch",
+      "the straw direction when the user's product has a straw"
+    ],
+    "camera_pitch_degrees": [
+      2,
+      6
+    ],
+    "focal_length_mm": [
+      45,
+      55
+    ],
+    "light_softness": [
+      0.32,
+      0.52
+    ],
+    "micro_moments": [
+      "raising the drink toward a window",
+      "pausing before the first sip",
+      "checking the drink in a patch of sunlight"
+    ],
+    "negative_space_ratio": [
+      0.68,
+      0.78
+    ],
+    "pov_modes": [
+      "eye-level to slightly-above handheld observation with a mild downward pitch"
+    ],
+    "prop_count": [
+      0,
+      0
+    ],
+    "subject_center_x": [
+      0.48,
+      0.52
+    ],
+    "subject_center_y": [
+      0.48,
+      0.54
+    ],
+    "subject_height_ratio": [
+      0.23,
+      0.29
+    ],
+    "subject_width_ratio": [
+      0.16,
+      0.2
+    ]
+  },
+  "scene": {
+    "background": "one warm-white interior plaster wall one hundred to one hundred eighty centimeters behind the held product, moderately softer than the focal plane",
+    "background_complexity": 0.12,
+    "max_prop_count": 1,
+    "props": [
+      "one natural hand"
+    ],
+    "surface": "none; product held in air",
+    "texture": "natural hand creases and pressure, cup optics, distant softened plaster, broad off-frame shadow variation and subtle shared sensor texture"
+  },
+  "schema_version": "2.0.0",
+  "source": {
+    "height_px": 586,
+    "reference_image": "raw_reference_not_shipped",
+    "supporting_group": "neutral_white_minimal/handheld_lifestyle",
+    "width_px": 600
+  },
+  "style_abstraction": {
+    "allowed_style_features": [
+      "first-person handheld framing",
+      "matte warm-white interior wall",
+      "directional sunlight",
+      "broad uncluttered space",
+      "smartphone main-camera perspective",
+      "slender feminine hand"
+    ],
+    "forbidden_copy_features": [
+      "reference-specific branding or wordmarks",
+      "reference cup and sleeve",
+      "exact hand anatomy and pose",
+      "exact diagonal shadow",
+      "reference beverage colors"
+    ],
+    "novel_scene_required": true,
+    "runtime_reference_image": false
+  },
+  "subject_layout": {
+    "main_subject": {
+      "area_ratio": 0.0504,
+      "bbox": {
+        "height_ratio": 0.28,
+        "width_ratio": 0.18,
+        "x_ratio": 0.41,
+        "y_ratio": 0.35
+      },
+      "center": {
+        "x_ratio": 0.5,
+        "y_ratio": 0.49
+      },
+      "height_ratio": 0.28,
+      "role": "one_handheld_exact_beverage_natively_reconstructed"
+    },
+    "negative_space": {
+      "bottom_ratio": 0.07,
+      "left_ratio": 0.32,
+      "right_ratio": 0.32,
+      "top_ratio": 0.3
+    },
+    "secondary_subjects": [
+      {
+        "area_ratio": 0.07,
+        "bbox": {
+          "height_ratio": 0.4,
+          "width_ratio": 0.28,
+          "x_ratio": 0.34,
+          "y_ratio": 0.52
+        },
+        "center": {
+          "x_ratio": 0.48,
+          "y_ratio": 0.72
+        },
+        "height_ratio": 0.4,
+        "role": "one_slender_fine_boned_natural_hand_with_short_bare_wrist"
+      }
+    ]
+  },
+  "tone_contract": {
+    "background_lightness": [
+      0.8,
+      0.92
+    ],
+    "background_plane": "distant warm-white plaster wall with attenuated texture, gradual tonal drift and broad partial shadows from unseen window and furniture",
+    "background_saturation": [
+      0.02,
+      0.07
+    ],
+    "color_bias": "clean warm white with a faint neutral gray cast, never brown or concrete gray",
+    "forbidden_surface_reading": [
+      "street pavement",
+      "sidewalk",
+      "outdoor concrete",
+      "asphalt",
+      "ground plane",
+      "floor receding into depth",
+      "rough cement slab"
+    ],
+    "global_contrast": [
+      0.26,
+      0.42
+    ],
+    "highlight_behavior": "sunlit wall remains bright with visible fine plaster texture and no clipped white patch",
+    "shadow_density": [
+      0.18,
+      0.34
+    ]
+  }
+}

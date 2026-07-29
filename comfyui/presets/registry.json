@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "default_preset_slot": "wood__product_center",
+  "passed_presets_manifest": "passed-presets.json",
+  "provider_profile": "../config/providers/openai-gpt-image-2.json",
+  "slots": {
+    "natural_white__product_large": {
+      "enabled": true,
+      "status": "published",
+      "family": "natural_white",
+      "composition": "closeup",
+      "preset_id": "instagram_white_diffuse_closeup_v1",
+      "legacy_gateway": {
+        "background_style": "white",
+        "composition": "closeup"
+      },
+      "bundle": "natural_white__product_large/preset.json"
+    },
+    "natural_white__product_center": {
+      "enabled": true,
+      "status": "published",
+      "family": "natural_white",
+      "composition": "medium",
+      "preset_id": "instagram_white_diffuse_wall_table_v1",
+      "legacy_gateway": {
+        "background_style": "white",
+        "composition": "medium"
+      },
+      "bundle": "natural_white__product_center/preset.json"
+    },
+    "natural_white__aerial_shot": {
+      "enabled": true,
+      "status": "published",
+      "family": "natural_white",
+      "composition": "aerial",
+      "preset_id": "instagram_white_neutral_overhead_spatial_v1",
+      "legacy_gateway": {
+        "background_style": "white",
+        "composition": "aerial"
+      },
+      "bundle": "natural_white__aerial_shot/preset.json"
+    },
+    "natural_white__handheld_lifestyle": {
+      "enabled": true,
+      "status": "published",
+      "family": "natural_white",
+      "composition": "handheld",
+      "preset_id": "instagram_white_direct_handheld_refined_v5",
+      "legacy_gateway": {
+        "background_style": "white",
+        "composition": "handheld"
+      },
+      "bundle": "natural_white__handheld_lifestyle/preset.json"
+    },
+    "wood__product_large": {
+      "enabled": true,
+      "status": "published",
+      "family": "wood",
+      "composition": "closeup",
+      "preset_id": "instagram_wood_calm_window_closeup_v1",
+      "legacy_gateway": {
+        "background_style": "wood",
+        "composition": "closeup"
+      },
+      "bundle": "wood__product_large/preset.json"
+    },
+    "wood__product_center": {
+      "enabled": true,
+      "status": "published",
+      "family": "wood",
+      "composition": "medium",
+      "preset_id": "tokyo_a6_relational_scene_hint_v4",
+      "legacy_gateway": {
+        "background_style": "wood",
+        "composition": "medium"
+      },
+      "bundle": "wood__product_center_a6/preset.json"
+    },
+    "wood__aerial_shot": {
+      "enabled": true,
+      "status": "published",
+      "family": "wood",
+      "composition": "aerial",
+      "preset_id": "instagram_wood_cane_brownie_overhead_v1",
+      "legacy_gateway": {
+        "background_style": "wood",
+        "composition": "aerial"
+      },
+      "bundle": "wood__aerial_shot/preset.json"
+    },
+    "wood__handheld_lifestyle": {
+      "enabled": true,
+      "status": "published",
+      "family": "wood",
+      "composition": "handheld",
+      "preset_id": "instagram_wood_handheld_two_person_v1",
+      "legacy_gateway": {
+        "background_style": "wood",
+        "composition": "handheld"
+      },
+      "bundle": "wood__handheld_lifestyle/preset.json"
+    },
+    "vivid__product_large": {
+      "enabled": true,
+      "status": "published",
+      "family": "vivid",
+      "composition": "closeup",
+      "preset_id": "instagram_dark_grey_closeup_v1",
+      "legacy_gateway": {
+        "background_style": "vivid",
+        "composition": "closeup"
+      },
+      "bundle": "vivid__product_large/preset.json"
+    },
+    "vivid__product_center": {
+      "enabled": true,
+      "status": "published",
+      "family": "vivid",
+      "composition": "medium",
+      "preset_id": "instagram_dark_grey_medium_v1",
+      "legacy_gateway": {
+        "background_style": "vivid",
+        "composition": "medium"
+      },
+      "bundle": "vivid__product_center/preset.json"
+    },
+    "vivid__aerial_shot": {
+      "enabled": true,
+      "status": "published",
+      "family": "vivid",
+      "composition": "aerial",
+      "preset_id": "instagram_dark_grey_aerial_v1",
+      "legacy_gateway": {
+        "background_style": "vivid",
+        "composition": "aerial"
+      },
+      "bundle": "vivid__aerial_shot/preset.json"
+    },
+    "vivid__handheld_lifestyle": {
+      "enabled": true,
+      "status": "published",
+      "family": "vivid",
+      "composition": "handheld",
+      "preset_id": "instagram_dark_grey_handheld_v1",
+      "legacy_gateway": {
+        "background_style": "vivid",
+        "composition": "handheld"
+      },
+      "bundle": "vivid__handheld_lifestyle/preset.json"
+    }
+  },
+  "alternatives": {
+    "instagram_wood_45deg_relational_v3": {
+      "enabled": false,
+      "status": "available_not_routed",
+      "family": "wood",
+      "composition": "medium",
+      "bundle": "wood__product_center/preset.json",
+      "activation_rule": "Add a new service slot or explicit preset option after backend/frontend contract approval; never replace the A6 default silently."
+    }
+  }
+}

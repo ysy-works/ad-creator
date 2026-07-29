@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "grade_profile_id": "vivid__aerial_shot_dark_grey_grade_v1",
+  "apply_in_pilot": false,
+  "policy": "Review-only metadata; the prompt remains the grade authority.",
+  "palette": [
+    "charcoal",
+    "cool dark grey",
+    "muted neutral daylight",
+    "restrained green"
+  ]
+}

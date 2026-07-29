@@ -1,0 +1,40 @@
+[TASK]
+Create one original Instagram wood-cafe photograph on an exact final 4:5 portrait canvas from a high overhead camera. Keep every declared object and its attached shadow complete inside the frame; do not crop or resize after generation. Image 1 is the user beverage authority. Image 2 is a sanitized non-photographic control board, not a scene to reproduce. Read only its broad topology, isolated wood and cane material families, required brownie-group identity, and lighting distribution. Build a new coherent cafe photograph; never render Image 2's 2x2 panel layout, empty placement ring, borders, exact furniture silhouette, exact table crop, exact grain or exact shadows.
+
+[INPUT ROLES]
+{{INPUT_ROLES}}
+Image 1 controls the actual beverage identity, serving temperature, color, opacity, ice, foam, cream, fruit, garnish and approximate top-surface arrangement. Image 2 controls only broad scene topology, required companion-dessert components and spoon orientation, furniture and material families, camera, scale, light distribution and material interaction. It supplies no complete scene pixels and no exact furniture or table geometry.
+
+[CONTAINER MODE - ADOPT REFERENCE DEFAULT]
+For adopt-reference mode, Image 1 alone determines the serving state and Image 2 never determines beverage temperature. Select exactly one preset container. If Image 1 is visibly iced or cold, reconstruct the exact user beverage inside Image 2's isolated empty short low clear-glass design: thin near-circular rim, nearly straight wall, thick weighted clear base, two or three subtle horizontal stepped ribs around the lower exterior, no handle, no branding. Ignore Image 2's evidence-panel tilt and reproject that glass under the preset camera. If Image 1 is hot or ambient with no visible cold cues, ignore Image 2's glass panel and reconstruct the beverage inside the approved original-reference warm-white glazed ceramic latte cup: low wide gently rounded bowl-like body, thin rounded near-circular rim, shallow ceramic sidewall, subtle supported foot, restrained natural glaze and no visible handle in the final overhead view. Never use a paper cup, blend ceramic and glass, transfer Image 2's empty placeholder, copy the source vessel, or let the board change the user's beverage identity, color, ice, foam or toppings. Keep the beverage strictly inside the selected rim. Never invent coffee or latte art. For preserve-source mode, use the separate mode template declared in the preset JSON.
+
+[CAMERA AND COMPOSITION]
+Use a 45-55mm-equivalent rectilinear camera pitched 72-80 degrees downward, with a casual off-axis overhead viewpoint and near-zero roll. Keep a moderate, physically plausible amount of cup sidewall. The composition flows diagonally from the partial cane chair at upper-left toward the raised round wooden table at right, then toward the beverage and brownie. Preserve the table as unmistakably circular and cropped naturally at the right and lower edges. Retain pale floor-and-wall negative space and the sense that the room continues beyond the frame.
+
+{{ASPECT_CONTRACT}}
+
+[DECLARED SCENE]
+Place the primary beverage in the lower-right half of the round table. Above and slightly right of it, place one secondary brownie grouping at a comfortable gap: a modest off-white ceramic plate with two thin dark-green rim lines, one dark moist rectangular brownie, one irregular off-white cream dollop and restrained cocoa dusting. View the brownie almost vertically, showing most of its top and only a narrow side face. At the plate's two-o'clock side, place exactly one small dark reclaimed-wood teaspoon on the tabletop. Its slim handle points upward and its slightly elongated narrow oval bowl points downward. Add no packaging, fork, napkin, flower, phone, book or undeclared prop.
+
+[WOOD AND CHAIR MATERIAL]
+The table is real dark warm-brown wood with directional grain, pores, subtle worn variation, restrained local reflection and a raised rounded edge. It is never a seamless brown plane, plastic veneer or procedural texture. The partial chair has a warm dark bentwood frame and natural beige cane webbing with irregular handmade tension, tiny depth changes and light passing through the woven openings. Do not repeat or clone the weave mechanically.
+
+[LIGHTING - HARD LOCK]
+{{LIGHTING_CONTRACT}}
+
+Use one directional upper-left window-sun key shared by chair, table, beverage, plate, brownie and spoon. It creates readable elongated shadows toward the lower-right, with attached contact occlusion and a restrained natural penumbra. The plate and brownie shadow is roughly thirty percent longer than a compact contact-only shadow. Preserve brighter sun patches and darker room-shadow areas without crushing the wood or clipping foam. Off-frame window, wall and furniture must be felt through partial shadow fields and falloff even though they are not visible.
+
+Place the primary beverage mostly inside one broad, low-density partial shadow cast by an unseen off-frame window frame or nearby furniture. This environmental shadow must visibly continue across the surrounding tabletop and cross part of the cup as one coherent field, never as a dark sticker on the drink. Keep only a restrained key-side rim highlight and small specular or transmitted accents on ice and transparent edges. Do not place the whole beverage in a bright direct-sun patch. Hold the overall exposure darker and quieter than Image 2 while preserving readable wood pores and the beverage's true local color.
+
+[PRODUCT-TO-WOOD INTEGRATION - HARD LOCK]
+The user beverage or adopted cup must belong physically to the wooden setting, never look pasted on. Match the same upper-left highlight direction, local exposure, finite sharpness and shadow density. Add a compact dark contact-occlusion ring directly beneath the vessel and one height-dependent lower-right cast shadow attached to it. Warm brown table bounce may tint only the shadow-facing lower rim and underside subtly; it must not replace the product's local color.
+
+For the selected clear glass, preserve real refraction and allow the wood grain to bend and darken only where physically visible through clear lower sidewalls, while keeping beverage color authoritative. Restrict transmitted lift to the key-side rim, ice edges and a small lower-glass accent. It must never make milk glow white, bleach strawberry fruit, turn matcha gray or brighten the entire cup. For the selected opaque ceramic cup, prohibit wood grain, beverage color or dark stains on the exterior; use only soft warm reflected fill, restrained glaze response and contact occlusion. Never create a bright cutout halo, duplicated rim, floating base or mismatched sharpness around the inserted product.
+
+Create a natural depth hierarchy instead of uniformly blurring the cup. Keep the beverage top plane, rim, ice and garnish slightly more resolved than the lower sidewall. Toward the base, reduce local edge contrast and micro-acuity gradually, add a thin environment-colored wrap from the wood, and merge it into one compact dense contact shadow. The lower boundary remains physically legible but not outlined; prohibit a bright or dark cutout contour.
+
+[COLOR AND PHOTOGRAPHIC CHARACTER]
+Use warm-neutral late-afternoon color without an orange filter, restrained saturation, slightly underexposed global exposure, protected foam highlights, natural black depth and finite phone-camera acuity. Preserve subtle sensor grain, material irregularity and ordinary cafe wear. The result should feel casually captured but expertly composed, never CGI, 3D rendered, HDR, airbrushed, oversharpened or synthetically perfect.
+
+[FINAL GATE]
+Return exactly one image. Reject wrong light direction, short or detached shadows, flat brown background, missing round table edge, missing cane chair, copied reference beverage, incorrect brownie or spoon orientation, extra props, branding, text, packaging, floating product, cutout halo, wood texture leaking onto opaque cups, lost beverage identity, repeated weave, artificial blur or render-like surfaces.

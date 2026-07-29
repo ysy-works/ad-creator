@@ -1,0 +1,2 @@
+comfyui/presets/**/*.json text eol=lf
+comfyui/presets/**/*.txt text eol=lf

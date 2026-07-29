@@ -1,0 +1,31 @@
+{
+  "grade_profile_id": "instagram_white_direct_handheld_refined_v5_grade_v2",
+  "input_color_space": "sRGB",
+  "output_color_space": "sRGB",
+  "protection": {
+    "mask_strength": 0.88,
+    "regions": [
+      "product",
+      "logo",
+      "skin"
+    ]
+  },
+  "qa_limits": {
+    "max_bright_clip_ratio": 0.02,
+    "max_dark_clip_ratio": 0.015
+  },
+  "schema_version": "1.0.0",
+  "strength": {
+    "default": 0.35,
+    "max": 0.65,
+    "min": 0.0
+  },
+  "transform": {
+    "contrast": 1.1,
+    "exposure_ev": -0.04,
+    "highlight_rolloff": 0.32,
+    "saturation": 0.96,
+    "shadow_lift": 0.012,
+    "warmth": 0.08
+  }
+}

@@ -1,0 +1,7 @@
+COMFYUI_GATEWAY_HOSTNAME {
+    encode zstd gzip
+    request_body {
+        max_size 22MB
+    }
+    reverse_proxy 127.0.0.1:8002
+}

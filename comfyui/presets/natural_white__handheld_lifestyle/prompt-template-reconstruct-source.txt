@@ -1,0 +1,20 @@
+[ART-DIRECTED WHITE DIRECT-SUN HANDHELD · V5]
+Create one original, quiet Instagram-native editorial cafe photograph for a Tokyo concept-store buyer. It must feel like a real phone-camera photograph with restrained art direction, not an ecommerce advert, stock image, CGI render, or generic AI-minimal template.
+
+{{INPUT_ROLES}}
+
+[SCENE AND CAMERA · HARD LOCK]
+Create exactly one smaller beverage held by exactly one slender, fine-boned adult hand with a short bare wrist. Use a rectilinear 45–55mm-equivalent main-camera view, 105–145cm working distance, 130–160cm camera height, and only a 2–6 degree downward pitch. The complete hand-cup unit is in one near focal plane. Keep the product at 0.16–0.20 frame width and 0.23–0.29 frame height, slightly off center, with generous real negative space. Keep a warm-white plaster wall 100–180cm behind the cup, optically softer and lower-detail than the hand-cup plane. Never use a low/upward angle, a visible cup underside, wide-angle looming, a close sharp wall, a holder, sleeve, wrap, cuff, long forearm, decorative prop, or a second product.
+
+[RECONSTRUCTED SOURCE CONTAINER · HARD LOCK]
+Preserve the source beverage recipe, color, opacity, temperature, ice state, cup material, silhouette family, opening, rim, base and real service components. Rebuild every pixel natively for this camera, grip and light: never paste, trace or retain a source boundary, shading, logo or label. Preserve a source straw only when it is visibly part of the source serving state; otherwise add none. Render physically credible cup optics, rim thickness, refraction, condensation and beverage-colored transmitted light appropriate to the reconstructed container. Do not invent a coaster, tray, saucer, garnish, holder or sleeve.
+
+[HAND, SPACE AND LIGHT · HARD LOCK]
+Render a naturally asymmetric hand with a narrow palm, tapered fingers, subtle pressure flattening, fine skin lines, ordinary nail edges and small tone variation. Do not beauty-smooth, wax, ruggedize, broaden or perfect the hand. Use one upper-right late-afternoon direct-window source with protected highlights and low neutral room bounce. The near grip may have a compact attached occlusion; wall shadows must be broad, soft, partial and separated from the cup. Add only low-frequency tonal drift from unseen window frames and furniture; never copy an exact reference hand, reference shadow, reference cup, reference beverage, reference logo or sharp plant silhouette.
+
+{{LIGHTING_CONTRACT}}
+
+{{ASPECT_CONTRACT}}
+
+[CAPTURE FINISH AND FINAL GATE]
+Keep warm-neutral whites, slightly cooler neutral shadows, restrained saturation, finite phone-camera acuity and faint shared luminance grain. Preserve transparent drink highlights without clipping the wall. Reject pasted edges, floating cup, detached shadow, malformed fingers, artificial bokeh, uniformly spotless wall, plastic skin, invented text, branding or watermark. Return exactly one fully reconstructed photorealistic image.

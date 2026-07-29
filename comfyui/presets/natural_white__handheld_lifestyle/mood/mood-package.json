@@ -1,0 +1,26 @@
+{
+  "compatibility": {
+    "composition_modes": [
+      "one_exact_handheld_product_against_white_wall"
+    ],
+    "materials": [
+      "glass",
+      "plastic",
+      "paper",
+      "ceramic"
+    ]
+  },
+  "display_name": "인스타 에디토리얼 · 화이트 직사광 핸드헬드 · 정제 비율 v5",
+  "grade_profile_path": "mood/grade-profile.json",
+  "lighting_sheet_path": "mood/lighting-sheet.json",
+  "mood_package_id": "instagram_white_direct_handheld_refined_v5",
+  "photographic_style_contract_path": "editorial/photographic-style-contract.json",
+  "preset_path": "editorial/reference-preset.json",
+  "product_integration_contract_path": null,
+  "reference_control_board_manifest_path": "control-board/scene-hint-manifest.json",
+  "reference_control_board_path": "control-board/scene-hint.png",
+  "runtime_profile_path": null,
+  "runtime_reference_policy": "offline_contract_only",
+  "scene_recipe_path": "mood/scene-recipe.json",
+  "schema_version": "1.0.0"
+}

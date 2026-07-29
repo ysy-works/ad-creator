@@ -1,0 +1,175 @@
+{
+  "schema_version": "2.0.0",
+  "lighting_sheet_id": "tokyo_a6_relational_scene_hint_sheet_v4",
+  "mood": "hard architectural daylight remains in the far room while a complete dark round tray and three related vessels sit quietly in open shade on a white table",
+  "reference_cluster": {
+    "anchor_preset_id": "tokyo_a6_relational_scene_hint_v4",
+    "minimum_cluster_size": 4,
+    "runtime_pixels_allowed": false,
+    "selection_rule": "A6 anchors the plane-specific daylight, dark-tray response and three-item relation; supporting images bound natural wood and neutral-room behavior without supplying runtime pixels",
+    "source_images": [
+      "우드_저채도_차분/미디엄/d7b081a0435a26b0dd79f58771e18d94.jpg",
+      "우드_저채도_차분/미디엄/7d02ca76e37fe21777415a98fbe01d31.jpg",
+      "우드_저채도_차분/미디엄/f1af782464b46c19abf57538aeabf19c.jpg",
+      "우드_저채도_차분/항공샷/7ce44b7f27de13453b1d9263c46a8b69.jpg"
+    ]
+  },
+  "key_light": {
+    "source": "direct back-right daylight crossing the distant room, with the same window providing broad reflected foreground light",
+    "direction": "back-right to front-left across the room; the tray receives open shade and broad bounce rather than the direct beam",
+    "relative_size": "small apparent sun source on the far plane and a large reflected source over the foreground",
+    "subject_to_wall_distance_cm": [
+      190,
+      250
+    ],
+    "azimuth_degrees": [
+      38,
+      56
+    ],
+    "elevation_degrees": [
+      27,
+      38
+    ],
+    "angular_size_degrees": [
+      0.8,
+      4.0
+    ],
+    "distance_class": "architectural daylight with plane-specific diffusion"
+  },
+  "ambient_fill": "neutral room and white-table bounce opens the foreground glass and ceramic while keeping the dark tray weighted",
+  "reference_anchor": {
+    "asset_id": "ref_381224f47976e566",
+    "pixel_sha256": "08b015d7d4c1e18a875b023aad6fdb5d5f2c0a487d951d20308e6e1ae136b560",
+    "role": "offline plane-specific daylight, camera, palette and material evidence; a separately sanitized low-frequency scene hint may transport only those measured relationships"
+  },
+  "fill_contract": {
+    "key_to_fill_ratio": [
+      1.7,
+      2.5
+    ],
+    "source": "white table, room surfaces and broad window bounce",
+    "color_bias": "neutral to faintly cool in shadow with no amber fill"
+  },
+  "screen_light_map": {
+    "lit_area_ratio": [
+      0.4,
+      0.58
+    ],
+    "shadow_area_ratio": [
+      0.28,
+      0.44
+    ],
+    "dominant_shadow_vector_degrees": [
+      128,
+      154
+    ],
+    "falloff": "bright structured far-room patches fall toward a quieter open-shade foreground without a spotlight boundary around the tray",
+    "gobo_geometry": "new hard linear architectural bands remain in the far plane; do not reproduce any reference leaf, heater, furniture or exact window-frame silhouette"
+  },
+  "specular_contract": {
+    "highlight_shape": "broad interrupted foreground glass edges, rolled ceramic white and a narrow broken satin response on the tray rim",
+    "highlight_width_ratio": [
+      0.04,
+      0.14
+    ],
+    "rim_continuity": "readable but naturally interrupted by refraction, condensation and viewing angle",
+    "transparent_caustic": "subtle, local and bounded to physically transparent paths"
+  },
+  "camera_coupling": {
+    "support_plane": "45-50mm view stepped back 190-250cm at 30-36 degrees above one white circular table and one complete round tray only 0.44-0.50 of frame width",
+    "shadow_projection": "hard 128-154 degree architectural bands remain distant while three compact foreground contacts share that direction with broader edges",
+    "depth_response": "tray ellipse, unequal vessel scale, overlap, table edge and light falloff establish depth before far-room softness"
+  },
+  "color_separation": {
+    "lit_neutral": "warm-neutral daylight below clipping",
+    "shadow_neutral": "deep neutral brown-gray with a faint cool counterbalance and readable grain",
+    "material_locality": "the #60513D and #312215 wood family stays local to the tray; #BBAB90, #9C8C73 and #DECFB9 remain room and table neutrals while the exact beverage keeps its own color"
+  },
+  "qa_geometry": {
+    "shadow_vector_tolerance_degrees": 16,
+    "lit_area_tolerance": 0.1,
+    "penumbra_ratio_tolerance": 0.08
+  },
+  "shadow_contract": {
+    "density": [
+      0.28,
+      0.44
+    ],
+    "edge": "hard architectural edges only in the far room; broader environmental falloff and denser compact contacts under every foreground item",
+    "attachment": "every vessel or immediate support intersects the tray plane; the adopted glass contacts its saucer and the saucer contacts the tray",
+    "transparent_material": "drink-colored transmission stays subtle and local without bleaching the dark tray",
+    "contact_shadow": {
+      "opacity": [
+        0.26,
+        0.42
+      ],
+      "footprint": [
+        0.04,
+        0.12
+      ],
+      "behavior": "small dense attached contacts under vessels, carafe and any immediate support"
+    },
+    "cast_shadow": {
+      "opacity": [
+        0.11,
+        0.23
+      ],
+      "footprint": [
+        0.24,
+        0.66
+      ],
+      "behavior": "restrained overlapping foreground shadows with softer edges than the distant architectural bands"
+    },
+    "transmitted_light": {
+      "opacity": [
+        0.07,
+        0.2
+      ],
+      "footprint": [
+        0.12,
+        0.38
+      ],
+      "behavior": "bounded beverage-colored lift inside real transparent paths only"
+    },
+    "qa_ratios": {
+      "cast_area_to_cup_bbox": [
+        0.24,
+        0.84
+      ],
+      "wrist_length_to_cup_height": [
+        0.0,
+        0.01
+      ],
+      "transparent_lift_inside_shadow": [
+        0.05,
+        0.24
+      ]
+    }
+  },
+  "capture_contract": {
+    "exposure_compensation_ev": [
+      -0.24,
+      -0.04
+    ],
+    "hdr": "restrained single-exposure response with no automatic lifting of the dark tray or flattening of the far-room sun",
+    "white_balance": "4700-5000K warm-neutral daylight with the exact beverage color protected",
+    "texture": "finite handheld acuity, readable subdued wood and ceramic texture, natural glass optics and faint shared luminance grain"
+  },
+  "grade_strengths": {
+    "natural": 0.28,
+    "balanced": 0.4,
+    "expressive": 0.32
+  },
+  "forbidden": [
+    "hard spotlight on the exact beverage",
+    "same shadow hardness on foreground and far room",
+    "rectangular or cropped tray",
+    "pale or orange tray",
+    "featureless black tray",
+    "glossy wood hotspot",
+    "full-frame brown veil",
+    "phone HDR",
+    "detached item shadow",
+    "clipped ceramic white"
+  ]
+}

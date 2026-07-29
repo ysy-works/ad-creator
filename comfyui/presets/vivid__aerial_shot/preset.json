@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "slot_id": "vivid__aerial_shot",
+  "preset_id": "instagram_dark_grey_aerial_v1",
+  "family": "vivid",
+  "composition": "aerial",
+  "status": "published",
+  "source_review_status": "passed_by_user_review",
+  "runtime_policy": {
+    "schema_version": 1,
+    "compiler_version": "preset-runtime-v1",
+    "maximum_prompt_characters": 50000,
+    "maximum_provider_inputs": 4,
+    "maximum_product_sources": 3,
+    "maximum_reference_controls": 1,
+    "default_container_mode": "reconstruct_source",
+    "supported_container_modes": [
+      "adopt_reference",
+      "reconstruct_source"
+    ],
+    "companion_policy": "reference_relational",
+    "brand_input_policy": {
+      "enabled": false,
+      "default_mode": "none",
+      "activation_requirement": "frontend_and_api_brand_asset_flow"
+    },
+    "temperature_policy": {
+      "mode": "preset_primary",
+      "container_mode_rules": {
+        "adopt_reference": {
+          "allowed_product_states": [
+            "iced",
+            "cold",
+            "ambient",
+            "hot"
+          ],
+          "auto_action": "preserve_source_state"
+        },
+        "reconstruct_source": {
+          "allowed_product_states": [
+            "iced",
+            "cold",
+            "ambient",
+            "hot"
+          ],
+          "auto_action": "preserve_source_state"
+        }
+      },
+      "emergency_fallback": {
+        "enabled_when_policy_missing": true,
+        "minimum_confidence": 0.85,
+        "unknown_action": "needs_review",
+        "conflict_action": "needs_review"
+      }
+    }
+  },
+  "prompt_template": {
+    "path": "prompt-template-reconstruct-source.txt",
+    "sha256": "a7e06f7c9b1f12f42fa582c1beb8c80e31c58318c0ed0204fa5ec42fc439c30f"
+  },
+  "lighting_sheet": {
+    "path": "lighting-sheet.json",
+    "sha256": "67e9ca7698955aa4ab1059a14f28a2a6e76b8d46f6fc4db7bf829371070d492e"
+  },
+  "grade_profile": {
+    "path": "grade-profile.json",
+    "sha256": "79fe275730228212cb085def88412a61f25af393a6b54ff89f273e897eac5fdf",
+    "apply_in_pilot": false
+  },
+  "contract_assets": {
+    "team_source_contract": {
+      "path": "../dark_grey/preset.json",
+      "sha256": "82809b3688f38a4ce304edf3dc7f0aab404ba1bd8937171ae5cbf6a992681436"
+    },
+    "team_prompt_archive": {
+      "path": "../dark_grey/prompt.md",
+      "sha256": "0c045e8c237ee45eea3c3310170dfa1347ab032d1f39e98ee7ebd9c7560bfdf0"
+    },
+    "team_hint_manifest": {
+      "path": "../dark_grey/source-hints-manifest.json",
+      "sha256": "5e5ef4a17091c327f385ad53792b64b142e43a5ea87e442a34153e47b3f7fbd6"
+    }
+  },
+  "provider_reference_policy": {
+    "maximum_images": 2,
+    "required_roles": [
+      "user_product",
+      "container_mode_scene_hint"
+    ],
+    "risk_acceptance": "Raw team hint is sent by explicit product-owner decision; sanitize in a later revision."
+  },
+  "hint_images": [
+    {
+      "role": "raw_dark_grey_aerial_layout_reference",
+      "path": "../dark_grey/source-hints/layout.webp",
+      "sha256": "1359c2dde2de0ad64645f8fc265b5efd7ee4c26efb4312c853357fb8e9dd73ef",
+      "width": 896,
+      "height": 1344,
+      "send_to_provider": true,
+      "container_mode_scope": [
+        "adopt_reference",
+        "reconstruct_source"
+      ],
+      "allowed_transfer": [
+        "declared shot topology",
+        "camera relationship",
+        "hand, sleeve and broad light distribution",
+        "container geometry only when adopt_reference is selected"
+      ],
+      "forbidden_transfer": [
+        "reference beverage identity",
+        "reference serving state",
+        "reference logo or text",
+        "exact person identity"
+      ]
+    }
+  ],
+  "transforms": [
+    {
+      "type": "normalize_product_source"
+    },
+    {
+      "type": "select_hint_by_container_mode"
+    },
+    {
+      "type": "sanitize_reference_control"
+    }
+  ],
+  "default_container_mode": "reconstruct_source",
+  "container_modes": {
+    "reconstruct_source": {
+      "provider_hint_role": "raw_dark_grey_aerial_layout_reference",
+      "container_identity_scope": "source_container_class_material_silhouette_handle_lid_and_visible_branding",
+      "prompt_template": {
+        "path": "prompt-template-reconstruct-source.txt",
+        "sha256": "a7e06f7c9b1f12f42fa582c1beb8c80e31c58318c0ed0204fa5ec42fc439c30f"
+      },
+      "preserve": [
+        "source beverage identity and serving state",
+        "source cup material, silhouette, handle and lid",
+        "authorized visible source branding"
+      ],
+      "discard": [
+        "source camera pose",
+        "source background",
+        "source lighting and shadows"
+      ]
+    },
+    "adopt_reference": {
+      "provider_hint_role": "raw_dark_grey_aerial_layout_reference",
+      "container_identity_scope": "published_dark_grey_temperature_compatible_container",
+      "prompt_template": {
+        "path": "prompt-template-adopt-reference.txt",
+        "sha256": "24576613a94b7ad18d49a722369ed14742237e3fbefa887445e74d3763de25a0"
+      },
+      "preserve": [
+        "source beverage identity and serving state",
+        "source liquid color, opacity, ice, foam, layers and garnish"
+      ],
+      "discard": [
+        "source container geometry and material",
+        "source container branding",
+        "reference beverage identity and serving state"
+      ]
+    }
+  },
+  "aspect_ratio_contracts": {
+    "4:5": {
+      "status": "published",
+      "visual_review_status": "passed_by_user_review",
+      "prompt_addendum": "Generate the exact final 4:5 canvas at 1024x1280 from a strict 90-degree vertical camera. Show only top surfaces. Keep the plant and covered candle as the upper pair and beverage and pastry plate as the lower pair in a loose diamond occupying 35-45 percent of the frame.",
+      "generation_size": "1024x1280",
+      "safe_crop": "none_exact_4x5",
+      "width": 1024,
+      "height": 1280,
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [
+          0.12,
+          0.28
+        ],
+        "product_height_ratio": [
+          0.12,
+          0.28
+        ],
+        "expected_primary_count": 1,
+        "crop_allowed": false,
+        "protected_objects_must_remain_complete": true
+      }
+    },
+    "1:1": {
+      "status": "published",
+      "visual_review_status": "passed_by_user_review",
+      "prompt_addendum": "Generate the exact final 1:1 canvas at 1024x1024 from a strict 90-degree vertical camera. Preserve the four-part diamond layout and generous bare black round-table area; show no vessel sidewalls.",
+      "generation_size": "1024x1024",
+      "safe_crop": "none_exact_1x1",
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [
+          0.1,
+          0.30000000000000004
+        ],
+        "product_height_ratio": [
+          0.12,
+          0.28
+        ],
+        "expected_primary_count": 1,
+        "crop_allowed": false,
+        "protected_objects_must_remain_complete": true
+      }
+    }
+  },
+  "qa_contract": {
+    "phase": "passed_by_user_review",
+    "hard_gates": [
+      "beverage_identity",
+      "container_mode",
+      "serving_state",
+      "camera_geometry",
+      "product_environment_integration",
+      "hint_copy_contamination",
+      "brand_ocr",
+      "crop"
+    ],
+    "known_release_risk": "Raw provider hints are not sanitized in this revision.",
+    "comparative_scores": [
+      "naturalness",
+      "mood_adherence",
+      "product_preservation",
+      "light_shadow_fidelity"
+    ]
+  }
+}

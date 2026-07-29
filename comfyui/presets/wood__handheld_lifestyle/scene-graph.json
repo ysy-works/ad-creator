@@ -1,0 +1,504 @@
+{
+  "schema_version": "2.0.0",
+  "analysis_metadata": {
+    "provider": "manual_visual_review",
+    "model": "human_approved_reference_contract",
+    "prompt_version": "reference_scene_graph_v2",
+    "analyzed_at": "2026-07-23T00:00:00+09:00",
+    "confidence": 0.98
+  },
+  "asset": {
+    "asset_id": "ref_c61e3c79a9b4d2ef",
+    "relative_path": "comfyui-inputs/ad_creator_reference_wood_handheld_two_person_v2.png",
+    "file_sha256": "680ea693fac3c74d3096bd57edff65633a1e5a85b08a2817580ea9b4da571a37",
+    "pixel_sha256": "37e5a9ab7862f2feb726a5ef7eb32f75d36a6da28842caa9d2bf755e64f65f3a",
+    "width_px": 1125,
+    "height_px": 1500,
+    "format": "PNG",
+    "source_folder_tags": [
+      "user_approved",
+      "wood",
+      "handheld",
+      "two_person",
+      "soft_window"
+    ],
+    "dhash": "66318502581998bc",
+    "duplicate_of": null
+  },
+  "scene_mode": "pair",
+  "observed_major_subject_count": 2,
+  "object_inventory_complete": true,
+  "objects": [
+    {
+      "slot_id": "beverage_primary",
+      "kind": "beverage",
+      "role": "primary",
+      "description": "ANGLE VARIANT B, selected moderate: lower-centre source cup remains compact at 20-22 percent frame width and 26-29 percent frame height. Tilt the cup axis only 9-12 degrees: its top moves camera-ward and toward the bottom of frame, while its base moves oppositely toward the upper-right window. Show 40-45 percent open top and keep the liquid surface gravity-level; never reverse this direction or turn it into a pouring pose.",
+      "body_bbox": {
+        "left": 0.348,
+        "top": 0.458,
+        "right": 0.562,
+        "bottom": 0.74,
+        "confidence": 0.98
+      },
+      "full_bbox": {
+        "left": 0.3,
+        "top": 0.438,
+        "right": 0.61,
+        "bottom": 0.832,
+        "confidence": 0.98
+      },
+      "straw": {
+        "present": false,
+        "bbox": null,
+        "centerline": null,
+        "emergence_point": null,
+        "angle_degrees": null
+      },
+      "container": {
+        "class": "user-controlled beverage container",
+        "material": "source-authoritative",
+        "silhouette": "source-authoritative sidewall under preserve-source mode",
+        "components": [
+          "complete exact user cup",
+          "exact beverage layers",
+          "natural hand occlusion"
+        ]
+      },
+      "interaction": "held",
+      "support_surface_id": "surface_primary_hand",
+      "depth_order": 3,
+      "occlusion_fraction": 0.16,
+      "replaceable": true,
+      "allowed_kinds": [
+        "beverage"
+      ],
+      "visible_text": [],
+      "brand_or_watermark_state": "uncertain",
+      "crop_safe": true
+    },
+    {
+      "slot_id": "beverage_secondary",
+      "kind": "beverage",
+      "role": "secondary",
+      "description": "Smaller generic hot ceramic companion cup attached to Image 2's upper-left leather-sleeved hand pose. It provides natural coffee/crema scale only and remains unbranded.",
+      "body_bbox": {
+        "left": 0.31,
+        "top": 0.34,
+        "right": 0.57,
+        "bottom": 0.56,
+        "confidence": 0.98
+      },
+      "full_bbox": {
+        "left": 0.27,
+        "top": 0.31,
+        "right": 0.61,
+        "bottom": 0.58,
+        "confidence": 0.98
+      },
+      "straw": {
+        "present": false,
+        "bbox": null,
+        "centerline": null,
+        "emergence_point": null,
+        "angle_degrees": null
+      },
+      "container": {
+        "class": "small off-white ceramic latte cup",
+        "material": "matte glazed ceramic",
+        "silhouette": "compact low cup with one simple handle and a visible irregular coffee surface",
+        "components": [
+          "ceramic rim",
+          "small handle",
+          "natural foam and crema"
+        ]
+      },
+      "interaction": "touching",
+      "support_surface_id": "surface_companion_hand",
+      "depth_order": 2,
+      "occlusion_fraction": 0.14,
+      "replaceable": false,
+      "allowed_kinds": [
+        "beverage"
+      ],
+      "visible_text": [],
+      "brand_or_watermark_state": "absent",
+      "crop_safe": true
+    },
+    {
+      "slot_id": "prop_pastry_plate",
+      "kind": "prop",
+      "role": "accent",
+      "description": "One partial white plate with a single croissant at the upper-right counter edge; natural cafe context, never a hero food shot.",
+      "body_bbox": {
+        "left": 0.82,
+        "top": 0.2,
+        "right": 1.0,
+        "bottom": 0.42,
+        "confidence": 0.94
+      },
+      "full_bbox": {
+        "left": 0.79,
+        "top": 0.17,
+        "right": 1.0,
+        "bottom": 0.45,
+        "confidence": 0.94
+      },
+      "straw": {
+        "present": false,
+        "bbox": null,
+        "centerline": null,
+        "emergence_point": null,
+        "angle_degrees": null
+      },
+      "container": {
+        "class": "cropped white pastry plate",
+        "material": "ceramic",
+        "silhouette": "partial plate rim and croissant edge",
+        "components": [
+          "one croissant",
+          "one white plate"
+        ]
+      },
+      "interaction": "resting",
+      "support_surface_id": "surface_wood_window_counter",
+      "depth_order": 0,
+      "occlusion_fraction": 0.0,
+      "replaceable": false,
+      "allowed_kinds": [
+        "prop"
+      ],
+      "visible_text": [],
+      "brand_or_watermark_state": "absent",
+      "crop_safe": true
+    },
+    {
+      "slot_id": "prop_magazine_saucer",
+      "kind": "prop",
+      "role": "accent",
+      "description": "Right-side neutral magazine partly covered by a plain white saucer, plus a small empty saucer near upper centre. Preserve their cropped spatial rhythm but not readable copy.",
+      "body_bbox": {
+        "left": 0.65,
+        "top": 0.35,
+        "right": 1.0,
+        "bottom": 0.78,
+        "confidence": 0.94
+      },
+      "full_bbox": {
+        "left": 0.55,
+        "top": 0.25,
+        "right": 1.0,
+        "bottom": 0.8,
+        "confidence": 0.94
+      },
+      "straw": {
+        "present": false,
+        "bbox": null,
+        "centerline": null,
+        "emergence_point": null,
+        "angle_degrees": null
+      },
+      "container": {
+        "class": "editorial paper and ceramic context cluster",
+        "material": "unbranded matte paper and white ceramic",
+        "silhouette": "cropped rectangular magazine with overlapping saucer circles",
+        "components": [
+          "one neutral magazine",
+          "one right-side saucer",
+          "one small empty upper-centre saucer"
+        ]
+      },
+      "interaction": "overlapping",
+      "support_surface_id": "surface_wood_window_counter",
+      "depth_order": 1,
+      "occlusion_fraction": 0.16,
+      "replaceable": false,
+      "allowed_kinds": [
+        "prop"
+      ],
+      "visible_text": [],
+      "brand_or_watermark_state": "uncertain",
+      "crop_safe": true
+    }
+  ],
+  "relations": [
+    {
+      "from_slot_id": "beverage_primary",
+      "predicate": "in_front_of",
+      "to_slot_id": "beverage_secondary",
+      "confidence": 0.98
+    },
+    {
+      "from_slot_id": "beverage_primary",
+      "predicate": "paired_with",
+      "to_slot_id": "beverage_secondary",
+      "confidence": 0.98
+    },
+    {
+      "from_slot_id": "beverage_secondary",
+      "predicate": "left_of",
+      "to_slot_id": "prop_magazine_saucer",
+      "confidence": 0.96
+    },
+    {
+      "from_slot_id": "prop_pastry_plate",
+      "predicate": "right_of",
+      "to_slot_id": "beverage_secondary",
+      "confidence": 0.96
+    },
+    {
+      "from_slot_id": "prop_magazine_saucer",
+      "predicate": "right_of",
+      "to_slot_id": "beverage_primary",
+      "confidence": 0.94
+    }
+  ],
+  "support_surfaces": [
+    {
+      "surface_id": "surface_wood_window_counter",
+      "kind": "counter",
+      "bbox": {
+        "left": 0.16,
+        "top": 0.0,
+        "right": 1.0,
+        "bottom": 0.78,
+        "confidence": 0.98
+      },
+      "plane_description": "Pale matte oak window counter with diagonal long-grain recession toward the upper-right and neutral white-gray sill beyond",
+      "supports_objects": true,
+      "perspective_scale": [
+        0.88,
+        1.15
+      ]
+    },
+    {
+      "surface_id": "surface_primary_hand",
+      "kind": "held_carrier",
+      "bbox": {
+        "left": 0.25,
+        "top": 0.54,
+        "right": 0.61,
+        "bottom": 0.93,
+        "confidence": 0.98
+      },
+      "plane_description": "Image 2 lower person's anonymous bare left hand and slim black hair-tie wrist at 6 o'clock holding the compact primary user drink above two separately readable dark-clothed thighs; no lower sleeve enters this surface",
+      "supports_objects": true,
+      "perspective_scale": [
+        0.96,
+        1.04
+      ]
+    },
+    {
+      "surface_id": "surface_companion_hand",
+      "kind": "held_carrier",
+      "bbox": {
+        "left": 0.0,
+        "top": 0.24,
+        "right": 0.62,
+        "bottom": 0.62,
+        "confidence": 0.98
+      },
+      "plane_description": "Upper-left anonymous hand emerging from charcoal-black leather and holding the smaller companion ceramic cup",
+      "supports_objects": true,
+      "perspective_scale": [
+        0.94,
+        1.06
+      ]
+    }
+  ],
+  "protected_regions": [
+    {
+      "region_id": "region_primary_hand",
+      "kind": "hand",
+      "bbox": {
+        "left": 0.25,
+        "top": 0.54,
+        "right": 0.61,
+        "bottom": 0.93,
+        "confidence": 0.98
+      },
+      "reason": "follow Image 2 lower person's bare left-wrist angle and visible black hair tie, then adapt the fingers around the smaller user cup; prohibit any lower black cuff or leather sleeve"
+    },
+    {
+      "region_id": "region_companion_hand",
+      "kind": "hand",
+      "bbox": {
+        "left": 0.0,
+        "top": 0.25,
+        "right": 0.62,
+        "bottom": 0.61,
+        "confidence": 0.98
+      },
+      "reason": "preserve one credible upper-left leather-sleeved companion hand"
+    },
+    {
+      "region_id": "region_primary_lower_body",
+      "kind": "occupied",
+      "bbox": {
+        "left": 0.05,
+        "top": 0.6,
+        "right": 0.78,
+        "bottom": 1.0,
+        "confidence": 0.98
+      },
+      "reason": "preserve exactly two anatomically connected dark-clothed thighs and knees with a shallow central V-shaped separation and visible fabric folds; never merge them into a one-leg silhouette"
+    },
+    {
+      "region_id": "region_window_release",
+      "kind": "negative_space",
+      "bbox": {
+        "left": 0.18,
+        "top": 0.0,
+        "right": 1.0,
+        "bottom": 0.26,
+        "confidence": 0.98
+      },
+      "reason": "retain pale window ledge and exterior release without copying its exact pixels"
+    },
+    {
+      "region_id": "region_magazine_copy",
+      "kind": "visible_text",
+      "bbox": {
+        "left": 0.67,
+        "top": 0.4,
+        "right": 1.0,
+        "bottom": 0.76,
+        "confidence": 0.98
+      },
+      "reason": "preserve magazine geometry only; suppress all readable copy"
+    }
+  ],
+  "insertion_zones": [
+    {
+      "zone_id": "zone_beverage_primary",
+      "bbox": {
+        "left": 0.348,
+        "top": 0.458,
+        "right": 0.562,
+        "bottom": 0.74,
+        "confidence": 0.98
+      },
+      "support_surface_id": "surface_primary_hand",
+      "allowed_kinds": [
+        "beverage"
+      ],
+      "scale_range": [
+        0.94,
+        1.06
+      ],
+      "confidence": 0.98,
+      "reason": "lower-centre held product slot preserves a visible source-cup sidewall, hand grip and safe 4:5 crop"
+    }
+  ],
+  "composition": {
+    "shot_type": "handheld",
+    "camera_height": "high",
+    "camera_pitch": "48-56 degree downward high-oblique seated observation",
+    "lens_character": "phone_mild_tele",
+    "subject_position": "lower-centre primary in one hand, smaller upper-left companion in a second hand, cropped counter props at right",
+    "negative_space": "quiet upper window ledge plus partial counter strips around the right-side props",
+    "asymmetry_source": "two staggered hands, unequal cup scales and cropped right-side pastry/magazine context",
+    "crop_character": "3:4 reference preserves the complete two-cup relationship; optional 4:5 output may trim only outer clothing/counter margins"
+  },
+  "depth": {
+    "plane_count": 4,
+    "foreground": "lower person's anonymous bare left hand, slim black hair tie, exact smaller user product and two distinct dark-clothed thighs",
+    "product_plane": "compact lower-centre held primary using angle variant B, selected moderate at 9-12 degrees: top camera-ward/bottom-of-frame, base window-ward/upper-right, liquid gravity-level, visible sidewall and attached hand occlusion",
+    "midground": "upper-left companion hand/cup plus right-side magazine/saucer cluster",
+    "background": "pale oak window counter, window ledge and small exterior band",
+    "perspective_cues": [
+      "normal-lens hand scale",
+      "two held cups at staggered depths",
+      "diagonal counter recession",
+      "attached finger occlusion",
+      "two-thigh central separation",
+      "tonal falloff toward dark clothing"
+    ],
+    "far_plane_softness": "subtle",
+    "atmospheric_separation": "mild"
+  },
+  "lighting": {
+    "source_type": "soft_window",
+    "direction": "one cloud-filtered upper-right rear window source toward lower-left hands and dark laps",
+    "source_size": "large",
+    "hardness": 0.18,
+    "contrast": 0.42,
+    "shadow": "compact finger/cup occlusion then broad soft lower-left counter and lap falloff",
+    "highlight": "muted cloudy-gray ceramic/sill rolloff and bounded user-drink ice highlights; low-chroma milk never reaches isolated paper white",
+    "transmitted_light": "subtle bounded lift through the physically transparent user drink only",
+    "white_balance": "neutral"
+  },
+  "color": {
+    "exposure": "low",
+    "saturation": "restrained",
+    "contrast": "soft",
+    "black_point": "natural",
+    "palette_hex": [
+      "#C8B99D",
+      "#9B8567",
+      "#454343",
+      "#EEF0EE",
+      "#C7CDD0"
+    ],
+    "mean_luminance": 0.43,
+    "luminance_stddev": 0.33,
+    "mean_saturation": 0.12,
+    "edge_energy": 0.052
+  },
+  "facets": {
+    "mood_tags": [
+      "quiet",
+      "low-saturation",
+      "candid",
+      "two-person",
+      "natural-cafe"
+    ],
+    "environment_tags": [
+      "window",
+      "cafe",
+      "pale-oak-counter"
+    ],
+    "material_tags": [
+      "oak",
+      "ceramic",
+      "leather",
+      "skin",
+      "transparent-beverage"
+    ],
+    "shot_tags": [
+      "handheld",
+      "high-oblique",
+      "relational-pair"
+    ]
+  },
+  "taxonomy": {
+    "environment_family": "warm_wood",
+    "lighting_family": "soft_window",
+    "camera_angle": "high_angle",
+    "capture_style": "held_product",
+    "scene_complexity": "pair",
+    "dominant_surface": "pale matte oak window counter",
+    "wood_prominence": 0.64,
+    "accent_color_prominence": 0.12,
+    "frontend_mood": "wood",
+    "frontend_angle": "high_angle",
+    "confidence": 0.98
+  },
+  "runtime_policy": {
+    "scene_pixels_allowed": false,
+    "container_pixels_allowed": true,
+    "copy_exclusions": [
+      "source latte art",
+      "readable magazine text",
+      "faces and identities",
+      "exact wood knots",
+      "reference reflections",
+      "all non-user-product branding"
+    ],
+    "maximum_exact_products": 1,
+    "maximum_generic_companions": 1,
+    "maximum_major_subjects": 3,
+    "maximum_props": 2
+  },
+  "quality_flags": []
+}

@@ -1,0 +1,110 @@
+[
+  {
+    "id": "natural_white__product_large",
+    "mood_id": "natural_white",
+    "mood_label": "뉴트럴 화이트",
+    "composition_id": "product_large",
+    "composition_label": "클로즈업",
+    "thumbnail_url": "/references/natural_white__product_large.webp",
+    "enabled": true
+  },
+  {
+    "id": "natural_white__product_center",
+    "mood_id": "natural_white",
+    "mood_label": "뉴트럴 화이트",
+    "composition_id": "product_center",
+    "composition_label": "미디움샷",
+    "thumbnail_url": "/references/natural_white__product_center.webp",
+    "enabled": true
+  },
+  {
+    "id": "natural_white__aerial_shot",
+    "mood_id": "natural_white",
+    "mood_label": "뉴트럴 화이트",
+    "composition_id": "aerial_shot",
+    "composition_label": "항공샷",
+    "thumbnail_url": "/references/natural_white__aerial_shot.webp",
+    "enabled": true
+  },
+  {
+    "id": "natural_white__handheld_lifestyle",
+    "mood_id": "natural_white",
+    "mood_label": "뉴트럴 화이트",
+    "composition_id": "handheld_lifestyle",
+    "composition_label": "손에 들고 있는 샷",
+    "thumbnail_url": "/references/natural_white__handheld_lifestyle.webp",
+    "enabled": true
+  },
+  {
+    "id": "wood__product_large",
+    "mood_id": "wood",
+    "mood_label": "우드",
+    "composition_id": "product_large",
+    "composition_label": "클로즈업",
+    "thumbnail_url": "/references/wood__product_large.webp",
+    "enabled": true
+  },
+  {
+    "id": "wood__product_center",
+    "mood_id": "wood",
+    "mood_label": "우드",
+    "composition_id": "product_center",
+    "composition_label": "미디움샷",
+    "thumbnail_url": "/references/wood__product_center.webp",
+    "enabled": true
+  },
+  {
+    "id": "wood__aerial_shot",
+    "mood_id": "wood",
+    "mood_label": "우드",
+    "composition_id": "aerial_shot",
+    "composition_label": "항공샷",
+    "thumbnail_url": "/references/wood__aerial_shot.webp",
+    "enabled": true
+  },
+  {
+    "id": "wood__handheld_lifestyle",
+    "mood_id": "wood",
+    "mood_label": "우드",
+    "composition_id": "handheld_lifestyle",
+    "composition_label": "손에 들고 있는 샷",
+    "thumbnail_url": "/references/wood__handheld_lifestyle.webp",
+    "enabled": true
+  },
+  {
+    "id": "vivid__product_large",
+    "mood_id": "vivid",
+    "mood_label": "다크 그레이",
+    "composition_id": "product_large",
+    "composition_label": "클로즈업",
+    "thumbnail_url": "/references/vivid__product_large.webp",
+    "enabled": true
+  },
+  {
+    "id": "vivid__product_center",
+    "mood_id": "vivid",
+    "mood_label": "다크 그레이",
+    "composition_id": "product_center",
+    "composition_label": "미디움샷",
+    "thumbnail_url": "/references/vivid__product_center.webp",
+    "enabled": true
+  },
+  {
+    "id": "vivid__aerial_shot",
+    "mood_id": "vivid",
+    "mood_label": "다크 그레이",
+    "composition_id": "aerial_shot",
+    "composition_label": "항공샷",
+    "thumbnail_url": "/references/vivid__aerial_shot.webp",
+    "enabled": true
+  },
+  {
+    "id": "vivid__handheld_lifestyle",
+    "mood_id": "vivid",
+    "mood_label": "다크 그레이",
+    "composition_id": "handheld_lifestyle",
+    "composition_label": "손에 들고 있는 샷",
+    "thumbnail_url": "/references/vivid__handheld_lifestyle.webp",
+    "enabled": true
+  }
+]

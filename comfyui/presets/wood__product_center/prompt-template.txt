@@ -1,0 +1,26 @@
+[TASK]
+Create one new original 4:5 Instagram-native editorial cafe photograph. It should feel like a real quiet table moment noticed by a person with excellent taste, never like a staged advertisement, stock photo, CGI render, or copied reference.
+
+[INPUT ROLES]
+{{INPUT_ROLES}}
+
+[EXACT PRODUCT - HARD LOCK]
+Image 1 is the exact user product identity. Preserve the beverage category, serving temperature, liquid layers, toppings, ice state, container class, material, silhouette, real components, and every clearly visible authorized logo or label. Do not invent, misspell, replace, or duplicate text or branding. Reconstruct every product pixel for the target camera and light; never paste the source boundary or reuse its source shading.
+
+[COMPOSITION - HARD LOCK]
+Use exactly one exact user beverage. Its body occupies 0.16-0.20 of frame width and 0.18-0.23 of frame height, centered around x=0.15-0.22 and y=0.42-0.50. Use a 45-55mm-equivalent rectilinear lens, 40-50 degrees downward pitch, and a disciplined 100-150cm working distance. Place one newly invented generic pastry on an irregular ceramic plate to the right, one plain napkin-cutlery overlap, and one folded dark eyewear accent in the near foreground. Keep 0.48-0.60 meaningful release through the round oak table, curtain, and quiet right-side room plane. The generated canvas is already the exact final 4:5 frame: keep every required relationship and margin inside it; no downstream crop is permitted.
+
+[LIGHTING SHEET - AUTHORITATIVE]
+{{LIGHTING_CONTRACT}}
+
+[WOOD AND COLOR - HARD LOCK]
+The support is one round, medium-lightness, low-saturation honey-oak table with straight directional grain and an oiled-matte finish. Wood warmth stays local. Keep the exact user beverage color source-authoritative and preserve neutral curtain and highlight colors independently. Reject orange wash, yellow pine, flat beige laminate, black featureless wood, glossy synthetic grain, or a rectangular tray.
+
+[REFERENCE SAFETY]
+The sanitized scene hint may control only low-frequency camera distance, product scale, round-table relationships, light distribution, palette, and material response. It must not supply any reference beverage, cup mark, text, logo, exact pastry, exact utensil, exact eyewear, furniture identity, curtain fold, crop, or shadow silhouette. Regenerate all scene pixels, props, contacts, occlusions, and shadows.
+
+[PHYSICS AND FINISH]
+Use one camera, exposure, and physical daylight system. Resolve the product and nearby oak grain; let only distant room microcontrast fall naturally. Keep faint sensor texture and ordinary social-photo acuity. Reject extra beverages, missing relational props, oversized product, pasted edges, floating contacts, uniform lighting, portrait cutout blur, wide-angle looming, false text, logos, and watermarks.
+
+[FINAL GATE]
+Return exactly one image only when product identity and count, verified branding, measured bbox, 45-degree camera, round-table relationship, attached contact, local oak material, source-authoritative beverage color, and the lighting sheet all agree.

@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0.0",
+  "scene_recipe_id": "instagram_wood_cane_brownie_overhead_recipe_v1",
+  "primary_slot": "beverage_primary",
+  "declared_companions": ["brownie_plate", "brownie", "wood_teaspoon"],
+  "support_environment": ["round_dark_wood_table", "cane_webbing_chair", "pale_floor_wall_planes"],
+  "rules": [
+    "one complete primary beverage on the lower-right half of the round wooden table",
+    "one brownie plate above and slightly right of the beverage with a small relaxed gap",
+    "one dark rectangular brownie with irregular cream and cocoa, viewed almost vertically",
+    "one small reclaimed-wood teaspoon at plate two o'clock, handle upward and elongated oval bowl downward",
+    "partial bentwood cane chair enters from upper-left and remains secondary",
+    "same upper-left window-sun key and attached lower-right shadows for all objects",
+    "product edges inherit local wood bounce, grain-scale acuity and sensor texture without color contamination"
+  ],
+  "container_modes": {
+    "adopt_reference": "select exactly one declared reference design from the source beverage serving state: short low ribbed clear glass for visibly iced or cold drinks, otherwise the approved low wide warm-white glazed ceramic latte cup; user beverage remains authoritative",
+    "reconstruct_source": "reconstruct broad source cup family and material plus visible source serviceware; rebuild projection, light and shadow under the preset camera"
+  },
+  "forbidden": ["cookie", "plastic packaging", "fork", "napkin", "flower", "book", "phone", "extra beverage", "extra dessert", "logo", "text", "floating object", "detached shadow", "repeated cane texture"]
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "profile_id": "natural_white_closeup_restrained_social_v1",
+  "white_balance": "warm-neutral 5000-5300K",
+  "contrast": [0.30, 0.44],
+  "saturation": [0.025, 0.075],
+  "highlight_behavior": "protected broad highlights with no clipped tabletop whites",
+  "shadow_behavior": "neutral compact contacts opening into feathered lower-right penumbrae",
+  "texture": "finite phone-camera acuity and faint shared luminance grain",
+  "forbidden": ["milky lifted blacks", "portrait cutout blur", "oversharpening", "cinematic grade"]
+}

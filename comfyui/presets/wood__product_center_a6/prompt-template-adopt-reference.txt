@@ -1,0 +1,31 @@
+[TASK]
+Create one new original Instagram-native editorial cafe photograph. It must feel like a quiet multi-subject table moment found in a real room, never a catalog render, staged advertisement, stock image, CGI scene or copied reference.
+
+[INPUT ROLES]
+{{INPUT_ROLES}}
+
+[EXACT BEVERAGE - HARD LOCK]
+Image 1 is the sole authority for the user's featured beverage category, serving temperature, liquid color and opacity, internal layers, toppings, ice state and real serving contents. Preserve those beverage facts exactly while rebuilding every pixel for the target camera and light. Discard the source container geometry, material, handle state, sleeve, label, logo and text. Do not let Image 2 replace, recolor, duplicate or reinterpret the user's beverage.
+
+[SELECTED REFERENCE CONTAINER - HARD LOCK]
+Image 2 is one randomly selected A6 control image and is the sole authority for exactly one generic right-front container design. Use only the selected design visible in Image 2: either (A) the compact rounded clear-glass vessel with a narrower clear base and fuller upper body, or (B) the short low straight-sided clear-glass tumbler with a thin circular rim, nearly constant diameter and understated weighted flat base. Both variants rest on one plain warm-white circular ceramic saucer. Variant B additionally includes exactly one small dark reclaimed-wood teaspoon along the IMAGE-RIGHT side of the saucer, with its narrow oval bowl lower-right and slim handle pointing upper-right; preserve that spoon only when Variant B is selected. Variant B's two-panel board uses its moderately soft LEFT panel only for exact generic glass, saucer and teaspoon geometry; use its strongly defocused RIGHT panel only for camera distance, product scale, compact three-item placement, round-tray relationship, spoon relationship, palette and light distribution. Never render the panel gutter or copy the left panel's large scale. Never blend the two glass silhouettes, invent a third glass, omit or duplicate the selected teaspoon, or choose independently of Image 2. Reconstruct the user's exact beverage inside the selected glass. Preserve no reference liquid color, foam, layer, garnish, ice, text or branding. Render the selected glass, saucer and declared spoon natively with credible rim and base thickness, refraction, highlights, local condensation when compatible with the source serving state, attached contacts and one coherent tray reflection. Add no handle, lid, straw, sleeve, label or logo.
+
+[ASPECT RATIO AND COMPOSITION - HARD LOCK]
+{{ASPECT_CONTRACT}}
+
+Build one deliberately small unequal three-point group: the selected right-front glass containing the exact user beverage, one newly invented generic unbranded dark iced drink at left-front, and one plain unbranded clear-water carafe at rear-center. All three make separate attached contacts on one complete round dark oiled-wood tray placed on one white circular table. Keep the selected glass on its one plain white saucer and preserve exactly one small dark wooden teaspoon beside it only when the selected board declares that spoon. Do not isolate or hero-center the exact beverage. Use a 45-50mm-equivalent rectilinear lens, 30-36 degrees downward pitch and a disciplined 190-250cm working distance. Keep every tray edge, vessel, selected serviceware, support contact, margin and required room plane inside the generated canvas; no downstream crop is permitted.
+
+[LIGHTING SHEET - AUTHORITATIVE]
+{{LIGHTING_CONTRACT}}
+
+[MATERIAL AND COLOR - HARD LOCK]
+The tray is deep neutral chocolate-brown oiled wood with restrained readable grain, never orange, pale blond, glossy or featureless black. The table and saucer remain warm-neutral white. Keep the exact user beverage color source-authoritative. The generic left drink stays neutral dark brown and the rear carafe stays colorless and clear; neither may borrow the user beverage, logo, label or layered recipe.
+
+[SCENE HINT SAFETY]
+The sanitized scene hint may control only low-frequency camera distance, compact three-item scale, round-tray relationships, broad light distribution, restrained palette, material response and the declared right-front glass-and-saucer geometry. It must not supply any reference beverage identity, color, foam, text, logo, identifiable room object, exact crop or exact shadow silhouette. Regenerate every scene pixel, vessel optic, overlap, contact, reflection and shadow under one coherent camera and daylight system.
+
+[PHYSICS AND FINISH]
+Resolve all three rims, bases, transparent paths, condensation, tray contacts and the complete tray ellipse together. Hard architectural sunlight remains in the distant room while the foreground tray sits in open shade with broad neutral window bounce. Retain finite social-photo acuity and faint shared luminance texture. Reject a fourth vessel, duplicated user beverage, missing companion, missing saucer, cropped or rectangular tray, pasted edges, floating contacts, false text, invented logos, watermarks, amber veil, phone HDR or portrait-cutout blur.
+
+[FINAL GATE]
+Return exactly one image only when the source beverage identity and serving state, the single glass variant selected by Image 2, its saucer and its mode-specific wooden teaspoon when declared, aspect-specific bbox and margins, compact A6 three-item relationship, complete dark round tray, attached contacts and lighting sheet all agree.

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "design_id": "natural_white_closeup_low_cylindrical_glass_saucer_v1",
+  "adopt_reference": {
+    "class": "low straight cylindrical clear glass",
+    "geometry": "thin circular rim, constant outside diameter, subtly weighted clear base, height-to-width ratio 0.95-1.05",
+    "support": "separate moderately wider low warm-white ceramic saucer",
+    "utensil": "one metal teaspoon with a dark natural-wood handle on the saucer's left side",
+    "branding": "plain and unbranded"
+  },
+  "reconstruct_source": {
+    "authority": "user product image",
+    "action": "rebuild the user's broad vessel family and complete serving assembly under the preset camera and light"
+  },
+  "forbidden": ["reference beverage", "waffle", "magazine text", "watermark", "additional vessel", "straw"]
+}
