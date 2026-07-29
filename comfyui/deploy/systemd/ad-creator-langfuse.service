@@ -1,18 +1,20 @@
 [Unit]
-Description=Ad Creator completed-generation Langfuse exporter
+Description=Ad Creator real-time Langfuse observation exporter
 After=network-online.target ad-creator-gateway.service
 Wants=network-online.target
 
 [Service]
-Type=oneshot
+Type=simple
 User=spai0813
 Group=spai0813
 WorkingDirectory=/opt/ad-creator
 EnvironmentFile=/etc/ad-creator/observability.env
-ExecStart=/opt/venv/observability/bin/python -B -m comfyui.observability.collector
+ExecStart=/opt/venv/observability/bin/python -B -m comfyui.observability.collector --watch
+Restart=on-failure
+RestartSec=5
 StateDirectory=ad-creator-observability
 StateDirectoryMode=0700
-ReadWritePaths=/var/lib/ad-creator-observability
+ReadWritePaths=/var/lib/ad-creator-observability /var/lib/ad-creator-gateway
 UMask=0077
 NoNewPrivileges=true
 PrivateTmp=true
@@ -24,4 +26,7 @@ ProtectControlGroups=true
 RestrictSUIDSGID=true
 LockPersonality=true
 MemoryDenyWriteExecute=true
-TimeoutStartSec=90
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target

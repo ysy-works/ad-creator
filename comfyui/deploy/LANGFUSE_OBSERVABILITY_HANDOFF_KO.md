@@ -4,9 +4,9 @@
 
 `langfuse` 브랜치는 `model-c` 코드를 수정하지 않고 다음만 추가한다.
 
-- Gateway: 익명 `X-Session-ID`, 생성 시작·완료 시각 저장
-- Collector: 완료 작업과 OpenAI 감사 manifest를 읽어 Langfuse v4로 전송
-- GCP: 외부 포트를 열지 않는 1분 주기 systemd timer
+- Gateway: 익명 `X-Session-ID`와 생성 단계 이벤트를 SQLite에 원자적으로 저장
+- Collector: 단계 이벤트와 OpenAI 감사 manifest를 읽어 Langfuse v4로 전송
+- GCP: 외부 포트를 열지 않는 상시 systemd 서비스
 
 수집 항목:
 
@@ -17,6 +17,7 @@
 - 텍스트 입력·이미지 입력·이미지 출력 토큰
 - 공식 단가 기준 USD 비용
 - 익명 세션 ID
+- 요청 접수, 대기열 등록, 실행 중, 성공·실패 단계
 
 수집하지 않는 항목:
 
@@ -101,9 +102,6 @@ sudo install -m 0640 -o root -g spai0813 \
 sudo install -m 0644 \
   /opt/ad-creator/comfyui/deploy/systemd/ad-creator-langfuse.service \
   /etc/systemd/system/ad-creator-langfuse.service
-sudo install -m 0644 \
-  /opt/ad-creator/comfyui/deploy/systemd/ad-creator-langfuse.timer \
-  /etc/systemd/system/ad-creator-langfuse.timer
 sudo systemctl daemon-reload
 ```
 
@@ -123,15 +121,13 @@ sudo -u spai0813 -H bash -c \
   /opt/venv/observability/bin/python -B -m comfyui.observability.collector --canary'
 ```
 
-Langfuse에서 canary의 상하위 span과 시간이 정상인지 확인한 뒤 실제 완료 작업을
-한 번 전송하고 timer를 켠다.
+Langfuse에서 canary의 상하위 span과 시간이 정상인지 확인한 뒤 상시 수집 서비스를
+활성화한다.
 
 ```bash
-sudo systemctl start ad-creator-langfuse.service
+sudo systemctl enable --now ad-creator-langfuse.service
 sudo systemctl status ad-creator-langfuse.service --no-pager
 sudo journalctl -u ad-creator-langfuse.service -n 50 --no-pager
-sudo systemctl enable --now ad-creator-langfuse.timer
-systemctl list-timers ad-creator-langfuse.timer --no-pager
 ```
 
 ## 장애·롤백
@@ -140,9 +136,10 @@ Collector는 Gateway DB와 감사 manifest를 읽기만 하며 생성 요청 경
 않는다. Langfuse 장애가 이미지 생성에 영향을 주지 않는다.
 
 ```bash
-sudo systemctl disable --now ad-creator-langfuse.timer
+sudo systemctl disable --now ad-creator-langfuse.service
 ```
 
-Timer만 끄면 관측 전송이 중단된다. ComfyUI, Gateway, `model-c`는 중지하거나
-재시작하지 않는다. 정상 전송으로 확인된 job ID는 별도 state DB에 기록되어
-중복 전송을 방지한다.
+수집 서비스만 끄면 관측 전송이 중단된다. ComfyUI, Gateway, `model-c`는 중지하거나
+재시작하지 않는다. 단계별 유일 키와 별도 state DB로 정상 전송을 한 번만 기록한다.
+전송 도중 프로세스가 중단돼 결과가 불확실하면 즉시 재전송하지 않고 Langfuse
+Observations API에서 기존 observation을 확인한 뒤에만 상태를 확정하거나 재시도한다.

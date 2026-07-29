@@ -278,6 +278,75 @@ class GatewayHelpersTest(unittest.TestCase):
             self.assertEqual(row["created_at_ms"], 100_000)
             self.assertEqual(row["completed_at_ms"], 120_000)
 
+    def test_observability_stages_are_recorded_once(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            with patch.dict(
+                os.environ,
+                {
+                    "AD_CREATOR_GATEWAY_API_KEY": API_KEY,
+                    "AD_CREATOR_GENERATION_SIGNING_KEY": SIGNING_KEY,
+                    "AD_CREATOR_GATEWAY_DB": str(
+                        Path(temp_dir) / "gateway.sqlite3"
+                    ),
+                },
+                clear=False,
+            ):
+                settings = Settings.from_env()
+                generation_id, _ = _reserve_test_generation(settings)
+                _attach_prompt(
+                    generation_id,
+                    prompt_id=str(uuid.uuid4()),
+                    workflow_id="model-c-v1",
+                    output_node_id="3",
+                    settings=settings,
+                )
+                _update_generation_record(
+                    generation_id,
+                    state="running",
+                    settings=settings,
+                )
+                _update_generation_record(
+                    generation_id,
+                    state="running",
+                    settings=settings,
+                )
+                _update_generation_record(
+                    generation_id,
+                    state="succeeded",
+                    settings=settings,
+                    image={
+                        "filename": "result.png",
+                        "subfolder": "ad_creator",
+                        "type": "output",
+                    },
+                )
+                _update_generation_record(
+                    generation_id,
+                    state="succeeded",
+                    settings=settings,
+                    image={
+                        "filename": "result.png",
+                        "subfolder": "ad_creator",
+                        "type": "output",
+                    },
+                )
+                with _database(settings) as connection:
+                    stages = [
+                        str(row[0])
+                        for row in connection.execute(
+                            """
+                            SELECT stage
+                            FROM generation_observability_events
+                            ORDER BY occurred_at_ms, stage
+                            """
+                        ).fetchall()
+                    ]
+            self.assertCountEqual(
+                stages,
+                ["accepted", "queued", "running", "succeeded"],
+            )
+            self.assertEqual(len(stages), len(set(stages)))
+
 
 class GatewayApiTest(unittest.TestCase):
     def setUp(self):

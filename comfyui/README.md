@@ -263,12 +263,12 @@ Internet :443
 
 ## Langfuse 관측
 
-생성 경로와 분리된 1분 주기 Collector가 완료 작업만 읽어 Langfuse로 보냅니다.
+생성 경로와 분리된 상시 Collector가 단계 이벤트를 읽어 Langfuse로 보냅니다.
 Langfuse 장애가 이미지 생성 성공 여부나 응답 시간에 영향을 주지 않습니다.
 
 ```text
-Gateway SQLite + OpenAI audit manifest
-  -> read-only Collector
+Gateway SQLite 단계 이벤트 + OpenAI audit manifest
+  -> 단일 Collector
     -> Langfuse v4 OTLP/HTTP
 ```
 
@@ -277,6 +277,8 @@ Gateway SQLite + OpenAI audit manifest
 - 비용: OpenAI 응답 usage를 텍스트 입력·이미지 입력·이미지 출력으로 분리하고
   프로젝트에 고정한 공식 단가 파일로 계산합니다.
 - 불완전한 usage는 총비용을 추정하지 않고 `cost_complete=false`로 남깁니다.
+- 단계별 유일 키와 전송 상태 DB로 중복 전송을 막고, 불확실한 전송은 Langfuse 조회
+  후에만 재시도합니다.
 - 설치·검증·프론트/백엔드 전달사항:
   `deploy/LANGFUSE_OBSERVABILITY_HANDOFF_KO.md`
 

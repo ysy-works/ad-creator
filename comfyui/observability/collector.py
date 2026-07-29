@@ -9,8 +9,12 @@ import time
 import uuid
 from contextlib import closing
 from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+from urllib.error import HTTPError, URLError
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
 
 
 PACKAGE_ROOT = Path(__file__).resolve().parents[1]
@@ -18,6 +22,8 @@ DEFAULT_PRICING_PATH = Path(__file__).with_name("openai_image_pricing.json")
 TERMINAL_STATES = {"succeeded", "failed", "expired"}
 OPENAI_WORKFLOWS = {"gpt-image-2-v1", "openai-gpt-image-2-low-v1"}
 MAX_MANIFEST_BYTES = 2 * 1024 * 1024
+RECONCILE_MIN_ABSENCES = 2
+RECONCILE_CHECK_INTERVAL_SECONDS = 30
 
 
 @dataclass(frozen=True)
@@ -32,6 +38,8 @@ class Settings:
     release: str | None
     pricing_path: Path
     export_timeout_seconds: int
+    poll_interval_seconds: float = 1.0
+    reconcile_after_seconds: int = 600
 
     @classmethod
     def from_env(cls, *, require_credentials: bool = True) -> "Settings":
@@ -58,6 +66,27 @@ class Settings:
         if not 1 <= timeout <= 120:
             raise RuntimeError(
                 "AD_CREATOR_LANGFUSE_TIMEOUT_SECONDS must be between 1 and 120."
+            )
+        try:
+            poll_interval = float(
+                os.environ.get("AD_CREATOR_LANGFUSE_POLL_SECONDS", "1")
+            )
+            reconcile_after = int(
+                os.environ.get(
+                    "AD_CREATOR_LANGFUSE_RECONCILE_AFTER_SECONDS", "600"
+                )
+            )
+        except ValueError as exc:
+            raise RuntimeError(
+                "Langfuse poll and reconcile settings must be numeric."
+            ) from exc
+        if not 0.25 <= poll_interval <= 60:
+            raise RuntimeError(
+                "AD_CREATOR_LANGFUSE_POLL_SECONDS must be between 0.25 and 60."
+            )
+        if not 60 <= reconcile_after <= 3600:
+            raise RuntimeError(
+                "AD_CREATOR_LANGFUSE_RECONCILE_AFTER_SECONDS must be between 60 and 3600."
             )
         release = os.environ.get("AD_CREATOR_OBSERVABILITY_RELEASE", "").strip()
         return cls(
@@ -93,6 +122,8 @@ class Settings:
                 )
             ).expanduser(),
             export_timeout_seconds=timeout,
+            poll_interval_seconds=poll_interval,
+            reconcile_after_seconds=reconcile_after,
         )
 
 
@@ -221,15 +252,74 @@ def _terminal_rows(database_path: Path) -> list[dict[str, Any]]:
             raise RuntimeError(
                 "Gateway database has not been migrated for observability."
             )
-        rows = connection.execute(
+        has_event_table = (
+            connection.execute(
+                """
+                SELECT 1
+                FROM sqlite_master
+                WHERE type = 'table'
+                  AND name = 'generation_observability_events'
+                """
+            ).fetchone()
+            is not None
+        )
+        event_exclusion = (
             """
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM generation_observability_events AS event
+                  WHERE event.job_id = generations.job_id
+              )
+            """
+            if has_event_table
+            else ""
+        )
+        rows = connection.execute(
+            f"""
             SELECT job_id, workflow_id, state, error, session_id,
                    created_at_ms, completed_at_ms, updated_at
             FROM generations
             WHERE state IN ('succeeded', 'failed', 'expired')
               AND created_at_ms IS NOT NULL
               AND completed_at_ms IS NOT NULL
+              {event_exclusion}
             ORDER BY completed_at_ms, job_id
+            """
+        ).fetchall()
+        return [dict(row) for row in rows]
+    finally:
+        connection.close()
+
+
+def _event_rows(database_path: Path) -> list[dict[str, Any]]:
+    if not database_path.is_file():
+        raise RuntimeError(f"Gateway database does not exist: {database_path}")
+    uri = f"file:{database_path.resolve().as_posix()}?mode=ro"
+    connection = sqlite3.connect(uri, uri=True, timeout=5.0)
+    try:
+        connection.row_factory = sqlite3.Row
+        connection.execute("PRAGMA query_only=ON")
+        table_exists = connection.execute(
+            """
+            SELECT 1
+            FROM sqlite_master
+            WHERE type = 'table'
+              AND name = 'generation_observability_events'
+            """
+        ).fetchone()
+        if table_exists is None:
+            return []
+        rows = connection.execute(
+            """
+            SELECT event.event_id, event.job_id, event.stage, event.state,
+                   event.workflow_id, event.session_id,
+                   event.occurred_at_ms, event.error,
+                   generation.created_at_ms, generation.completed_at_ms,
+                   generation.updated_at
+            FROM generation_observability_events AS event
+            LEFT JOIN generations AS generation
+              ON generation.job_id = event.job_id
+            ORDER BY event.occurred_at_ms, event.event_id
             """
         ).fetchall()
         return [dict(row) for row in rows]
@@ -252,6 +342,42 @@ def _state_connection(path: Path) -> sqlite3.Connection:
             exported_at_ms INTEGER NOT NULL
         )
         """
+    )
+    connection.execute(
+        """
+        CREATE TABLE IF NOT EXISTS observation_exports (
+            event_id TEXT PRIMARY KEY,
+            trace_id TEXT NOT NULL,
+            observation_id TEXT NOT NULL,
+            fingerprint TEXT NOT NULL,
+            status TEXT NOT NULL
+                CHECK(status IN ('pending', 'in_flight', 'uncertain', 'sent')),
+            occurred_at_ms INTEGER NOT NULL,
+            attempt_started_at_ms INTEGER,
+            uncertain_since_ms INTEGER,
+            last_checked_at_ms INTEGER,
+            absent_checks INTEGER NOT NULL DEFAULT 0,
+            exported_at_ms INTEGER,
+            updated_at_ms INTEGER NOT NULL,
+            last_error TEXT
+        )
+        """
+    )
+    connection.execute(
+        """
+        UPDATE observation_exports
+        SET status = 'uncertain',
+            uncertain_since_ms = COALESCE(
+                uncertain_since_ms, attempt_started_at_ms, updated_at_ms
+            ),
+            updated_at_ms = ?,
+            last_error = COALESCE(
+                last_error,
+                'Collector stopped while the export result was unknown.'
+            )
+        WHERE status = 'in_flight'
+        """,
+        (time.time_ns() // 1_000_000,),
     )
     connection.commit()
     if os.name != "nt":
@@ -423,6 +549,223 @@ def _trace_id(job_id: str) -> str:
     return value if int(value, 16) != 0 else "1".zfill(32)
 
 
+def _observation_id(event_id: str) -> str:
+    value = hashlib.sha256(
+        f"observation:{event_id}".encode("utf-8")
+    ).hexdigest()[:16]
+    return value if int(value, 16) != 0 else "1".zfill(16)
+
+
+def _event_definition(
+    row: dict[str, Any], settings: Settings
+) -> dict[str, Any]:
+    event_id = str(row["event_id"])
+    job_id = str(row["job_id"])
+    stage = str(row["stage"])
+    state = str(row["state"])
+    occurred_at_ms = int(row["occurred_at_ms"])
+    workflow_id = str(row["workflow_id"])
+    names = {
+        "accepted": "request-accepted",
+        "queued": "generation-queued",
+        "running": "generation-running",
+        "unknown": "generation-status-unknown",
+        "succeeded": "generation-succeeded",
+        "failed": "generation-failed",
+        "expired": "generation-expired",
+        "submission_failed": "prompt-submission-failed",
+    }
+    attributes: dict[str, Any] = {
+        "langfuse.trace.name": "ad-creator.image-generation",
+        "langfuse.environment": settings.environment,
+        "langfuse.observation.type": "span",
+        "langfuse.observation.input": _json_attribute(
+            {"workflow_id": workflow_id}
+        ),
+        "langfuse.observation.output": _json_attribute({"status": state}),
+        "langfuse.observation.metadata.workflow_id": workflow_id,
+        "langfuse.observation.metadata.stage": stage,
+        "langfuse.observation.metadata.status": state,
+    }
+    if settings.release:
+        attributes["langfuse.release"] = settings.release
+    session_id = row.get("session_id")
+    if isinstance(session_id, str) and session_id:
+        attributes["langfuse.session.id"] = session_id
+    created_at_ms = row.get("created_at_ms")
+    if (
+        stage in TERMINAL_STATES
+        and isinstance(created_at_ms, int)
+        and occurred_at_ms >= created_at_ms
+    ):
+        attributes[
+            "langfuse.observation.metadata.gateway_observed_duration_ms"
+        ] = occurred_at_ms - created_at_ms
+        attributes[
+            "langfuse.observation.metadata.gateway_timing_definition"
+        ] = "request accepted to terminal state first observed"
+    if state == "failed" or stage == "submission_failed":
+        attributes["langfuse.observation.level"] = "ERROR"
+        attributes["langfuse.observation.status_message"] = str(
+            row.get("error") or "Generation failed."
+        )[:500]
+    definition = {
+        "event_id": event_id,
+        "job_id": job_id,
+        "trace_id": _trace_id(job_id),
+        "observation_id": _observation_id(event_id),
+        "parent_observation_id": (
+            None
+            if stage == "accepted"
+            else _observation_id(f"{job_id}:accepted")
+        ),
+        "name": names.get(stage, f"generation-{stage}"),
+        "start_ns": occurred_at_ms * 1_000_000,
+        "end_ns": occurred_at_ms * 1_000_000 + 1_000_000,
+        "attributes": attributes,
+        "occurred_at_ms": occurred_at_ms,
+    }
+    definition["fingerprint"] = hashlib.sha256(
+        _json_attribute(definition).encode("ascii")
+    ).hexdigest()
+    return definition
+
+
+def _provider_event_definition(
+    *,
+    row: dict[str, Any],
+    manifest_entry: tuple[dict[str, Any], Path],
+    pricing: dict[str, Any],
+    settings: Settings,
+) -> dict[str, Any]:
+    legacy = _trace_definition(
+        row=row,
+        manifest_entry=manifest_entry,
+        pricing=pricing,
+        settings=settings,
+    )
+    child = legacy.get("child")
+    if not isinstance(child, dict):
+        raise RuntimeError(
+            f"Provider observation could not be built for job {row['job_id']}."
+        )
+    job_id = str(row["job_id"])
+    event_id = f"{job_id}:provider"
+    definition = {
+        "event_id": event_id,
+        "job_id": job_id,
+        "trace_id": _trace_id(job_id),
+        "observation_id": _observation_id(event_id),
+        "parent_observation_id": _observation_id(f"{job_id}:accepted"),
+        "name": str(child["name"]),
+        "start_ns": int(child["start_ns"]),
+        "end_ns": int(child["end_ns"]),
+        "attributes": child["attributes"],
+        "occurred_at_ms": int(child["start_ns"]) // 1_000_000,
+    }
+    definition["fingerprint"] = hashlib.sha256(
+        _json_attribute(definition).encode("ascii")
+    ).hexdigest()
+    return definition
+
+
+def _export_observation(
+    definition: dict[str, Any], settings: Settings
+) -> None:
+    try:
+        from opentelemetry import trace
+        from opentelemetry.context import Context
+        from opentelemetry.exporter.otlp.proto.http.trace_exporter import (
+            OTLPSpanExporter,
+        )
+        from opentelemetry.sdk.resources import Resource
+        from opentelemetry.sdk.trace import (
+            IdGenerator,
+            ReadableSpan,
+            Span,
+            SpanProcessor,
+            TracerProvider,
+        )
+        from opentelemetry.sdk.trace.export import SpanExportResult
+    except ImportError as exc:
+        raise RuntimeError(
+            "Install comfyui/observability/requirements.txt before exporting."
+        ) from exc
+
+    class FixedIdGenerator(IdGenerator):
+        def generate_trace_id(self) -> int:
+            return int(str(definition["trace_id"]), 16)
+
+        def generate_span_id(self) -> int:
+            return int(str(definition["observation_id"]), 16)
+
+    class CollectingProcessor(SpanProcessor):
+        def __init__(self) -> None:
+            self.spans: list[ReadableSpan] = []
+
+        def on_start(
+            self, span: Span, parent_context: Context | None = None
+        ) -> None:
+            return None
+
+        def on_end(self, span: ReadableSpan) -> None:
+            self.spans.append(span)
+
+        def shutdown(self) -> None:
+            return None
+
+        def force_flush(self, timeout_millis: int = 30000) -> bool:
+            return True
+
+    parent_context = None
+    parent_id = definition.get("parent_observation_id")
+    if isinstance(parent_id, str) and parent_id:
+        remote_parent = trace.NonRecordingSpan(
+            trace.SpanContext(
+                trace_id=int(str(definition["trace_id"]), 16),
+                span_id=int(parent_id, 16),
+                is_remote=True,
+                trace_flags=trace.TraceFlags(1),
+                trace_state=trace.TraceState(),
+            )
+        )
+        parent_context = trace.set_span_in_context(remote_parent)
+
+    processor = CollectingProcessor()
+    provider = TracerProvider(
+        resource=Resource.create({"service.name": "ad-creator-observability"}),
+        id_generator=FixedIdGenerator(),
+    )
+    provider.add_span_processor(processor)
+    tracer = provider.get_tracer("ad-creator.langfuse-collector", "2.0.0")
+    span = tracer.start_span(
+        str(definition["name"]),
+        context=parent_context,
+        start_time=int(definition["start_ns"]),
+        attributes=definition["attributes"],
+    )
+    span.end(end_time=int(definition["end_ns"]))
+
+    authorization = base64.b64encode(
+        f"{settings.public_key}:{settings.secret_key}".encode("utf-8")
+    ).decode("ascii")
+    exporter = OTLPSpanExporter(
+        endpoint=f"{settings.base_url}/api/public/otel/v1/traces",
+        headers={
+            "Authorization": f"Basic {authorization}",
+            "x-langfuse-ingestion-version": "4",
+        },
+        timeout=settings.export_timeout_seconds,
+    )
+    try:
+        result = exporter.export(processor.spans)
+    finally:
+        exporter.shutdown()
+        provider.shutdown()
+    if result is not SpanExportResult.SUCCESS:
+        raise RuntimeError("Langfuse OTLP observation export failed.")
+
+
 def _export_trace(definition: dict[str, Any], settings: Settings) -> str:
     try:
         from opentelemetry import trace
@@ -522,6 +865,351 @@ def _export_trace(definition: dict[str, Any], settings: Settings) -> str:
     if result is not SpanExportResult.SUCCESS:
         raise RuntimeError("Langfuse OTLP export failed.")
     return _trace_id(job_id)
+
+
+def _observation_exists(
+    definition: dict[str, Any], settings: Settings
+) -> bool:
+    occurred_at_ms = int(definition["occurred_at_ms"])
+    start = datetime.fromtimestamp(
+        occurred_at_ms / 1000, tz=timezone.utc
+    ) - timedelta(hours=1)
+    end = datetime.fromtimestamp(
+        occurred_at_ms / 1000, tz=timezone.utc
+    ) + timedelta(hours=1)
+    query = urlencode(
+        {
+            "fields": "core",
+            "limit": "100",
+            "traceId": str(definition["trace_id"]),
+            "fromStartTime": start.isoformat().replace("+00:00", "Z"),
+            "toStartTime": end.isoformat().replace("+00:00", "Z"),
+        }
+    )
+    authorization = base64.b64encode(
+        f"{settings.public_key}:{settings.secret_key}".encode("utf-8")
+    ).decode("ascii")
+    request = Request(
+        f"{settings.base_url}/api/public/v2/observations?{query}",
+        headers={
+            "Authorization": f"Basic {authorization}",
+            "Accept": "application/json",
+        },
+        method="GET",
+    )
+    try:
+        with urlopen(request, timeout=settings.export_timeout_seconds) as response:
+            payload = response.read(2 * 1024 * 1024 + 1)
+    except (HTTPError, URLError, TimeoutError, OSError) as exc:
+        raise RuntimeError("Langfuse observation lookup failed.") from exc
+    if len(payload) > 2 * 1024 * 1024:
+        raise RuntimeError("Langfuse observation lookup response was too large.")
+    try:
+        decoded = json.loads(payload.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise RuntimeError(
+            "Langfuse observation lookup returned invalid JSON."
+        ) from exc
+    data = decoded.get("data") if isinstance(decoded, dict) else None
+    if not isinstance(data, list):
+        raise RuntimeError(
+            "Langfuse observation lookup returned an invalid response."
+        )
+    observation_id = str(definition["observation_id"])
+    return any(
+        isinstance(item, dict) and str(item.get("id")) == observation_id
+        for item in data
+    )
+
+
+def _register_observation(
+    state: sqlite3.Connection, definition: dict[str, Any]
+) -> sqlite3.Row:
+    now_ms = time.time_ns() // 1_000_000
+    state.execute(
+        """
+        INSERT OR IGNORE INTO observation_exports (
+            event_id, trace_id, observation_id, fingerprint, status,
+            occurred_at_ms, updated_at_ms
+        ) VALUES (?, ?, ?, ?, 'pending', ?, ?)
+        """,
+        (
+            definition["event_id"],
+            definition["trace_id"],
+            definition["observation_id"],
+            definition["fingerprint"],
+            definition["occurred_at_ms"],
+            now_ms,
+        ),
+    )
+    state.commit()
+    record = state.execute(
+        "SELECT * FROM observation_exports WHERE event_id = ?",
+        (definition["event_id"],),
+    ).fetchone()
+    if record is None:
+        raise sqlite3.DatabaseError("Observation export state was not stored.")
+    if (
+        str(record["trace_id"]) != str(definition["trace_id"])
+        or str(record["observation_id"]) != str(definition["observation_id"])
+    ):
+        raise RuntimeError(
+            f"Observation identity changed for {definition['event_id']}."
+        )
+    if str(record["fingerprint"]) != str(definition["fingerprint"]):
+        if str(record["status"]) == "sent":
+            return record
+        if (
+            str(record["status"]) == "pending"
+            and record["attempt_started_at_ms"] is None
+        ):
+            state.execute(
+                """
+                UPDATE observation_exports
+                SET fingerprint = ?, updated_at_ms = ?
+                WHERE event_id = ?
+                """,
+                (
+                    definition["fingerprint"],
+                    now_ms,
+                    definition["event_id"],
+                ),
+            )
+            state.commit()
+            record = state.execute(
+                "SELECT * FROM observation_exports WHERE event_id = ?",
+                (definition["event_id"],),
+            ).fetchone()
+            if record is None:
+                raise sqlite3.DatabaseError(
+                    "Observation export state was not stored."
+                )
+        else:
+            raise RuntimeError(
+                f"Observation definition changed after export started for "
+                f"{definition['event_id']}."
+            )
+    return record
+
+
+def _process_observation(
+    *,
+    state: sqlite3.Connection,
+    definition: dict[str, Any],
+    settings: Settings,
+) -> str:
+    record = _register_observation(state, definition)
+    status_value = str(record["status"])
+    if status_value == "sent":
+        return "already_exported"
+
+    now_ms = time.time_ns() // 1_000_000
+    if status_value in {"in_flight", "uncertain"}:
+        uncertain_since_ms = int(
+            record["uncertain_since_ms"]
+            or record["attempt_started_at_ms"]
+            or record["updated_at_ms"]
+        )
+        if (
+            now_ms - uncertain_since_ms
+            < settings.reconcile_after_seconds * 1000
+        ):
+            return "uncertain"
+        last_checked_at_ms = record["last_checked_at_ms"]
+        if (
+            isinstance(last_checked_at_ms, int)
+            and now_ms - last_checked_at_ms
+            < RECONCILE_CHECK_INTERVAL_SECONDS * 1000
+        ):
+            return "uncertain"
+        try:
+            exists = _observation_exists(definition, settings)
+        except RuntimeError as exc:
+            state.execute(
+                """
+                UPDATE observation_exports
+                SET status = 'uncertain', last_checked_at_ms = ?,
+                    updated_at_ms = ?, last_error = ?
+                WHERE event_id = ?
+                """,
+                (now_ms, now_ms, str(exc), definition["event_id"]),
+            )
+            state.commit()
+            return "uncertain"
+        if exists:
+            state.execute(
+                """
+                UPDATE observation_exports
+                SET status = 'sent', exported_at_ms = COALESCE(exported_at_ms, ?),
+                    updated_at_ms = ?, last_checked_at_ms = ?,
+                    last_error = NULL
+                WHERE event_id = ?
+                """,
+                (now_ms, now_ms, now_ms, definition["event_id"]),
+            )
+            state.commit()
+            return "reconciled"
+        absent_checks = int(record["absent_checks"]) + 1
+        next_status = (
+            "pending"
+            if absent_checks >= RECONCILE_MIN_ABSENCES
+            else "uncertain"
+        )
+        state.execute(
+            """
+            UPDATE observation_exports
+            SET status = ?, absent_checks = ?, last_checked_at_ms = ?,
+                updated_at_ms = ?, last_error = ?
+            WHERE event_id = ?
+            """,
+            (
+                next_status,
+                absent_checks,
+                now_ms,
+                now_ms,
+                (
+                    None
+                    if next_status == "pending"
+                    else "Observation is not visible in Langfuse yet."
+                ),
+                definition["event_id"],
+            ),
+        )
+        state.commit()
+        return "retry_ready" if next_status == "pending" else "uncertain"
+
+    claim = state.execute(
+        """
+        UPDATE observation_exports
+        SET status = 'in_flight', attempt_started_at_ms = ?,
+            updated_at_ms = ?, last_error = NULL
+        WHERE event_id = ? AND status = 'pending'
+        """,
+        (now_ms, now_ms, definition["event_id"]),
+    )
+    state.commit()
+    if claim.rowcount != 1:
+        current = state.execute(
+            "SELECT status FROM observation_exports WHERE event_id = ?",
+            (definition["event_id"],),
+        ).fetchone()
+        if current is not None and str(current["status"]) == "sent":
+            return "already_exported"
+        return "uncertain"
+    try:
+        _export_observation(definition, settings)
+    except (OSError, RuntimeError, ValueError) as exc:
+        failed_at_ms = time.time_ns() // 1_000_000
+        state.execute(
+            """
+            UPDATE observation_exports
+            SET status = 'uncertain',
+                uncertain_since_ms = COALESCE(uncertain_since_ms, ?),
+                updated_at_ms = ?, last_error = ?
+            WHERE event_id = ?
+            """,
+            (
+                failed_at_ms,
+                failed_at_ms,
+                str(exc)[:500],
+                definition["event_id"],
+            ),
+        )
+        state.commit()
+        return "uncertain"
+    exported_at_ms = time.time_ns() // 1_000_000
+    state.execute(
+        """
+        UPDATE observation_exports
+        SET status = 'sent', exported_at_ms = ?, updated_at_ms = ?,
+            uncertain_since_ms = NULL, last_checked_at_ms = NULL,
+            absent_checks = 0, last_error = NULL
+        WHERE event_id = ?
+        """,
+        (
+            exported_at_ms,
+            exported_at_ms,
+            definition["event_id"],
+        ),
+    )
+    state.commit()
+    return "exported"
+
+
+def collect_events(
+    *, settings: Settings, dry_run: bool = False
+) -> dict[str, int]:
+    rows = _event_rows(settings.gateway_database)
+    counts = {
+        "events": len(rows),
+        "already_exported": 0,
+        "exported": 0,
+        "reconciled": 0,
+        "uncertain": 0,
+        "retry_ready": 0,
+        "waiting_for_manifest": 0,
+        "failed": 0,
+    }
+    pricing: dict[str, Any] | None = None
+    with closing(_state_connection(settings.state_database)) as state:
+        for row in rows:
+            definitions = [_event_definition(row, settings)]
+            if (
+                str(row["stage"]) == "succeeded"
+                and str(row["workflow_id"]) in OPENAI_WORKFLOWS
+            ):
+                try:
+                    manifest_entry = _manifest_for_job(
+                        str(row["job_id"]), settings.audit_directory
+                    )
+                    if manifest_entry is None:
+                        counts["waiting_for_manifest"] += 1
+                    elif (
+                        row.get("created_at_ms") is not None
+                        and row.get("completed_at_ms") is not None
+                    ):
+                        if pricing is None:
+                            pricing = _pricing(settings.pricing_path)
+                        definitions.append(
+                            _provider_event_definition(
+                                row=row,
+                                manifest_entry=manifest_entry,
+                                pricing=pricing,
+                                settings=settings,
+                            )
+                        )
+                except (
+                    OSError,
+                    ValueError,
+                    RuntimeError,
+                    json.JSONDecodeError,
+                ) as exc:
+                    print(
+                        f"collector skipped provider observation for "
+                        f"{row['job_id']}: {exc}",
+                        file=sys.stderr,
+                    )
+                    counts["failed"] += 1
+            for definition in definitions:
+                try:
+                    if dry_run:
+                        counts["exported"] += 1
+                        continue
+                    outcome = _process_observation(
+                        state=state,
+                        definition=definition,
+                        settings=settings,
+                    )
+                    if outcome in counts:
+                        counts[outcome] += 1
+                except (OSError, RuntimeError, sqlite3.Error, ValueError) as exc:
+                    print(
+                        f"collector failed observation "
+                        f"{definition['event_id']}: {exc}",
+                        file=sys.stderr,
+                    )
+                    counts["failed"] += 1
+    return counts
 
 
 def collect(*, settings: Settings, dry_run: bool = False) -> dict[str, int]:
@@ -624,9 +1312,47 @@ def send_canary(settings: Settings) -> str:
     return _export_trace(definition, settings)
 
 
+def _collect_all(
+    *, settings: Settings, dry_run: bool = False
+) -> dict[str, dict[str, int]]:
+    return {
+        "observations": collect_events(
+            settings=settings,
+            dry_run=dry_run,
+        ),
+        "legacy": collect(
+            settings=settings,
+            dry_run=dry_run,
+        ),
+    }
+
+
+def _watch(settings: Settings) -> int:
+    while True:
+        try:
+            counts = _collect_all(settings=settings)
+            observations = counts["observations"]
+            legacy = counts["legacy"]
+            if (
+                observations["exported"]
+                or observations["reconciled"]
+                or observations["retry_ready"]
+                or observations["failed"]
+                or legacy["exported"]
+                or legacy["failed"]
+            ):
+                print(
+                    json.dumps(counts, ensure_ascii=True, sort_keys=True),
+                    flush=True,
+                )
+        except (OSError, RuntimeError, sqlite3.Error, ValueError) as exc:
+            print(f"collector error: {exc}", file=sys.stderr, flush=True)
+        time.sleep(settings.poll_interval_seconds)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Export completed ad-creator generations to Langfuse."
+        description="Export ad-creator generation stages to Langfuse."
     )
     parser.add_argument(
         "--dry-run",
@@ -638,9 +1364,14 @@ def main() -> int:
         action="store_true",
         help="Send one synthetic trace without reading generation data.",
     )
+    parser.add_argument(
+        "--watch",
+        action="store_true",
+        help="Continuously export new generation stages.",
+    )
     args = parser.parse_args()
-    if args.dry_run and args.canary:
-        parser.error("--dry-run and --canary cannot be used together.")
+    if sum((args.dry_run, args.canary, args.watch)) > 1:
+        parser.error("--dry-run, --canary and --watch cannot be combined.")
     try:
         settings = Settings.from_env(require_credentials=not args.dry_run)
         if args.canary:
@@ -652,12 +1383,18 @@ def main() -> int:
                 )
             )
             return 0
-        counts = collect(settings=settings, dry_run=args.dry_run)
+        if args.watch:
+            return _watch(settings)
+        counts = _collect_all(settings=settings, dry_run=args.dry_run)
     except (OSError, RuntimeError, sqlite3.Error, ValueError) as exc:
         print(f"collector error: {exc}", file=sys.stderr)
         return 1
     print(json.dumps(counts, ensure_ascii=True, sort_keys=True))
-    return 1 if counts["failed"] else 0
+    return (
+        1
+        if counts["observations"]["failed"] or counts["legacy"]["failed"]
+        else 0
+    )
 
 
 if __name__ == "__main__":

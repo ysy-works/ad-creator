@@ -93,6 +93,14 @@ app = FastAPI(
 
 _SUBMISSION_LOCK = asyncio.Lock()
 _TERMINAL_STATES = {"succeeded", "failed", "expired"}
+_STATE_EVENT_STAGES = {
+    "queued": "queued",
+    "running": "running",
+    "unknown": "unknown",
+    "succeeded": "succeeded",
+    "failed": "failed",
+    "expired": "expired",
+}
 _REQUIRED_GENERATION_COLUMNS = {
     "generation_id",
     "job_id",
@@ -151,6 +159,28 @@ def _database(settings: Settings):
             )
             """
         )
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS generation_observability_events (
+                event_id TEXT PRIMARY KEY,
+                job_id TEXT NOT NULL,
+                stage TEXT NOT NULL,
+                state TEXT NOT NULL,
+                workflow_id TEXT NOT NULL,
+                session_id TEXT,
+                occurred_at_ms INTEGER NOT NULL,
+                error TEXT,
+                UNIQUE(job_id, stage)
+            )
+            """
+        )
+        connection.execute(
+            """
+            CREATE INDEX IF NOT EXISTS
+                generation_observability_events_occurred_idx
+            ON generation_observability_events (occurred_at_ms, event_id)
+            """
+        )
         columns = {
             str(row[1]) for row in connection.execute("PRAGMA table_info(generations)").fetchall()
         }
@@ -189,6 +219,37 @@ def _database(settings: Settings):
         connection.commit()
     finally:
         connection.close()
+
+
+def _record_generation_event(
+    connection: sqlite3.Connection,
+    *,
+    job_id: str,
+    workflow_id: str,
+    session_id: str | None,
+    stage: str,
+    state: str,
+    occurred_at_ms: int,
+    error: str | None = None,
+) -> None:
+    connection.execute(
+        """
+        INSERT OR IGNORE INTO generation_observability_events (
+            event_id, job_id, stage, state, workflow_id, session_id,
+            occurred_at_ms, error
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            f"{job_id}:{stage}",
+            job_id,
+            stage,
+            state,
+            workflow_id,
+            session_id,
+            occurred_at_ms,
+            error,
+        ),
+    )
 
 
 def _reserve_generation(
@@ -238,6 +299,15 @@ def _reserve_generation(
                 now_ms,
             ),
         )
+        _record_generation_event(
+            connection,
+            job_id=job_id,
+            workflow_id=workflow_id,
+            session_id=session_id,
+            stage="accepted",
+            state="submitting",
+            occurred_at_ms=now_ms,
+        )
         record = connection.execute(
             "SELECT * FROM generations WHERE generation_id = ?", (generation_id,)
         ).fetchone()
@@ -255,6 +325,7 @@ def _attach_prompt(
     settings: Settings,
 ) -> None:
     with _database(settings) as connection:
+        now_ms = time.time_ns() // 1_000_000
         cursor = connection.execute(
             """
             UPDATE generations
@@ -266,16 +337,50 @@ def _attach_prompt(
                 prompt_id,
                 workflow_id,
                 output_node_id,
-                int(time.time()),
+                now_ms // 1000,
                 generation_id,
             ),
         )
         if cursor.rowcount != 1:
             raise sqlite3.DatabaseError("Generation prompt metadata was not stored.")
+        record = connection.execute(
+            "SELECT * FROM generations WHERE generation_id = ?",
+            (generation_id,),
+        ).fetchone()
+        if record is None:
+            raise sqlite3.DatabaseError("Generation prompt metadata was not stored.")
+        _record_generation_event(
+            connection,
+            job_id=str(record["job_id"]),
+            workflow_id=str(record["workflow_id"]),
+            session_id=record["session_id"],
+            stage="queued",
+            state="queued",
+            occurred_at_ms=now_ms,
+        )
 
 
 def _delete_unsubmitted_generation(generation_id: str, settings: Settings) -> None:
     with _database(settings) as connection:
+        record = connection.execute(
+            """
+            SELECT job_id, workflow_id, session_id
+            FROM generations
+            WHERE generation_id = ? AND prompt_id IS NULL AND state = 'submitting'
+            """,
+            (generation_id,),
+        ).fetchone()
+        if record is not None:
+            _record_generation_event(
+                connection,
+                job_id=str(record["job_id"]),
+                workflow_id=str(record["workflow_id"]),
+                session_id=record["session_id"],
+                stage="submission_failed",
+                state="failed",
+                occurred_at_ms=time.time_ns() // 1_000_000,
+                error="Prompt submission was rejected before it was queued.",
+            )
         connection.execute(
             """
             DELETE FROM generations
@@ -305,7 +410,7 @@ def _update_generation_record(
         now_ms = time.time_ns() // 1_000_000
         now = now_ms // 1000
         if state == "expired":
-            connection.execute(
+            cursor = connection.execute(
                 """
                 UPDATE generations
                 SET state = 'expired', error = ?, updated_at = ?,
@@ -315,7 +420,7 @@ def _update_generation_record(
                 (error, now, now_ms, generation_id),
             )
         elif state == "succeeded" and image is not None:
-            connection.execute(
+            cursor = connection.execute(
                 """
                 UPDATE generations
                 SET state = 'succeeded', filename = ?, subfolder = ?, output_type = ?,
@@ -335,7 +440,7 @@ def _update_generation_record(
             )
         else:
             completed_at_ms = now_ms if state in _TERMINAL_STATES else None
-            connection.execute(
+            cursor = connection.execute(
                 """
                 UPDATE generations
                 SET state = ?, error = ?, updated_at = ?,
@@ -345,6 +450,27 @@ def _update_generation_record(
                 """,
                 (state, error, now, completed_at_ms, generation_id),
             )
+        stage = _STATE_EVENT_STAGES.get(state)
+        if cursor.rowcount == 1 and stage is not None:
+            record = connection.execute(
+                """
+                SELECT job_id, workflow_id, session_id, state, error
+                FROM generations
+                WHERE generation_id = ?
+                """,
+                (generation_id,),
+            ).fetchone()
+            if record is not None and str(record["state"]) == state:
+                _record_generation_event(
+                    connection,
+                    job_id=str(record["job_id"]),
+                    workflow_id=str(record["workflow_id"]),
+                    session_id=record["session_id"],
+                    stage=stage,
+                    state=state,
+                    occurred_at_ms=now_ms,
+                    error=record["error"],
+                )
 
 
 def _recorded_image(record: dict[str, Any]) -> dict[str, str] | None:
