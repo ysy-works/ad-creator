@@ -4,12 +4,17 @@ import json
 from pathlib import Path
 from typing import Optional
 
-from fastapi import APIRouter, UploadFile, File, Form, Header
+from fastapi import APIRouter, UploadFile, File, Form, Header, HTTPException, status
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from PIL import Image
 
-from app.model.model import generate_styled_image, resolve_workflow_id, OPENAI_WORKFLOW_ID
+from app.model.model import (
+    OPENAI_WORKFLOW_ID,
+    generate_styled_image,
+    record_frontend_completion,
+    resolve_workflow_id,
+)
 from app.services.caption_generator import generate_caption_package
 
 router = APIRouter()
@@ -117,7 +122,7 @@ async def generate(
     pil_image = Image.open(io.BytesIO(image_data)).convert("RGB")
 
     try:
-        result_image = generate_styled_image(
+        result_image, generation_id = generate_styled_image(
             pil_image, reference, workflow_id=workflow_id, aspect_ratio=aspect_ratio,
             cup_source=cup_source, session_id=x_session_id,
         )
@@ -130,7 +135,31 @@ async def generate(
 
     return JSONResponse(content={
         "result_image": image_to_base64(result_image),
+        "generation_id": generation_id,
     })
+
+
+class FrontendCompletedRequest(BaseModel):
+    generation_id: str = Field(min_length=1, max_length=2048)
+    duration_ms: int = Field(ge=1, le=30 * 60 * 1000)
+
+
+@router.post(
+    "/telemetry/frontend-completed",
+    status_code=status.HTTP_202_ACCEPTED,
+)
+async def frontend_completed(payload: FrontendCompletedRequest):
+    try:
+        record_frontend_completion(
+            generation_id=payload.generation_id,
+            duration_ms=payload.duration_ms,
+        )
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Frontend completion 기록을 일시적으로 처리할 수 없습니다.",
+        ) from exc
+    return {"accepted": True}
 
 
 class CaptionRequest(BaseModel):

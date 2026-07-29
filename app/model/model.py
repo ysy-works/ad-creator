@@ -163,7 +163,7 @@ def _build_gateway_headers(idempotency_key: str, session_id: str = None) -> dict
     return headers
 
 
-def _generate_with_model_c_v1(product_image: Image.Image, reference: dict, aspect_ratio: str = None, cup_source: str = None, session_id: str = None) -> Image.Image:
+def _generate_with_model_c_v1(product_image: Image.Image, reference: dict, aspect_ratio: str = None, cup_source: str = None, session_id: str = None) -> tuple[Image.Image, str]:
     """
     model-c-v1 워크플로 — ComfyUI Gateway 경유 (팀장 제공 BACKEND_HANDOFF.md 스펙).
 
@@ -209,7 +209,10 @@ def _generate_with_model_c_v1(product_image: Image.Image, reference: dict, aspec
     image_response = requests.get(result_url, headers=headers, timeout=60)
     image_response.raise_for_status()
 
-    return Image.open(io.BytesIO(image_response.content)).convert("RGB")
+    return (
+        Image.open(io.BytesIO(image_response.content)).convert("RGB"),
+        str(submitted["generation_id"]),
+    )
 
 
 def _generate_with_model_c_v1_legacy_direct(product_image: Image.Image, reference: dict) -> Image.Image:
@@ -254,7 +257,7 @@ def _generate_with_model_c_v1_legacy_direct(product_image: Image.Image, referenc
 VALID_ASPECT_RATIOS = {"4:5", "1:1"}
 
 
-def _generate_with_gpt_image_2(product_image: Image.Image, reference: dict, aspect_ratio: str = None, cup_source: str = None, session_id: str = None) -> Image.Image:
+def _generate_with_gpt_image_2(product_image: Image.Image, reference: dict, aspect_ratio: str = None, cup_source: str = None, session_id: str = None) -> tuple[Image.Image, str]:
     """
     gpt-image-2-v1 워크플로 (2026-07-24 소연님 안내로 이름 확정, 구 이름 openai-gpt-image-2-low-v1).
 
@@ -319,7 +322,10 @@ def _generate_with_gpt_image_2(product_image: Image.Image, reference: dict, aspe
     image_response = requests.get(result_url, headers=headers, timeout=60)
     image_response.raise_for_status()
 
-    return Image.open(io.BytesIO(image_response.content)).convert("RGB")
+    return (
+        Image.open(io.BytesIO(image_response.content)).convert("RGB"),
+        str(submitted["generation_id"]),
+    )
 
 
 # workflow_id -> 실제 호출 함수. 새 워크플로가 추가되면 여기 한 줄만 등록하면 됨.
@@ -334,7 +340,7 @@ def resolve_workflow_id(workflow_id: str = None) -> str:
     return workflow_id or DEFAULT_WORKFLOW_ID
 
 
-def generate_styled_image(product_image: Image.Image, reference: dict, workflow_id: str = None, aspect_ratio: str = None, cup_source: str = None, session_id: str = None) -> Image.Image:
+def generate_styled_image(product_image: Image.Image, reference: dict, workflow_id: str = None, aspect_ratio: str = None, cup_source: str = None, session_id: str = None) -> tuple[Image.Image, str]:
     """
     입력:
       - product_image: 사용자가 업로드한 원본 사진
@@ -354,3 +360,24 @@ def generate_styled_image(product_image: Image.Image, reference: dict, workflow_
     if handler is None:
         raise ValueError(f"알 수 없는 workflow_id입니다: {workflow_id}")
     return handler(product_image, reference, aspect_ratio=aspect_ratio, cup_source=cup_source, session_id=session_id)
+
+
+def record_frontend_completion(generation_id: str, duration_ms: int) -> None:
+    if not GATEWAY_BASE_URL or not GATEWAY_API_KEY:
+        raise RuntimeError(
+            "ComfyUI Gateway 환경변수가 설정되지 않았습니다 "
+            "(COMFYUI_GATEWAY_BASE_URL / COMFYUI_GATEWAY_API_KEY 확인 필요)."
+        )
+    response = requests.post(
+        (
+            f"{GATEWAY_BASE_URL.rstrip('/')}/v1/generations/{generation_id}"
+            "/client-observations/frontend-completed"
+        ),
+        headers={"Authorization": f"Bearer {GATEWAY_API_KEY}"},
+        json={"duration_ms": duration_ms},
+        timeout=10,
+    )
+    if response.status_code != 202:
+        raise RuntimeError(
+            f"Frontend completion 기록 실패 ({response.status_code})."
+        )

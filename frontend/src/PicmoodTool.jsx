@@ -432,6 +432,7 @@ function App({ lang = "ko", setLang }) {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0); // 이미지 생성 중 시뮬레이션 진행률(%)
   const progressIntervalRef = useRef(null); // 진행률 타이머 id (실패/언마운트 시 정리용)
+  const frontendTimingRef = useRef(null);
   const [error, setError] = useState("");
   const [resultImage, setResultImage] = useState(null);
 
@@ -471,6 +472,7 @@ function App({ lang = "ko", setLang }) {
     const file = e.target.files[0];
     setProductFile(file);
     setResultImage(null);
+    frontendTimingRef.current = null;
     setCaptionReady(false);
     if (file) {
       setProductPreviewUrl(URL.createObjectURL(file));
@@ -518,6 +520,15 @@ function App({ lang = "ko", setLang }) {
       setError(t.selectCupSourceFirst);
       return;
     }
+    const sessionId = getOrCreateSessionId();
+    const frontendTiming = {
+      startedAt: performance.now(),
+      generationId: null,
+      sessionId,
+      reporting: false,
+      reported: false,
+    };
+    frontendTimingRef.current = frontendTiming;
     setError("");
     setLoading(true);
     setResultImage(null);
@@ -547,7 +558,7 @@ function App({ lang = "ko", setLang }) {
 
       const response = await fetch(`${API_BASE}/generate`, {
         method: "POST",
-        headers: { "X-Session-ID": getOrCreateSessionId() },
+        headers: { "X-Session-ID": sessionId },
         body: formData,
       });
 
@@ -567,6 +578,9 @@ function App({ lang = "ko", setLang }) {
       }
 
       const data = await response.json();
+      frontendTiming.generationId =
+        typeof data.generation_id === "string" ? data.generation_id : null;
+      frontendTimingRef.current = frontendTiming;
 
       // 실제 응답이 도착했으니 진행률 타이머를 멈추고 100%로 채운다.
       // 350ms 정도 잠깐 보여준 뒤 로딩을 종료해서, 90%에서 갑자기 결과가
@@ -585,6 +599,7 @@ function App({ lang = "ko", setLang }) {
         progressIntervalRef.current = null;
       }
       setProgress(0);
+      frontendTimingRef.current = null;
       setError(err.message || t.genericError);
     } finally {
       // 위쪽에서 이미 정리되지만, throw 위치와 무관하게 항상 타이머가
@@ -595,6 +610,58 @@ function App({ lang = "ko", setLang }) {
       }
       setLoading(false);
     }
+  };
+
+  const handleResultImageLoad = () => {
+    const timing = frontendTimingRef.current;
+    if (
+      !timing?.generationId ||
+      timing.reporting ||
+      timing.reported
+    ) {
+      return;
+    }
+
+    timing.reporting = true;
+    const durationMs = Math.max(
+      1,
+      Math.round(performance.now() - timing.startedAt),
+    );
+    const payload = JSON.stringify({
+      generation_id: timing.generationId,
+      duration_ms: durationMs,
+    });
+
+    const send = async () => {
+      for (let attempt = 0; attempt < 2; attempt += 1) {
+        try {
+          const response = await fetch(
+            `${API_BASE}/telemetry/frontend-completed`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-Session-ID": timing.sessionId,
+              },
+              body: payload,
+              keepalive: true,
+            },
+          );
+          if (response.ok) {
+            timing.reported = true;
+            return;
+          }
+        } catch {
+          // 화면 표시와 독립적인 측정이므로 오류를 사용자에게 노출하지 않는다.
+        }
+        if (attempt === 0) {
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+        }
+      }
+      timing.reporting = false;
+    };
+
+    void send();
   };
 
   // 2단계: 사용자가 결과를 확인한 후 버튼을 눌렀을 때만 캡션 생성
@@ -1326,7 +1393,11 @@ function App({ lang = "ko", setLang }) {
           <div className="result-section">
             <h3 className="section-title">{t.resultTitle}</h3>
             <PostFrame brand="Picmood" likeCount={null} lang={lang} photoClassName="post-frame__photo--result">
-              <img src={resultImage} alt={t.resultAlt} />
+              <img
+                src={resultImage}
+                alt={t.resultAlt}
+                onLoad={handleResultImageLoad}
+              />
             </PostFrame>
             <button className="download-btn" onClick={handleDownload}>{t.downloadImage}</button>
 
