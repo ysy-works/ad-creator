@@ -74,18 +74,18 @@
   ],
   "prompt_template": {
     "path": "prompt-template-adopt-reference.txt",
-    "sha256": "15ddad9c666ec9008ab6adeb9e4dacf89555169bccaebb3e63c0d8f149e91caa"
+    "sha256": "e6408ff232e66c257d43d451cfc519ef102efc60b8b5f5ac2fef9c25873d3f9d"
   },
   "container_modes": {
     "adopt_reference": {
       "prompt_template": {
         "path": "prompt-template-adopt-reference.txt",
-        "sha256": "15ddad9c666ec9008ab6adeb9e4dacf89555169bccaebb3e63c0d8f149e91caa"
+        "sha256": "e6408ff232e66c257d43d451cfc519ef102efc60b8b5f5ac2fef9c25873d3f9d"
       },
       "provider_hint_role": "reference_cup_pose_light_and_scene_evidence",
       "source_product_authority": "beverage_only",
       "container_design_path": "container-design.json",
-      "prompt_addendum": "[ACTIVE CONTAINER MODE] Discard the source vessel and rebuild the exact user beverage inside the compact off-white reference mug. Preserve the right-side handle and lower-left cup-axis lean from the selected evidence board. Never transfer the reference beverage, source saucer, source label, or any brand."
+      "prompt_addendum": "[ACTIVE CONTAINER MODE] Discard the source vessel and rebuild the exact user beverage inside exactly the single reference mug selected by the evidence board: either compact off-white ceramic or compact brushed stainless steel. Preserve that selected material, silhouette, image-right handle and lower-left cup-axis lean. Never blend cup variants or transfer the reference beverage, source saucer, source label, or any brand."
     },
     "reconstruct_source": {
       "prompt_template": {
@@ -130,7 +130,7 @@
     },
     "container_design": {
       "path": "container-design.json",
-      "sha256": "f8cb45b266d478cde76d0c399f2511598fbe9fc0bf6364b08420c3f4a5ab02d9"
+      "sha256": "7417a207fe08b018ce88406b083c79532b1738d7c996e1b9ee93c6fca8028390"
     }
   },
   "hint_images": [
@@ -144,7 +144,23 @@
         "adopt_reference"
       ],
       "send_to_provider": true,
+      "random_variant_group": "wood_handheld_reference_mug_v2",
+      "selection_policy": "random_one",
       "reason": "Segmented evidence for the compact reference mug, two local hand poses, pale oak, props and cloudy-window photometry; never an output layout."
+    },
+    {
+      "role": "reference_cup_pose_light_and_scene_evidence",
+      "path": "control-board/scene-hint-adopt-reference-metal-v2.png",
+      "sha256": "03fab41ab62ea07e77769b17fc4c14e8998094cfa819cfb07043fcdfb3e4b425",
+      "width": 1086,
+      "height": 1448,
+      "container_mode_scope": [
+        "adopt_reference"
+      ],
+      "send_to_provider": true,
+      "random_variant_group": "wood_handheld_reference_mug_v2",
+      "selection_policy": "random_one",
+      "reason": "Segmented evidence for the compact brushed-stainless reference mug with squared image-right handle, bare-left-hand grip, companion, pale oak, props and cloudy-window photometry; never an output layout or beverage authority."
     },
     {
       "role": "source_cup_pose_light_and_scene_evidence",
@@ -250,7 +266,7 @@
       "selected_container_mode",
       "lower_left_cup_axis",
       "gravity_level_liquid",
-      "right_side_hot_handle",
+      "selected_reference_handle_on_image_right",
       "exact_two_hands_two_cups",
       "two_distinct_lower_legs",
       "lower_bare_wrist",
@@ -262,7 +278,7 @@
     ],
     "hard_fail": [
       "cup axis leans right or toward the window",
-      "hot source handle is missing, mirrored or not on image-right",
+      "selected reference handle is missing, mirrored or not on image-right",
       "lower hand holds a source saucer",
       "lower black sleeve or leather cuff appears",
       "one lower leg is missing or both legs merge",

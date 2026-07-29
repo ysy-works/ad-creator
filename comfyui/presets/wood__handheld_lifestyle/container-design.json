@@ -1,30 +1,34 @@
 {
   "schema_version": "1.0.0",
-  "container_design_id": "wood_handheld_compact_ceramic_mug_v1",
-  "display_name": "Compact off-white ceramic mug for the Wood Handheld preset",
-  "design": {
-    "class": "compact handled cafe mug",
-    "material": "matte off-white glazed ceramic",
-    "geometry": "short compact cylindrical body with a gently rounded lower wall, thin readable rim and one complete small loop handle that follows the held reference orientation",
-    "components": [
-      "thin circular ceramic rim",
-      "short compact cylindrical body",
-      "gently rounded lower wall",
-      "one complete small loop handle",
-      "plain unbranded exterior"
-    ],
-    "height_to_width_ratio": [
-      0.72,
-      0.92
-    ]
-  },
+  "container_design_id": "wood_handheld_reference_mug_variants_v2",
+  "display_name": "Randomly selected compact ceramic or brushed-metal mug for the Wood Handheld preset",
+  "selection_authority": "Use exactly the single target-cup design shown by the randomly selected provider hint. Never blend variants.",
+  "selection_policy": "random_one",
+  "design_variants": [
+    {
+      "variant_id": "compact_off_white_ceramic_mug",
+      "class": "compact handled cafe mug",
+      "material": "matte off-white glazed ceramic",
+      "geometry": "short compact cylindrical body with a gently rounded lower wall, thin readable rim, small foot and one complete small loop handle on image-right",
+      "height_to_width_ratio": [0.72, 0.92]
+    },
+    {
+      "variant_id": "compact_brushed_stainless_mug",
+      "class": "compact handled metal cafe mug",
+      "material": "plain satin brushed stainless steel",
+      "geometry": "short straight cylindrical body with a thin rolled metal rim, subtly weighted flat base and one complete squared rectangular metal loop handle on image-right",
+      "height_to_width_ratio": [0.72, 0.92]
+    }
+  ],
   "allowed_transfer": [
-    "compact off-white ceramic mug proportions",
-    "thin rim and gently rounded lower wall",
-    "one small loop handle in the natural hand-held orientation",
-    "plain unbranded exterior"
+    "only the one target-cup variant present in the selected provider hint",
+    "selected short compact proportions and selected material response",
+    "one complete selected handle on image-right",
+    "plain unbranded exterior",
+    "natural bare-left-hand grip and lower-left cup-axis lean"
   ],
   "forbidden_transfer": [
+    "mixing ceramic and stainless-steel geometry or material",
     "reference latte art, crema pattern, bubbles, recipe or topping",
     "reference text, logo, watermark or decorative mark",
     "reference hand identity, nail color or skin texture",
@@ -38,6 +42,7 @@
     ],
     "supports_toppings": true,
     "supports_straw": false,
-    "brand_surface": "plain exterior only"
+    "brand_surface": "plain exterior only",
+    "opaque_material_rule": "ceramic and stainless variants remain opaque; never show beverage or wood through the sidewall"
   }
 }
