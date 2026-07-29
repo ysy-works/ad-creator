@@ -1,0 +1,129 @@
+{
+  "$schema": "../../../schemas/scene-recipe.schema.json",
+  "capture": {
+    "forbidden_processing": [
+      "beauty-smoothing the hand",
+      "uniformly lifted shadows",
+      "softbox-like wraparound fill",
+      "large spotless brightness gradient",
+      "heavy orange movie-like grading"
+    ],
+    "local_texture": "retain fine wall grain, skin creases, knuckle color variation, glass thickness, liquid texture and subtle sensor noise",
+    "phone_hdr": "restrained computational tone mapping with natural tonal separation",
+    "shadow_processing": "do not lift every dark region toward the wall midtone; preserve natural tonal separation"
+  },
+  "compatible_presets": [
+    "instagram_white_direct_handheld_refined_v5"
+  ],
+  "composition": {
+    "asymmetry_sources": [
+      "a compact connected shadow behind and left of the product",
+      "one partial diagonal sun patch",
+      "the hand entering from the lower edge"
+    ],
+    "inherit_preset_bbox": true,
+    "subject_anchor_priority": "One smaller hand-cup unit at width 0.16-0.20 and height 0.23-0.29 is supported by a slender fine-boned hand under a 2-6 degree downward camera; no enlarged alternative exists."
+  },
+  "coupling_rules": [
+    "Camera working distance remains 105-145cm and pitch remains 2-6 degrees downward.",
+    "The cup and a slender fine-boned hand share one near focal plane and one upper-right direct-window source.",
+    "When the selected container includes a straw it is colorless optically clear plastic with neutral transmitted wall light; otherwise no straw is invented.",
+    "The wall remains 100-180cm behind with lower detail and moderate optical softness.",
+    "The reviewed V4 contrast of 1.10 remains unchanged."
+  ],
+  "display_name": "인스타 에디토리얼 · 화이트 직사광 핸드헬드 · 정제 비율 v5",
+  "environment": {
+    "background_plane": "real warm-white plaster wall 100-180cm behind the held product, with attenuated texture and moderate optical softness",
+    "sun_patch_shape": "broad partial tonal changes from window frames and unseen furniture outside the frame, not one sharp connected silhouette",
+    "surface_character": "fine irregular plaster visible only at reduced background contrast and acuity"
+  },
+  "forbidden": [
+    "low or upward camera and visible cup underside",
+    "paper sleeve, holder, wrap or cuff",
+    "sharp connected cup-and-hand wall silhouette",
+    "wall as sharp as the near hand-cup plane",
+    "waxy or beauty-retouched skin",
+    "crushed shadows or clipped wall",
+    "oversized hero product or wide-angle looming"
+  ],
+  "generation_policy": {
+    "normal_paid_generations": 1,
+    "runtime_reference_image": false,
+    "traditional_compositing": false
+  },
+  "human_rendering": {
+    "forbidden": [
+      "broad rugged palm or oversized hand",
+      "thick swollen fingers or coarse knuckles",
+      "hairy, callused or weathered forearm",
+      "airbrushed or waxy skin",
+      "holder, sleeve, wrap or cuff"
+    ],
+    "light_response": "sun-facing skin is warm and bright while turning planes retain neutral density and microtexture; no glowing fill",
+    "skin_texture": "fine natural lines, narrow-palm anatomy, tapered fingers, subtle knuckle structure, ordinary nail edges and small color variation without rugged exaggeration or beauty retouch"
+  },
+  "lighting": {
+    "ambient_fill": "low neutral room bounce plus subtle off-frame furniture color and exposure variation",
+    "background_lightness": [
+      0.68,
+      0.86
+    ],
+    "direction": "upper right toward lower left",
+    "exposure_compensation_ev": [
+      -0.3,
+      0.0
+    ],
+    "global_contrast": [
+      0.38,
+      0.52
+    ],
+    "highlight_behavior": "protect transparent-container highlights while retaining bright direct-sun sparkle and local contrast; no flat white clipping",
+    "light_softness": [
+      0.32,
+      0.52
+    ],
+    "shadow_density": [
+      0.22,
+      0.4
+    ],
+    "shadow_description": "broad softened partial wall shadows with gradual density falloff; no sharp connected cup-hand silhouette",
+    "shadow_temperature": "slightly cooler and more neutral than the warm sunlit areas",
+    "source": "unfiltered direct late-afternoon sun entering through a real window with no curtain or diffusion panel",
+    "subject_to_wall_distance_cm": [
+      100,
+      180
+    ],
+    "sun_patch_coverage": [
+      0.25,
+      0.45
+    ]
+  },
+  "material_rules": {
+    "glass": "Show real thickness at the rim and weighted base, restrained specular highlights, transmitted green light and small refraction changes; the glass shadow may contain lighter transmitted areas.",
+    "plastic": "clear cup and lid show thin neutral reflections; a selected straw is colorless optically clear plastic with neutral transmitted wall light, never gray, green, beige, black, metallic or opaque"
+  },
+  "quality_gate": {
+    "hard_fail": [
+      "exact product count differs from one",
+      "product width exceeds 0.20 or height exceeds 0.29",
+      "hand is oversized, broad-palmed, rugged, thick-fingered or coarse-knuckled",
+      "a required straw is gray, green, beige, black, metallic or opaque instead of colorless optically clear plastic",
+      "a straw is invented when the selected source or container policy says none",
+      "camera pitch is below 2 degrees or an upward/low-angle reading appears",
+      "paper sleeve, holder, wrap or cuff appears",
+      "wall reads close, sharp or in the same focal plane as the cup",
+      "skin is waxy, airbrushed, uniform or anatomically malformed",
+      "contrast crushes hand or beverage shadows, or clips the white wall"
+    ],
+    "weights": {
+      "color_and_tone": 0.12,
+      "instagram_composition": 0.23,
+      "lighting_physical_coherence": 0.17,
+      "natural_smartphone_capture": 0.22,
+      "novel_scene_distance": 0.08,
+      "product_identity": 0.18
+    }
+  },
+  "recipe_id": "instagram_white_direct_handheld_refined_v5",
+  "schema_version": "1.0.0"
+}

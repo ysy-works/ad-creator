@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "default_workflow_id": "gpt-image-2-v1",
+  "workflows": {
+    "gpt-image-2-v1": {
+      "enabled": true,
+      "api_workflow": "gpt-image-2-v1.api.json",
+      "ui_workflow": "gpt-image-2-v1.ui.json",
+      "custom_node_types": [
+        "AdCreatorOpenAIImageGenerate"
+      ],
+      "input_bindings": {
+        "source_image": {
+          "node_id": "1",
+          "input": "image"
+        },
+        "preset_id": {
+          "node_id": "2",
+          "input": "preset_id"
+        },
+        "container_mode": {
+          "node_id": "2",
+          "input": "container_mode"
+        },
+        "serving_temperature": {
+          "node_id": "2",
+          "input": "serving_temperature"
+        },
+        "aspect_ratio": {
+          "node_id": "2",
+          "input": "aspect_ratio"
+        },
+        "request_id": {
+          "node_id": "2",
+          "input": "request_id"
+        }
+      },
+      "required_inputs": [
+        "source_image",
+        "preset_id",
+        "aspect_ratio",
+        "request_id"
+      ],
+      "output_node_id": "3"
+    },
+    "openai-gpt-image-2-low-v1": {
+      "enabled": true,
+      "api_workflow": "openai-gpt-image-2-low-v1.api.json",
+      "ui_workflow": "openai-gpt-image-2-low-v1.ui.json",
+      "custom_node_types": [
+        "AdCreatorOpenAIImageGenerate"
+      ],
+      "input_bindings": {
+        "source_image": {
+          "node_id": "1",
+          "input": "image"
+        },
+        "preset_id": {
+          "node_id": "2",
+          "input": "preset_id"
+        },
+        "container_mode": {
+          "node_id": "2",
+          "input": "container_mode"
+        },
+        "serving_temperature": {
+          "node_id": "2",
+          "input": "serving_temperature"
+        },
+        "aspect_ratio": {
+          "node_id": "2",
+          "input": "aspect_ratio"
+        },
+        "request_id": {
+          "node_id": "2",
+          "input": "request_id"
+        }
+      },
+      "required_inputs": [
+        "source_image",
+        "preset_id",
+        "aspect_ratio",
+        "request_id"
+      ],
+      "output_node_id": "3"
+    },
+    "model-c-v1": {
+      "enabled": true,
+      "api_workflow": "model-c-v1.api.json",
+      "ui_workflow": "model-c-v1.ui.json",
+      "custom_node_types": [
+        "AdCreatorModelCGenerate"
+      ],
+      "input_bindings": {
+        "source_image": {
+          "node_id": "1",
+          "input": "image"
+        },
+        "composition": {
+          "node_id": "2",
+          "input": "composition"
+        },
+        "background_style": {
+          "node_id": "2",
+          "input": "background_style"
+        },
+        "strength": {
+          "node_id": "2",
+          "input": "strength"
+        },
+        "seed": {
+          "node_id": "2",
+          "input": "seed"
+        }
+      },
+      "output_node_id": "3"
+    }
+  }
+}

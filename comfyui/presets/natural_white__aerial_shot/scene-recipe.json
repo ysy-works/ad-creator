@@ -1,0 +1,121 @@
+{
+  "$schema": "../../../schemas/scene-recipe.schema.json",
+  "schema_version": "1.0.0",
+  "recipe_id": "instagram_white_neutral_overhead_spatial_recipe_v1",
+  "display_name": "화이트 원형 테이블과 타일 바닥의 공간감 항공샷",
+  "compatible_presets": ["instagram_white_neutral_overhead_spatial_v1"],
+  "generation_policy": {
+    "normal_paid_generations": 1,
+    "runtime_reference_image": true,
+    "traditional_compositing": false
+  },
+  "composition": {
+    "inherit_preset_bbox": true,
+    "subject_anchor_priority": "one complete primary beverage sits just below center on the right-dominant round white table; one secondary dessert group sits above it at twelve o'clock and a cropped magazine remains peripheral at the far right edge; keep the table edge and left floor wedge visible",
+    "asymmetry_sources": [
+      "large circular table entering from the right",
+      "narrow gray tiled-floor wedge on the left",
+      "broad partial shadows cast by unseen room elements"
+    ]
+  },
+  "environment": {
+    "background_plane": "one large matte warm-neutral white circular tabletop above a gray tiled cafe floor visible only as a narrow left wedge",
+    "surface_character": "clean plain warm-neutral white painted or matte-laminate cafe table with only extremely subtle fine grain and low-amplitude real-world imperfections; preserve light gradients and shadows but prohibit marble veins, cloudy mottling, faux-stone blotches, plaster, paper, canvas, stains, repeated AI texture, procedural noise and synthetic render smoothness; allow only the declared dessert plate, Basque cheesecake, fork and cropped BAUHAUS magazine",
+    "sun_patch_shape": "broad irregular soft-edged tonal patches from off-frame window obstructions, never a crisp leaf or furniture silhouette"
+  },
+  "declared_companions": {
+    "dessert_group": {
+      "anchor": "twelve o'clock above the primary beverage",
+      "plate": "one modest warm-white matte ceramic plate with a shallow raised rim and attached contact shadow",
+      "cake": "one triangular Basque burnt cheesecake slice with a gently sunken center, slightly higher irregular outer rim, dark caramelized top, thick pale finely porous cream-cheese middle and thin darker baked base; never sponge or castella",
+      "fork": "one slim four-tine stainless-steel dessert fork across the lower plate, tines left and handle right, not touching the cake"
+    },
+    "magazine_group": {
+      "anchor": "far right edge around two-to-three o'clock",
+      "appearance": "cropped peripheral portion of the published white BAUHAUS magazine with bold black title, gray architectural cover graphic and visible white edge or spine"
+    }
+  },
+  "lighting": {
+    "source": "one large upper-left window diffused by room air and partial off-frame architecture or furniture",
+    "direction": "upper left toward lower right",
+    "shadow_description": "a compact attached product shadow plus broad low-density environmental shadows crossing both floor and table from objects outside the frame",
+    "light_softness": [0.58, 0.76],
+    "subject_to_wall_distance_cm": [40, 90],
+    "shadow_density": [0.16, 0.34],
+    "global_contrast": [0.28, 0.44],
+    "background_lightness": [0.72, 0.9],
+    "ambient_fill": "neutral room bounce that keeps white-table texture and gray-floor depth readable",
+    "exposure_compensation_ev": [-0.18, 0.02],
+    "sun_patch_coverage": [0.18, 0.38],
+    "highlight_behavior": "soft protected white highlights with table texture, cup rim and beverage surface retained",
+    "shadow_temperature": "neutral to faintly cool relative to the warm-neutral table"
+  },
+  "capture": {
+    "phone_hdr": "restrained natural social-photo HDR",
+    "shadow_processing": "retain the spatial separation between elevated tabletop, receding floor and off-frame room volume",
+    "local_texture": "retain ceramic or source-container construction, beverage identity, ice and toppings without artificial microcontrast",
+    "forbidden_processing": [
+      "uniform Gaussian blur",
+      "portrait-mode cutout",
+      "oversharpening",
+      "milky lifted blacks",
+      "seamless studio sweep",
+      "cinematic grade"
+    ]
+  },
+  "human_rendering": {
+    "skin_texture": "not applicable because no hand is active",
+    "light_response": "not applicable because no hand is active",
+    "forbidden": ["hand", "finger", "wrist", "arm", "sleeve"]
+  },
+  "material_rules": {
+    "glass": "in source-family mode rebuild a simple glass in the same broad family and material under the target overhead camera; exact source height, taper, sidewall geometry and branding are not invariants. In adopt-reference mode reconstruct only the versioned opaque white ceramic mug. Keep rim, ice, liquid and attached shadow physically connected",
+    "plastic": "in source-family mode rebuild a simple plastic cup in the same broad family and material under the target overhead camera and never add an unverified lid or straw; in adopt-reference mode obey the separate versioned opaque ceramic container contract"
+  },
+  "coupling_rules": [
+    "Product, table, floor and environmental shadows belong to one upper-left window exposure.",
+    "The curved table edge and receding floor grout jointly communicate camera height and room depth.",
+    "The product stays fully on the table and owns one attached contact shadow.",
+    "Only the declared cup and companion-scene designs may transfer; reference beverage, latte art, exact shadow silhouette and exact pixel layout are excluded.",
+    "The dessert group stays secondary above the mug, and the magazine stays cropped at the far right edge.",
+    "The fork tines point left and the handle extends right below the cake without overlap."
+  ],
+  "forbidden": [
+    "fabric, coaster, napkin or placemat",
+    "bread, flower, phone or any undeclared decorative prop; source saucer, support plate and spoon are allowed only when present in reconstruct_source mode",
+    "any book or magazine other than the declared cropped BAUHAUS magazine",
+    "marble veining, cloudy mottling, faux-stone patches, plaster texture, repeated procedural noise or CGI-smooth tabletop",
+    "castella, sponge, chiffon, pound-cake or bread-like cheesecake texture",
+    "fruit, cream, sauce, ice cream, label card or garnish on the cheesecake plate",
+    "visible chair, plant or furniture body",
+    "flat white seamless background with no floor wedge",
+    "crisp graphic sunlight or copied shadow silhouette",
+    "copied reference coffee, crema or latte art",
+    "invented text, logo or watermark outside the declared BAUHAUS magazine"
+  ],
+  "quality_gate": {
+    "hard_fail": [
+      "the round table edge or left gray floor wedge disappears",
+      "floor grout does not recede or the table reads as a flat background",
+      "broad off-frame environmental shadow atmosphere is absent",
+      "fabric, coaster, napkin or an undeclared decorative prop appears; source saucer, support plate and spoon are allowed only when present in reconstruct_source mode",
+      "the cheesecake lacks a sunken center, higher irregular rim or three-zone cut face",
+      "the fork tines do not point left or the handle does not extend right below the cake",
+      "the declared BAUHAUS magazine is missing, substituted, enlarged or moved inward",
+      "the tabletop reads as marble, mottled faux stone, procedural AI texture or a synthetic render",
+      "product is cropped, floats or lacks an attached contact shadow",
+      "reference coffee or latte art replaces the user beverage, or the exact reference shadow silhouette leaks",
+      "product inherits the oblique source camera instead of the target overhead camera",
+      "cup rim is strongly elliptical or too much sidewall is visible",
+      "beverage color, syrup or fruit appears on an opaque cup exterior or base"
+    ],
+    "weights": {
+      "natural_smartphone_capture": 0.15,
+      "instagram_composition": 0.24,
+      "product_identity": 0.2,
+      "lighting_physical_coherence": 0.2,
+      "color_and_tone": 0.13,
+      "novel_scene_distance": 0.08
+    }
+  }
+}

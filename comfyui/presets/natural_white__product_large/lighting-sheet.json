@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "lighting_sheet_id": "natural_white_closeup_soft_window_v1",
+  "mood": "warm-neutral close cafe tabletop under one broad diffuse window",
+  "key_light": {
+    "source": "one very large upper-left diffuse window",
+    "direction": "upper-left/left-front toward lower-right",
+    "relative_size": "very large, producing broad highlights and feathered penumbrae"
+  },
+  "ambient_fill": "weak neutral white-room bounce",
+  "key_to_fill_ratio": [1.5, 2.5],
+  "shadow_density": [0.14, 0.29],
+  "shadow_vector_degrees": [112, 142],
+  "penumbra_ratio": [0.28, 0.55],
+  "shadow_contract": {
+    "edge": "compact attached core opening into a long feathered lower-right penumbra",
+    "attachment": "cup, saucer and spoon each own a separate directionally coherent contact"
+  },
+  "capture_contract": {
+    "white_balance": "5000-5300K warm-neutral white",
+    "texture": "matte tabletop, protected glass and ceramic detail with faint natural grain"
+  },
+  "forbidden": ["hard sun", "multiple light directions", "HDR halo", "clipped white", "blue cast", "beige veil", "seamless studio sweep"]
+}

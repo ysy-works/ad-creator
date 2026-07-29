@@ -1,0 +1,25 @@
+[TASK]
+Create one new original Instagram-native cafe photograph. It must feel quietly observed and naturally captured, while following the measured preset precisely. Do not make a catalog render, CGI image, copied reference, poster, or generic AI minimalist template.
+
+[INPUT ROLES]
+{{INPUT_ROLES}}
+
+[EXACT PRODUCT - HARD LOCK]
+Image 1 is the exact user product identity. Preserve the beverage category, serving temperature, liquid layers, toppings, ice state, container class, material, silhouette, real components, and every clearly visible authorized logo or label. Do not invent, misspell, replace, or duplicate text or branding. The source photograph is evidence, not a cutout: rerender the complete product for the new camera and light, including rim and base geometry, refraction, highlights, condensation, contact, shadow, focus, and grain.
+
+[ASPECT RATIO AND COMPOSITION - HARD LOCK]
+{{ASPECT_CONTRACT}}
+
+Use a 50-60mm-equivalent rectilinear normal perspective at product level to very slightly above, with 2-10 degrees downward pitch. No props. Keep the complete product, contact shadow, wall-table boundary, and required margins inside the generated canvas; no downstream crop is permitted.
+
+[LIGHTING SHEET - AUTHORITATIVE]
+{{LIGHTING_CONTRACT}}
+
+[LOOK AND MATERIAL]
+Use one warm-neutral matte white wall and one matte white tabletop. Keep low saturation, low-to-medium contrast, a soft highlight shoulder, faint luminance grain, minor real surface variation, and finite social-photo acuity. The product remains fully legible; the wall and table retain gentle texture without portrait-mode blur. Never introduce wood, gray concrete, a seamless studio sweep, glossy acrylic, beige wash, or clipped broad whites.
+
+[ORIGINALITY AND PHYSICS]
+Invent a new wall, table, tonal falloff, and shadow. Copy no reference product, exact wall mark, exact shadow silhouette, or pixel layout. Product, support, reflection, transmission, and shadow must share one camera, exposure, and physical light source. Reject pasted edges, halos, floating bases, detached shadows, malformed transparent material, duplicated products, false text, logos, and watermarks.
+
+[FINAL GATE]
+Return exactly one image only when product identity, verified branding, measured scale, negative space, wall-table boundary, target-camera optics, attached contact, transparent-material behavior, and the lighting sheet all agree.

@@ -1,0 +1,243 @@
+{
+  "camera_geometry": {
+    "camera_height_cm": [
+      130,
+      160
+    ],
+    "depth_of_field": "cup and hand resolve naturally while the wall 100-180cm behind is moderately softer through real optical distance, not segmentation",
+    "distortion": "natural handheld normal-lens perspective without cup looming",
+    "focal_length_equivalent_mm": [
+      45,
+      55
+    ],
+    "pitch_degrees": [
+      2,
+      6
+    ],
+    "projection": "rectilinear eye-level to slightly-above normal-lens projection",
+    "roll_degrees": [
+      -1,
+      1
+    ],
+    "working_distance_cm": [
+      105,
+      145
+    ],
+    "yaw_degrees": [
+      -5,
+      5
+    ]
+  },
+  "composition_geometry": {
+    "bbox_semantics": "one smaller handheld product; width 0.16-0.20 and height 0.23-0.29",
+    "crop_policy": "retain one whole modest product, natural grip and short bare wrist",
+    "forbidden": [
+      "product width above 0.20 or height above 0.29",
+      "broad rugged palm or oversized hand",
+      "thick swollen fingers or coarse knuckles",
+      "low or upward camera",
+      "visible cup underside",
+      "wide-angle looming",
+      "high overhead flat lay",
+      "multiple products",
+      "decorative props"
+    ],
+    "frame_rhythm": "distant wall first, then a smaller cup and slender supporting hand",
+    "negative_space": "0.68-0.78 meaningful distant wall and broad partial light variation",
+    "primary_subject_area_ratio": [
+      0.0368,
+      0.058
+    ],
+    "primary_subject_bbox": {
+      "bottom": 0.63,
+      "left": 0.41,
+      "right": 0.59,
+      "top": 0.35
+    },
+    "support_plane": {
+      "dominant_edge_angles_degrees": [
+        0
+      ],
+      "kind": "distant vertical warm-white plaster wall behind a held product",
+      "occupancy_ratio": [
+        0.84,
+        0.96
+      ],
+      "perspective": "wall 100-180cm behind the product with attenuated detail and no ground-plane reading"
+    }
+  },
+  "composition_variation": {
+    "allowed_variations": [
+      "minor product x-position",
+      "asymmetric grip pressure",
+      "distant wall texture phase",
+      "broad off-frame shadow phase"
+    ],
+    "invariants": [
+      "one smaller exact sleeve-free handheld product",
+      "one slender fine-boned natural hand and short bare wrist",
+      "distant warm-white wall 100-180cm behind",
+      "conditional straw is colorless optically clear or absent according to the chosen container",
+      "one upper-right window source with broad off-frame occlusion"
+    ],
+    "reference_scene_copy_forbidden": true,
+    "repeat_guard": "never recreate the reference acid. mark, paper sleeve, exact hand, sharp connected shadow or close-wall geometry",
+    "scene_similarity_limit": 0.6,
+    "selection": "derive only a minor hand entry, product x-offset and sun-patch edge from the request seed"
+  },
+  "contract_id": "instagram_white_direct_handheld_refined_v5_contract_v1",
+  "creative_direction": {
+    "art_direction": "one smaller naturally held beverage supported by a slender fine-boned hand, seen from eye level to slightly above against a distant textured warm-white wall",
+    "audience": "a Tokyo concept-store buyer and a senior lifestyle merchandiser",
+    "desired_response": "a quiet, natural frame that earns attention through proportion, air and believable light",
+    "forbidden_impression": [
+      "generic AI minimalist template",
+      "hero product advertisement",
+      "sterile ecommerce catalog",
+      "over-styled cafe campaign"
+    ],
+    "restraint": "one smaller product, one refined natural hand, one wall and one sunlight idea"
+  },
+  "finish_signature": {
+    "acuity": "finite near-plane phone acuity with moderate distant-wall softness",
+    "depth_rendering": "hand-cup overlap, focus separation, background detail attenuation and broad shadow falloff establish real wall distance",
+    "forbidden": [
+      "oversharpening",
+      "noise-free CGI gradients",
+      "portrait cutout",
+      "premium catalog retouch",
+      "cinematic grade"
+    ],
+    "grain": "subtle shared luminance sensor texture with no beauty smoothing",
+    "microcontrast": "fine on tapered fingers, natural nail edges and cup rim; reduced on the distant wall",
+    "retouching": "retain fine skin lines, subtle pressure and small color variation; reject rugged exaggeration and beauty smoothing"
+  },
+  "lighting_geometry": {
+    "angular_size_degrees": [
+      4,
+      9
+    ],
+    "azimuth_degrees": [
+      35,
+      55
+    ],
+    "elevation_degrees": [
+      28,
+      38
+    ],
+    "forbidden": [
+      "sharp connected cup-hand wall silhouette",
+      "uniform spotless wall",
+      "softbox beauty fill",
+      "waxy skin highlight",
+      "clipped white wall"
+    ],
+    "highlight_behavior": "bright direct-sun rim and skin response below clipping",
+    "key_to_fill_ratio": [
+      2.0,
+      3.4
+    ],
+    "lit_area_ratio": [
+      0.38,
+      0.62
+    ],
+    "optical_effects": "transparent containers preserve beverage-colored transmitted light inside the compact shadow",
+    "penumbra_ratio": [
+      0.3,
+      0.58
+    ],
+    "shadow_area_ratio": [
+      0.18,
+      0.36
+    ],
+    "shadow_vector_degrees": [
+      125,
+      155
+    ],
+    "source_topology": "one upper-right direct window source with neutral room bounce and broad partial occlusion from window frames and furniture outside the frame"
+  },
+  "preset_id": "instagram_white_direct_handheld_refined_v5",
+  "qa_contract": {
+    "hard_fail": [
+      "exact product count differs from one",
+      "product width exceeds 0.20 or height exceeds 0.29",
+      "hand is oversized, broad-palmed, rugged, thick-fingered or coarse-knuckled",
+      "a required straw is gray, green, beige, black, metallic or opaque instead of colorless optically clear plastic",
+      "a straw is invented when the selected source or container policy says none",
+      "camera pitch is below 2 degrees or an upward/low-angle reading appears",
+      "paper sleeve, holder, wrap or cuff appears",
+      "wall reads close, sharp or in the same focal plane as the cup",
+      "skin is waxy, airbrushed, uniform or anatomically malformed",
+      "contrast crushes hand or beverage shadows, or clips the white wall"
+    ],
+    "weights": {
+      "brand_integrity": 0.07,
+      "camera_geometry": 0.18,
+      "color_and_tone": 0.18,
+      "composition_rhythm": 0.24,
+      "lighting_space": 0.2,
+      "product_identity": 0.13
+    }
+  },
+  "reference_binding": {
+    "asset_id": "ref_0b090606ccc794cd",
+    "height_px": 586,
+    "pixel_sha256": "ffa6187cdfcfe955c6e95b72211bf5cf212a7634491220846d10ebce37e1484f",
+    "provider_submission": "never",
+    "relative_path": "reference_02.jpg",
+    "runtime_role": "offline handheld geometry and direct-sun authority",
+    "width_px": 600
+  },
+  "schema_version": "1.0.0",
+  "tone_signature": {
+    "black_point": "open neutral shadow with skin and transparent-material detail",
+    "contrast_curve": "contrast +2% versus v3; real direct-sun separation with open shadows and a soft protected highlight shoulder",
+    "forbidden": [
+      "orange movie grade",
+      "blue shadow cast",
+      "crushed hand shadow",
+      "flat HDR",
+      "plastic skin",
+      "clipped wall"
+    ],
+    "highlight_color": "warm-neutral direct window sun",
+    "local_contrast": "moderate at grip, cup rim and liquid boundary; only a very slight overall increase",
+    "luma_percentiles": {
+      "p05": [
+        0.12,
+        0.22
+      ],
+      "p25": [
+        0.52,
+        0.66
+      ],
+      "p50": [
+        0.68,
+        0.78
+      ],
+      "p75": [
+        0.78,
+        0.88
+      ],
+      "p95": [
+        0.9,
+        0.97
+      ]
+    },
+    "material_separation": "wall, skin, cup material and beverage remain distinct under one direct source",
+    "palette_hex": [
+      "#5F554B",
+      "#A68E78",
+      "#C9BBAA",
+      "#E1DCCF"
+    ],
+    "saturation": "quiet wall and skin; exact beverage color remains source-authoritative",
+    "shadow_color": "slightly cooler neutral than the sunlit wall",
+    "white_balance_kelvin": [
+      4850,
+      5250
+    ],
+    "white_point": "warm-white textured plaster below clipping",
+    "working_color_space": "sRGB display-referred natural social finish"
+  }
+}

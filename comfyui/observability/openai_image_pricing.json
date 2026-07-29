@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "currency": "USD",
+  "verified_on": "2026-07-27",
+  "source": "https://developers.openai.com/api/docs/models/gpt-image-2",
+  "models": {
+    "gpt-image-2": {
+      "input_text_per_token": 0.000005,
+      "input_image_per_token": 0.000008,
+      "output_image_per_token": 0.00003
+    }
+  }
+}

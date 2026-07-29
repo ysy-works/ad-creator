@@ -1,0 +1,35 @@
+[TASK]
+Create one new original Instagram-native close cafe photograph beside a large window. Preserve the quiet low-saturation mood, natural wood, soft air and physically coherent light. Do not copy the approved reference scene pixel-for-pixel. Do not produce CGI, ecommerce lighting, HDR, a pasted product, a catalog render or generic AI cafe imagery.
+
+[INPUT ROLES]
+{{INPUT_ROLES}}
+The exact user drink remains the sole beverage-identity authority. Published condition imagery controls only the declared scene, light, material, companion cup and—when the adopted-container mode is selected—the clear PET cup design. Never copy reference coffee into the primary drink.
+
+[PRIMARY PRODUCT - HARD LOCK]
+Preserve the user's beverage category, serving temperature, liquid colors and opacity, layer order, ice, foam, cream, fruit, garnish and natural asymmetry. Re-render the liquid, cup, reflections, refraction, transmission, condensation, contact and shadow together under the scene light; never paste or sticker the product into the scene.
+
+[CONTAINER MODES]
+For reconstruct_source, retain the user's broad cup family, material, rim, base, saucer, spoon and immediate serving assembly. Do not add the reference paper label or straw.
+For adopt_reference, discard the source cup and use the published tall clear PET cold cup: open rolled circular rim, gently tapered wall, narrow clear base ring, height-to-width ratio 1.47-1.55, and one off-white vertical rectangular paper label rotated naturally with the cup's cylindrical curvature. The exact lowercase heading is "cafe" with several lines of tiny understated English editorial copy. Use one plain black straw whose exposed rise above the rim is 1.05-1.12 times the cup bottom diameter, equivalent to 0.52-0.58 times the cup body height. Preserve its realistic diameter, slight lean and clean cylindrical cut end. Do not transfer the reference drink recipe, coffee color, milk diffusion, ice arrangement or condensation pixels.
+
+[COMPOSITION - HARD LOCK]
+Use a close environmental tabletop pair from slightly above both rims, with a controlled 20-25 degree downward pitch and a 50-60mm-equivalent rectilinear normal-to-mild-tele lens. The primary product is large at front-left; the secondary paper cup is smaller and behind-right on the same round pale live-edge wood table. Maintain overlap, scale falloff, support-plane convergence and at least 28-36% meaningful negative space. Keep the bright diagonal white window sill and restrained cool-gray exterior band. Place one small neutral ceramic planter on top of the white sill, clearly distant and softly resolved. It must never emerge from a window-frame gap or overlap implausibly with either cup.
+
+{{ASPECT_CONTRACT}}
+
+[SECONDARY PAPER CUP - HARD LOCK]
+Render one tall warm off-white paper cup behind-right, made from two naturally nested paper cups with two readable rolled rims. It contains iced Americano with dark translucent coffee, real angular ice and abundant fine tan crema bubbles. Print the exact small uppercase text "CAFE AMERICANO" on its front. The lettering must remain readable, understated and naturally curved around the cylindrical surface. A blank cup, missing text, invented wording, flat decal or distorted cup is a hard failure.
+
+[LIGHTING - AUTHORITATIVE]
+{{LIGHTING_CONTRACT}}
+
+Use one broad diffuse upper-left/rear window source for every object. Match direction, elevation, softness, temperature and exposure across the user drink, transparent wall, toppings, rear paper cup, wood and sill. Light must transmit through glass or PET and liquid, refract through ice, scatter through milk or cream and create a compact attached contact shadow. Preserve soft ambient fill, restrained occlusion and faint low-density shadows from unseen surrounding room objects so the scene feels occupied beyond the frame. No isolated spotlight, hard studio key, yellow wash, blue cast, flat ambient fill or contradictory shadow.
+
+[WOOD AND COLOR - HARD LOCK]
+Use real pale warm live-edge wood with subtle irregular cross-grain, shallow scratches, pores, tonal variation and finite photographic detail. Keep the earlier dark mark near the primary cup's left side reduced to roughly 30% intensity so it reads as ordinary grain, never black mold, scorch, ink or a decorative stain. Keep the wood warm while global whites remain neutral and the exterior stays faintly cool. Use low saturation, gentle highlight shoulder, modest contrast, fine luminance grain and natural social-photo acuity. Avoid orange grading, synthetic repeated grain, plastic smoothness, over-sharpening and HDR.
+
+[PHYSICS AND AIR]
+All objects must share the same perspective, exposure, color temperature and support plane. Preserve physically attached contacts, cup-bottom occlusion, soft cast shadows, transparent-edge highlights, liquid transmission and distance-dependent contrast. Include subtle reflected light and faint off-frame presence without adding undeclared visible props or people. Keep the image quiet, tactile and naturally imperfect.
+
+[FINAL GATE]
+Return exactly one image only when the primary beverage identity, selected cup mode, close scale, rear double paper cup, abundant crema, exact curved "CAFE AMERICANO", distant sill planter, pale natural wood, window direction, transmitted light, attached contacts and calm Instagram color all agree. Reject scene cloning, missing text, wrong cup mode, overlong or very short straw, plant emerging from architecture, pasted beverage edges, floating objects, black mold-like marks, invented branding, extra props, watermarks, panels or collage seams.

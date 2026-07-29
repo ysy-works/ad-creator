@@ -1,0 +1,122 @@
+{
+  "ambient_fill": "neutral room bounce plus faint local color and exposure changes from window frames, curtain and furniture outside the image; oak warmth remains local",
+  "capture_contract": {
+    "exposure_compensation_ev": [
+      -0.16,
+      0.06
+    ],
+    "hdr": "restrained computational tone mapping with preserved wood grain and bright neutral detail",
+    "texture": "finite social-photo acuity with readable oak grain, ordinary pastry and fabric variation, subtle sensor texture and no showroom retouch",
+    "white_balance": "warm-neutral 4700-5100K; wood warmth remains local and the beverage stays source-authoritative"
+  },
+  "forbidden": [
+    "shadowless catalog surface",
+    "uniform full-frame exposure",
+    "one copied hard window silhouette",
+    "orange or yellow ambient wash",
+    "A6 scene lighting topology"
+  ],
+  "grade_strengths": {
+    "balanced": 0.3,
+    "expressive": 0.44,
+    "natural": 0.16
+  },
+  "key_light": {
+    "direction": "upper-left across the group toward the lower-right",
+    "relative_size": "large, with broad highlights and wide naturally varied penumbrae",
+    "source": "large upper-left cafe window filtered by an ordinary curtain",
+    "subject_to_wall_distance_cm": [
+      35,
+      80
+    ]
+  },
+  "lighting_sheet_id": "instagram_wood_45deg_relational_v3_sheet_v1",
+  "mood": "quiet 45-degree medium-oak cafe moment with ordinary related props and unseen-room presence",
+  "reference_cluster": {
+    "anchor_preset_id": "instagram_wood_45deg_relational_v3",
+    "minimum_cluster_size": 4,
+    "runtime_pixels_allowed": false,
+    "selection_rule": "one 45-degree round medium-oak plane, soft curtain window and a deep readable peripheral falloff",
+    "source_images": [
+      "우드_저채도_차분/항공샷/c3e3420b13f8f959aa2371a27e9dc305.jpg",
+      "우드_저채도_차분/미디엄/7d02ca76e37fe21777415a98fbe01d31.jpg",
+      "우드_저채도_차분/항공샷/7ce44b7f27de13453b1d9263c46a8b69.jpg",
+      "우드_저채도_차분/미디엄/다운로드.png",
+      "우드_저채도_차분/미디엄/f1af782464b46c19abf57538aeabf19c.jpg",
+      "우드_저채도_차분/미디엄/9bd029a5bdde020464462a33e1188628.jpg"
+    ]
+  },
+  "schema_version": "2.0.0",
+  "screen_light_map": {
+    "dominant_shadow_vector_degrees": [
+      105,
+      138
+    ],
+    "falloff": "gradual upper-left to lower-right falloff with local room-bounce variation",
+    "gobo_geometry": "broad soft partial window-frame, curtain and furniture shadows from outside the frame",
+    "lit_area_ratio": [
+      0.44,
+      0.68
+    ],
+    "shadow_area_ratio": [
+      0.2,
+      0.42
+    ]
+  },
+  "shadow_contract": {
+    "attachment": "small attached contacts for every supported object plus one shared broad partial room shadow",
+    "cast_shadow": {
+      "behavior": "wide low-contrast partial shadows from unseen window frame, curtain and furniture; no exact copied silhouette",
+      "footprint": [
+        0.7,
+        1.8
+      ],
+      "opacity": [
+        0.05,
+        0.14
+      ]
+    },
+    "contact_shadow": {
+      "behavior": "small dense support contact with no floating rim or base",
+      "footprint": [
+        0.06,
+        0.18
+      ],
+      "opacity": [
+        0.2,
+        0.34
+      ]
+    },
+    "density": [
+      0.12,
+      0.26
+    ],
+    "edge": "soft and spatially varied with denser attached contacts",
+    "qa_ratios": {
+      "cast_area_to_cup_bbox": [
+        0.42,
+        1.35
+      ],
+      "transparent_lift_inside_shadow": [
+        0.12,
+        0.46
+      ],
+      "wrist_length_to_cup_height": [
+        0.05,
+        0.3
+      ]
+    },
+    "transmitted_light": {
+      "behavior": "subtle drink-colored lift inside the transparent shadow",
+      "footprint": [
+        0.24,
+        0.68
+      ],
+      "opacity": [
+        0.14,
+        0.34
+      ]
+    },
+    "transparent_material": "clear containers retain broad window reflections, refraction and beverage-colored transmission"
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "slot_id": "natural_white__handheld_lifestyle",
+  "preset_id": "instagram_white_direct_handheld_refined_v5",
+  "family": "natural_white",
+  "composition": "handheld",
+  "status": "published",
+  "source_review_status": "passed_by_user_review",
+  "runtime_policy": {
+    "schema_version": 1,
+    "compiler_version": "preset-runtime-v1",
+    "maximum_prompt_characters": 12000,
+    "maximum_provider_inputs": 4,
+    "maximum_product_sources": 3,
+    "maximum_reference_controls": 1,
+    "default_container_mode": "adopt_reference",
+    "supported_container_modes": ["adopt_reference", "reconstruct_source"],
+    "companion_policy": "none",
+    "brand_input_policy": {
+      "enabled": false,
+      "default_mode": "none",
+      "activation_requirement": "frontend_and_api_brand_asset_flow"
+    },
+    "temperature_policy": {
+      "mode": "preset_primary",
+      "container_mode_rules": {
+        "adopt_reference": {
+          "allowed_product_states": ["iced", "cold", "ambient"],
+          "auto_action": "use_preset_default_state",
+          "default_state": "cold"
+        },
+        "reconstruct_source": {
+          "allowed_product_states": ["iced", "cold", "ambient", "hot"],
+          "auto_action": "preserve_source_state"
+        }
+      },
+      "emergency_fallback": {
+        "enabled_when_policy_missing": true,
+        "minimum_confidence": 0.85,
+        "unknown_action": "needs_review",
+        "conflict_action": "needs_review"
+      }
+    }
+  },
+  "provider_reference_policy": {
+    "maximum_images": 2
+  },
+  "transforms": [
+    {"type": "crop_product_by_analysis_geometry", "fallback": "full_user_image"},
+    {"type": "normalize_product_source"},
+    {"type": "select_hint_by_container_mode"},
+    {"type": "sanitize_reference_control"}
+  ],
+  "prompt_template": {
+    "path": "prompt-template.txt",
+    "sha256": "8ca4f73e553e2d792e1b48878554fa48b9b3d4896761acb0c3a426848ea0f423"
+  },
+  "container_modes": {
+    "adopt_reference": {
+      "prompt_template": {
+        "path": "prompt-template.txt",
+        "sha256": "8ca4f73e553e2d792e1b48878554fa48b9b3d4896761acb0c3a426848ea0f423"
+      },
+      "provider_hint_role": "sanitized_scene_hint",
+      "prompt_addendum": "This is the default reference-container mode. It is only compatible with explicitly resolved iced, cold or ambient service states; a hot source must be blocked before provider submission."
+    },
+    "reconstruct_source": {
+      "prompt_template": {
+        "path": "prompt-template-reconstruct-source.txt",
+        "sha256": "5c633dce577cd7ebcf503a8044bd3bccfb0d757de7337a6acfff67c75fae8166"
+      },
+      "provider_hint_role": "sanitized_scene_hint",
+      "prompt_addendum": "This source-container mode fully reconstructs the observed cup under the target camera and light. It preserves no source pixels or source branding, and it may preserve the source serving state automatically."
+    }
+  },
+  "lighting_sheet": {
+    "path": "mood/lighting-sheet.json",
+    "sha256": "54f80c49e46117a31fa5ba21f69f271058470b41cc89ad81859ed0efec461634"
+  },
+  "grade_profile": {
+    "path": "mood/grade-profile.json",
+    "sha256": "537c463497fa9a6bd73b5f15bd0abf37c8f83cdb74a243d423693e41eeb84ff1",
+    "apply_in_pilot": false
+  },
+  "contract_assets": {
+    "reference_preset": {
+      "path": "editorial/reference-preset.json",
+      "sha256": "305636eea76a82c9a0e7e606dd2f8740fec4e5c3b06bc649d1e6da1294c99bf2"
+    },
+    "photographic_style_contract": {
+      "path": "editorial/photographic-style-contract.json",
+      "sha256": "1a471c7efd582b215690938da1f5c5fcfd6efa399b216433a29cb4ea97ca31b5"
+    },
+    "scene_recipe": {
+      "path": "mood/scene-recipe.json",
+      "sha256": "182bbe9fad98be3d395b713a5fabb0b2c6f7f9408f91c2542d732f6a731dd870"
+    },
+    "mood_package": {
+      "path": "mood/mood-package.json",
+      "sha256": "03f950bb86377d1560e48f8fdd3b5a0b75c7a125517b3d03f25451fa0d9e529a"
+    },
+    "scene_hint_manifest": {
+      "path": "control-board/scene-hint-manifest.json",
+      "sha256": "4e290790f71cd396d846b829e8111f5be6f25d181ea9e014bdb7ffbaf9180059"
+    }
+  },
+  "hint_images": [
+    {
+      "role": "sanitized_scene_hint",
+      "path": "control-board/scene-hint.png",
+      "sha256": "d93827a2227f03b02133cca43aa6fb0f9ef8cf9d7808a89d9d1a7b0f93a4abca",
+      "width": 768,
+      "height": 1024,
+      "container_mode_scope": ["adopt_reference", "reconstruct_source"],
+      "send_to_provider": true,
+      "reason": "Sanitized topology, scale, distant-wall depth and broad light-map hint only; it excludes the reference cup, brand, beverage and hand identity."
+    }
+  ],
+  "aspect_ratio_contracts": {
+    "4:5": {
+      "status": "published",
+      "visual_review_status": "passed_by_user_review",
+      "prompt_addendum": "Generate the exact final 4:5 canvas. Keep the full hand-cup unit at product width 0.16-0.20 and product height 0.23-0.29, with its product center within x=0.41-0.59 and y=0.35-0.63. Keep 0.68-0.78 meaningful warm-white wall negative space; do not crop the cup or invent a foreground surface.",
+      "generation_size": "1024x1280",
+      "safe_crop": "none_exact_4x5",
+      "width": 1024,
+      "height": 1280,
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [0.16, 0.20],
+        "product_height_ratio": [0.23, 0.29],
+        "center_x_ratio": [0.41, 0.59],
+        "center_y_ratio": [0.35, 0.63],
+        "negative_space_ratio": [0.68, 0.78],
+        "crop_allowed": false
+      }
+    },
+    "1:1": {
+      "status": "published",
+      "visual_review_status": "passed_by_user_review",
+      "prompt_addendum": "Generate the exact final 1:1 canvas from the start; never crop a portrait result. Keep the full hand-cup unit at product width 0.17-0.21 and product height 0.25-0.31, with at least 0.60 meaningful wall negative space and no cropped cup or invented foreground surface.",
+      "generation_size": "1024x1024",
+      "safe_crop": "none_exact_1x1",
+      "width": 1024,
+      "height": 1024,
+      "format": "png",
+      "bbox_qa": {
+        "product_width_ratio": [0.17, 0.21],
+        "product_height_ratio": [0.25, 0.31],
+        "negative_space_ratio": [0.60, 0.76],
+        "crop_allowed": false
+      }
+    }
+  },
+  "qa_contract": {
+    "phase": "passed_user_review_runtime_migration",
+    "hard_gates": ["exact_product_count", "container_mode", "serving_compatibility", "brand_free_ocr", "hand_anatomy", "bbox", "wall_depth", "scene_hint_leakage"],
+    "comparative_scores": ["naturalness", "mood_adherence", "light_physical_coherence"],
+    "aspect_ratio_specific_bbox": true
+  }
+}

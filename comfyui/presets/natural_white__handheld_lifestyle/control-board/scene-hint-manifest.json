@@ -1,0 +1,144 @@
+{
+  "artifact_type": "sanitized_photographic_scene_hint",
+  "aspect_ratio": "3:4",
+  "checks": [
+    {
+      "check_id": "dimensions_3_by_4",
+      "evidence": {
+        "observed_px": [
+          768,
+          1024
+        ]
+      },
+      "status": "pass"
+    },
+    {
+      "check_id": "no_technical_panels_or_labels_drawn",
+      "evidence": {
+        "drawing_operations": "photo plate, local-context masks and feathering only"
+      },
+      "status": "pass"
+    },
+    {
+      "check_id": "sensitive_regions_removed",
+      "evidence": {
+        "mask_ids": [
+          "reference_cup_sleeve_brand_and_beverage_removal",
+          "distant_wall_softening"
+        ]
+      },
+      "status": "pass"
+    },
+    {
+      "check_id": "output_differs_from_raw_source",
+      "evidence": {
+        "output_pixel_sha256": "b4e36babdbad4863678bb7b51c17e0cef60c9ea3145c918d5b9d03552b14317a",
+        "source_pixel_sha256": "ffa6187cdfcfe955c6e95b72211bf5cf212a7634491220846d10ebce37e1484f"
+      },
+      "status": "pass"
+    }
+  ],
+  "construction": {
+    "canvas_px": [
+      768,
+      1024
+    ],
+    "final_information_ceiling_px": [
+      384,
+      512
+    ],
+    "portrait_fit": "full source retained over low-frequency edge extension",
+    "sanitation_masks": [
+      {
+        "bbox_normalized": [
+          0.345,
+          0.205,
+          0.69,
+          0.71
+        ],
+        "feather_px": 7.0,
+        "mask_id": "reference_cup_sleeve_brand_and_beverage_removal",
+        "operation": "local-context polygonal cup replacement",
+        "polygon_normalized": [
+          [
+            0.385,
+            0.215
+          ],
+          [
+            0.65,
+            0.215
+          ],
+          [
+            0.675,
+            0.65
+          ],
+          [
+            0.61,
+            0.705
+          ],
+          [
+            0.415,
+            0.705
+          ],
+          [
+            0.36,
+            0.65
+          ]
+        ]
+      },
+      {
+        "bbox_normalized": [
+          0.0,
+          0.0,
+          1.0,
+          1.0
+        ],
+        "feather_px": 21,
+        "mask_id": "distant_wall_softening",
+        "operation": "background-only optical low-pass with near hand-cup plane retained"
+      }
+    ]
+  },
+  "forbidden_transfer": [
+    "reference acid. mark, paper sleeve, beverage color or exact cup pixels",
+    "reference hand identity, exact anatomy, skin pixels or exact grip",
+    "sharp connected wall shadow or exact sunlight-patch silhouette",
+    "source pixels as final output pixels"
+  ],
+  "height_px": 1024,
+  "manifest_content_sha256": "4f8dd08a2adb1fbb2b4b39a7d0e16561471802b84eaaeab8174aebfbe14d8488",
+  "manifest_path": "control-board/scene-hint-manifest.json",
+  "manifest_relative_path": "control-board/scene-hint-manifest.json",
+  "path": "control-board/scene-hint.png",
+  "pixel_sha256": "b4e36babdbad4863678bb7b51c17e0cef60c9ea3145c918d5b9d03552b14317a",
+  "policy_version": "white_wood_revision_scene_hint_v3",
+  "relative_path": "control-board/scene-hint.png",
+  "retained_relationships": [
+    "one hand entering from the lower edge and supporting one cold beverage",
+    "natural finger overlap, grip pressure and cup-to-hand scale",
+    "cup and hand in one near focal plane with a more distant softly resolved wall",
+    "upper-right window direction and a broad softened off-frame tonal patch",
+    "large warm-white negative space without a paper sleeve or visible branding"
+  ],
+  "role": "scene_hint",
+  "sanitation": {
+    "borderless_photo_like_plate": true,
+    "fixed_placeholder_color_used": false,
+    "panel_boundaries": false,
+    "raw_reference_provider_submission_allowed": false,
+    "reference_beverage_identity_removed": true,
+    "technical_panels": false,
+    "visible_labels": false
+  },
+  "schema_version": "1.0.0",
+  "sha256": "d93827a2227f03b02133cca43aa6fb0f9ef8cf9d7808a89d9d1a7b0f93a4abca",
+  "source_binding": {
+    "asset_id": "ref_0b090606ccc794cd",
+    "height_px": 586,
+    "path": "raw_reference_not_shipped",
+    "pixel_sha256": "ffa6187cdfcfe955c6e95b72211bf5cf212a7634491220846d10ebce37e1484f",
+    "sha256": "0b090606ccc794cde1f35fbf143f27b70084f5030762343eca6d46ae796b6c36",
+    "width_px": 600
+  },
+  "width_px": 768
+}

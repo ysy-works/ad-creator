@@ -1,0 +1,43 @@
+[WOOD HANDHELD TWO-PERSON — RECONSTRUCT SOURCE]
+Create one original native 4:5 portrait or 1:1 square Instagram cafe photograph, as resolved by the aspect contract below. It must feel like an ordinary, beautifully observed cloudy-afternoon photograph with restrained faded-film character—not an advertisement, collage, copied reference, CGI render, or generic AI lifestyle image.
+
+{{INPUT_ROLES}}
+
+[INPUT AUTHORITY — HARD LOCK]
+Image 1 alone owns the exact user beverage and complete source cup: beverage family, color relationships, layer order, translucency or opacity, ice/foam/garnish, rim, wall, base, handle, typography and authorized visible design. Reconstruct those properties natively under the new camera and light; never paste source pixels, source hand, saucer, background, source white point, reflection, shadow, or source perspective.
+Image 2 is a segmented evidence board, never an output layout. Use only its local evidence: upper-left companion leather sleeve/hand/ceramic cup; lower hand geometry and target-cup angle; cropped pastry, magazine and saucers; pale-oak grain direction, sill, cloudy-window photometry and depth ordering. Structured placement below owns the final frame. Never output panel seams, gutters, a split screen, copied text, identity, exact latte art, wood knots, or reference pixels.
+
+[FRAME MAP AND SUBJECT COUNT — HARD LOCK]
+Show exactly two anonymous adult hands and exactly two drinks. No face, third person, extra wrist, extra cup, fused limb, duplicate finger, or one merged leg mass.
+The target user drink is lower-centre: body approximately x=0.33–0.58, y=0.45–0.76, occupying about 20–22% frame width and 26–29% frame height. A bare LEFT hand with a thin black hair tie enters from 6 o’clock and supports the middle-lower cup; its black sleeve remains completely outside the crop. Two connected but visibly separate dark-clothed thighs/knees remain below, with unequal folds and a shallow central V.
+The companion is smaller and above-left: approximately x=0.31–0.57, y=0.34–0.56. Only this arm wears charcoal-black matte leather and holds one generic off-white ceramic hot cup. Keep the upper-right croissant/white plate partial and distant. Keep the neutral blank magazine with a cropped saucer at right plus one small empty saucer near upper-centre. Props are spatial evidence, never hero objects.
+
+[CAMERA AND CUP POSE — HARD LOCK]
+Use rectilinear 45–52 mm-equivalent optics, 105–135 cm working distance, camera pitch 48–56°, yaw within ±4°, and roll within ±1.2°. This is a high-oblique seat-side view approaching overhead, not an eye-level cup rotated in two dimensions.
+The lower cup must reveal enough sidewall to show the product while remaining physically plausible from this high camera. In image coordinates, from BASE CENTRE to RIM CENTRE, the cup axis moves only slightly toward lower-left 7–8 o’clock: a real 3D lean of about 4–6°. Never lean right, upper-right, toward the window, or strongly diagonal. Keep rim, wall and base on one perspective axis. Keep the liquid free surface gravity-level with a small physically plausible asymmetric air gap; no spill or pouring pose.
+If Image 1 is hot and has a handle, keep that exact handle fully readable on IMAGE-RIGHT while the left hand grips the cup body; do not mirror, delete, flatten, or move the handle. If Image 1 includes a saucer, the hand holds the cup body only: remove the saucer from the hand and either omit it or place it naturally on the counter as an existing secondary prop. If Image 1 is iced, preserve the complete transparent cup and enough sidewall for layers and refraction. Do not redesign the vessel or mix it with the companion cup.
+
+[HAND, CUP, AND LIQUID PHYSICS]
+Regenerate anonymous anatomy using Image 2 only for wrist direction, finger approach, grip pressure and occlusion. Adapt fingers to Image 1’s actual cup geometry. Use ordinary joints, thumb opposition, small skin variation, realistic nail scale and compact attached occlusion. Reject mannequin grip, beauty-smoothed skin, extra fingers, stretched palm, black lower cuff, or leather duplicated onto the lower person.
+Rebuild Image 1 volumetrically. Transparent walls retain finite rim/base thickness, curved reflections, refraction, condensation and beverage-colored transmission. Opaque ceramic or metal retains its actual silhouette, glaze or reflection field and integrated wall design. Printed stripes or words must follow the vessel’s curvature, highlight rolloff and finger occlusion; never become a flat sticker. Ice is irregular and partly submerged, never geometric. Hot coffee or foam keeps a natural imperfect surface and thin crema where present.
+
+[BEVERAGE RELIGHTING AND COLOR — HARD LOCK]
+Preserve the source beverage’s natural identity and internal color relationships, not exact source RGB, source saturation, white point, highlight, or shadow. Reinterpret the drink inside this preset’s single cloudy-window exposure and restrained faded-film response.
+For matcha or another green milk drink, keep a muted living olive-green with natural tonal variation and a quiet warm-gray ivory milk region with faint green, oak and skin bounce. Never neon green, muddy brown, paper white, or self-luminous milk. The brightest milk/cream remains 10–18% below the brightest window or ceramic highlight, darkens gently toward sidewall and lower hand, and shares the same film shoulder and shadow hue as skin, oak and ceramic.
+For a hot drink, preserve beverage and crema identity while rebuilding reflections, glaze and surface light from the cloudy window. Keep the free surface gravity-level inside the subtly tilted rim. For every drink, integrate rim, meniscus, liquid, ice/foam, hand contact and reflected fill into one exposure. No pasted boundary, floating cup, isolated white layer, plastic glass, or detached highlight.
+Keep the product structurally resolved, but lower only the beverage liquid-and-ice local edge acuity and microcontrast about 5–7% relative to the adjacent hand and cup rim. This is subtle optical integration, not blur: cup contour, typography, branding, garnish identity and hand detail remain intact.
+
+{{LIGHTING_CONTRACT}}
+
+[LIGHT, AIR, AND DEPTH — HARD LOCK]
+Use exactly one very large cloud-filtered upper-right/rear window. Broad cool-neutral daylight travels from upper-right toward lower-left with no direct sun, golden-hour red, blind stripe, spotlight, second key, or conflicting catchlight. Keep a 5400–5750 K cloudy-neutral starting balance, exposure around −0.34 to −0.16 EV, key-to-fill about 1.16–1.42, protected gray-white sill and a broad slow penumbra.
+Build four real depth planes: lower bare wrist/two thighs; held user drink; companion and counter props; cool sill/exterior beyond. Depth comes first from scale, overlap, finger occlusion, counter recession, under-counter darkness, off-frame room occlusion and plane-to-plane light loss—not global blur or portrait bokeh. Suggest unseen nearby furniture and people only through low-frequency reflected fill, gentle shadow interruption and air, never invented silhouettes.
+Pale oak stays matte with long pores and natural grain, muted honey-beige rather than yellow or orange. Invent a new grain phase; do not copy exact knots. Keep ceramic and sill cool-neutral gray-ivory below clipping, charcoal clothing textured rather than crushed, and skin desaturated warm-neutral.
+
+[FADED FILM FINISH]
+Apply a restrained cloudy-afternoon print response: 6–10% reduced color density, softly compressed highlight shoulder, slightly opened but anchored black toe, faint low-contrast sensor grain and finite ordinary phone-camera acuity. The result may feel gently weathered or light-faded, but never sepia, sunset, teal-orange, foggy gray, app-filtered, HDR-sharpened, commercially clean, or uniformly soft.
+
+{{ASPECT_CONTRACT}}
+
+[FINAL AUDIT]
+Require the compact lower user drink in the bare left 6 o’clock hand, slight lower-left 7–8 o’clock cup-axis lean, gravity-level liquid, smaller upper-left leather-sleeved companion, two distinct lower legs, partial upper-right pastry, right magazine/saucer context and one coherent cloudy-window exposure. Reject board replication, source pixel reuse, missing handle, handheld saucer, lower black sleeve, right/window-leaning cup, oversized product, top-only iced drink, paper-white milk, isolated oversharp beverage, malformed anatomy, readable magazine copy, watermark, or CGI materials.

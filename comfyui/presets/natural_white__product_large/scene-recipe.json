@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "recipe_id": "natural_white_closeup_complete_assembly_v1",
+  "environment": "warm ivory-white matte cafe tabletop inside a quiet white room",
+  "primary": "one complete user beverage and serving assembly",
+  "support": "one separate warm-white ceramic saucer and one wood-handled teaspoon",
+  "peripheral_cues": ["narrow off-frame waffle edge at upper-left", "small off-frame magazine corner at upper-right"],
+  "camera": "rectilinear high three-quarter 52-58mm equivalent, 42-49 degree downward pitch",
+  "light": "one broad upper-left diffuse window with weak neutral bounce",
+  "negative_space": [0.42, 0.50],
+  "forbidden": ["complete waffle plate", "centered magazine", "extra cup", "hand", "plant", "seamless studio sweep", "reference-pixel copying"]
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.0",
+  "container_design_id": "wood_overhead_reference_container_by_serving_state_v4",
+  "selection_authority": "Infer the serving state from the user beverage image. Use the cold glass only for visibly iced or cold drinks; otherwise use the approved warm-white ceramic latte cup. Never infer from the control board's empty glass panel.",
+  "conditional_variants": {
+    "iced_or_cold": {
+      "class": "short low clear glass tumbler",
+      "material": "clear weighted glass",
+      "color": "colorless transparent",
+      "silhouette": "short low nearly straight-sided tumbler with a thin circular rim, thick weighted clear base and two or three subtle horizontal stepped ribs around the lower exterior",
+      "handle": "none",
+      "branding": "none",
+      "camera_behavior": "reproject the isolated design evidence under the preset's 72-80 degree downward camera; keep the rim near-circular and sidewall moderate, never copy the evidence-panel tilt",
+      "wood_interaction": "bend and darken visible wood grain only through physically clear lower sidewalls; preserve compact base occlusion, restrained key-side transmission and one attached lower-right shadow",
+      "hard_fail": ["logo", "printing", "handle", "plastic look", "floating base", "opaque sidewall", "missing ribbed lower-wall identity", "copied reference beverage"]
+    },
+    "hot_or_ambient": {
+      "class": "low wide ceramic latte cup",
+      "material": "glazed ceramic with restrained natural sheen",
+      "color": "warm white",
+      "silhouette": "low wide gently rounded ceramic cup with a thin rounded near-circular rim, shallow bowl-like wall and subtle supported foot",
+      "handle": "no visible handle in the final overhead view",
+      "branding": "none",
+      "camera_behavior": "near-circular rim at 72-80 degree downward pitch with a low, physically plausible ceramic sidewall",
+      "wood_interaction": "soft warm reflected fill on the shadow-facing lower ceramic edge and dense attached foot occlusion; never transfer wood grain or beverage color onto the glaze",
+      "hard_fail": ["logo", "printing", "paper cup", "tall mug", "plastic gloss", "floating foot", "wood grain on exterior", "beverage stain outside rim"]
+    }
+  },
+  "source_authority": "The user product image owns serving state and beverage identity. The sanitized control board supplies only the empty cold-glass design; the approved warm-white ceramic cup remains contract-declared from the original reference.",
+  "global_hard_fail": ["using both variants", "blending ceramic and glass", "choosing glass for a visibly hot drink", "choosing ceramic for a visibly iced or cold drink", "paper cup", "logo", "text"]
+}

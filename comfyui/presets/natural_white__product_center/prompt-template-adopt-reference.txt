@@ -1,0 +1,28 @@
+[TASK]
+Create one new original Instagram-native cafe photograph. It must feel quietly observed and naturally captured, while following the measured preset precisely. Do not make a catalog render, CGI image, copied reference, poster, or generic AI minimalist template.
+
+[INPUT ROLES]
+{{INPUT_ROLES}}
+
+[EXACT BEVERAGE - HARD LOCK]
+Image 1 is the sole authority for the user's beverage category, serving temperature, liquid color and opacity, internal layers, toppings, ice state and real serving contents. Preserve those beverage facts exactly while rebuilding every pixel for the target camera and light. Discard the source container geometry, material, handle state, sleeve, label, logo and text. Do not transfer any beverage identity, color, recipe or surface state from Image 2.
+
+[SELECTED CONTROL BOARD - HARD LOCK]
+Image 2 is one randomly selected two-panel control board packed into one provider input. The left panel supplies the close container-design evidence: one unbranded short straight-sided clear glass tumbler with a thin circular rim, understated flat base and fine vertical fluting. The right panel supplies the selected complete scene evidence: the same empty glass at the intended small environmental scale, wall-table background family, camera distance, wall-table geometry, low-contrast natural-light direction, physical grounding and negative-space distribution. Use the right-panel cup only for scale, position, perspective and contact; use the left-panel cup for exact generic geometry and transparent-glass material. Rebuild every pixel as one new full-frame photograph and never render the panel divider, a collage, or two separate scenes. Replace the right-panel cup's empty interior with the exact beverage from Image 1 while retaining the fixed glass design and conspicuously small environmental scale. Render credible rim thickness, fluting, base weight, refraction, transmission, highlights, contact and attached shadow. Add no lid, straw, handle, sleeve, saucer, coaster, label, logo or text.
+
+[ASPECT RATIO AND COMPOSITION - HARD LOCK]
+{{ASPECT_CONTRACT}}
+
+Use a 50-60mm-equivalent rectilinear normal perspective at product level to very slightly above, with 2-10 degrees downward pitch. No props. Keep the complete adopted glass, beverage, contact shadow, wall-table boundary and required margins inside the generated canvas; no downstream crop is permitted.
+
+[LIGHTING SHEET - AUTHORITATIVE]
+{{LIGHTING_CONTRACT}}
+
+[LOOK AND MATERIAL]
+Use one warm-neutral matte white wall and one matte white tabletop. Keep low saturation, low-to-medium contrast, a soft highlight shoulder, faint luminance grain, minor real surface variation and finite social-photo acuity. The beverage remains fully legible; the wall and table retain gentle texture without portrait-mode blur. Never introduce wood, gray concrete, a seamless studio sweep, glossy acrylic, beige wash or clipped broad whites.
+
+[ORIGINALITY AND PHYSICS]
+Invent a new wall, table, tonal falloff and shadow. Copy no reference beverage, exact wall mark, exact table mark, exact shadow silhouette or pixel layout. Beverage, adopted glass, support, reflection, transmission and shadow must share one camera, exposure and physical light source. Reject pasted edges, halos, floating bases, detached shadows, malformed transparent material, duplicated products, false text, logos and watermarks.
+
+[FINAL GATE]
+Return exactly one image only when the source beverage identity and serving state, adopted fluted-glass geometry, measured scale, negative space, wall-table boundary, attached contact, transparent-material behavior and lighting sheet all agree.

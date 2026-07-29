@@ -1,0 +1,229 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "instagram_wood_handheld_two_person_contract_v1",
+  "preset_id": "instagram_wood_handheld_two_person_v1",
+  "creative_direction": {
+    "audience": "a social-feed viewer looking for an intimate, believable two-person cafe pause",
+    "desired_response": "the exact iced user drink appears naturally held by the lower person in a real window-side conversation, never pasted into a coffee still life",
+    "art_direction": "high-oblique two-hand composition: lower-centre exact user drink, upper-left ceramic companion, pale wood counter and partial right-side cafe context",
+    "restraint": "preserve cropped everyday context, believable hand pressure and quiet material texture; no product-ad symmetry or styling flourish",
+    "forbidden_impression": [
+      "AI beverage demo",
+      "fashion campaign",
+      "commercial studio spotlight",
+      "overdecorated cafe set",
+      "pasted product cutout"
+    ]
+  },
+  "reference_binding": {
+    "asset_id": "ref_c61e3c79a9b4d2ef",
+    "pixel_sha256": "37e5a9ab7862f2feb726a5ef7eb32f75d36a6da28842caa9d2bf755e64f65f3a",
+    "relative_path": "comfyui-inputs/ad_creator_reference_wood_handheld_two_person_v2.png",
+    "width_px": 1125,
+    "height_px": 1500,
+    "runtime_role": "submitted spatial hand-pose hint for two grip silhouettes, exclusive clothing zones, crop topology, prop placement, pale wood counter, window direction and faded cloudy-afternoon exposure",
+    "provider_submission": "scene_hint_only"
+  },
+  "camera_geometry": {
+    "projection": "rectilinear normal high-oblique handheld observation with no phone-wide stretch",
+    "focal_length_equivalent_mm": [
+      45,
+      52
+    ],
+    "working_distance_cm": [
+      105,
+      135
+    ],
+    "camera_height_cm": [
+      125,
+      145
+    ],
+    "pitch_degrees": [
+      48,
+      56
+    ],
+    "yaw_degrees": [
+      -4,
+      4
+    ],
+    "roll_degrees": [
+      -1.2,
+      1.2
+    ],
+    "distortion": "natural cup ellipses and wrist foreshortening; neither stretched edge hands nor flattened tabletop",
+    "depth_of_field": "both hands, both cups, saucers and right-side prop edges remain structurally readable; only exterior microdetail recedes"
+  },
+  "composition_geometry": {
+    "primary_subject_bbox": {
+      "left": 0.348,
+      "top": 0.458,
+      "right": 0.562,
+      "bottom": 0.74
+    },
+    "bbox_semantics": "raw 3:4 lower-centre held product body including visible sidewall but excluding any optional straw; hand is a separate occluding foreground relation",
+    "primary_subject_area_ratio": [
+      0.056,
+      0.064
+    ],
+    "negative_space": "upper window counter remains quiet; right-side pastry and magazine/saucer crop provide context without filling the frame",
+    "support_plane": {
+      "kind": "pale matte oak window counter plus two natural held-carrier hand contacts",
+      "occupancy_ratio": [
+        0.56,
+        0.74
+      ],
+      "dominant_edge_angles_degrees": [
+        -42,
+        -4,
+        42
+      ],
+      "perspective": "a pale wood counter recedes toward the upper-right window; hands interrupt it at two distinct seated depths"
+    },
+    "frame_rhythm": "compact lower-centre iced primary at 20-22 percent frame width and 26-29 percent frame height in Image 2's bare left hand; its top leans camera-ward/bottom-of-frame while its base shifts window-ward/upper-right at the selected B angle of 9-12 degrees; smaller upper-left ceramic companion and cropped right-side context remain unchanged",
+    "crop_policy": "3:4 source composition stays complete; optional 4:5 crop may trim only outer clothing and counter margins, never either hand, cup, pastry plate, magazine/saucer cluster or window ledge",
+    "forbidden": [
+      "missing primary sidewall",
+      "equal side-by-side cup lineup",
+      "cropped fingers",
+      "face",
+      "empty right-side context",
+      "centered studio symmetry"
+    ]
+  },
+  "composition_variation": {
+    "selection": "derive only small new grain phase, exterior microtexture, companion handle angle and natural finger pressure from request seed",
+    "invariants": [
+      "lower-centre user drink held by the 6 o'clock hand",
+      "smaller upper-left companion held by the leather-sleeved hand",
+      "right-side pastry and magazine/saucer context",
+      "upper-right window counter and one diffuse daylight field"
+    ],
+    "allowed_variations": [
+      "minor non-identifying skin texture",
+      "new oak grain phase",
+      "small companion crema variation",
+      "unreadable neutral magazine page layout"
+    ],
+    "repeat_guard": "the relational map and light field are authoritative, but do not copy magazine text, faces, exact wood knots, exact reflections, skin identity or reference pixels",
+    "scene_similarity_limit": 0.82,
+    "reference_scene_copy_forbidden": true
+  },
+  "lighting_geometry": {
+    "source_topology": "one broad upper-right rear diffused window source with quiet room return",
+    "azimuth_degrees": [
+      36,
+      58
+    ],
+    "elevation_degrees": [
+      38,
+      52
+    ],
+    "angular_size_degrees": [
+      38,
+      58
+    ],
+    "key_to_fill_ratio": [
+      1.28,
+      1.62
+    ],
+    "lit_area_ratio": [
+      0.48,
+      0.62
+    ],
+    "shadow_area_ratio": [
+      0.24,
+      0.36
+    ],
+    "shadow_vector_degrees": [
+      196,
+      228
+    ],
+    "penumbra_ratio": [
+      0.46,
+      0.68
+    ],
+    "highlight_behavior": "broad rolled light on ceramics, real restrained glass/plastic edges and small irregular ice responses",
+    "optical_effects": "the user drink retains finite wall thickness, ice refraction, liquid transmission and hand/counter bounce under the same light",
+    "forbidden": [
+      "hard noon sun",
+      "window-bar gobo",
+      "multiple catchlights",
+      "clipped ceramic",
+      "glowing ice",
+      "orange ambient wash"
+    ]
+  },
+  "tone_signature": {
+    "working_color_space": "sRGB display-referred natural social-photo finish",
+    "white_balance_kelvin": [
+      5400,
+      5750
+    ],
+    "luma_percentiles": {
+      "p05": [
+        0.06,
+        0.12
+      ],
+      "p25": [
+        0.24,
+        0.36
+      ],
+      "p50": [
+        0.42,
+        0.54
+      ],
+      "p75": [
+        0.62,
+        0.75
+      ],
+      "p95": [
+        0.8,
+        0.89
+      ]
+    },
+    "black_point": "soft neutral charcoal with leather grain, trouser folds and hand separation visible; a gentle film toe without washed haze",
+    "white_point": "cloudy gray-white window ledge and ceramic roll below clipping; never paper-white glow",
+    "shadow_color": "neutral charcoal with a quiet cool-gray window influence, not brown-black or blue-teal",
+    "highlight_color": "muted neutral ivory on ceramic, pale gray on window and only restrained faded beige reflection on oak",
+    "contrast_curve": "slightly faded low-to-moderate overcast-afternoon film curve: compressed highlights, open but anchored shadows and separated materials",
+    "material_separation": "locally faded oak, cool-neutral ceramic/window, matte leather, natural skin and source-authoritative drink layers remain separately readable within one subdued exposure"
+  },
+  "finish_signature": {
+    "acuity": "finite ordinary phone-camera acuity softened by a mild faded-film response; keep the primary drink structurally resolved but reduce its local edge acuity about 5-7 percent relative to the nearby hand and cup rim so it belongs to the frame",
+    "microcontrast": "real wood pores, leather grain, ceramic edge rolloff and skin texture remain local; primary beverage liquid and ice use slightly softer microcontrast than the hand and rim, never isolated hyper-sharpness or blur",
+    "grain": "faint low-contrast sensor texture with a subtle analog-print softness only",
+    "forbidden": [
+      "beauty retouch",
+      "plastic skin",
+      "global blur",
+      "HDR halo",
+      "AI-clean smoothing",
+      "portrait bokeh",
+      "orange vintage filter",
+      "teal-and-orange grade"
+    ]
+  },
+  "qa_contract": {
+    "hard_fail": [
+      "exact user product count or identity differs from one",
+      "primary/companion hierarchy or approved center-and-scale variation corridors fail",
+      "rear companion is not exactly two visibly nested paper cups carrying exact small CAFE AMERICANO text on the curved outer cup",
+      "condition-image diagonal sill, round-table boundary or close scale materially changes",
+      "direct sun, gobo shadow, spotlight, conflicting source or hard penumbra appears",
+      "4850-5100K reference-matched local wood warmth and neutral-gray exterior separation fails",
+      "the plant pot is not visibly supported by the white sill or appears to grow from a frame seam or gap",
+      "adopt-reference mode lacks the rectangular cafe paper label, preserve-source mode receives that label, or any unauthorized text appears",
+      "the table's 10 o'clock dark mark exceeds 30% of the condition-image contrast or reads as mold, mildew, soot, burn or rot",
+      "fewer than three scene identifiers differ from the condition image, causing the output to read as a scene clone",
+      "product, paper cup or shadow reads as pasted, floating or synthetic"
+    ],
+    "weights": {
+      "camera_geometry": 0.12,
+      "composition_rhythm": 0.22,
+      "color_and_tone": 0.14,
+      "lighting_space": 0.24,
+      "product_identity": 0.24,
+      "brand_integrity": 0.04
+    }
+  }
+}

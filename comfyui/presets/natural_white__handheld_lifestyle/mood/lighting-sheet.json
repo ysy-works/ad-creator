@@ -1,0 +1,124 @@
+{
+  "ambient_fill": "low neutral room bounce preserves hand and cup texture while distant-wall tone shifts imply window frames and furniture outside the image",
+  "capture_contract": {
+    "exposure_compensation_ev": [
+      -0.25,
+      -0.03
+    ],
+    "hdr": "restrained tone mapping with a two-percent contrast increase; protect wall, cup and skin highlights and keep shadow detail open",
+    "texture": "fine hand lines, tapered fingers, natural nail edges, cup thickness, liquid texture, subtle sensor noise and a moderately softer distant wall",
+    "white_balance": "warm-neutral sunlight with slightly cooler neutral shadow, never amber or beige overall"
+  },
+  "forbidden": [
+    "oversized cup or broad rugged hand",
+    "gray, green, beige, black, metallic or opaque straw",
+    "paper sleeve, holder or wrap",
+    "sharp connected cup-hand wall silhouette",
+    "wall as sharp as the hand and cup",
+    "waxy beauty-retouched skin",
+    "uniform spotless background",
+    "softbox wraparound fill"
+  ],
+  "grade_strengths": {
+    "balanced": 0.3,
+    "expressive": 0.43,
+    "natural": 0.16
+  },
+  "key_light": {
+    "direction": "upper-right to lower-left",
+    "relative_size": "small-to-medium directional window source with a real penumbra that broadens over wall distance",
+    "source": "unfiltered late-afternoon window sunlight passing through a real opening",
+    "subject_to_wall_distance_cm": [
+      100,
+      180
+    ]
+  },
+  "lighting_sheet_id": "instagram_white_direct_handheld_refined_v5_sheet_v2",
+  "mood": "natural eye-level sleeve-free handheld cold drink in direct window light with real wall separation and slightly firmer restrained contrast",
+  "reference_cluster": {
+    "anchor_preset_id": "instagram_white_direct_handheld_refined_v5",
+    "minimum_cluster_size": 5,
+    "runtime_pixels_allowed": false,
+    "selection_rule": "vertical warm-white interior planes, a single real window direction, compact connected shadows, protected transparent highlights and no cinematic orange cast",
+    "source_images": [
+      "화이트_뉴트럴_저대비_자연광/미디엄/47b780f5ebe9ea88c8d4d88c38a373b7.jpg",
+      "화이트_뉴트럴_저대비_자연광/미디엄/82507b2c8263a6a4007dad9770020022.jpg",
+      "화이트_뉴트럴_저대비_자연광/미디엄/9b33b2897c073cdbcc5cddf4ee4400a1.jpg",
+      "화이트_뉴트럴_저대비_자연광/미디엄/d1c9124b0ea47462944d13d51c79b84c.jpg",
+      "채도대비_뚜렷_포인트컬러/미디엄/252f7447c3d5c5362767e8c7f51f6b2e.jpg"
+    ]
+  },
+  "schema_version": "2.0.0",
+  "screen_light_map": {
+    "dominant_shadow_vector_degrees": [
+      125,
+      150
+    ],
+    "falloff": "gradual upper-right to lower-left falloff with moderate background detail attenuation",
+    "gobo_geometry": "broad soft partial window-frame and furniture shadows outside the frame, never connected sharply to the cup",
+    "lit_area_ratio": [
+      0.38,
+      0.62
+    ],
+    "shadow_area_ratio": [
+      0.18,
+      0.36
+    ]
+  },
+  "shadow_contract": {
+    "attachment": "small grip occlusion remains attached to the hand-cup unit; wall shadows are broad, soft and spatially separated",
+    "cast_shadow": {
+      "behavior": "broad softened partial wall shadow with gradual density falloff from a distant hand-cup unit and unseen window/furniture occluders",
+      "footprint": [
+        0.9,
+        1.8
+      ],
+      "opacity": [
+        0.04,
+        0.12
+      ]
+    },
+    "contact_shadow": {
+      "behavior": "small dense occlusion around the lower fingers and nearest container edge; no detached halo",
+      "footprint": [
+        0.06,
+        0.18
+      ],
+      "opacity": [
+        0.22,
+        0.36
+      ]
+    },
+    "density": [
+      0.28,
+      0.46
+    ],
+    "edge": "defined only at small grip occlusion; broad and soft on the distant wall",
+    "qa_ratios": {
+      "cast_area_to_cup_bbox": [
+        0.55,
+        1.05
+      ],
+      "transparent_lift_inside_shadow": [
+        0.14,
+        0.42
+      ],
+      "wrist_length_to_cup_height": [
+        0.06,
+        0.3
+      ]
+    },
+    "transmitted_light": {
+      "behavior": "faint beverage-colored lift remains within the transparent-container portion of the cast shadow",
+      "footprint": [
+        0.2,
+        0.58
+      ],
+      "opacity": [
+        0.12,
+        0.3
+      ]
+    },
+    "transparent_material": "glass and clear plastic preserve beverage-colored transmitted light; the weighted base and finger-contact edge retain more density"
+  }
+}

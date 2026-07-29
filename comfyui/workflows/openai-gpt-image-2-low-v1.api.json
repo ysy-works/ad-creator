@@ -1,0 +1,36 @@
+{
+  "1": {
+    "inputs": {
+      "image": "__INPUT_IMAGE__"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load exact user product"
+    }
+  },
+  "2": {
+    "inputs": {
+      "image": ["1", 0],
+      "preset_id": "wood__product_center",
+      "container_mode": "default",
+      "serving_temperature": "auto",
+      "aspect_ratio": "4:5",
+      "quality": "low",
+      "request_id": "__REQUEST_ID__"
+    },
+    "class_type": "AdCreatorOpenAIImageGenerate",
+    "_meta": {
+      "title": "Published preset · OpenAI GPT Image 2 · low"
+    }
+  },
+  "3": {
+    "inputs": {
+      "filename_prefix": "ad_creator/openai-gpt-image-2-low-v1",
+      "images": ["2", 0]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save aspect-native delivery image"
+    }
+  }
+}

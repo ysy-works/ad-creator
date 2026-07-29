@@ -1,0 +1,43 @@
+[WOOD HANDHELD TWO-PERSON — ADOPT REFERENCE CUP]
+Create one original native 4:5 portrait or 1:1 square Instagram cafe photograph, as resolved by the aspect contract below. It must feel like an ordinary, beautifully observed cloudy-afternoon photograph with restrained faded-film character—not an advertisement, collage, copied reference, CGI render, or generic AI lifestyle image.
+
+{{INPUT_ROLES}}
+
+[INPUT AUTHORITY — HARD LOCK]
+Image 1 alone owns the exact user beverage: beverage family, natural color relationships, layer order, translucency or opacity, ice/foam/garnish and authorized beverage identity. Its source vessel, hand, saucer, background, camera, white point, reflections and shadows have no authority.
+Image 2 is one randomly selected segmented evidence board, never an output layout. Its target panel owns one design and lower bare-hand grip: either compact off-white ceramic or compact brushed stainless. Other panels supply only the upper-left leather-sleeved companion, pastry, magazine/saucers, pale-oak direction, sill, cloudy-window light and depth. Use only the selected board’s target design; never blend materials. Placement below owns the frame. Never output panel seams, split screen, copied text, identity, reference beverage, knots, or pixels.
+
+[FRAME MAP AND SUBJECT COUNT — HARD LOCK]
+Show exactly two anonymous adult hands and exactly two drinks. No face, third person, extra wrist, extra cup, fused limb, duplicate finger, or one merged leg mass.
+The target mug is lower-centre: x=0.33–0.58, y=0.45–0.76, about 20–22% frame width and 26–29% height. A bare LEFT hand with thin black hair tie enters from 6 o’clock and supports its middle-lower body; no lower black sleeve. Below it, keep two separate dark-clothed thighs/knees with unequal folds and a shallow V.
+The smaller companion sits above-left at x=0.31–0.57, y=0.34–0.56. Only this arm wears matte charcoal leather and holds one generic off-white ceramic hot cup. Keep a partial distant croissant/white plate upper-right, blank magazine with cropped saucer at right, and small empty saucer upper-centre. Props remain spatial evidence.
+
+[SELECTED CUP AND CAMERA — HARD LOCK]
+Discard Image 1’s source vessel and reconstruct its beverage inside exactly the one target mug declared by Image 2. If Image 2 shows the ceramic variant, preserve its short compact cylindrical body, thin rounded ceramic rim, gently rounded lower wall, small foot and one small loop handle on IMAGE-RIGHT. If Image 2 shows the stainless variant, preserve its short straight cylindrical body, thin rolled metal rim, subtly weighted flat base, plain satin brushed-steel exterior and one squared rectangular metal loop handle on IMAGE-RIGHT. Never blend the two variants, change the selected material, turn either into a tall tumbler, paper cup or handleless cylinder, or mix it with the companion cup. Do not transfer any reference beverage.
+Use rectilinear 45–52 mm-equivalent optics, 105–135 cm working distance, camera pitch 48–56°, yaw within ±4°, and roll within ±1.2°. This is a high-oblique seat-side view approaching overhead, not an eye-level cup rotated in two dimensions.
+From BASE CENTRE to RIM CENTRE, the selected mug axis moves only slightly toward lower-left 7–8 o’clock: a real 3D lean of about 4–6°. Never lean right, upper-right, toward the window, or strongly diagonal. Keep rim, wall and base on one perspective axis. Keep the liquid free surface gravity-level with a small physically plausible asymmetric air gap; no spill or pouring pose. The left hand grips the mug body while the selected right-side handle remains fully visible.
+
+[HAND, CUP, AND LIQUID PHYSICS]
+Use Image 2 only for anonymous wrist direction, finger approach, grip pressure and occlusion. Keep ordinary joints, thumb opposition, skin variation and realistic nails. Reject mannequin grip, extra fingers, stretched palm, black lower cuff or duplicated leather.
+Rebuild Image 1 beverage volumetrically inside the selected mug, preserving natural color hierarchy, opacity, irregular ice, foam and compatible garnish. Integrate meniscus, submerged ice, rim bounce, window reflection and hand occlusion. Ceramic stays cool-neutral matte ivory; stainless stays dense satin metal, never chrome. Do not expose source sidewalls/labels, paste its surface, or copy a reference beverage.
+
+[BEVERAGE RELIGHTING AND COLOR — HARD LOCK]
+Preserve the source beverage’s natural identity and internal color relationships, not exact source RGB, source saturation, white point, highlight, or shadow. Reinterpret it inside this preset’s single cloudy-window exposure and restrained faded-film response.
+For matcha or another green milk drink, keep a muted living olive-green with natural tonal variation and a quiet warm-gray ivory milk region with faint green, oak and skin bounce. Never neon green, muddy brown, paper white, or self-luminous milk. The brightest milk/cream remains 10–18% below the brightest window or selected-cup highlight, darkens gently toward the lower hand, and shares the same film shoulder and shadow hue as skin, oak and the selected material.
+For a hot drink, preserve beverage and crema identity while rebuilding the surface light from the cloudy window. Keep the free surface gravity-level inside the subtly tilted rim. For every drink, integrate rim, meniscus, liquid, ice/foam, hand contact and reflected fill into one exposure. No pasted boundary, floating mug, isolated white layer, or detached highlight.
+Keep the product structurally resolved, but lower only the beverage liquid-and-ice local edge acuity and microcontrast about 5–7% relative to the adjacent hand and selected mug rim. This is subtle optical integration, not blur: selected mug contour, handle, garnish identity and hand detail remain intact.
+
+{{LIGHTING_CONTRACT}}
+
+[LIGHT, AIR, AND DEPTH — HARD LOCK]
+Use exactly one very large cloud-filtered upper-right/rear window. Broad cool-neutral daylight travels from upper-right toward lower-left with no direct sun, golden-hour red, blind stripe, spotlight, second key, or conflicting catchlight. Keep a 5400–5750 K cloudy-neutral starting balance, exposure around −0.34 to −0.16 EV, key-to-fill about 1.16–1.42, protected gray-white sill and a broad slow penumbra.
+Build four depth planes: lower bare wrist/two thighs; selected mug; companion/counter props; cool sill/exterior. Use scale, overlap, finger occlusion, counter recession, under-counter darkness, off-frame occlusion and plane light loss—not global blur or bokeh. Imply unseen furniture/people only through low-frequency fill, shadow interruption and air, never silhouettes.
+Keep pale oak matte, long-pored and muted honey-beige, never yellow/orange; invent new grain without copying knots. Ceramic and sill remain cool gray-ivory below clipping; stainless remains neutral satin metal without chrome glare. Keep charcoal fabric textured and skin desaturated warm-neutral.
+
+[FADED FILM FINISH]
+Use 6–10% reduced color density, a soft highlight shoulder, anchored open blacks, faint sensor grain and finite phone-camera acuity. Keep a gently faded cloudy-afternoon print response; reject sepia, sunset, teal-orange, foggy gray, app filters, HDR sharpening and uniform softness.
+
+{{ASPECT_CONTRACT}}
+
+[FINAL AUDIT]
+Require the single mug variant selected by Image 2 in the bare left 6 o’clock hand, complete image-right handle, slight lower-left lean, gravity-level liquid, smaller leather-sleeved upper-left companion, two distinct lower legs, partial pastry, right magazine/saucer context and one cloudy-window exposure. Reject variant blending, board replication, source-vessel or reference-beverage leakage, lower black sleeve, right/window lean, oversized product, paper-white milk, isolated sharpness, malformed anatomy, readable copy, watermark and CGI.

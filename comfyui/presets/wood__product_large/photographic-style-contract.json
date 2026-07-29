@@ -1,0 +1,246 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "instagram_wood_calm_window_closeup_contract_v1",
+  "preset_id": "instagram_wood_calm_window_closeup_v1",
+  "creative_direction": {
+    "audience": "a social-feed viewer looking for a calm natural cafe product moment",
+    "desired_response": "the exact user drink appears to have always occupied the measured close window-side scene under the reference-faithful diffuse light",
+    "art_direction": "measured front-left primary and smaller behind-right double-paper companion on one round pale wood plane",
+    "restraint": "preserve the quiet close scale, air and light rather than inventing new styling or props",
+    "forbidden_impression": [
+      "AI beverage demo",
+      "commercial studio spotlight",
+      "orange lifestyle filter",
+      "pasted product cutout",
+      "overdecorated cafe set"
+    ]
+  },
+  "reference_binding": {
+    "asset_id": "ref_95fa7947818ce496",
+    "pixel_sha256": "fdcf3f83e673d7ed06cecb376eb7b94386bb2c1657f942136017aeeadc919523",
+    "relative_path": "comfyui-inputs/ad_creator_reference_wood_window_closeup_v1.png",
+    "width_px": 1254,
+    "height_px": 1254,
+    "runtime_role": "offline authority for camera, pair geometry, pale live-edge wood, soft-window light and restrained warm-neutral tone",
+    "provider_submission": "never"
+  },
+  "camera_geometry": {
+    "projection": "rectilinear normal-to-mild-tele close environmental projection",
+    "focal_length_equivalent_mm": [
+      52,
+      58
+    ],
+    "working_distance_cm": [
+      90,
+      120
+    ],
+    "camera_height_cm": [
+      105,
+      125
+    ],
+    "pitch_degrees": [
+      20,
+      25
+    ],
+    "yaw_degrees": [
+      -3,
+      3
+    ],
+    "roll_degrees": [
+      -0.8,
+      0.8
+    ],
+    "distortion": "natural cup taper and table ellipse with no wide-phone looming or stretched frame edges",
+    "depth_of_field": "both cups and both table contacts resolve; only plant and exterior microdetail recede without portrait blur"
+  },
+  "composition_geometry": {
+    "primary_subject_bbox": {
+      "left": 0.281,
+      "top": 0.412,
+      "right": 0.627,
+      "bottom": 0.824
+    },
+    "bbox_semantics": "raw 3:4 product body excluding optional straw; its 0.412 height becomes approximately 0.437 after centered 4:5 crop without geometric stretching",
+    "primary_subject_area_ratio": [
+      0.139,
+      0.147
+    ],
+    "negative_space": "0.28-0.36 meaningful release across upper exterior, diagonal sill, distant plant and pair gap",
+    "support_plane": {
+      "kind": "one pale matte round live-edge wood table",
+      "occupancy_ratio": [
+        0.42,
+        0.62
+      ],
+      "dominant_edge_angles_degrees": [
+        -12,
+        8,
+        90
+      ],
+      "perspective": "a broad near wood plane with a rounded irregular edge and mild ellipse supports both drink contacts"
+    },
+    "frame_rhythm": "close front-left product, smaller behind-right double-paper cup, very small distant sill plant, diagonal sill and round wood edge",
+    "crop_policy": "centered 4:5 crop retains both rims and bases and does not enlarge either subject",
+    "forbidden": [
+      "primary product outside target bbox",
+      "companion larger than the exact product",
+      "side-by-side equal lineup",
+      "cropped product base",
+      "centered studio symmetry",
+      "copied reference pixel layout"
+    ]
+  },
+  "composition_variation": {
+    "selection": "derive independent pair offsets and scale, plant silhouette and sill position, wood edge/grain/crack topology, exterior microtexture and sill crop from the request seed",
+    "invariants": [
+      "front-left primary remains larger and in front of the behind-right companion within the approved drift and scale corridors",
+      "one round pale matte live-edge wood table",
+      "52-58mm camera at 20-25 degree pitch",
+      "one very large upper-left rear diffuse window source"
+    ],
+    "allowed_variations": [
+      "small independent primary and companion center/scale variation without cup-shape variation",
+      "new pale-wood grain phase, ring flow, cracks and live-edge contour",
+      "non-identifying exterior microtexture and sill crop",
+      "new distant pot silhouette, leaf mass and exact sill position"
+    ],
+    "repeat_guard": "condition-image lens family, scale range, support topology, light field and color are authoritative, but exact pixels and object coordinates are not; require at least three visible scene-identifier changes among wood, plant, exterior, sill crop and pair offsets; allow only the conditional cafe paper label and exact CAFE AMERICANO companion text",
+    "scene_similarity_limit": 0.72,
+    "reference_scene_copy_forbidden": true
+  },
+  "lighting_geometry": {
+    "source_topology": "one very large diffused upper-left window source plus quiet room bounce",
+    "azimuth_degrees": [
+      300,
+      330
+    ],
+    "elevation_degrees": [
+      32,
+      46
+    ],
+    "angular_size_degrees": [
+      42,
+      62
+    ],
+    "key_to_fill_ratio": [
+      1.15,
+      1.42
+    ],
+    "lit_area_ratio": [
+      0.56,
+      0.7
+    ],
+    "shadow_area_ratio": [
+      0.14,
+      0.25
+    ],
+    "shadow_vector_degrees": [
+      118,
+      150
+    ],
+    "penumbra_ratio": [
+      0.5,
+      0.74
+    ],
+    "highlight_behavior": "broad rolled paper and transparent-container highlights with small broken ice and condensation responses",
+    "optical_effects": "subtle bounded liquid transmission, real rim thickness and nonuniform condensation under one light direction",
+    "forbidden": [
+      "hard studio spotlight",
+      "multiple conflicting catchlights",
+      "shadowless cups",
+      "clipped paper white",
+      "glowing ice",
+      "orange ambient wash"
+    ]
+  },
+  "tone_signature": {
+    "working_color_space": "sRGB display-referred natural social-photo finish",
+    "white_balance_kelvin": [
+      4850,
+      5100
+    ],
+    "luma_percentiles": {
+      "p05": [
+        0.06,
+        0.12
+      ],
+      "p25": [
+        0.28,
+        0.4
+      ],
+      "p50": [
+        0.5,
+        0.63
+      ],
+      "p75": [
+        0.7,
+        0.82
+      ],
+      "p95": [
+        0.88,
+        0.96
+      ]
+    },
+    "black_point": "soft neutral brown-black with visible wood pore and beverage separation",
+    "white_point": "neutral paper and window whites roll below clipping",
+    "contrast_curve": "gentle toe, separated midtones and soft highlight shoulder",
+    "saturation": "restrained environment with the exact user beverage color protected",
+    "shadow_color": "neutral brown-gray with slight cool exterior influence",
+    "highlight_color": "warm-neutral diffused daylight",
+    "palette_hex": [
+      "#BBAB9A",
+      "#8B7761",
+      "#504131",
+      "#F1EFEE",
+      "#E3DCD5"
+    ],
+    "material_separation": "warmth remains local to pale wood; paper stays neutral white; exterior stays cool gray; product color stays source-authoritative",
+    "local_contrast": "moderate only at product, rim, ice, crema and contacts; subdued on plant and exterior",
+    "forbidden": [
+      "full-frame brown grade",
+      "yellow wood wash",
+      "teal-orange split",
+      "HDR halos",
+      "crushed dark beverage",
+      "uniform saturation"
+    ]
+  },
+  "finish_signature": {
+    "acuity": "finite twelve-to-sixteen-megapixel-like detail with no uniform hyper-sharpness",
+    "microcontrast": "selective on product, ice, crema, condensation and wood contacts; reduced in plant and exterior",
+    "grain": "faint shared low-contrast luminance texture rather than a visible filter",
+    "depth_rendering": "normal-lens scale, overlap, table ellipse, contacts and soft window falloff establish depth",
+    "retouching": "retain irregular ice, small bubbles, condensation variation and wood pores while integrating the exact product into new light",
+    "forbidden": [
+      "AI-clean liquid gradients",
+      "perfect geometric ice",
+      "airbrushed milk",
+      "sharpening halo",
+      "pasted edge",
+      "synthetic portrait blur"
+    ]
+  },
+  "qa_contract": {
+    "hard_fail": [
+      "exact user product count or identity differs from one",
+      "primary/companion hierarchy or approved center-and-scale variation corridors fail",
+      "rear companion is not exactly two visibly nested paper cups carrying exact small CAFE AMERICANO text on the curved outer cup",
+      "condition-image diagonal sill, round-table boundary or close scale materially changes",
+      "direct sun, gobo shadow, spotlight, conflicting source or hard penumbra appears",
+      "4850-5100K reference-matched local wood warmth and neutral-gray exterior separation fails",
+      "the plant pot is not visibly supported by the white sill or appears to grow from a frame seam or gap",
+      "adopt-reference mode lacks the rectangular cafe paper label, preserve-source mode receives that label, or any unauthorized text appears",
+      "the table's 10 o'clock dark mark exceeds 30% of the condition-image contrast or reads as mold, mildew, soot, burn or rot",
+      "fewer than three scene identifiers differ from the condition image, causing the output to read as a scene clone",
+      "product, paper cup or shadow reads as pasted, floating or synthetic"
+    ],
+    "weights": {
+      "camera_geometry": 0.12,
+      "composition_rhythm": 0.22,
+      "color_and_tone": 0.14,
+      "lighting_space": 0.24,
+      "product_identity": 0.24,
+      "brand_integrity": 0.04
+    }
+  }
+}
