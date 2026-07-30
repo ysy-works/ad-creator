@@ -119,23 +119,40 @@ def build_prompt(
             lines.append(color_rule)
         lines.append(
             "This is the PRESET's own reference cup design -- it is deliberately NOT the user's original cup. "
-            "The input image has been cropped down to the beverage's own content (its color, ice, foam, "
-            "layering), with little to no original cup structure visible, specifically so this reference cup "
-            "design can be applied cleanly without fighting the original cup's shape."
+            "Image 1 may still visibly contain the user's original cup; treat that source container as excluded "
+            "evidence and do not reproduce its silhouette, material, rim, base, handle, lid, straw, sleeve, "
+            "label, logo or text. Transfer only the beverage's own color, opacity, ice, foam, layering, garnish "
+            "and serving state into this preset vessel."
+        )
+        lines.append(
+            "Keep the adopted preset vessel unbranded. Do not copy any logo, wordmark, label or text from the "
+            "user's original cup or from a reference image, and never invent new branding."
         )
     else:  # user_cup
         lines.append(
-            "Reconstruct the EXACT cup/container shown in the user's uploaded photo -- its shape, material, "
-            "color, handle (if any), and lid (if any) -- faithfully and natively for this new camera and "
-            "light. Do NOT apply this preset's reference mug/glass color, handle, or saucer rules in this "
-            "mode -- the user's own original cup design is the source of truth for the vessel's appearance."
+            "Reconstruct the EXACT cup/container shown in Image 1 -- its class, material, silhouette, color, "
+            "rim, base, handle, lid, straw, attached sleeve or wrap, and every other visible component -- "
+            "faithfully and natively for this new camera and light. Preserve component presence as well as "
+            "appearance: keep a handle, lid, straw, sleeve or wrap only when it is visible in Image 1, and "
+            "never add one when it is absent. Do NOT apply this preset's reference mug/glass color, handle, "
+            "straw, sleeve, label or saucer rules in this mode; Image 1 is the source of truth for the vessel."
         )
-    lines.append(
-        "Preserve any real logo or wordmark exactly as it appears on the user's original cup photo, rendered "
-        "clearly and legibly on the reconstructed vessel. NEVER invent, generate, or design a new logo of any "
-        "kind. If no logo is visible in the input image, the output must also show no logo -- do not add one."
-    )
-    if cup.get("no_straw"):
+        lines.append(
+            "Hard lock: preserve the source-visible straw and lid state exactly; retain each one only when visible in "
+            "Image 1, and never delete, substitute or invent either component."
+        )
+        lines.append(
+            "Preserve the source-visible immediate serving assembly too, including a saucer, coaster or spoon "
+            "when present. A handheld shot may move that assembly naturally to the supporting surface rather "
+            "than placing it inside the gripping hand, but must not redesign it."
+        )
+        lines.append(
+            "Preserve every real source-visible logo, wordmark or label exactly as it appears on that same "
+            "cup surface, with matching placement, scale and orientation. If it is camera-visible in Image 1, "
+            "keep it camera-visible after reconstruction rather than rotating, blanking, hiding or replacing "
+            "it. If no branding is visible in Image 1, add none. Never invent or copy reference-image branding."
+        )
+    if cup.get("no_straw") and container_mode == "reference_cup":
         lines.append(preset["beverage_rules"]["no_straw_for_ice"])
     if cup.get("no_saucer") and container_mode == "reference_cup":
         lines.append(preset["beverage_rules"]["no_saucer_for_ice"])
@@ -178,8 +195,20 @@ def build_prompt(
             "holding or resting near it) appear."
         )
 
-    lines.append("\n### PRODUCT / IDENTITY PRESERVATION (hard constraints, shared)")
+    lines.append("\n### PRODUCT / IDENTITY PRESERVATION (hard constraints)")
     lines.append("- " + "\n- ".join(lock["hard_lock"]))
+    if container_mode == "reference_cup":
+        lines.append(
+            "- active mode identity: reconstruct the selected preset vessel natively and discard all source "
+            "container geometry, components, serving assembly and branding; preserve only the source beverage "
+            "and serving state; obey the preset vessel's own hot-saucer or iced-no-saucer rule"
+        )
+    else:
+        lines.append(
+            "- active mode identity: reconstruct the complete Image 1 vessel natively, including the presence "
+            "or absence of each handle, lid, straw, sleeve, wrap, immediate serving assembly and source-visible "
+            "label; never substitute, simplify, rotate away or blank those properties"
+        )
     lines.append(blocks["preservation"])
 
     lines.append("\n### WHAT TO AVOID (shared)")

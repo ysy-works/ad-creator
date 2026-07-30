@@ -22,6 +22,9 @@
     "brand_input_policy": {
       "enabled": false,
       "default_mode": "none",
+      "source_visible_branding_modes": [
+        "reconstruct_source"
+      ],
       "activation_requirement": "frontend_and_api_brand_asset_flow"
     },
     "temperature_policy": {
@@ -56,7 +59,7 @@
   },
   "prompt_template": {
     "path": "prompt-template-reconstruct-source.txt",
-    "sha256": "076c78b253eb4d2d0bb9b21c0356b478c1922c83966dd0044207d74686c288b0"
+    "sha256": "add4573ea64412b1366ce285b51bd6bc50f4ce87bbc2bc2cccf371b12ec267e2"
   },
   "lighting_sheet": {
     "path": "lighting-sheet.json",
@@ -70,7 +73,7 @@
   "contract_assets": {
     "team_source_contract": {
       "path": "../dark_grey/preset.json",
-      "sha256": "82809b3688f38a4ce304edf3dc7f0aab404ba1bd8937171ae5cbf6a992681436"
+      "sha256": "294d0b55b741065539aa1340bd895fb4bcf38a2a52ae756fc516f4e2b7604e41"
     },
     "team_prompt_archive": {
       "path": "../dark_grey/prompt.md",
@@ -130,15 +133,16 @@
   "container_modes": {
     "reconstruct_source": {
       "provider_hint_role": "raw_dark_grey_glass_wall_reference",
-      "container_identity_scope": "source_container_class_material_silhouette_handle_lid_and_visible_branding",
+      "container_identity_scope": "source_container_class_material_silhouette_rim_base_handle_lid_straw_attached_sleeve_wrap_and_visible_branding_placement_orientation",
       "prompt_template": {
         "path": "prompt-template-reconstruct-source.txt",
-        "sha256": "076c78b253eb4d2d0bb9b21c0356b478c1922c83966dd0044207d74686c288b0"
+        "sha256": "add4573ea64412b1366ce285b51bd6bc50f4ce87bbc2bc2cccf371b12ec267e2"
       },
       "preserve": [
         "source beverage identity and serving state",
-        "source cup material, silhouette, handle and lid",
-        "authorized visible source branding"
+        "source cup class, material, silhouette, rim and base",
+        "presence or absence of source handle, lid, straw, sleeve, wrap and immediate serving assembly",
+        "authorized visible source branding with original placement, scale and orientation"
       ],
       "discard": [
         "source camera pose",
@@ -151,7 +155,7 @@
       "container_identity_scope": "published_dark_grey_temperature_compatible_container",
       "prompt_template": {
         "path": "prompt-template-adopt-reference.txt",
-        "sha256": "fc5f85abb9a1037af600f7d8a047e746454f19831e1de7ebe69f9b58d8d98fbe"
+        "sha256": "aad1dfcd0198b36b8e9a36a26d7eac0c1f04c0a3b79b7cbba1fa2044e5a9717f"
       },
       "preserve": [
         "source beverage identity and serving state",
@@ -167,7 +171,7 @@
   "aspect_ratio_contracts": {
     "4:5": {
       "status": "published",
-      "visual_review_status": "passed_by_user_review",
+      "visual_review_status": "representative_matrix_pending",
       "prompt_addendum": "Generate the exact final 4:5 canvas at 1024x1280. Keep the complete beverage in the lower-right at 0.30-0.40 frame width. Preserve the black counter in the lower 35-45 percent and the daylight glass-wall context as the larger quiet upper field.",
       "generation_size": "1024x1280",
       "safe_crop": "none_exact_4x5",
@@ -190,7 +194,7 @@
     },
     "1:1": {
       "status": "published",
-      "visual_review_status": "passed_by_user_review",
+      "visual_review_status": "representative_matrix_pending",
       "prompt_addendum": "Generate the exact final 1:1 canvas at 1024x1024 from the start. Keep the complete beverage in the lower-right at 0.30-0.40 frame width, with a balanced black counter and daylight glass-wall field.",
       "generation_size": "1024x1024",
       "safe_crop": "none_exact_1x1",
@@ -213,16 +217,24 @@
     }
   },
   "qa_contract": {
-    "phase": "passed_by_user_review",
+    "phase": "representative_paid_visual_review_pending",
     "hard_gates": [
       "beverage_identity",
       "container_mode",
       "serving_state",
+      "conditional_source_components",
+      "source_visible_branding_when_reconstructing",
+      "source_container_exclusion_when_adopting",
       "camera_geometry",
       "product_environment_integration",
       "hint_copy_contamination",
       "brand_ocr",
       "crop"
+    ],
+    "hard_fail": [
+      "reconstruct_source removes, blanks, rotates away or replaces source-visible branding",
+      "reconstruct_source removes or invents a handle, lid, straw, sleeve, wrap or immediate serving assembly",
+      "adopt_reference retains source container geometry, components or branding"
     ],
     "known_release_risk": "Raw provider hints are not sanitized in this revision.",
     "comparative_scores": [

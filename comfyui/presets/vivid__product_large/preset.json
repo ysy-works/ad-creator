@@ -59,7 +59,7 @@
   },
   "prompt_template": {
     "path": "prompt-template-reconstruct-source.txt",
-    "sha256": "75f2bfe26478ba6733032e35bab0a4928d38ae3c197432a301c6a00ba16b11d6"
+    "sha256": "4bc55170437e440c4ac091964c963f5472f6b68783faa8d47b3dd33761e2c7c0"
   },
   "lighting_sheet": {
     "path": "lighting-sheet.json",
@@ -73,7 +73,7 @@
   "contract_assets": {
     "team_source_contract": {
       "path": "../dark_grey/preset.json",
-      "sha256": "82809b3688f38a4ce304edf3dc7f0aab404ba1bd8937171ae5cbf6a992681436"
+      "sha256": "294d0b55b741065539aa1340bd895fb4bcf38a2a52ae756fc516f4e2b7604e41"
     },
     "team_prompt_archive": {
       "path": "../dark_grey/prompt.md",
@@ -133,15 +133,16 @@
   "container_modes": {
     "reconstruct_source": {
       "provider_hint_role": "raw_dark_grey_closeup_reference",
-      "container_identity_scope": "source_container_class_material_silhouette_handle_lid_straw_and_visible_branding",
+      "container_identity_scope": "source_container_class_material_silhouette_rim_base_handle_lid_straw_attached_sleeve_wrap_and_visible_branding_placement_orientation",
       "prompt_template": {
         "path": "prompt-template-reconstruct-source.txt",
-        "sha256": "75f2bfe26478ba6733032e35bab0a4928d38ae3c197432a301c6a00ba16b11d6"
+        "sha256": "4bc55170437e440c4ac091964c963f5472f6b68783faa8d47b3dd33761e2c7c0"
       },
       "preserve": [
         "source beverage identity and serving state",
-        "source cup material, silhouette, handle, lid and source-visible straw state",
-        "authorized visible source branding"
+        "source cup class, material, silhouette, rim and base",
+        "presence or absence of source handle, lid, straw, sleeve, wrap and immediate serving assembly",
+        "authorized visible source branding with original placement, scale and orientation"
       ],
       "discard": [
         "source camera pose",
@@ -154,7 +155,7 @@
       "container_identity_scope": "published_dark_grey_temperature_compatible_container",
       "prompt_template": {
         "path": "prompt-template-adopt-reference.txt",
-        "sha256": "7f02e24294ababfd946fe33f14803a010a30cd058e79cfed58c7f0ddc854a8f4"
+        "sha256": "7300f18e4130833e60502fcdc18ff79568503d57880b0c9a89e7389095f78741"
       },
       "preserve": [
         "source beverage identity and serving state",
@@ -170,7 +171,7 @@
   "aspect_ratio_contracts": {
     "4:5": {
       "status": "published",
-      "visual_review_status": "passed_by_user_review",
+      "visual_review_status": "representative_matrix_pending",
       "prompt_addendum": "Generate the exact final 4:5 canvas at 1024x1280. Keep the complete beverage dominant but uncropped at 0.55-0.70 frame width, with only narrow soft-focus dark-grey wall and counter context at the edges.",
       "generation_size": "1024x1280",
       "safe_crop": "none_exact_4x5",
@@ -193,7 +194,7 @@
     },
     "1:1": {
       "status": "published",
-      "visual_review_status": "passed_by_user_review",
+      "visual_review_status": "representative_matrix_pending",
       "prompt_addendum": "Generate the exact final 1:1 canvas at 1024x1024 from the start. Recompose the complete beverage at 0.50-0.64 frame width with no crop and retain restrained dark-grey counter context around it.",
       "generation_size": "1024x1024",
       "safe_crop": "none_exact_1x1",
@@ -216,16 +217,24 @@
     }
   },
   "qa_contract": {
-    "phase": "passed_by_user_review",
+    "phase": "representative_paid_visual_review_pending",
     "hard_gates": [
       "beverage_identity",
       "container_mode",
       "serving_state",
+      "conditional_source_components",
+      "source_visible_branding_when_reconstructing",
+      "source_container_exclusion_when_adopting",
       "camera_geometry",
       "product_environment_integration",
       "hint_copy_contamination",
       "brand_ocr",
       "crop"
+    ],
+    "hard_fail": [
+      "reconstruct_source removes, blanks, rotates away or replaces source-visible branding",
+      "reconstruct_source removes or invents a handle, lid, straw, sleeve, wrap or immediate serving assembly",
+      "adopt_reference retains source container geometry, components or branding"
     ],
     "known_release_risk": "Raw provider hints are not sanitized in this revision.",
     "comparative_scores": [

@@ -22,6 +22,9 @@
     "brand_input_policy": {
       "enabled": false,
       "default_mode": "none",
+      "source_visible_branding_modes": [
+        "reconstruct_source"
+      ],
       "activation_requirement": "frontend_and_api_brand_asset_flow"
     },
     "temperature_policy": {
@@ -56,7 +59,7 @@
   },
   "prompt_template": {
     "path": "prompt-template-reconstruct-source.txt",
-    "sha256": "5dd069167194b9413c41286605567208ad474fa00c45f20ad4a61cf8d538f311"
+    "sha256": "0c2691c8e8f76c61674e8b852f560bf6f8dddda622714555aedad9ab3f6f6832"
   },
   "lighting_sheet": {
     "path": "lighting-sheet.json",
@@ -70,7 +73,7 @@
   "contract_assets": {
     "team_source_contract": {
       "path": "../dark_grey/preset.json",
-      "sha256": "82809b3688f38a4ce304edf3dc7f0aab404ba1bd8937171ae5cbf6a992681436"
+      "sha256": "294d0b55b741065539aa1340bd895fb4bcf38a2a52ae756fc516f4e2b7604e41"
     },
     "team_prompt_archive": {
       "path": "../dark_grey/prompt.md",
@@ -152,15 +155,16 @@
   "container_modes": {
     "reconstruct_source": {
       "provider_hint_role": "dark_grey_handheld_user_pose_only",
-      "container_identity_scope": "source_container_class_material_silhouette_handle_lid_and_visible_branding",
+      "container_identity_scope": "source_container_class_material_silhouette_rim_base_handle_lid_straw_attached_sleeve_wrap_and_visible_branding_placement_orientation",
       "prompt_template": {
         "path": "prompt-template-reconstruct-source.txt",
-        "sha256": "5dd069167194b9413c41286605567208ad474fa00c45f20ad4a61cf8d538f311"
+        "sha256": "0c2691c8e8f76c61674e8b852f560bf6f8dddda622714555aedad9ab3f6f6832"
       },
       "preserve": [
         "source beverage identity and serving state",
-        "source cup material, silhouette, handle and lid",
-        "authorized visible source branding"
+        "source cup class, material, silhouette, rim and base",
+        "presence or absence of source handle, lid, straw, sleeve, wrap and immediate serving assembly",
+        "authorized visible source branding with original placement, scale and orientation"
       ],
       "discard": [
         "source camera pose",
@@ -173,7 +177,7 @@
       "container_identity_scope": "published_dark_grey_temperature_compatible_container",
       "prompt_template": {
         "path": "prompt-template-adopt-reference.txt",
-        "sha256": "f67928700c77b5ff7563e1f1383ffcf6757f0cfe18645198c51cb875cf2af7ae"
+        "sha256": "b01629886e7141b8c8c0159a09aaecd40f8878250721f8c5ef98bc78fe393f31"
       },
       "preserve": [
         "source beverage identity and serving state",
@@ -189,7 +193,7 @@
   "aspect_ratio_contracts": {
     "4:5": {
       "status": "published",
-      "visual_review_status": "passed_by_user_review",
+      "visual_review_status": "representative_matrix_pending",
       "prompt_addendum": "Generate the exact final 4:5 canvas at 1024x1280. Keep one complete hand-beverage unit uncropped. For an iced source, hold the upright cup against the dark-grey wall; for a hot source, keep the mug base on the black table with the hand resting on or beside it.",
       "generation_size": "1024x1280",
       "safe_crop": "none_exact_4x5",
@@ -212,7 +216,7 @@
     },
     "1:1": {
       "status": "published",
-      "visual_review_status": "passed_by_user_review",
+      "visual_review_status": "representative_matrix_pending",
       "prompt_addendum": "Generate the exact final 1:1 canvas at 1024x1024 from the start. Keep one complete hand-beverage unit and preserve the source-temperature branch without cropping the hand, wrist, cup rim or base.",
       "generation_size": "1024x1024",
       "safe_crop": "none_exact_1x1",
@@ -235,16 +239,24 @@
     }
   },
   "qa_contract": {
-    "phase": "passed_by_user_review",
+    "phase": "representative_paid_visual_review_pending",
     "hard_gates": [
       "beverage_identity",
       "container_mode",
       "serving_state",
+      "conditional_source_components",
+      "source_visible_branding_when_reconstructing",
+      "source_container_exclusion_when_adopting",
       "camera_geometry",
       "product_environment_integration",
       "hint_copy_contamination",
       "brand_ocr",
       "crop"
+    ],
+    "hard_fail": [
+      "reconstruct_source removes, blanks, rotates away or replaces source-visible branding",
+      "reconstruct_source removes or invents a handle, lid, straw, sleeve, wrap or immediate serving assembly",
+      "adopt_reference retains source container geometry, components or branding"
     ],
     "known_release_risk": "Handheld mode hints are sanitized and separated by container mode.",
     "comparative_scores": [

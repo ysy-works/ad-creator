@@ -189,6 +189,78 @@ class PresetRuntimeTest(unittest.TestCase):
                     self.assertEqual(cropped.size, (60, 40))
                 self.assertEqual(audit[0]["status"], "applied")
 
+    def test_dark_grey_container_modes_separate_source_identity_and_branding(self):
+        reconstructed = resolve_preset_contract(
+            "vivid__product_center",
+            container_mode="reconstruct_source",
+            serving_temperature="cold",
+            registry_path=REGISTRY,
+        )
+        adopted = resolve_preset_contract(
+            "vivid__product_center",
+            container_mode="adopt_reference",
+            serving_temperature="cold",
+            registry_path=REGISTRY,
+        )
+        self.assertIn("Reconstruct the EXACT cup/container shown in Image 1", reconstructed.prompt)
+        self.assertIn("remove visible authorized source branding", reconstructed.prompt)
+        self.assertIn("If no branding is visible in Image 1, add none", reconstructed.prompt)
+        self.assertNotIn("Keep the adopted preset vessel unbranded", reconstructed.prompt)
+        self.assertIn("treat that source container as excluded evidence", adopted.prompt)
+        self.assertIn("Keep the adopted preset vessel unbranded", adopted.prompt)
+        self.assertIn("No earlier prompt phrase authorizes branding", adopted.prompt)
+        self.assertNotIn("Preserve every real source-visible logo", adopted.prompt)
+
+    def test_wood_handheld_reconstruct_source_declares_geometry_state_contract(self):
+        contract = resolve_preset_contract(
+            "wood__handheld_lifestyle",
+            container_mode="reconstruct_source",
+            serving_temperature="hot",
+            registry_path=REGISTRY,
+        )
+        self.assertIn("strict direct-evidence geometry rule", contract.prompt)
+        self.assertIn("smooth, uninterrupted rotational wall", contract.prompt)
+        self.assertIn("addition of an unevidenced side protrusion", contract.prompt)
+        self.assertIn("board deliberately contains no target-container attachment evidence", contract.prompt)
+        self.assertIn("STATE VISIBLE LOOP", contract.prompt)
+        self.assertIn("STATE CONTINUOUS WALL", contract.prompt)
+        self.assertIn("closed or C-shaped side loop", contract.prompt)
+        self.assertIn("image-right loop remains unobstructed", contract.prompt)
+        self.assertEqual(contract.prompt.lower().count("handle"), 2)
+        self.assertIn("carry ZERO target-container identity", contract.prompt)
+        self.assertIn("empty-air grip is an anatomy guide, not a missing mug", contract.prompt)
+        self.assertNotIn("Reject board replication, source pixel reuse, missing handle,", contract.prompt)
+
+        bundle = json.loads(
+            (REGISTRY.parent / "wood__handheld_lifestyle" / "preset.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        hint = next(
+            item
+            for item in bundle["hint_images"]
+            if item["role"] == "source_cup_pose_light_and_scene_evidence"
+        )
+        self.assertTrue(
+            any(
+                "all target cup family" in rule
+                for rule in hint.get("excluded_transfer", [])
+            )
+        )
+        self.assertIn("zero target-vessel identity authority", hint["reason"])
+
+    def test_wood_closeup_reconstruct_source_keeps_source_identity_and_companion_copy(self):
+        contract = resolve_preset_contract(
+            "wood__product_large",
+            container_mode="reconstruct_source",
+            serving_temperature="cold",
+            registry_path=REGISTRY,
+        )
+        self.assertIn("Preserve every source-visible primary label", contract.prompt)
+        self.assertIn('exact generic text "CAFE AMERICANO"', contract.prompt)
+        self.assertIn("remove visible authorized source branding", contract.prompt)
+        self.assertNotIn("No earlier prompt phrase authorizes branding", contract.prompt)
+
     def test_passed_manifest_bundles_are_complete_and_hash_verified(self):
         registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
         manifest_path = REGISTRY.parent / registry["passed_presets_manifest"]

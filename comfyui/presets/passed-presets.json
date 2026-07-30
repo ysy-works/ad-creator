@@ -51,7 +51,7 @@
       "status": "passed_by_user_review",
       "runtime_state": "published_non_default",
       "bundle": "wood__product_large/preset.json",
-      "bundle_sha256": "bfd6955d000164f4983194cc68f56b2081bae9a55b54a5a546fa4fbf190c27fa"
+      "bundle_sha256": "838f696967a63cd3c6c5bc248b689e0d85e064e4b5d5d2fbfdf11c2329bb9777"
     },
     {
       "preset_id": "instagram_wood_cane_brownie_overhead_v1",
@@ -65,35 +65,35 @@
       "status": "passed_by_user_review",
       "runtime_state": "published_non_default",
       "bundle": "wood__handheld_lifestyle/preset.json",
-      "bundle_sha256": "dc1e2e7f93238a47daa77b882038138808c54e4bdbbe12e158e73e9e66f8e3ec"
+      "bundle_sha256": "0e51d2246b98fceab2bf86d14b4f7fd5af47dd2b56dbc8b1b2c81532b445f6fd"
     },
     {
       "preset_id": "instagram_dark_grey_closeup_v1",
       "status": "passed_by_user_review",
       "runtime_state": "published_non_default",
       "bundle": "vivid__product_large/preset.json",
-      "bundle_sha256": "994936de97feeb75a9edd3e6e3d353acd554b82588dec5a5e0123867f03d13d6"
+      "bundle_sha256": "9f661729928cbb0c6e90abc7a1d6fb62a5fbf290f21fdfc39db4682bf1891204"
     },
     {
       "preset_id": "instagram_dark_grey_medium_v1",
       "status": "passed_by_user_review",
       "runtime_state": "published_non_default",
       "bundle": "vivid__product_center/preset.json",
-      "bundle_sha256": "addd62a55e3e828197e436e991b276ed5ac30181bddc8126bc6990ebf3034436"
+      "bundle_sha256": "a48702eed76019f9acc110a242f19827c8b0a81946b64e71eddcbe20c2fe2e63"
     },
     {
       "preset_id": "instagram_dark_grey_aerial_v1",
       "status": "passed_by_user_review",
       "runtime_state": "published_non_default",
       "bundle": "vivid__aerial_shot/preset.json",
-      "bundle_sha256": "0ed35142fe45c1c93bccd8dadc7a27a942a36d6a3fb11791b677499077f991b8"
+      "bundle_sha256": "34d7368b3bad617c82ef7d62384265c529393da75fcb1929f4885a70e1454a7f"
     },
     {
       "preset_id": "instagram_dark_grey_handheld_v1",
       "status": "passed_by_user_review",
       "runtime_state": "published_non_default",
       "bundle": "vivid__handheld_lifestyle/preset.json",
-      "bundle_sha256": "05a6a8162976b545027e9a5ff4a63d4f0af5402a7a485afb5320fc327316ed44"
+      "bundle_sha256": "1ac8166607e0a7bc0d5ede8c4c0f22ab73511fe13111b4784d86d3a6d709fd48"
     }
   ],
   "excluded": [

@@ -45,7 +45,30 @@ def main() -> int:
     _require(prompt.count("{{ASPECT_CONTRACT}}") == 1, "ASPECT_CONTRACT placeholder is invalid.")
     _require('"CAFE AMERICANO"' in prompt, "Rear cup text lock is missing.")
     _require("1.05-1.12 times the cup bottom diameter" in prompt, "Straw ratio lock is missing.")
+    _require(
+        "mandatory component of the adopted reference cup regardless of whether Image 1 has a straw" in prompt,
+        "Adopted straw must be independent of source serving cues.",
+    )
+    _require(
+        "Preserve every source-visible primary label, logo, wordmark and printed design" in prompt,
+        "Reconstruct-source primary branding lock is missing.",
+    )
+    _require(
+        "the separate rear companion must still carry" in prompt,
+        "Source branding must not suppress preset companion typography.",
+    )
     _require("Do not copy the approved reference scene pixel-for-pixel." in prompt, "Scene-clone safeguard is missing.")
+    brand_policy = bundle["runtime_policy"]["brand_input_policy"]
+    _require(
+        brand_policy.get("source_visible_branding_modes") == ["reconstruct_source"],
+        "Source-visible branding authority must be limited to reconstruct_source.",
+    )
+    typography = brand_policy["preset_typography"][0]
+    _require(
+        "cylindrical" in typography["target_surface"]
+        and "curvature" in typography["target_surface"],
+        "Rear cup typography must declare a curved cylindrical target surface.",
+    )
 
     _asset(bundle["lighting_sheet"], "lighting sheet")
     _asset(bundle["grade_profile"], "grade profile")
@@ -67,9 +90,22 @@ def main() -> int:
         path = _asset(item, item["role"])
         with Image.open(path) as image:
             _require([image.width, image.height] == [item["width"], item["height"]], f"Dimension mismatch: {path.name}")
+    reference_hint = next(
+        item
+        for item in hints
+        if item["role"] == "reference_cup_geometry_light_and_companion_evidence"
+    )
+    _require(
+        any("mandatory single black straw" in rule for rule in reference_hint.get("transfer_scope", [])),
+        "Reference hint transfer scope must explicitly include the adopted straw.",
+    )
 
     modes = bundle.get("container_modes")
     _require(set(modes) == {"adopt_reference", "reconstruct_source"}, "Both cup modes are required.")
+    _require(
+        modes["reconstruct_source"].get("preserve_source_visible_branding") is True,
+        "Reconstruct-source mode must preserve visible source identity.",
+    )
     _require(bundle.get("default_container_mode") == "adopt_reference", "Reviewed default mode changed.")
     _require(set(bundle.get("aspect_ratio_contracts", {})) == {"4:5", "1:1"}, "Aspect contracts changed.")
     _require(bundle["aspect_ratio_contracts"]["4:5"]["status"] == "published", "4:5 must be published.")

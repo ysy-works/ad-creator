@@ -346,6 +346,7 @@ def build_bundle(slot_id: str, config: dict, source: dict) -> None:
             "brand_input_policy": {
                 "enabled": False,
                 "default_mode": "none",
+                "source_visible_branding_modes": ["reconstruct_source"],
                 "activation_requirement": "frontend_and_api_brand_asset_flow",
             },
             "temperature_policy": {
@@ -414,15 +415,19 @@ def build_bundle(slot_id: str, config: dict, source: dict) -> None:
         "container_modes": {
             "reconstruct_source": {
                 "provider_hint_role": mode_hints["reconstruct_source"]["role"],
-                "container_identity_scope": "source_container_class_material_silhouette_handle_lid_and_visible_branding",
+                "container_identity_scope": (
+                    "source_container_class_material_silhouette_rim_base_handle_lid_straw_"
+                    "attached_sleeve_wrap_and_visible_branding_placement_orientation"
+                ),
                 "prompt_template": {
                     "path": user_prompt.name,
                     "sha256": sha256(user_prompt),
                 },
                 "preserve": [
                     "source beverage identity and serving state",
-                    "source cup material, silhouette, handle and lid",
-                    "authorized visible source branding",
+                    "source cup class, material, silhouette, rim and base",
+                    "presence or absence of source handle, lid, straw, sleeve, wrap and immediate serving assembly",
+                    "authorized visible source branding with original placement, scale and orientation",
                 ],
                 "discard": ["source camera pose", "source background", "source lighting and shadows"],
             },
@@ -474,11 +479,19 @@ def build_bundle(slot_id: str, config: dict, source: dict) -> None:
                 "beverage_identity",
                 "container_mode",
                 "serving_state",
+                "conditional_source_components",
+                "source_visible_branding_when_reconstructing",
+                "source_container_exclusion_when_adopting",
                 "camera_geometry",
                 "product_environment_integration",
                 "hint_copy_contamination",
                 "brand_ocr",
                 "crop",
+            ],
+            "hard_fail": [
+                "reconstruct_source removes, blanks, rotates away or replaces source-visible branding",
+                "reconstruct_source removes or invents a handle, lid, straw, sleeve, wrap or immediate serving assembly",
+                "adopt_reference retains source container geometry, components or branding",
             ],
             "known_release_risk": (
                 "Handheld mode hints are sanitized and separated by container mode."

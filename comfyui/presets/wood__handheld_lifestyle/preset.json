@@ -90,12 +90,12 @@
     "reconstruct_source": {
       "prompt_template": {
         "path": "prompt-template-reconstruct-source.txt",
-        "sha256": "efb234092a15330f3fcfb37572269fef8e083a571d05a7195749b8dbad5241b1"
+        "sha256": "35d1f21a1591078a036772c68c7384b542df522ea93e79c908c1d6a84d04c43b"
       },
       "provider_hint_role": "source_cup_pose_light_and_scene_evidence",
       "source_product_authority": "full_user_product",
       "preserve_serving_assembly": true,
-      "prompt_addendum": "[ACTIVE CONTAINER MODE] Rebuild the complete user cup and beverage under the preset camera and light. If a source saucer exists, the lower hand holds only the cup body; omit the saucer or move it naturally to the counter. Never paste source pixels or mix in the reference target mug."
+      "prompt_addendum": "[ACTIVE CONTAINER MODE] Rebuild the complete user cup and beverage under the preset camera and light. Apply the prompt template's mutually exclusive VISIBLE LOOP versus CONTINUOUS WALL decision using visible Image 1 pixels only. If a source saucer exists, the lower hand holds only the cup body; omit the saucer or move it naturally to the counter. Never paste source pixels or mix in the reference target mug."
     }
   },
   "lighting_sheet": {
@@ -165,14 +165,23 @@
     {
       "role": "source_cup_pose_light_and_scene_evidence",
       "path": "control-board/scene-hint-reconstruct-source.png",
-      "sha256": "34be85659c758294021a1b286e039d0f0372721cb963804ecbe3cc13e4363f8b",
-      "width": 1125,
-      "height": 1500,
+      "sha256": "e865ab93ed07aba3013deae596f27dba184ed6125c2efba3bc82916fbc11033f",
+      "width": 1086,
+      "height": 1448,
       "container_mode_scope": [
         "reconstruct_source"
       ],
       "send_to_provider": true,
-      "reason": "Final segmented real-photo plus 3D angle evidence for the lower-left cup-axis lean, hand anatomy, companion, props and light; it has no user-product identity authority."
+      "transfer_scope": [
+        "upper-right empty-air hand anatomy, wrist direction, C-shaped grip and target-axis pose only",
+        "upper-left companion person and handleless companion ceramic tumbler only",
+        "pale oak, pastry, magazine, saucers, window light and depth ordering"
+      ],
+      "excluded_transfer": [
+        "all target cup family, silhouette, rim, base, material, handle, label and liquid identity",
+        "all source beverage identity and source pixels"
+      ],
+      "reason": "Container-neutral reconstruct-source board: it contains no cup-handle evidence, and the upper-right target hands deliberately hold empty air. The board controls anatomy and pose but has zero target-vessel identity authority. Image 1 alone owns the complete user cup; an unambiguous visible source handle is required before any target handle may be rendered."
     }
   ],
   "camera_contract": {
@@ -266,7 +275,7 @@
       "selected_container_mode",
       "lower_left_cup_axis",
       "gravity_level_liquid",
-      "selected_reference_handle_on_image_right",
+      "source_or_selected_reference_handle_presence_and_orientation",
       "exact_two_hands_two_cups",
       "two_distinct_lower_legs",
       "lower_bare_wrist",
@@ -278,7 +287,8 @@
     ],
     "hard_fail": [
       "cup axis leans right or toward the window",
-      "selected reference handle is missing, mirrored or not on image-right",
+      "a handle visible in Image 1 or selected by adopt_reference is missing, mirrored or not on image-right",
+      "reconstruct_source invents a handle when Image 1 is handleless",
       "lower hand holds a source saucer",
       "lower black sleeve or leather cuff appears",
       "one lower leg is missing or both legs merge",

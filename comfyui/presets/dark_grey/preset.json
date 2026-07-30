@@ -208,15 +208,15 @@
   "preservation_policy": {
     "hard_lock": [
       "exact user product count one",
-      "beverage recipe/color/temperature/serving state exactly as in the product photo (ice+no-straw if iced; foam/latte-art if hot -- never invent the opposite temperature)",
-      "source cup semantics reconstructed natively, never pasted or traced from any reference",
-      "the beverage stands directly on the surface -- no metal tray and no saucer/coaster beneath it, in every shot",
+      "beverage recipe/color/temperature/serving state and visible ice/foam/latte-art exactly as in the product photo; never invent the opposite temperature or a serving cue absent from Image 1",
+      "the selected container mode is authoritative: user_cup reconstructs Image 1, while reference_cup discards the Image 1 vessel and uses the preset vessel; never mix the two",
+      "immediate serving assembly follows the selected mode: reference_cup obeys the preset vessel's declared saucer rule, while user_cup preserves the source-visible saucer/coaster/spoon without copying source pixels",
       "target brand contract",
       "product width 0.30-0.40 and height 0.16-0.22 of frame",
-      "never invent a logo, for hot or iced. Only reproduce the exact logo visible in the user's photo, legibly, on the new vessel; if the photo shows no logo, show none. Vessel shape may adapt (mug/glass) but logo content is never invented, altered, or added."
+      "never invent a logo: user_cup preserves only source-visible branding on the reconstructed source vessel, while reference_cup discards source branding and stays unbranded"
     ],
     "editable": [
-      "every output pixel; physically consistent perspective, refraction, contact and shadow; minor product x/y position; concrete speckle phase, moisture-mark position and prop choice; cup/vessel shape and material to match scene mood and temperature, keeping any logo intact and legible"
+      "every output pixel; physically consistent perspective, refraction, contact and shadow; minor product x/y position; concrete speckle phase, moisture-mark position and prop choice; never alter the selected mode's container identity"
     ],
     "reference_exclusions": [
       "reference cup/tumbler identity and exact object pixels",
@@ -230,7 +230,7 @@
     "look": "Natural but art-directed Instagram cafe observation in a dark, moody industrial register: matte cool-grey concrete, brushed steel, restrained daylight, finite acuity.",
     "composition": "Keep exactly one exact user beverage small, standing directly on the surface (no tray, no saucer/coaster) in the lower-right two-thirds of frame. Leave a tall, bare, quiet wall or background plane upper-left as negative space, keeping the composition airy and quiet, Instagram-editorial rather than catalog-centered.",
     "input_roles": "Image one gives product identity. Any other reference supplies only abstracted framing/texture/light -- never literal pixels or a metal tray. The same indoor environment persists across all four shots; only camera framing and props differ.",
-    "preservation": "Reconstruct the user's cup/container design natively for the new camera and light; never paste, trace or preserve any source boundary. Preserve beverage and serving semantics and obey only the target brand contract. CRITICAL, anti-composite rule: the beverage's surface highlights, reflections, and any visible sheen on the glass or ceramic must be re-rendered as if lit by THIS scene's own light source (the dim, moody interior light or the evening window light described above) -- do NOT copy over the bright, even, studio-style highlights or reflections from the user's original product photo. If the original photo's lighting looks brighter or more evenly lit than this scene, the beverage's highlights must be dimmed and reshaped to match this scene's darker, more directional light, so the drink and its environment read as one single continuous photograph under one light source, never as a brighter object pasted onto a darker background.",
+    "preservation": "Reconstruct the mode-authorized container natively for the new camera and light; never paste, trace or preserve a source boundary. Preserve beverage and serving semantics while keeping container identity strictly separated by mode. CRITICAL, anti-composite rule: the beverage's surface highlights, reflections, and any visible sheen on the glass or ceramic must be re-rendered as if lit by THIS scene's own light source (the dim, moody interior light or the evening window light described above) -- do NOT copy over the bright, even, studio-style highlights or reflections from the user's original product photo. If the original photo's lighting looks brighter or more evenly lit than this scene, the beverage's highlights must be dimmed and reshaped to match this scene's darker, more directional light, so the drink and its environment read as one single continuous photograph under one light source, never as a brighter object pasted onto a darker background.",
     "negative": "No extra beverage, no metal tray or napkin, no saucer/coaster under an iced drink, no glossy/bright wall, no warm-beige cast, no legible card/window/signage text, no busy sharp background furniture, no oversized product, no crushed blacks or blown highlights, no invented logo, no cookie as the food prop. This is an INDOOR cafe corner (or the medium shot's glass wall) -- never outdoor pavement, curb, parking lot, sky, or building facades; the wall must read as the specified rough dark-grey concrete or glass, not a different material or exterior surface."
   },
   "quality_gates": {
@@ -314,7 +314,7 @@
         "hot": [],
         "ice": []
       },
-      "negative_extra": "CRITICAL: this shot must include NO food prop of any kind -- no pastry, cake, cookie, plate, or napkin anywhere in frame. Only the beverage and the hand/sleeve holding or resting near it. No visible logo, wordmark, or embossed brand text anywhere. No metal tray anywhere. No identifiable person, face, or distinguishing personal detail -- hand and sleeve only, generic and unbranded. No bare wrist skin visible under any circumstance -- the cuff must cover it. No bright, airy, or well-lit look -- keep the whole frame dark and low-key.",
+      "negative_extra": "CRITICAL: this shot must include NO food prop of any kind -- no pastry, cake, cookie, plate, or napkin anywhere in frame. Only the beverage and the hand/sleeve holding or resting near it. No invented or reference-derived logo, wordmark, or embossed brand text; user_cup may retain only branding visibly present on Image 1. No metal tray anywhere. No identifiable person, face, or distinguishing personal detail -- hand and sleeve only, generic and unbranded. No bare wrist skin visible under any circumstance -- the cuff must cover it. No bright, airy, or well-lit look -- keep the whole frame dark and low-key.",
       "uses_shared_layout": false
     }
   },
@@ -342,12 +342,12 @@
   "container_modes": {
     "reference_cup": {
       "display_name": "레퍼런스 컵 버전",
-      "description": "Cup shape/material/color/handle/lid always follow this preset's own cup_shapes (by beverage_temp), never the user's cup. Only the beverage's own color/ice/foam comes from the user's photo. One input photo is used for all 4 shots; crop out the cup body/logo where practical so the model anchors less on it. Each shot's own camera angle (incl. aerial's strict vertical) is fully text-driven, independent of the input photo's angle.",
-      "logo_policy": "no logo is expected or added -- the cropped input shows no cup, so the reference cup renders with no logo unless the target brand contract separately specifies one."
+      "description": "Cup shape/material/color/handle/lid always follow this preset's own cup_shapes (by beverage_temp), never the user's cup. Image 1 may still show the full source cup, but only its beverage color/opacity/ice/foam/layers/garnish and serving state transfer; discard the source vessel and branding completely. Each shot's camera angle (including aerial's strict vertical) is independent of the input photo's angle.",
+      "logo_policy": "the preset reference cup remains unbranded even when Image 1 visibly contains source-cup branding; discard all source and reference logo/text evidence."
     },
     "user_cup": {
       "display_name": "사용자 컵 버전",
-      "description": "The full original photo (cup + beverage) is sent. Cup shape/material/color/handle/lid/logo are reconstructed faithfully from the user's own photo -- this preset's cup_shapes color/handle/saucer rules do NOT apply in this mode; the user's own cup is the source of truth.",
+      "description": "The full original photo (cup + beverage) is sent. Reconstruct the exact source class, material, silhouette, color, rim, base, handle, lid, straw, attached sleeve/wrap and source-visible branding, including each component's presence or absence and the branding's placement/orientation. This preset's reference-cup design rules do NOT apply; Image 1 is the source of truth.",
       "logo_policy": "preserve any real logo/wordmark exactly as it appears in the user's uploaded photo; never invent a new one."
     },
     "shared_rule": "Regardless of container_mode, beverage type/temperature/recipe/ice-or-foam state always comes from the user's own photo, never from any reference photo or preset assumption."

@@ -19,10 +19,11 @@
     "brand_input_policy": {
       "enabled": false,
       "default_mode": "preset_typography",
+      "source_visible_branding_modes": ["reconstruct_source"],
       "preset_typography": [
         {
           "text": "CAFE AMERICANO",
-          "target_surface": "rear companion outer paper cup front",
+          "target_surface": "curved camera-facing cylindrical front of the rear companion outer paper cup; glyph baseline and outer-letter foreshortening follow the cup curvature",
           "transfer_scope": "preset-declared generic beverage descriptor only; never source or reference brand authority"
         }
       ],
@@ -67,7 +68,7 @@
   ],
   "prompt_template": {
     "path": "prompt-template.txt",
-    "sha256": "afe43e22e4189e21cf7113ac6c075e6f5c1ee8c42f3c921b16ce493df06714a5"
+    "sha256": "0463e8f9dc2a7db608dc999819ac2aef0e2b269e14c574fd82ada07ba558c1e1"
   },
   "lighting_sheet": {
     "path": "lighting-sheet.json",
@@ -110,7 +111,7 @@
       "send_to_provider": true,
       "container_mode_scope": ["adopt_reference"],
       "transfer_scope": [
-        "clear PET cup construction and cafe paper label",
+        "clear PET cup construction, cafe paper label and mandatory single black straw with the declared proportion",
         "rear nested paper cup, crema and curved CAFE AMERICANO text",
         "window direction, distant sill planter, wood color and grain",
         "relative scale, perspective, air and contact-shadow behavior"
@@ -137,13 +138,14 @@
       "provider_hint_role": "reference_cup_geometry_light_and_companion_evidence",
       "source_product_authority": "beverage_only",
       "container_design_path": "container-design.json",
-      "prompt_addendum": "[ACTIVE CONTAINER MODE]\nUse adopt_reference for this execution. Discard the source vessel and rebuild the exact user beverage inside the declared clear PET reference cup. Keep the preset CAFE AMERICANO companion typography. Do not preserve or transfer any source or reference brand."
+      "prompt_addendum": "[ACTIVE CONTAINER MODE]\nUse adopt_reference for this execution. Discard the source vessel and rebuild the exact user beverage inside the declared clear PET reference cup. Include exactly one mandatory plain black straw at the declared proportion even when Image 1 has no straw. Keep the preset CAFE AMERICANO companion typography curved around the rear cylindrical paper cup. Do not preserve or transfer any source or reference brand."
     },
     "reconstruct_source": {
       "provider_hint_role": "source_cup_geometry_light_and_companion_evidence",
       "source_product_authority": "full_user_product",
       "preserve_serving_assembly": true,
-      "prompt_addendum": "[ACTIVE CONTAINER MODE]\nUse reconstruct_source for this execution. Rebuild the user's broad cup family, material and complete serving assembly under the preset camera and light; never paste source pixels and never add the reference primary paper label or straw. Keep the preset CAFE AMERICANO companion typography."
+      "preserve_source_visible_branding": true,
+      "prompt_addendum": "[ACTIVE CONTAINER MODE]\nUse reconstruct_source for this execution. Rebuild the user's exact cup family, material, silhouette, components and complete serving assembly under the preset camera and light. Preserve only source-visible primary labels, logos, wordmarks and printed design at their real placement, scale and orientation; if none is visible, add none. Never paste source pixels and never add the adopted reference primary paper label or black straw unless visible in Image 1. Keep the separate preset CAFE AMERICANO companion typography."
     }
   },
   "camera_contract": {
@@ -199,6 +201,7 @@
     "hard_gates": [
       "beverage_identity",
       "selected_container_mode",
+      "source_visible_primary_identity_when_reconstructing",
       "close_subject_scale",
       "window_light_direction_and_temperature",
       "transparent_liquid_integration",
@@ -213,7 +216,9 @@
     "hard_fail": [
       "scene is copied pixel-for-pixel from the reference",
       "primary beverage looks pasted or does not share scene light",
+      "reconstruct_source removes, replaces, rotates away or genericizes source-visible primary branding",
       "CAFE AMERICANO is missing, distorted or flat",
+      "adopt_reference omits the required single black straw",
       "rear paper cup is not visibly double nested",
       "plant emerges from a window-frame gap",
       "adopted straw is substantially longer or shorter than the declared ratio",
