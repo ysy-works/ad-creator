@@ -255,6 +255,17 @@ def _generate_with_model_c_v1_legacy_direct(product_image: Image.Image, referenc
 
 
 VALID_ASPECT_RATIOS = {"4:5", "1:1"}
+CUP_SOURCE_TO_CONTAINER_MODE = {
+    "uploaded": "reconstruct_source",
+    "model": "adopt_reference",
+}
+
+
+def _container_mode_from_cup_source(cup_source: str | None) -> str:
+    try:
+        return CUP_SOURCE_TO_CONTAINER_MODE[cup_source]
+    except (KeyError, TypeError) as exc:
+        raise ValueError("컵 사용 방식(내가 찍은 컵 또는 예쁜 컵)을 선택해주세요.") from exc
 
 
 def _generate_with_gpt_image_2(product_image: Image.Image, reference: dict, aspect_ratio: str = None, cup_source: str = None, session_id: str = None) -> tuple[Image.Image, str]:
@@ -274,11 +285,9 @@ def _generate_with_gpt_image_2(product_image: Image.Image, reference: dict, aspe
     전혀 하지 않는다 (router.py의 workflow별 분기 참고. 예전엔 4:5를
     880x1100으로 축소했었는데, 그 축소 단계 자체가 없어졌음).
 
-    cup_source는 "uploaded"(업로드한 컵 그대로) 또는 "model"(모델이 준비한
-    컵으로 교체). 2026-07-24 소연님 회의 요청사항인데, Gateway/모델 쪽 정확한
-    파라미터명·스타일별 지원 여부가 아직 확정 전이라 값이 있으면 그대로
-    실어 보내기만 하고 검증은 하지 않는다. 계약 확정되면 OPENAI_ACTIVE_PRESET_IDS
-    처럼 preset_id별 유효성 검증을 추가할 예정.
+    cup_source는 프론트 계약의 "uploaded" 또는 "model"이며, Gateway 계약의
+    reconstruct_source 또는 adopt_reference로 명시 변환한다. 누락되거나 알 수
+    없는 값이면 유료 생성 요청 전에 거부한다.
 
     session_id는 2026-07-27 소연님 Langfuse 연동 요청사항 — _build_gateway_headers
     참고. 마찬가지로 값이 있을 때만 헤더에 실어 보내고, 값 자체는 검증·로깅하지 않는다.
@@ -295,6 +304,7 @@ def _generate_with_gpt_image_2(product_image: Image.Image, reference: dict, aspe
 
     if aspect_ratio not in VALID_ASPECT_RATIOS:
         raise ValueError("결과 비율(4:5 또는 1:1)을 선택해주세요.")
+    container_mode = _container_mode_from_cup_source(cup_source)
 
     buffer = io.BytesIO()
     product_image.save(buffer, format="PNG")
@@ -308,9 +318,8 @@ def _generate_with_gpt_image_2(product_image: Image.Image, reference: dict, aspe
         "workflow_id": OPENAI_WORKFLOW_ID,
         "preset_id": preset_id,
         "aspect_ratio": aspect_ratio,
+        "container_mode": container_mode,
     }
-    if cup_source:
-        data["cup_source"] = cup_source
 
     submitted = _submit_generation(headers, files, data)
 
