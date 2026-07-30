@@ -314,6 +314,50 @@ class PublishedPresetTest(unittest.TestCase):
         self.assertEqual(adopted.serving_temperature, "source_authoritative")
         self.assertEqual(reconstructed.serving_temperature, "source_authoritative")
 
+    def test_reported_reference_cup_presets_compile_without_source_cup_conflicts(self):
+        expected_reference_roles = {
+            "natural_white__product_center": ("white_medium_reference_cup_hint",),
+            "wood__product_center": ("wood_medium_reference_container_scene_hint",),
+            "vivid__product_large": ("raw_dark_grey_closeup_reference",),
+            "vivid__product_center": ("raw_dark_grey_glass_wall_reference",),
+            "vivid__handheld_lifestyle": (
+                "dark_grey_handheld_double_wall_reference",
+            ),
+        }
+
+        for slot_id, expected_roles in expected_reference_roles.items():
+            with self.subTest(slot_id=slot_id):
+                adopted = load_published_preset(
+                    slot_id,
+                    container_mode="adopt_reference",
+                    serving_temperature="auto",
+                )
+                reconstructed = load_published_preset(
+                    slot_id,
+                    container_mode="reconstruct_source",
+                    serving_temperature="auto",
+                )
+
+                self.assertEqual(adopted.container_mode, "adopt_reference")
+                self.assertEqual(adopted.provider_image_roles, expected_roles)
+                self.assertIn("Container mode=adopt_reference", adopted.prompt)
+                self.assertNotIn(
+                    "Reconstruct the user's cup/container design",
+                    adopted.prompt,
+                )
+                self.assertNotIn(
+                    "source cup semantics reconstructed",
+                    adopted.prompt,
+                )
+                self.assertEqual(
+                    reconstructed.container_mode,
+                    "reconstruct_source",
+                )
+                self.assertIn(
+                    "Container mode=reconstruct_source",
+                    reconstructed.prompt,
+                )
+
     def test_white_handheld_resolves_its_two_declared_cup_policies(self):
         adopted = load_published_preset(
             "natural_white__handheld_lifestyle",

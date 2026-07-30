@@ -173,7 +173,7 @@
       "container_identity_scope": "published_dark_grey_temperature_compatible_container",
       "prompt_template": {
         "path": "prompt-template-adopt-reference.txt",
-        "sha256": "f67928700c77b5ff7563e1f1383ffcf6757f0cfe18645198c51cb875cf2af7ae"
+        "sha256": "e2e2b78a9fa2a62ea51d53bfc2dec6299fa52c026b8a16a35d48f4857dd69e22"
       },
       "preserve": [
         "source beverage identity and serving state",

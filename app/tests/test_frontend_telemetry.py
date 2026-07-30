@@ -50,6 +50,33 @@ class FrontendTelemetryApiTest(unittest.TestCase):
             "signed-generation-id",
         )
         self.assertTrue(response.json()["result_image"].startswith("data:image/png;base64,"))
+        self.assertEqual(
+            generate_styled_image.call_args.kwargs["cup_source"],
+            "uploaded",
+        )
+
+    @patch("app.api.router.generate_styled_image")
+    def test_generate_requires_valid_cup_source(self, generate_styled_image):
+        reference_id = _load_references()[0]["id"]
+        common = {
+            "files": {"product_image": ("product.png", _png(), "image/png")},
+            "data": {
+                "reference_id": reference_id,
+                "workflow_id": "gpt-image-2-v1",
+                "aspect_ratio": "1:1",
+            },
+        }
+
+        missing = self.client.post("/generate", **common)
+        invalid = self.client.post(
+            "/generate",
+            files=common["files"],
+            data={**common["data"], "cup_source": "default"},
+        )
+
+        self.assertEqual(missing.status_code, 422)
+        self.assertEqual(invalid.status_code, 422)
+        generate_styled_image.assert_not_called()
 
     @patch("app.api.router.record_frontend_completion")
     def test_frontend_completion_is_forwarded_once(self, record):
@@ -70,6 +97,47 @@ class FrontendTelemetryApiTest(unittest.TestCase):
 
 
 class FrontendTelemetryGatewayClientTest(unittest.TestCase):
+    def test_cup_source_maps_to_gateway_container_mode(self):
+        self.assertEqual(
+            model._container_mode_from_cup_source("uploaded"),
+            "reconstruct_source",
+        )
+        self.assertEqual(
+            model._container_mode_from_cup_source("model"),
+            "adopt_reference",
+        )
+        for invalid in (None, "", "default", "adopt_reference"):
+            with self.subTest(invalid=invalid):
+                with self.assertRaises(ValueError):
+                    model._container_mode_from_cup_source(invalid)
+
+    def test_generation_submits_gateway_container_mode_not_frontend_alias(self):
+        for cup_source, expected in (
+            ("uploaded", "reconstruct_source"),
+            ("model", "adopt_reference"),
+        ):
+            with (
+                self.subTest(cup_source=cup_source),
+                patch.object(model, "GATEWAY_BASE_URL", "https://gateway.example"),
+                patch.object(model, "GATEWAY_API_KEY", "secret-key"),
+                patch.object(
+                    model,
+                    "_submit_generation",
+                    side_effect=RuntimeError("submission captured"),
+                ) as submit,
+            ):
+                with self.assertRaisesRegex(RuntimeError, "submission captured"):
+                    model._generate_with_gpt_image_2(
+                        Image.new("RGB", (8, 8), "white"),
+                        {"id": "natural_white__product_center"},
+                        aspect_ratio="1:1",
+                        cup_source=cup_source,
+                    )
+
+                payload = submit.call_args.args[2]
+                self.assertEqual(payload["container_mode"], expected)
+                self.assertNotIn("cup_source", payload)
+
     def test_gateway_request_uses_server_secret_and_expected_payload(self):
         response = Mock(status_code=202)
         with (

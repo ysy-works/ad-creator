@@ -72,14 +72,14 @@
       "status": "passed_by_user_review",
       "runtime_state": "published_non_default",
       "bundle": "vivid__product_large/preset.json",
-      "bundle_sha256": "994936de97feeb75a9edd3e6e3d353acd554b82588dec5a5e0123867f03d13d6"
+      "bundle_sha256": "04f8ae0dc4f13079be07ff1f22ad5b8ce73d675d47b9a638da66e4481ad59ca3"
     },
     {
       "preset_id": "instagram_dark_grey_medium_v1",
       "status": "passed_by_user_review",
       "runtime_state": "published_non_default",
       "bundle": "vivid__product_center/preset.json",
-      "bundle_sha256": "addd62a55e3e828197e436e991b276ed5ac30181bddc8126bc6990ebf3034436"
+      "bundle_sha256": "c7cff2842bae73e1e1a09472d054c6af41d8755370c5f89008dc7841410a6d83"
     },
     {
       "preset_id": "instagram_dark_grey_aerial_v1",
@@ -93,7 +93,7 @@
       "status": "passed_by_user_review",
       "runtime_state": "published_non_default",
       "bundle": "vivid__handheld_lifestyle/preset.json",
-      "bundle_sha256": "05a6a8162976b545027e9a5ff4a63d4f0af5402a7a485afb5320fc327316ed44"
+      "bundle_sha256": "e7a9ac84024ad1b5e900ae5bac9696e7f13af6b198deed7329c4da628185c455"
     }
   ],
   "excluded": [
